@@ -60,10 +60,11 @@ jobs:
         with:
           version: latest
       - run: opa check policies && opa test policies -v
-      - name: Types and lint
-        run: npx tsc --noEmit && npx eslint .
+      # Before the type check: the Prisma client under lib/db/generated is git-ignored, and the code imports it.
       - name: Database schema
         run: npx prisma migrate deploy && npx prisma generate
+      - name: Types and lint
+        run: npx tsc --noEmit && npx eslint .
       - name: OPA sidecar for the contract tests
         run: (opa run --server --addr 127.0.0.1:8181 policies > /tmp/opa.log 2>&1 &) && sleep 2
       - name: Stub gateway on 4001 (feature-specs/11 § 4, § 8; the master key and the key secret are generated for this job and never stored)

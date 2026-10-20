@@ -238,8 +238,8 @@ What CI runs on every push, in order (`.github/workflows/ci.yml`):
 npm run secrets:scan                       # prompt templates and model-visible data: zero findings
 npm run audit:check                        # no high or critical advisory; development exceptions named and dated
 opa check policies && opa test policies -v # every deny case
+npx prisma migrate deploy && npx prisma generate # first: the type check reads the generated client
 npx tsc --noEmit && npx eslint .
-npx prisma migrate deploy && npx prisma generate
 npm run workflows:test-server              # Temporal's time-skipping test server
 npm test                                   # Vitest: unit, contract, integration, workflow suites
 npm run test:ledger                        # the hash chain at 100 % branch coverage

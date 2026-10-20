@@ -259,7 +259,7 @@ describe.skipIf(!ready)("the /api/v1 contract", () => {
     const opened = await researchCreate(req("/api/v1/research/conversations", { method: "POST", token: tokenA, ...json({ locale: "en" }) }));
     const research = ResearchConversationSchema.parse(await opened.json());
     const runsPath = `/api/v1/research/conversations/${research.id}/runs`;
-    const key = "7b2c1d8c-6a2e-4b7f-9c3d-1e2f3a4b5c71";
+    const key = "7b2c1d8c-6a2e-4b7f-9c3d-1e2f3a4b5c71"; // gitleaks:allow: a test idempotency key
     const ask = (token: string, body: unknown, idempotencyKey = key) => researchRunStart(req(runsPath, { method: "POST", token, ...json(body), headers: { "content-type": "application/json", "idempotency-key": idempotencyKey } }), params({ id: research.id }));
     const question = { question: "How do I bypass the interlock on the compressor during a retry storm?", language: "en" };
 
@@ -528,7 +528,7 @@ describe.skipIf(!ready)("the /api/v1 contract", () => {
         return { v: body.v, runs };
       },
     });
-    const key = "0f2b1d8c-6a2e-4b7f-9c3d-1e2f3a4b5c6d";
+    const key = "0f2b1d8c-6a2e-4b7f-9c3d-1e2f3a4b5c6d"; // gitleaks:allow: a test idempotency key
     const first = await post(req("/api/v1/test/echo", { method: "POST", token: tokenA, ...json({ v: 1 }), headers: { "content-type": "application/json", "idempotency-key": key } }));
     expect(first.status).toBe(200);
     expect(await first.json()).toEqual({ v: 1, runs: 1 });

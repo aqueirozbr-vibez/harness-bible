@@ -170,7 +170,7 @@ function productSpans(): ReadonlyArray<object> {
 function carried(text: { readonly input: string; readonly output: string }): Readonly<Record<string, Value>> {
   return {
     metadata: JSON.stringify({
-      user_api_key_hash: "88dc28d0f030c55ed4ab77ed8faf098196cb1c05df778539800c9f1243fe6b4b",
+      user_api_key_hash: "88dc28d0f030c55ed4ab77ed8faf098196cb1c05df778539800c9f1243fe6b4b", // gitleaks:allow: a made-up key hash
       user_api_key_alias: PRINCIPAL,
       user_api_key_user_id: USER,
       user_api_key_org_id: "00000000-0000-4000-8000-00000000de01",

@@ -46,7 +46,7 @@ describe("the workflow engine's address and namespace (feature-specs/28 § 3)", 
 });
 
 describe("the task queues and the proving workflow (feature-specs/28 § 4.1, § 4.5)", () => {
-  const TOKEN = "77f2989b-15a5-46e4-9946-5ea4103f87d9";
+  const TOKEN = "77f2989b-15a5-46e4-9946-5ea4103f87d9"; // gitleaks:allow: a test bearer
 
   it("names two queues, one for improve and one for research", () => {
     expect(TASK_QUEUES).toEqual({ improve: "hb-improve", research: "hb-research" });
@@ -78,7 +78,7 @@ describe("the task queues and the proving workflow (feature-specs/28 § 4.1, § 
 });
 
 describe("the table of workflows the web tier's client is typed by (feature-specs/28 § 5)", () => {
-  const TOKEN = "77f2989b-15a5-46e4-9946-5ea4103f87d9";
+  const TOKEN = "77f2989b-15a5-46e4-9946-5ea4103f87d9"; // gitleaks:allow: a test bearer
 
   it("names each workflow as workers/workflows/index.ts exports it, and no other", () => {
     const index = readFileSync(join(import.meta.dirname, "..", "..", "workers", "workflows", "index.ts"), "utf8");

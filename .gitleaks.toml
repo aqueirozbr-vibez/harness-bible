@@ -1,0 +1,13 @@
+# gitleaks (CI's "Secrets in the repository" step, gitleaks/gitleaks-action; feature-specs/09 § 8.8): its default
+# rules, and one allowance. A test's fixed secret is written as a 16-character hex run repeated four times, which the
+# generic rule reads as a key; the idiom is allowed where it is written so, and nowhere else. A single test value
+# of another shape carries `gitleaks:allow` on its own line, saying what it is.
+title = "Harness Bible"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "the tests' fixed secrets: a 16-character hex run repeated four times"
+regexTarget = "line"
+regexes = ['''"(0123456789abcdef|89abcdef01234567|fedcba9876543210)"\.repeat\(4\)''']

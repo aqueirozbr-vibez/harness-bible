@@ -146,7 +146,8 @@ jobs:
           for i in $(seq 1 60); do
             if curl -fsS http://localhost:8081/realms/harness-bible/.well-known/openid-configuration > wk.json; then break; fi; sleep 3;
           done
-          grep -q '"issuer":"http://localhost:8081/realms/harness-bible"' wk.json
+          # A realm that never answers is Keycloak's own refusal: its log says why (a failed import exits the container).
+          grep -q '"issuer":"http://localhost:8081/realms/harness-bible"' wk.json || (docker logs kc; exit 1)
           docker logs kc | grep -i "import finished successfully" || (docker logs kc; exit 1)
           docker logs kc | grep -qi " error" && (docker logs kc; exit 1) || true
       - name: The stand-in realm takes the place of Google and GitHub (the local walk's setup)

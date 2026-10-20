@@ -325,7 +325,7 @@ describe("the workers with the gateway down (§ 7.3)", () => {
       expect(await call(surface.workers.url, "/health")).toMatchObject({ status: 200, json: { ok: true, gateway: "down", keys: 0 } });
       expect(await call(surface.workers.url, "/keys/ensure", { principal: ORG })).toMatchObject({ status: 503, json: { code: "GATEWAY_UNAVAILABLE" } });
       expect(surface.db.rows.size).toBe(0);
-      surface.db.rows.set(JSON.stringify(ORG), { id: "row-1", litellmKeyId: "f".repeat(64), keyCiphertext: encryptKey(SECRET, "sk-0123456789abcdef0123456789abcdef"), maxBudgetUsd: "5", tokensPerMinute: 1000, createdAt: NOW, rotatedAt: null });
+      surface.db.rows.set(JSON.stringify(ORG), { id: "row-1", litellmKeyId: "f".repeat(64), keyCiphertext: encryptKey(SECRET, "sk-0123456789abcdef0123456789abcdef"), maxBudgetUsd: "5", tokensPerMinute: 1000, createdAt: NOW, rotatedAt: null }); // gitleaks:allow: a made-up virtual key
       expect(await call(surface.workers.url, "/gateway/check", { principal: ORG })).toMatchObject({ status: 503, json: { code: "GATEWAY_UNAVAILABLE" } });
     } finally {
       await surface.workers.close();

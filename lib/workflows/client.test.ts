@@ -31,7 +31,7 @@ import {
  * tests/integration/workflows.test.ts.
  */
 
-const TOKEN = "77f2989b-15a5-46e4-9946-5ea4103f87d9";
+const TOKEN = "77f2989b-15a5-46e4-9946-5ea4103f87d9"; // gitleaks:allow: a test bearer
 const ID = provingWorkflowId(TOKEN);
 const RUN = "01a10cb8-1a90-7880-b6c7-6a29dc1f1915";
 const AT: EngineAddress = { address: "engine.test:7233", namespace: "harness-bible" };

@@ -25,7 +25,7 @@ const READER: SessionUser = { id: "11111111-1111-4111-8111-111111111111", organi
 const RESEARCH = "22222222-2222-4222-8222-222222222222";
 const RUN = "33333333-3333-4333-8333-333333333333";
 const SEED = "44444444-4444-4444-8444-444444444444";
-const KEY = "0f2b1d8c-6a2e-4b7f-9c3d-1e2f3a4b5c6d";
+const KEY = "0f2b1d8c-6a2e-4b7f-9c3d-1e2f3a4b5c6d"; // gitleaks:allow: a test idempotency key
 const NOW = new Date("2026-10-12T15:00:00.000Z");
 const QUESTION = "What changed in idempotency key retention since the book was verified?";
 /** Another run of the research, the newest, which check 3 reads. */

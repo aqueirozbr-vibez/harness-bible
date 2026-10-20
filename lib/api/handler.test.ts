@@ -82,7 +82,7 @@ const base: EndpointSpec<{ id: string }, { q?: string }, { text: string } | unde
 function post(path: string, body: unknown, headers: Record<string, string> = {}): Request {
   return new Request(`http://localhost:3000${path}`, {
     method: "POST",
-    headers: { "content-type": "application/json", "idempotency-key": "8b6a1c6e-2f6e-4f0c-9b4a-2b1d8f6e7a10", "sec-fetch-site": "same-origin", ...headers },
+    headers: { "content-type": "application/json", "idempotency-key": "8b6a1c6e-2f6e-4f0c-9b4a-2b1d8f6e7a10", "sec-fetch-site": "same-origin", ...headers }, // gitleaks:allow: a test idempotency key
     body: JSON.stringify(body),
   });
 }

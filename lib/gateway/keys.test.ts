@@ -6,7 +6,7 @@ import { decryptKey, encryptKey, keySecret } from "./keys";
 
 const SECRET = "0123456789abcdef".repeat(4);
 const OTHER = "fedcba9876543210".repeat(4);
-const KEY = "sk-3f2a9c1e7b4d5a6c8e0f1a2b3c4d5e6f";
+const KEY = "sk-3f2a9c1e7b4d5a6c8e0f1a2b3c4d5e6f"; // gitleaks:allow: a made-up virtual key
 
 function codeOf(fn: () => unknown): string {
   try {

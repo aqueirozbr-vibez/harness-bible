@@ -17,12 +17,21 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# What the workers process reads: its own folder, the shared lib/ (schemas, db, gateway, env) and the schema
-# the client is generated from. Nothing from app/ or components/ (§ 7.1).
+# What the workers process reads: its own folder, the shared lib/ (schemas, db, gateway, env), the schema the
+# client is generated from, and what lib/ and the workers import or read at run time: pipeline/ (the render hash,
+# the figures, the merge's edit, build and check), messages/ (the catalogues), and from the working directory the
+# agents' guides/, the decision aids/ and the rubric/. Nothing from app/ or components/ (§ 7.1), and nothing from
+# infra/ (the gate tooling that imports the stub gateway is the scripts', not the running workers'). Found missing
+# on CI's first runner (2026-10-20): the container could not start, "Cannot find module '@/pipeline/renderHash'".
 COPY tsconfig.json prisma.config.ts ./
 COPY prisma ./prisma
 COPY lib ./lib
 COPY workers ./workers
+COPY pipeline ./pipeline
+COPY messages ./messages
+COPY guides ./guides
+COPY aids ./aids
+COPY rubric ./rubric
 
 # lib/db/generated is git-ignored, so the client is generated here. The URL is a build-time placeholder for
 # prisma.config.ts: generation reads the schema only, and the real DATABASE_URL arrives as an environment

@@ -1,6 +1,9 @@
 # The build context of the first-party images (infra/<service>/Dockerfile). A secret, an installed dependency
 # and a build output never enter an image: they are mounted, installed or generated inside it.
 .env*
+# At any depth: a pattern without a slash matches the context's root alone, and infra/gateway/.env and
+# infra/observability/.env hold provider and Langfuse keys.
+**/.env*
 node_modules
 .next
 out

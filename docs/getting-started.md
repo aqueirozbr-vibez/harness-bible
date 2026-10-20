@@ -243,6 +243,7 @@ npx tsc --noEmit && npx eslint .
 npm run ingest && npm run db:seed && npm run rubric:publish -- v1.2  # the release the database suites read (§ 5),
 # then a stub key for the development reader and the release's vectors (CI's step "The release the database suites read")
 npm run workflows:test-server              # Temporal's time-skipping test server
+docker pull python:3.12-slim               # the lab tier's image, which the decision aids' docker runner uses
 npm test                                   # Vitest: unit, contract, integration, workflow suites
 npm run test:ledger                        # the hash chain at 100 % branch coverage
 npm run test:rubric                        # the rubric at 100 % branch coverage, the four worked examples to the number

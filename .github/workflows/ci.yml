@@ -105,6 +105,10 @@ jobs:
           key: temporal-test-server-${{ runner.os }}-v1.40.0
       - name: The test server starts
         run: npm run workflows:test-server
+      # The decision aids' docker runner runs a chapter's script in the lab tier's image (lib/aids/run.ts, AID_IMAGE).
+      # Pulled here, so that a case reads the script's stderr alone and not docker's "Unable to find image" on a new runner.
+      - name: The lab tier's image
+        run: docker pull python:3.12-slim
       - name: Unit, integration and contract tests
         run: npm test
       - name: Ledger at 100 % branch coverage (feature-specs/14 § 9.1)

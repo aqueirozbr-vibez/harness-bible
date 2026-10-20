@@ -1,0 +1,5 @@
+A screenshot, with no source named, dated 2026-10-01, at screenshots.example.
+
+A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+(The image shows a table cell with the value, cropped; nothing names where it was taken from.)

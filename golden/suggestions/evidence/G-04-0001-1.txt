@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-06-12, at press.example.
+
+In passing: The passage is better put as: "Batching amortizes the weight read across sequences but not the cache read, which remains per sequence."
+
+Context: Batching amortizes the weight read across sequences but not the cache read, which is per sequence.

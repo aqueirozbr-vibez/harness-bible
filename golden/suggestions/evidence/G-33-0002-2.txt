@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-03-24, at vendor.example.
+
+In passing: f05 30 → is 1, the earlier 0 having been revised.
+
+Context: f05 30 → · 0

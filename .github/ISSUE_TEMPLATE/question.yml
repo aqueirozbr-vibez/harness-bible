@@ -1,0 +1,36 @@
+name: Question
+description: Ask about running, understanding or extending the app.
+title: "[question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Worth a look first: docs/getting-started.md, docs/architecture.md, and the feature specs in context/feature-specs/.
+        Please remove keys, tokens and personal data from anything you paste.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Setup and running
+        - Architecture or design decisions
+        - Agents, guides or sensors
+        - Improve, the rubric or the ledger
+        - Research
+        - Policies (OPA)
+        - The development method (specs, units, AI agent)
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you tried or read
+      description: Commands, docs or spec sections, so the answer can start from there.

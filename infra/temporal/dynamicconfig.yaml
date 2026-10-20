@@ -1,0 +1,15 @@
+# The workflow engine's dynamic configuration (feature-specs/28 § 3), mounted into the `temporal` service.
+# Both keys are checked by the server's own validator: `temporal-server validate-dynamic-config` knows them.
+
+# The SQL schema stores a workflow id, a task queue and the like in columns 255 characters wide. Without this limit
+# the server accepts a longer id and the database refuses it later. The product's own ids are far shorter
+# (`suggestion:S-15-0377`, `research:<uuid>`); this is the bound Temporal's published SQL configuration sets.
+limit.maxIDLength:
+  - value: 255
+    constraints: {}
+
+# The server otherwise reports its version and a cluster id to its vendor and asks whether a newer one exists.
+# Off, as the usage reports of the observability stack are: nothing of the stack leaves the machine.
+frontend.enableServerVersionCheck:
+  - value: false
+    constraints: {}

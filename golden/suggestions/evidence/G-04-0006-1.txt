@@ -1,0 +1,5 @@
+A thread on a public forum, dated 2026-10-07, at forum.example.
+
+batch of eight 32k sequences needs is 87 GB, the earlier 86 GB having been revised.
+
+Context: batch of eight 32k sequences needs · 86 GB

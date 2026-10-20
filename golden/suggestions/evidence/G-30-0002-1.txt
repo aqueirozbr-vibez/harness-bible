@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2024-08-01, at regulator.example.
+
+The passage is better put as: "In practice, a specialist that cannot resolve its inputs returns to the coordinator, which decides whether to ask a human; a specialist never clarifies with a human directly."
+
+Context: A specialist that cannot resolve its inputs returns to the coordinator, which decides whether to ask a human; a specialist never clarifies with a human directly.

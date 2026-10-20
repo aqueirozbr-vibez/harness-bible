@@ -1,0 +1,24 @@
+{
+  "p_no_failure_13calls_f0.01": 0.878,
+  "p_no_failure_13calls_f0.02": 0.769,
+  "p_no_failure_13calls_f0.05": 0.513,
+  "task_success_f0.02_retries1": 0.9948,
+  "task_success_f0.02_retries3": 1.0,
+  "task_success_f0.05_retries1": 0.968,
+  "task_success_f0.05_retries3": 0.9999,
+  "expected_redo_fraction_no_checkpoint": 0.455,
+  "extra_tokens_per_1000_tasks_no_checkpoint": 75075,
+  "approval_wait_hours": 14.33,
+  "held_worker_cost_usd_per_approval_at_0.05_per_vcpu_h": 0.358,
+  "duplicate_writes_per_1000_tasks_no_idempotency_2pct_ambiguous": 20,
+  "backoff_schedule_s": [
+    1.0,
+    2.0,
+    4.0,
+    8.0,
+    16.0,
+    30.0
+  ],
+  "backoff_total_worst_s": 61.0,
+  "timestamp": "2026-09-22T00:17:36.749818+00:00"
+}

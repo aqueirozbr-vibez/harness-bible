@@ -1,0 +1,5 @@
+A practitioner's post on their own site, dated 2026-09-15, at blog.example.
+
+On a related matter, without the figure itself: the section's subject is discussed at length, and the change proposed is not stated.
+
+Context: What to record: grader model and version; rubric version; calibration set version and labelers; κ per criterion; gate configuration and baseline version; date.

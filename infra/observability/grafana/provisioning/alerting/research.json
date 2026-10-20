@@ -1,0 +1,66 @@
+{
+  "apiVersion": 1,
+  "groups": [
+    {
+      "orgId": 1,
+      "name": "research",
+      "folder": "Harness Bible",
+      "interval": "1m",
+      "rules": [
+        {
+          "uid": "hb-research-cap",
+          "title": "research spend at its cap before the month's twentieth day",
+          "condition": "B",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 172800,
+                "to": 0
+              },
+              "datasourceUid": "hb-postgres",
+              "model": {
+                "refId": "A",
+                "datasource": {
+                  "type": "grafana-postgresql-datasource",
+                  "uid": "hb-postgres"
+                },
+                "format": "table",
+                "rawQuery": true,
+                "editorMode": "code",
+                "rawSql": "SELECT s.key AS metric, s.value\nFROM (\n-- research calls refused at the cap: the research principal's calls the gateway refused because its budget's cap was reached, by whether the day was before the month's twentieth.\n-- The platform's principal alone (feature-specs/48 § 7.3): a person's research meets their own cap, which is their budget's and not this series' to count. The view's payer `platform` is the organisation whose \"researchPrincipal\" is true (migration 20261012200000_research_principal), never one found by its name. The one alert of feature-specs/44 § 4 reads the line before-20th: the month's research vetting spent before its twentieth day, which is information and not an incident.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a call was refused.\nSELECT date_trunc('millennium'::text, s.day) AS bucket,\n       CASE WHEN extract(day FROM s.day) < 20 THEN 'before-20th' ELSE 'from-20th' END AS key,\n       count(*)::float8 AS n,\n       NULL::float8 AS d,\n       count(*)::float8 AS value\nFROM \"ResearchSpend\" s\nWHERE s.outcome = 'budget'\n  AND s.payer = 'platform'\n  AND s.day >= $__timeFrom()::timestamp\n  AND s.day < $__timeTo()::timestamp\nGROUP BY 1, 2\nORDER BY 1, 2\n) s\nWHERE s.key = 'before-20th'"
+              }
+            },
+            {
+              "refId": "B",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "refId": "B",
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "type": "math",
+                "expression": "$A > 0"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "Error",
+          "for": "0s",
+          "labels": {
+            "severity": "info"
+          },
+          "annotations": {
+            "summary": "The research principal's budget reached its cap before the twentieth: Improve's vetting of the findings people send waits for the month's reset, and so do the legacy runs still in flight (feature-specs/48 § 7.3). Information, not an incident (feature-specs/44 § 4); the numbers A12 to A14 and D5 may want looking at (44 § 3)."
+          },
+          "isPaused": false
+        }
+      ]
+    }
+  ]
+}

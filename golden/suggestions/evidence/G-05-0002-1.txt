@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2024-08-01, at vendor.example.
+
+attention score work at 128k is is 478, the earlier 477 having been revised.
+
+Context: attention score work at 128k is · 477

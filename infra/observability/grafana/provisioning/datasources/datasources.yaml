@@ -1,0 +1,43 @@
+# Grafana's three sources (feature-specs/21 § 5.2), provisioned so that a fresh container needs no clicking and a
+# dashboard can name a source by a uid that is the same everywhere.
+#
+# PostgreSQL is the application database through the read-only role hb_metrics (infra/observability/init.sql):
+# the rows are the truth, the gate reads them too, and there is no second set of numbers (D4). The password comes
+# from the container's environment (HB_METRICS_PASSWORD), never from this file.
+apiVersion: 1
+
+datasources:
+  - name: PostgreSQL
+    uid: hb-postgres
+    type: grafana-postgresql-datasource
+    access: proxy
+    url: db:5432
+    user: hb_metrics
+    jsonData:
+      database: harness_bible
+      sslmode: disable
+    secureJsonData:
+      password: $HB_METRICS_PASSWORD
+    editable: false
+
+  - name: Tempo
+    uid: hb-tempo
+    type: tempo
+    access: proxy
+    url: http://tempo:3200
+    editable: false
+
+  - name: Loki
+    uid: hb-loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    jsonData:
+      # A line's `traceId` opens its trace: the ids in the lines and in the spans are the same ids (§ 5.1).
+      derivedFields:
+        - name: trace
+          matcherType: label
+          matcherRegex: traceId
+          datasourceUid: hb-tempo
+          url: "$${__value.raw}"
+    editable: false

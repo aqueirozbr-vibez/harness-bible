@@ -1,0 +1,278 @@
+{
+  "apiVersion": 1,
+  "groups": [
+    {
+      "orgId": 1,
+      "name": "assistant",
+      "folder": "Harness Bible",
+      "interval": "1m",
+      "rules": [
+        {
+          "uid": "hb-first-token-p95",
+          "title": "first-token p95 above 2 s over the last hour",
+          "condition": "B",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 3600,
+                "to": 0
+              },
+              "datasourceUid": "hb-postgres",
+              "model": {
+                "refId": "A",
+                "datasource": {
+                  "type": "grafana-postgresql-datasource",
+                  "uid": "hb-postgres"
+                },
+                "format": "table",
+                "rawQuery": true,
+                "editorMode": "code",
+                "rawSql": "SELECT s.key AS metric, s.value\nFROM (\n-- first-token p95: the 95th percentile of the time to the first token, in milliseconds, over the turns that streamed one.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('millennium'::text, m.\"createdAt\") AS bucket,\n       ''::text AS key,\n       NULL::float8 AS n,\n       count(*)::float8 AS d,\n       percentile_cont(0.95) WITHIN GROUP (ORDER BY m.\"firstTokenMs\") AS value\nFROM \"Message\" m\nWHERE m.role = 'ASSISTANT'\n  AND m.\"firstTokenMs\" IS NOT NULL\n  AND m.\"createdAt\" >= $__timeFrom()::timestamp\n  AND m.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s"
+              }
+            },
+            {
+              "refId": "B",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "refId": "B",
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "type": "math",
+                "expression": "$A > 2000"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "Error",
+          "for": "0s",
+          "labels": {
+            "severity": "warn"
+          },
+          "annotations": {
+            "summary": "The 95th percentile of the time to the first token passed two seconds over the last hour (architecture § 8)."
+          },
+          "isPaused": false
+        },
+        {
+          "uid": "hb-refusal-rate",
+          "title": "a refusal cause above 20 % of turns over the last day",
+          "condition": "B",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 86400,
+                "to": 0
+              },
+              "datasourceUid": "hb-postgres",
+              "model": {
+                "refId": "A",
+                "datasource": {
+                  "type": "grafana-postgresql-datasource",
+                  "uid": "hb-postgres"
+                },
+                "format": "table",
+                "rawQuery": true,
+                "editorMode": "code",
+                "rawSql": "SELECT s.key AS metric, s.value\nFROM (\n-- refusal rate by cause: refusals over turns, as 'any' and one line per cause.\n-- A turn is an assistant row: an answer, a refusal or a failed turn.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nWITH turns AS (\n  SELECT date_trunc('millennium'::text, m.\"createdAt\") AS bucket, m.\"refusalCause\" AS cause\n  FROM \"Message\" m\n  WHERE m.role = 'ASSISTANT'\n    AND m.\"createdAt\" >= $__timeFrom()::timestamp\n    AND m.\"createdAt\" < $__timeTo()::timestamp\n), totals AS (\n  SELECT bucket, count(*)::float8 AS d, count(cause)::float8 AS refused FROM turns GROUP BY 1\n)\nSELECT tot.bucket, 'any'::text AS key, tot.refused AS n, tot.d, tot.refused / tot.d AS value\nFROM totals tot\nUNION ALL\nSELECT tot.bucket, t.cause AS key, count(*)::float8 AS n, tot.d, count(*)::float8 / tot.d AS value\nFROM turns t\nJOIN totals tot ON tot.bucket = t.bucket\nWHERE t.cause IS NOT NULL\nGROUP BY tot.bucket, t.cause, tot.d\nORDER BY 1, 2\n) s\nWHERE s.key <> 'any'"
+              }
+            },
+            {
+              "refId": "B",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "refId": "B",
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "type": "math",
+                "expression": "$A > 0.2"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "Error",
+          "for": "0s",
+          "labels": {
+            "severity": "warn"
+          },
+          "annotations": {
+            "summary": "One refusal cause accounts for more than a fifth of the last day's turns."
+          },
+          "isPaused": false
+        },
+        {
+          "uid": "hb-citation-rate",
+          "title": "citation rate below 90 % over the last day",
+          "condition": "B",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 86400,
+                "to": 0
+              },
+              "datasourceUid": "hb-postgres",
+              "model": {
+                "refId": "A",
+                "datasource": {
+                  "type": "grafana-postgresql-datasource",
+                  "uid": "hb-postgres"
+                },
+                "format": "table",
+                "rawQuery": true,
+                "editorMode": "code",
+                "rawSql": "SELECT s.key AS metric, s.value\nFROM (\n-- citation rate: of the answers that made claims, the share whose citation verdict is PASS with no claim replaced.\n-- An answer is an assistant row that is neither a refusal nor a failed turn. One with no claims to check\n-- (citation verdict NA: a walk, whose numbers are the script's) is outside the rate.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('millennium'::text, m.\"createdAt\") AS bucket,\n       ''::text AS key,\n       count(*) FILTER (WHERE v.verdict = 'PASS' AND m.substituted = 0)::float8 AS n,\n       count(*)::float8 AS d,\n       count(*) FILTER (WHERE v.verdict = 'PASS' AND m.substituted = 0)::float8 / count(*)::float8 AS value\nFROM \"Message\" m\nJOIN \"SensorVerdict\" v ON v.\"messageId\" = m.id AND v.sensor = 'citation'\nWHERE m.role = 'ASSISTANT'\n  AND m.\"refusalCause\" IS NULL\n  AND m.\"modelId\" IS NOT NULL\n  AND v.verdict <> 'NA'\n  AND m.\"createdAt\" >= $__timeFrom()::timestamp\n  AND m.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s"
+              }
+            },
+            {
+              "refId": "B",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "refId": "B",
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "type": "math",
+                "expression": "$A < 0.9"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "Error",
+          "for": "0s",
+          "labels": {
+            "severity": "warn"
+          },
+          "annotations": {
+            "summary": "Fewer than nine in ten of the last day's answers carry a citation on every claim."
+          },
+          "isPaused": false
+        },
+        {
+          "uid": "hb-purge-absent",
+          "title": "no purge run in two days",
+          "condition": "B",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 172800,
+                "to": 0
+              },
+              "datasourceUid": "hb-loki",
+              "model": {
+                "refId": "A",
+                "datasource": {
+                  "type": "loki",
+                  "uid": "hb-loki"
+                },
+                "editorMode": "code",
+                "queryType": "instant",
+                "instant": true,
+                "expr": "sum(count_over_time({service_name=\"hb-lines\"} | kind=\"job\" | job=\"assistant:purge\" | error=\"\" [2d]))"
+              }
+            },
+            {
+              "refId": "B",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "refId": "B",
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "type": "math",
+                "expression": "$A < 1"
+              }
+            }
+          ],
+          "noDataState": "Alerting",
+          "execErrState": "Error",
+          "for": "0s",
+          "labels": {
+            "severity": "warn"
+          },
+          "annotations": {
+            "summary": "The nightly retention job has written no successful line in two days: message text older than 30 days is not being cleared (architecture § 4.4)."
+          },
+          "isPaused": false
+        },
+        {
+          "uid": "hb-secret-detected",
+          "title": "a secret was found in a log line",
+          "condition": "B",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 86400,
+                "to": 0
+              },
+              "datasourceUid": "hb-loki",
+              "model": {
+                "refId": "A",
+                "datasource": {
+                  "type": "loki",
+                  "uid": "hb-loki"
+                },
+                "editorMode": "code",
+                "queryType": "instant",
+                "instant": true,
+                "expr": "sum(count_over_time({service_name=\"hb-lines\"} | hb_secret_detected=\"true\" [1d]))"
+              }
+            },
+            {
+              "refId": "B",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "refId": "B",
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "type": "math",
+                "expression": "$A > 0"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "Error",
+          "for": "0s",
+          "labels": {
+            "severity": "page"
+          },
+          "annotations": {
+            "summary": "The guard replaced a secret in a log line. The value did not leave the process, but a line holds no text, so something upstream wrote a secret where none belongs: find the line by its trace id and fix its source."
+          },
+          "isPaused": false
+        }
+      ]
+    }
+  ]
+}

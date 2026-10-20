@@ -1,0 +1,17 @@
+{
+  "agent": "assistant",
+  "version": "v1.8",
+  "files": [
+    "guide.md",
+    "citation-rules.md"
+  ],
+  "sha256": "4b341f081c71e2ef89ef66a4e10ea1e157dffcfeff21178dda0692f2e6707353",
+  "parts": {
+    "grader": {
+      "files": [
+        "grader.md"
+      ],
+      "sha256": "cd33142c9a998fd9609c420fd13f219c489d257bf8a388a35f4acfc38d1ff95e"
+    }
+  }
+}

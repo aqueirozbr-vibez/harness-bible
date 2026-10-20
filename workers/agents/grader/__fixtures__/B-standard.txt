@@ -1,0 +1,9 @@
+IEEE Std 2026.4-2026 — Idempotent Retries in Agent Pipelines
+
+6.2 Idempotency keys
+
+A write that may be retried shall carry an idempotency key chosen by the caller before the first attempt. A receiver that holds a completed write under that key shall answer the stored result and shall not perform the write again. A key shall be kept for at least 24 hours.
+
+6.3 Retry budgets
+
+An eleven-step pipeline at a two per cent transient failure rate completes without failure 80 per cent of the time; with one retry per step, 99.5 per cent. A retry policy shall state a maximum count and a maximum delay.

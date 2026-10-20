@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, undated, at regulator.example.
+
+The passage is better put as: "In practice, the provider absorbs the cache arithmetic, but the reader pays for it in the output-token price and in the prompt-caching discount that rewards exactly the prefix discipline described above."
+
+Context: The provider absorbs the cache arithmetic, but the reader pays for it in the output-token price and in the prompt-caching discount that rewards exactly the prefix discipline described above.

@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-03-24, at regulator.example.
+
+In passing: A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+Context: Two thousand tokens here are cheap insurance against a plan that skips validation.

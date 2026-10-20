@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Book · Search</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" data-theme="light" style="width: 1440px; height: 1420px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <header class="topbar">
+    <a class="brand" href="#"><span class="glyph">✢</span><b>Harness Bible</b><span class="faint">interactive</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#" aria-current="page">Book</a>
+      <a href="#">Assistant</a>
+      <a href="#">Labs</a>
+      <a href="#">Improve</a>
+    </nav>
+    <div class="grow" style="display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+      <label class="row" style="flex: 1 1 auto; max-width: 420px; height: 32px; border: 1px solid var(--ink-2); padding: 0 10px; gap: 8px;">
+        <span class="cap">search</span>
+        <input class="grow" style="border: 0; background: transparent; font: inherit; font-size: 13px; color: var(--ink); height: 30px; outline: none;" value="idempotency" placeholder="chapters, labs, registries" aria-label="Search the book">
+        <span class="kbd">/</span>
+      </label>
+      <span class="tex">release 2026.09 · sha 7f3a9c1e</span>
+    </div>
+    <div class="row" style="padding: 0 16px; gap: 12px; border-left: 1px solid var(--rule);">
+      <div class="langtoggle" role="group" aria-label="Edition language">
+        <button aria-pressed="true">EN</button><button aria-pressed="false">PT</button>
+      </div>
+      <a href="#" class="small muted">Account</a>
+    </div>
+  </header>
+
+  <div style="flex: 1 1 auto; display: grid; grid-template-columns: 296px minmax(0, 1fr) 320px; min-height: 0;">
+
+    <aside class="rr" style="padding: 24px 24px 24px 28px; display: flex; flex-direction: column; gap: 14px; overflow: hidden;" aria-label="Filters">
+      <div class="between"><span class="h4">Filters</span><button class="btn btn-sm btn-q" disabled="disabled">Clear all</button></div>
+      <p class="help">No filters set. Each group narrows the results; groups combine with AND.</p>
+
+      <fieldset class="rt" style="border-left: 0; border-right: 0; border-bottom: 0; margin: 0; padding: 14px 0 0; display: flex; flex-direction: column; gap: 4px;">
+        <legend class="cap" style="padding: 0 8px 0 0;">part</legend>
+        <ul class="col">
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink-3);"><input type="checkbox" disabled="disabled">Part 0 · why now</label><span class="counter">0</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">Part I · foundations</label><span class="counter">1</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">Part II · harness engineering</label><span class="counter">20</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">Part III · industrial application</label><span class="counter">2</span></li>
+        </ul>
+      </fieldset>
+
+      <fieldset class="rt" style="border-left: 0; border-right: 0; border-bottom: 0; margin: 0; padding: 14px 0 0; display: flex; flex-direction: column; gap: 4px;">
+        <legend class="cap" style="padding: 0 8px 0 0;">layer</legend>
+        <ul class="col">
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">1</span>Intuition</label><span class="counter">1</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">2</span>Mechanism</label><span class="counter">5</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">3</span>Worked numbers</label><span class="counter">3</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">4</span>Measurement</label><span class="counter">2</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">5</span>Failure</label><span class="counter">3</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink-3);"><input type="checkbox" disabled="disabled"><span class="mono faint" style="font-size: 11px; min-width: 18px;">6</span>Frontier</label><span class="counter">0</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">7</span>Industrial application</label><span class="counter">1</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">8</span>Decision aids</label><span class="counter">2</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="mono faint" style="font-size: 11px; min-width: 18px;">9</span>Sources</label><span class="counter">2</span></li>
+        </ul>
+        <span class="help">Labs carry no layer · 4 results</span>
+      </fieldset>
+
+      <fieldset class="rt" style="border-left: 0; border-right: 0; border-bottom: 0; margin: 0; padding: 14px 0 0; display: flex; flex-direction: column; gap: 4px;">
+        <legend class="cap" style="padding: 0 8px 0 0;">source tier</legend>
+        <ul class="col">
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="chip t-pri"><i>pri</i> primary</span></label><span class="counter">6</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="chip t-ven"><i>ven</i> vendor</span></label><span class="counter">7</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="chip t-anl"><i>anl</i> analyst</span></label><span class="counter">1</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="chip t-pra"><i>pra</i> practitioner</span></label><span class="counter">3</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="chip t-ill"><i>ill</i> illustrative</span></label><span class="counter">2</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span class="chip t-der"><i>ƒ</i> derived</span></label><span class="counter">5</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink-3);"><input type="checkbox" disabled="disabled"><span class="chip t-opn"><i>opn</i> open</span></label><span class="counter">0</span></li>
+        </ul>
+      </fieldset>
+
+      <fieldset class="rt" style="border-left: 0; border-right: 0; border-bottom: 0; margin: 0; padding: 14px 0 0; display: flex; flex-direction: column; gap: 4px;">
+        <legend class="cap" style="padding: 0 8px 0 0;">verification age</legend>
+        <ul class="col">
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">≤ 30 d</label><span class="counter">18</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">≤ 90 d</label><span class="counter">4</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox"><span style="color: var(--warn);">&gt; 90 d · stale figure</span></label><span class="counter">1</span></li>
+        </ul>
+      </fieldset>
+
+      <fieldset class="rt" style="border-left: 0; border-right: 0; border-bottom: 0; margin: 0; padding: 14px 0 0; display: flex; flex-direction: column; gap: 4px;">
+        <legend class="cap" style="padding: 0 8px 0 0;">type</legend>
+        <ul class="col">
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">Chapter section</label><span class="counter">17</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">Lab</label><span class="counter">4</span></li>
+          <li class="between" style="min-height: 28px;"><label class="check" style="color: var(--ink);"><input type="checkbox">Registry row</label><span class="counter">2</span></li>
+        </ul>
+      </fieldset>
+
+    </aside>
+
+    <main style="padding: 28px 40px 32px 40px; display: flex; flex-direction: column; gap: 16px; overflow: hidden;">
+      <div class="col" style="gap: 8px;">
+        <span class="cap">search · chapters, labs, registries · release 2026.09</span>
+        <div class="between">
+          <h1 class="h2"><span class="muted">Results for</span> idempotency</h1>
+          <div class="seg" role="group" aria-label="Sort results">
+            <button aria-pressed="true">Relevance</button><button aria-pressed="false">Book order</button><button aria-pressed="false">Recently verified</button>
+          </div>
+        </div>
+        <div class="row" style="gap: 12px;">
+          <span class="meta">23 results · 312 ms</span>
+          <span class="cap">·</span>
+          <span class="cap">also matched idempotent, idempotence</span>
+        </div>
+      </div>
+      <div class="empty" style="padding: 12px 16px; flex-direction: row; align-items: center; gap: 12px;">
+        <span class="glyph">✢</span>
+        <span class="small muted">No filters applied. Showing every match. Pick a layer or a source tier on the left to narrow the list.</span>
+      </div>
+      <ol class="rt-s" aria-label="Search results">
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">21.2</span>
+              <a href="#" class="h4">Mechanism</a>
+              <span class="small faint">ch21 · Control plane and durable execution</span>
+            </div>
+            <span class="label faint">chapter section</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">An activity that writes to an external system carries an <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> key built from the workflow id and the step number. A retried write with the same key is recognised by the receiver and discarded.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">layer 2 · mechanism</span>
+            <span class="chip t-pri"><i>pri</i> primary</span> <span class="chip t-ven"><i>ven</i> vendor</span>
+            <span class="meta">v1.5.0</span>
+            <span class="st st-ok">verified 9 d</span>
+          </div>
+        </li>
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">21.3</span>
+              <a href="#" class="h4">Worked numbers</a>
+              <span class="small faint">ch21 · Control plane and durable execution</span>
+            </div>
+            <span class="label faint">chapter section</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">Without durable execution the scenario produces 117 duplicate side effects a day. A durable workflow with <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> keys on every write activity repeats none.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">layer 3 · worked numbers</span>
+            <span class="chip t-ill"><i>ill</i> illustrative</span> <span class="chip t-der"><i>ƒ</i> derived</span>
+            <span class="meta">v1.5.0</span>
+            <span class="st st-ok">verified 9 d</span> <span class="derive">ƒ L47</span>
+          </div>
+        </li>
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">26.3</span>
+              <a href="#" class="h4">Mechanism</a>
+              <span class="small faint">ch26 · Sensors and verification</span>
+            </div>
+            <span class="label faint">chapter section</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">An <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> sensor compares each write activity's key against the workflow's history and blocks a second write with the same key before it reaches the tool.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">layer 2 · mechanism</span>
+            <span class="chip t-pri"><i>pri</i> primary</span> <span class="chip t-pra"><i>pra</i> practitioner</span>
+            <span class="meta">v1.4.2</span>
+            <span class="st st-ok">verified 17 d</span>
+          </div>
+        </li>
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">Lab 21</span>
+              <a href="#" class="h4">Kill the worker at step 7</a>
+              <span class="small faint">Lab 21 · README · durable execution</span>
+            </div>
+            <span class="label faint">lab · readme</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">Run the agent as a Temporal workflow, stop the worker at step 7 and count writes in the work-order system. Expected: 0 duplicates with <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> keys, 117 a day without.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">lab · no layer</span>
+            <span class="chip t-der"><i>ƒ</i> derived</span>
+            <span class="meta">ci 12 Sep 09:41</span>
+            <span class="st st-ok">verified 9 d</span> <span class="st st-ok">reproduced</span>
+          </div>
+        </li>
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">21.9 r4</span>
+              <a href="#" class="h4">Temporal documentation · retry policies</a>
+              <span class="small faint">ch21 · Sources · row r4</span>
+            </div>
+            <span class="label faint">registry row</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">Default retry policy: initial interval 1 s, backoff coefficient 2.0. Activities should be written so that a retry is safe; the documentation recommends an <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> key per activity.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">layer 9 · sources</span>
+            <span class="chip t-ven"><i>ven</i> vendor</span>
+            <span class="meta">row checked</span>
+            <span class="st st-ok">verified 9 d</span>
+          </div>
+        </li>
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">29.4</span>
+              <a href="#" class="h4">Measurement</a>
+              <span class="small faint">ch29 · Observability and audit</span>
+            </div>
+            <span class="label faint">chapter section</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">Count repeated <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> keys per trace. A non-zero count on a write span is a defect, not noise, and the audit pack records it with the span hash.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">layer 4 · measurement</span>
+            <span class="chip t-pri"><i>pri</i> primary</span> <span class="chip t-pra"><i>pra</i> practitioner</span>
+            <span class="meta">v1.3.0</span>
+            <span class="st st-ok">verified 29 d</span>
+          </div>
+        </li>
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">25.5</span>
+              <a href="#" class="h4">Failure</a>
+              <span class="small faint">ch25 · Tools, MCP, execution environments</span>
+            </div>
+            <span class="label faint">chapter section</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">A tool schema without an <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> key parameter leaves the harness to guess whether a timeout meant success. The guess is wrong in both directions.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">layer 5 · failure</span>
+            <span class="chip t-ven"><i>ven</i> vendor</span> <span class="chip t-pra"><i>pra</i> practitioner</span>
+            <span class="meta">v1.4.0</span>
+            <span class="st st-ok">verified 15 d</span>
+          </div>
+        </li>
+
+        <li class="rb" style="padding: 14px 0 16px; display: flex; flex-direction: column; gap: 6px;">
+          <div class="between" style="align-items: baseline;">
+            <div class="row" style="gap: 10px; align-items: baseline; min-width: 0;">
+              <span class="mono" style="font-size: 13px; min-width: 72px; color: var(--ink-2);">15.3</span>
+              <a href="#" class="h4">Worked numbers</a>
+              <span class="small faint">ch15 · Economics of models</span>
+            </div>
+            <span class="label faint">chapter section</span>
+          </div>
+          <p style="font-size: 14px; line-height: 22px; padding-left: 82px; max-width: 820px;">A resubmitted batch without an <mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">idempotency</mark> key is billed as a new batch. The cost line uses the cached-input price in source row r12, last checked 97 days ago.</p>
+          <div class="row" style="gap: 10px; padding-left: 82px; flex-wrap: wrap;">
+            <span class="cap" style="color: var(--ink-2);">layer 3 · worked numbers</span>
+            <span class="chip t-ven"><i>ven</i> vendor</span> <span class="chip t-der"><i>ƒ</i> derived</span>
+            <span class="meta">v1.4.1</span>
+            <span class="st st-ok">verified 23 d</span> <span class="st-block sb-warn" style="height: 20px; padding: 0 6px; font-size: 10.5px;">stale · r12 97 d</span>
+          </div>
+        </li>
+      </ol>
+      <div class="between">
+        <span class="meta">showing 8 of 23</span>
+        <button class="btn">Show 15 more</button>
+      </div>
+    </main>
+
+    <aside class="rl" style="padding: 24px 24px 24px 20px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;" aria-label="Search instrument">
+      <section class="inst">
+        <div class="inst-h"><span class="t">Index</span><span class="sep">·</span><span>2026.09</span><span class="ts">built 14 Sep 03:10</span></div>
+        <div class="inst-b">
+          <dl class="kv" style="margin: 0;">
+            <dt>chapters</dt><dd>41 · 369 sections</dd>
+            <dt>labs</dt><dd>35 readmes</dd>
+            <dt>registry rows</dt><dd>1,204</dd>
+            <dt>edition</dt><dd>EN · PT at parity</dd>
+          </dl>
+        </div>
+        <div class="inst-f" style="justify-content: space-between;"><span>index hash</span><span class="tex">#e19a·4c07</span></div>
+      </section>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Query</span><span class="sep">·</span><span>312 ms</span><span class="ts">under 500 ms target</span></div>
+        <div class="inst-b" style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="loader">parse    █░░░░░░░░░░░░░░░░░░░   9 ms
+lexical  ████████░░░░░░░░░░░░ 118 ms
+vector   ███████░░░░░░░░░░░░░ 104 ms
+re-rank  █████░░░░░░░░░░░░░░░  81 ms</div>
+          <div class="rt" style="padding-top: 10px; display: flex; flex-direction: column; gap: 4px;">
+            <span class="cap">terms</span>
+            <span class="meta">idempotency · idempotent · idempotence</span>
+            <span class="meta faint">pt: idempotência · 23 results</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="col" style="gap: 10px;">
+        <span class="cap">from this search</span>
+        <a class="btn" href="#" style="justify-content: space-between;"><span>Ask about idempotency</span><span class="kbd">a</span></a>
+        <a class="btn" href="#" style="justify-content: space-between;"><span>Open Lab 21</span><span class="meta">~ 3 min</span></a>
+        <a class="btn" href="#" style="justify-content: space-between;"><span>Save search</span><span class="meta">account</span></a>
+      </section>
+
+      <div class="rt" style="padding-top: 12px; display: flex; flex-direction: column; gap: 6px;">
+        <span class="cap">marks</span>
+        <div class="row small"><span class="st-block sb-warn" style="height: 20px; padding: 0 6px; font-size: 10.5px;">stale</span><span class="muted">a cited figure in the section is &gt; 90 d old</span></div>
+        <div class="row small"><mark style="background: var(--sel); color: inherit; box-shadow: 0 1px 0 var(--ver); padding: 0 2px;">term</mark><span class="muted">matched text</span></div>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="statusbar">
+    <span>search · idempotency</span>
+    <span>EN · source EN</span>
+    <span>pinned release 2026.09</span>
+    <span>23 results · 312 ms</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);">loaded 0.36 s</span>
+  </footer>
+</div>
+
+
+</body>
+</html>

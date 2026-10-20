@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Retries at eleven steps &mdash; Provider Two Engineering</title>
+  <meta property="og:title" content="Retries at eleven steps (social title)">
+  <meta property="og:url" content="https://provider-two.example/blog/retries?utm_source=social">
+  <meta property="article:published_time" content="2026-07-14T09:30:00-03:00">
+  <meta property="article:modified_time" content="2026-09-01T10:00:00Z">
+  <meta name="description" content="Why a retried write without a key is a second write.">
+  <link rel="stylesheet" href="/site.css">
+  <link rel="canonical" href="/blog/retries">
+  <style>
+    body { font-family: sans-serif; } .hidden-style { display: none; }
+  </style>
+  <script type="application/ld+json">
+    { "@context": "https://schema.org", "@type": "BlogPosting", "headline": "Retries at eleven steps", "datePublished": "2026-07-14", "author": { "@type": "Organization", "name": "Provider Two" } }
+  </script>
+  <script>
+    window.analyticsToken = "SCRIPT_TEXT_MUST_NOT_APPEAR"; document.write("<p>injected</p>");
+  </script>
+</head>
+<body>
+  <!-- a comment with <p>markup</p> that is not text -->
+  <nav aria-label="Main"><a href="/">Home</a> <a href="/blog">Blog</a></nav>
+  <header>
+    <h1>Retries at eleven steps</h1>
+    <p class="byline">By the platform team &middot; <time datetime="2026-07-15T12:00:00Z">15 July 2026</time></p>
+  </header>
+  <main>
+    <article>
+      <p>A retried write without an idempotency key is a <strong>second write</strong>. At eleven steps the chance that at least one step retries is 1 &minus; 0.95<sup>11</sup> &asymp; 43&nbsp;%.</p>
+      <p>The fix is small: <code>Idempotency-Key</code> on every write, stored for 24&nbsp;h, replayed on a repeat. Compare <a href="/pricing" title="Pricing > plans">our plans</a>.</p>
+      <div hidden>A hidden note: HIDDEN_TEXT_MUST_NOT_APPEAR.</div>
+      <div aria-hidden="true"><span>ARIA_HIDDEN_MUST_NOT_APPEAR</span></div>
+      <svg viewBox="0 0 10 10" role="img"><title>SVG_TITLE_MUST_NOT_APPEAR</title><text x="1" y="5">SVG_TEXT_MUST_NOT_APPEAR</text></svg>
+      <figure><img src="/retry.png" alt="Retry rate against steps"><figcaption>Figure 1. The retry rate against the number of steps.</figcaption></figure>
+      <table>
+        <thead><tr><th>Steps</th><th>Retry rate</th></tr></thead>
+        <tbody><tr><td>5</td><td>23 %</td></tr><tr><td>11</td><td>43 %</td></tr></tbody>
+      </table>
+      <ul><li>Keys on every write</li><li>Replay, never re-run</li></ul>
+      <pre><code>POST /writes
+Idempotency-Key: 7c3e…</code></pre>
+      <textarea name="notes">TEXTAREA_MUST_NOT_APPEAR</textarea>
+      <noscript>NOSCRIPT_MUST_NOT_APPEAR</noscript>
+      <template><p>TEMPLATE_MUST_NOT_APPEAR</p></template>
+      <p>Tags in text: 1 < 2 and a &lt;b&gt; written as entities; a&#x301; combining; &#128512; emoji; &unknownthing; kept.</p>
+    </article>
+  </main>
+  <footer><p>&copy; 2026 Provider Two</p></footer>
+  <script src="/bundle.js"></script>
+  <script>trailing("SCRIPT_TAIL_MUST_NOT_APPEAR")</script>
+</body>
+</html>

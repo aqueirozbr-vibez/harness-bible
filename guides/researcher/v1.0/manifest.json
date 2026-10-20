@@ -1,0 +1,20 @@
+{
+  "agent": "researcher",
+  "version": "v1.0",
+  "files": [],
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "parts": {
+    "planner": {
+      "files": [
+        "planner.md"
+      ],
+      "sha256": "8b60657c7ce6b259381bbde3ec97d837b00f522befa740dbd04424d9666228e4"
+    },
+    "reader": {
+      "files": [
+        "reader.md"
+      ],
+      "sha256": "257a4949865245997d3a5c8b51a7ff0981bffcfe7a9529691a4295f07c5e79ca"
+    }
+  }
+}

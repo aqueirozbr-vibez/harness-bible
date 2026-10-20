@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2024-08-01, at vendor.example.
+
+Pre-norm stabilizes deep transformers The source: Xiong et al., ICML 2020, arXiv 2002.04745.
+
+Context: Pre-norm stabilizes deep transformers — Xiong et al., ICML 2020, arXiv 2002.04745

@@ -1,0 +1,784 @@
+{
+  "uid": "hb-assistant",
+  "title": "Assistant citation and flag rate",
+  "description": "The assistant's headline series, computed from the rows the product keeps (feature-specs/21 § 5.3). Every query is a statement of lib/metrics/sql; npm run assistant:metrics prints the same numbers. Generated: change lib/metrics/dashboard.ts and run npm run observe:generate.",
+  "tags": [
+    "harness-bible",
+    "assistant"
+  ],
+  "timezone": "utc",
+  "editable": false,
+  "graphTooltip": 1,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": {
+    "from": "now/M",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "citation rate",
+      "description": "citation rate: of the answers that made claims, the share whose citation verdict is PASS with no claim replaced. An answer is an assistant row that is neither a refusal nor a failed turn. One with no claims to check (citation verdict NA: a walk, whose numbers are the script's) is outside the rate. Over the dashboard's range, by month: with the default range, the month to date.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"citation rate\"\nFROM (\n-- citation rate: of the answers that made claims, the share whose citation verdict is PASS with no claim replaced.\n-- An answer is an assistant row that is neither a refusal nor a failed turn. One with no claims to check\n-- (citation verdict NA: a walk, whose numbers are the script's) is outside the rate.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('month'::text, m.\"createdAt\") AS bucket,\n       ''::text AS key,\n       count(*) FILTER (WHERE v.verdict = 'PASS' AND m.substituted = 0)::float8 AS n,\n       count(*)::float8 AS d,\n       count(*) FILTER (WHERE v.verdict = 'PASS' AND m.substituted = 0)::float8 / count(*)::float8 AS value\nFROM \"Message\" m\nJOIN \"SensorVerdict\" v ON v.\"messageId\" = m.id AND v.sensor = 'citation'\nWHERE m.role = 'ASSISTANT'\n  AND m.\"refusalCause\" IS NULL\n  AND m.\"modelId\" IS NOT NULL\n  AND v.verdict <> 'NA'\n  AND m.\"createdAt\" >= $__timeFrom()::timestamp\n  AND m.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value"
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "flag rate",
+      "description": "flag rate: flagged assistant messages over assistant messages, as 'any' and one line per coded reason. A message is counted in its own bucket, whenever the flag was placed. Over the dashboard's range, by month: with the default range, the month to date.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- flag rate: flagged assistant messages over assistant messages, as 'any' and one line per coded reason.\n-- A message is counted in its own bucket, whenever the flag was placed.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nWITH turns AS (\n  SELECT m.id, date_trunc('month'::text, m.\"createdAt\") AS bucket\n  FROM \"Message\" m\n  WHERE m.role = 'ASSISTANT'\n    AND m.\"createdAt\" >= $__timeFrom()::timestamp\n    AND m.\"createdAt\" < $__timeTo()::timestamp\n), totals AS (\n  SELECT bucket, count(*)::float8 AS d FROM turns GROUP BY 1\n), flagged AS (\n  SELECT t.bucket, t.id, f.reason\n  FROM turns t\n  JOIN \"Flag\" f ON f.\"messageId\" = t.id\n)\nSELECT tot.bucket,\n       'any'::text AS key,\n       (SELECT count(DISTINCT x.id) FROM flagged x WHERE x.bucket = tot.bucket)::float8 AS n,\n       tot.d,\n       (SELECT count(DISTINCT x.id) FROM flagged x WHERE x.bucket = tot.bucket)::float8 / tot.d AS value\nFROM totals tot\nUNION ALL\nSELECT tot.bucket,\n       x.reason AS key,\n       count(DISTINCT x.id)::float8 AS n,\n       tot.d,\n       count(DISTINCT x.id)::float8 / tot.d AS value\nFROM flagged x\nJOIN totals tot ON tot.bucket = x.bucket\nGROUP BY tot.bucket, x.reason, tot.d\nORDER BY 1, 2\n) s\nWHERE s.key = 'any'\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value"
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "refusal rate",
+      "description": "refusal rate by cause: refusals over turns, as 'any' and one line per cause. A turn is an assistant row: an answer, a refusal or a failed turn. Over the dashboard's range, by month: with the default range, the month to date.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- refusal rate by cause: refusals over turns, as 'any' and one line per cause.\n-- A turn is an assistant row: an answer, a refusal or a failed turn.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nWITH turns AS (\n  SELECT date_trunc('month'::text, m.\"createdAt\") AS bucket, m.\"refusalCause\" AS cause\n  FROM \"Message\" m\n  WHERE m.role = 'ASSISTANT'\n    AND m.\"createdAt\" >= $__timeFrom()::timestamp\n    AND m.\"createdAt\" < $__timeTo()::timestamp\n), totals AS (\n  SELECT bucket, count(*)::float8 AS d, count(cause)::float8 AS refused FROM turns GROUP BY 1\n)\nSELECT tot.bucket, 'any'::text AS key, tot.refused AS n, tot.d, tot.refused / tot.d AS value\nFROM totals tot\nUNION ALL\nSELECT tot.bucket, t.cause AS key, count(*)::float8 AS n, tot.d, count(*)::float8 / tot.d AS value\nFROM turns t\nJOIN totals tot ON tot.bucket = t.bucket\nWHERE t.cause IS NOT NULL\nGROUP BY tot.bucket, t.cause, tot.d\nORDER BY 1, 2\n) s\nWHERE s.key = 'any'\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value"
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "first-token p95",
+      "description": "first-token p95: the 95th percentile of the time to the first token, in milliseconds, over the turns that streamed one. Over the dashboard's range, by month: with the default range, the month to date.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 18,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"first-token p95\"\nFROM (\n-- first-token p95: the 95th percentile of the time to the first token, in milliseconds, over the turns that streamed one.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('month'::text, m.\"createdAt\") AS bucket,\n       ''::text AS key,\n       NULL::float8 AS n,\n       count(*)::float8 AS d,\n       percentile_cont(0.95) WITHIN GROUP (ORDER BY m.\"firstTokenMs\") AS value\nFROM \"Message\" m\nWHERE m.role = 'ASSISTANT'\n  AND m.\"firstTokenMs\" IS NOT NULL\n  AND m.\"createdAt\" >= $__timeFrom()::timestamp\n  AND m.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 2000
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value"
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "citation rate",
+      "description": "citation rate: of the answers that made claims, the share whose citation verdict is PASS with no claim replaced. An answer is an assistant row that is neither a refusal nor a failed turn. One with no claims to check (citation verdict NA: a walk, whose numbers are the script's) is outside the rate.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"citation rate\"\nFROM (\n-- citation rate: of the answers that made claims, the share whose citation verdict is PASS with no claim replaced.\n-- An answer is an assistant row that is neither a refusal nor a failed turn. One with no claims to check\n-- (citation verdict NA: a walk, whose numbers are the script's) is outside the rate.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('day'::text, m.\"createdAt\") AS bucket,\n       ''::text AS key,\n       count(*) FILTER (WHERE v.verdict = 'PASS' AND m.substituted = 0)::float8 AS n,\n       count(*)::float8 AS d,\n       count(*) FILTER (WHERE v.verdict = 'PASS' AND m.substituted = 0)::float8 / count(*)::float8 AS value\nFROM \"Message\" m\nJOIN \"SensorVerdict\" v ON v.\"messageId\" = m.id AND v.sensor = 'citation'\nWHERE m.role = 'ASSISTANT'\n  AND m.\"refusalCause\" IS NULL\n  AND m.\"modelId\" IS NOT NULL\n  AND v.verdict <> 'NA'\n  AND m.\"createdAt\" >= $__timeFrom()::timestamp\n  AND m.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "flag rate",
+      "description": "flag rate: flagged assistant messages over assistant messages, as 'any' and one line per coded reason. A message is counted in its own bucket, whenever the flag was placed.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- flag rate: flagged assistant messages over assistant messages, as 'any' and one line per coded reason.\n-- A message is counted in its own bucket, whenever the flag was placed.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nWITH turns AS (\n  SELECT m.id, date_trunc('day'::text, m.\"createdAt\") AS bucket\n  FROM \"Message\" m\n  WHERE m.role = 'ASSISTANT'\n    AND m.\"createdAt\" >= $__timeFrom()::timestamp\n    AND m.\"createdAt\" < $__timeTo()::timestamp\n), totals AS (\n  SELECT bucket, count(*)::float8 AS d FROM turns GROUP BY 1\n), flagged AS (\n  SELECT t.bucket, t.id, f.reason\n  FROM turns t\n  JOIN \"Flag\" f ON f.\"messageId\" = t.id\n)\nSELECT tot.bucket,\n       'any'::text AS key,\n       (SELECT count(DISTINCT x.id) FROM flagged x WHERE x.bucket = tot.bucket)::float8 AS n,\n       tot.d,\n       (SELECT count(DISTINCT x.id) FROM flagged x WHERE x.bucket = tot.bucket)::float8 / tot.d AS value\nFROM totals tot\nUNION ALL\nSELECT tot.bucket,\n       x.reason AS key,\n       count(DISTINCT x.id)::float8 AS n,\n       tot.d,\n       count(DISTINCT x.id)::float8 / tot.d AS value\nFROM flagged x\nJOIN totals tot ON tot.bucket = x.bucket\nGROUP BY tot.bucket, x.reason, tot.d\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "refusal rate by cause",
+      "description": "refusal rate by cause: refusals over turns, as 'any' and one line per cause. A turn is an assistant row: an answer, a refusal or a failed turn.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- refusal rate by cause: refusals over turns, as 'any' and one line per cause.\n-- A turn is an assistant row: an answer, a refusal or a failed turn.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nWITH turns AS (\n  SELECT date_trunc('day'::text, m.\"createdAt\") AS bucket, m.\"refusalCause\" AS cause\n  FROM \"Message\" m\n  WHERE m.role = 'ASSISTANT'\n    AND m.\"createdAt\" >= $__timeFrom()::timestamp\n    AND m.\"createdAt\" < $__timeTo()::timestamp\n), totals AS (\n  SELECT bucket, count(*)::float8 AS d, count(cause)::float8 AS refused FROM turns GROUP BY 1\n)\nSELECT tot.bucket, 'any'::text AS key, tot.refused AS n, tot.d, tot.refused / tot.d AS value\nFROM totals tot\nUNION ALL\nSELECT tot.bucket, t.cause AS key, count(*)::float8 AS n, tot.d, count(*)::float8 / tot.d AS value\nFROM turns t\nJOIN totals tot ON tot.bucket = t.bucket\nWHERE t.cause IS NOT NULL\nGROUP BY tot.bucket, t.cause, tot.d\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "timeseries",
+      "title": "first-token p95",
+      "description": "first-token p95: the 95th percentile of the time to the first token, in milliseconds, over the turns that streamed one.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"first-token p95\"\nFROM (\n-- first-token p95: the 95th percentile of the time to the first token, in milliseconds, over the turns that streamed one.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('day'::text, m.\"createdAt\") AS bucket,\n       ''::text AS key,\n       NULL::float8 AS n,\n       count(*)::float8 AS d,\n       percentile_cont(0.95) WITHIN GROUP (ORDER BY m.\"firstTokenMs\") AS value\nFROM \"Message\" m\nWHERE m.role = 'ASSISTANT'\n  AND m.\"firstTokenMs\" IS NOT NULL\n  AND m.\"createdAt\" >= $__timeFrom()::timestamp\n  AND m.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "grounded distribution",
+      "description": "grounded distribution: the median (p50) and the 10th percentile (p10) of the grader's score, over the graded answers.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- grounded distribution: the median (p50) and the 10th percentile (p10) of the grader's score, over the graded answers.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT g.bucket, q.key, NULL::float8 AS n, g.d, q.value\nFROM (\n  SELECT date_trunc('day'::text, m.\"createdAt\") AS bucket,\n         count(*)::float8 AS d,\n         percentile_cont(0.5) WITHIN GROUP (ORDER BY m.grounded::float8) AS p50,\n         percentile_cont(0.1) WITHIN GROUP (ORDER BY m.grounded::float8) AS p10\n  FROM \"Message\" m\n  WHERE m.role = 'ASSISTANT'\n    AND m.grounded IS NOT NULL\n    AND m.\"createdAt\" >= $__timeFrom()::timestamp\n    AND m.\"createdAt\" < $__timeTo()::timestamp\n  GROUP BY 1\n) g\nCROSS JOIN LATERAL (VALUES ('p10'::text, g.p10), ('p50'::text, g.p50)) AS q(key, value)\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "type": "timeseries",
+      "title": "cost per active account",
+      "description": "cost per active account: the model spend recorded in the bucket, in USD, over the accounts with at least one message in it. The spend is every BudgetLedger row, whatever its kind; an account is a reader.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"cost per active account\"\nFROM (\n-- cost per active account: the model spend recorded in the bucket, in USD, over the accounts with at least one message in it.\n-- The spend is every BudgetLedger row, whatever its kind; an account is a reader.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nWITH spend AS (\n  SELECT date_trunc('day'::text, b.\"createdAt\") AS bucket, sum(b.\"costUsd\")::float8 AS usd\n  FROM \"BudgetLedger\" b\n  WHERE b.\"createdAt\" >= $__timeFrom()::timestamp\n    AND b.\"createdAt\" < $__timeTo()::timestamp\n  GROUP BY 1\n), active AS (\n  SELECT date_trunc('day'::text, m.\"createdAt\") AS bucket, count(DISTINCT m.\"userId\")::float8 AS accounts\n  FROM \"Message\" m\n  WHERE m.\"createdAt\" >= $__timeFrom()::timestamp\n    AND m.\"createdAt\" < $__timeTo()::timestamp\n  GROUP BY 1\n)\nSELECT COALESCE(s.bucket, a.bucket) AS bucket,\n       ''::text AS key,\n       COALESCE(s.usd, 0) AS n,\n       COALESCE(a.accounts, 0) AS d,\n       COALESCE(s.usd, 0) / NULLIF(a.accounts, 0) AS value\nFROM spend s\nFULL JOIN active a ON a.bucket = s.bucket\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "type": "timeseries",
+      "title": "cache read share",
+      "description": "cache read share: tokens read from the prompt cache over all prompt tokens, on the frontier alias's answered calls. The prompt is what was sent: the uncached input, the cache reads and the cache writes.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 28,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"cache read share\"\nFROM (\n-- cache read share: tokens read from the prompt cache over all prompt tokens, on the frontier alias's answered calls.\n-- The prompt is what was sent: the uncached input, the cache reads and the cache writes.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('day'::text, b.\"createdAt\") AS bucket,\n       ''::text AS key,\n       sum(b.\"cacheReadTokens\")::float8 AS n,\n       sum(b.\"inputTokens\" + b.\"cacheReadTokens\" + b.\"cacheWriteTokens\")::float8 AS d,\n       sum(b.\"cacheReadTokens\")::float8 / NULLIF(sum(b.\"inputTokens\" + b.\"cacheReadTokens\" + b.\"cacheWriteTokens\"), 0)::float8 AS value\nFROM \"BudgetLedger\" b\nWHERE b.alias = 'hb-frontier'\n  AND b.outcome = 'ok'\n  AND b.\"createdAt\" >= $__timeFrom()::timestamp\n  AND b.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": "timeseries",
+      "title": "edition mismatch share",
+      "description": "edition mismatch share: of the answers that cite the book, the share whose reader's language is not the cited edition's, one line per reader's language. While the Portuguese editions are pending, a Portuguese answer cites the English edition, and this is the measure of that gap. An answer that cites nothing has no edition to differ from and is outside the share.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 28,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- edition mismatch share: of the answers that cite the book, the share whose reader's language is not the cited\n-- edition's, one line per reader's language. While the Portuguese editions are pending, a Portuguese answer cites the\n-- English edition, and this is the measure of that gap. An answer that cites nothing has no edition to differ from\n-- and is outside the share.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('day'::text, m.\"createdAt\") AS bucket,\n       c.locale AS key,\n       count(*) FILTER (WHERE lower(m.\"citesEdition\") <> c.locale)::float8 AS n,\n       count(*)::float8 AS d,\n       count(*) FILTER (WHERE lower(m.\"citesEdition\") <> c.locale)::float8 / count(*)::float8 AS value\nFROM \"Message\" m\nJOIN \"Conversation\" c ON c.id = m.\"conversationId\"\nWHERE m.role = 'ASSISTANT'\n  AND m.\"refusalCause\" IS NULL\n  AND m.\"modelId\" IS NOT NULL\n  AND m.\"citesEdition\" IS NOT NULL\n  AND m.\"createdAt\" >= $__timeFrom()::timestamp\n  AND m.\"createdAt\" < $__timeTo()::timestamp\nGROUP BY 1, 2\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "type": "timeseries",
+      "title": "purge",
+      "description": "purge: conversations whose text the retention run cleared, by the instant of the run that cleared them. The count of messages a run nulled is in the run's own job line, not in a row.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 36,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"purge\"\nFROM (\n-- purge: conversations whose text the retention run cleared, by the instant of the run that cleared them.\n-- The count of messages a run nulled is in the run's own job line, not in a row.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored.\nSELECT date_trunc('day'::text, c.\"textPurgedAt\") AS bucket,\n       ''::text AS key,\n       count(*)::float8 AS n,\n       NULL::float8 AS d,\n       count(*)::float8 AS value\nFROM \"Conversation\" c\nWHERE c.\"textPurgedAt\" >= $__timeFrom()::timestamp\n  AND c.\"textPurgedAt\" < $__timeTo()::timestamp\nGROUP BY 1\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "type": "logs",
+      "title": "purge · the job's own lines",
+      "description": "Each run of the retention job writes one line with what it cleared: messages, citations, mode results, conversations, abandoned turns closed. The series above counts conversations from the rows; the count of messages a run nulled exists only here.",
+      "datasource": {
+        "type": "loki",
+        "uid": "hb-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 44,
+        "w": 24,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "hb-loki"
+          },
+          "editorMode": "code",
+          "queryType": "range",
+          "expr": "{service_name=\"hb-lines\"} | kind=\"job\" | job=\"assistant:purge\""
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "wrapLogMessage": true,
+        "enableLogDetails": true,
+        "sortOrder": "Descending",
+        "dedupStrategy": "none"
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-06-12, at regulator.example.
+
+In passing: A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+Context: The MoE fails the memory test at two GPUs.

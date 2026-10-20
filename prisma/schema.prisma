@@ -1,0 +1,1399 @@
+// Content domain of the pinned release (feature-specs/04-content-domain-schema.md § 3).
+// Rows are immutable per release: the pipeline inserts a new release or aborts (architecture § 11.1–3).
+// The `vector` extension and Section.embedding arrived with Phase 2 (migration 20260923210000_embeddings,
+// feature-specs/12 § 4.1): the development database is the compose pgvector container, because pgvector has
+// no Windows build for the local cluster (12 § 8, D5). The embedding job is the only writer of the three
+// embedding columns, under EMBED=1 (12 § 4.2, D3); every other content write is the pipeline's.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/db/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Part {
+  P0
+  P1
+  P2
+  P3
+  P4
+}
+
+enum Carries {
+  PROSE
+  INSTRUMENT
+  LAB
+}
+
+enum Layer {
+  INTUITION
+  MECHANISM
+  WORKED_NUMBERS
+  MEASUREMENT
+  FAILURE
+  FRONTIER
+  INDUSTRIAL_APPLICATION
+  DECISION_AIDS
+  SOURCES
+}
+
+enum SourceTier {
+  PRIMARY
+  VENDOR
+  ANALYST
+  PRACTITIONER
+  ILLUSTRATIVE
+  DERIVED
+  OPEN
+}
+
+enum Lang {
+  EN
+  PT
+}
+
+enum VerifyStatus {
+  PASSED
+  FAILED
+  UNVERIFIED
+}
+
+enum Verdict {
+  REPRODUCED
+  NOT_REPRODUCED
+  KILLED
+  ERROR
+}
+
+enum EditionStatus {
+  PARITY
+  PENDING
+}
+
+enum Role {
+  READER
+  BUILDER
+  CONTRIBUTOR
+  CURATOR
+  ORG_ADMIN
+}
+
+enum Residency {
+  BR_SAO_PAULO
+}
+
+// ---------- accounts and reader state (feature-specs/04 § 9, 05 § 4.1) ----------
+// Account-scoped rows carry organisationId; user-scoped rows carry userId. The
+// client extension injects the session's value into every query (tenant guard).
+
+model Organisation {
+  id              String      @id @default(uuid())
+  name            String
+  seatLimit       Int
+  residency       Residency   @default(BR_SAO_PAULO)
+  ssoIssuer       String?
+  tokenCap        BigInt
+  /// The organisation's switch for research of its members' answered questions (feature-specs/40 § 8.2, A4): default on, set by an operator's command.
+  researchEnabled Boolean     @default(true)
+  /// The platform's research principal (feature-specs/48 § 7.3; review of unit 70): true on the one organisation `npm run research:org -- --create` makes, which the research views read as the platform's payer. One at most, by a partial unique index Prisma cannot declare (migration 20261012200000_research_principal, lib/db/RAW_SQL.md).
+  researchPrincipal Boolean   @default(false)
+  ideMinutesCap   Int
+  // The gateway key's `tpm_limit` (feature-specs/11 § 3.4, D4). No default: the value for a new
+  // organisation is a number the spec does not give and is owed by Andre (tracker Open Questions).
+  tokensPerMinute Int
+  createdAt       DateTime    @default(now())
+  users           User[]
+  seats           Seat[]
+  gatewayKey      GatewayKey?
+}
+
+model User {
+  id                    String                 @id @default(uuid())
+  organisationId        String?
+  organisation          Organisation?          @relation(fields: [organisationId], references: [id])
+  email                 String                 @unique
+  displayName           String
+  role                  Role                   @default(READER)
+  identityVerified      Boolean                @default(false)
+  provenanceConsentAt   DateTime?
+  /// The reader's switch for research of their answered questions (feature-specs/40 § 8.2): default on.
+  researchEnabled       Boolean                @default(true)
+  locale                String                 @default("pt-BR")
+  throttledUntil        DateTime?
+  deletedAt             DateTime?
+  // feature-specs/08 § 4.3, 09 § 9: the Keycloak subject this user signs in as; the LGPD
+  // deletion request (hard delete 30 days later); whether the person edited the display name.
+  keycloakSub           String?                @unique
+  deletionRequestedAt   DateTime?
+  displayNameEdited     Boolean                @default(false)
+  createdAt             DateTime               @default(now())
+  seat                  Seat?
+  sessions              Session[]
+  identities            Identity[]
+  authEvents            AuthEvent[]
+  bookmarks             Bookmark[]
+  notes                 Note[]
+  progress              ReadingPathProgress[]
+  gatewayKey            GatewayKey?
+  conversations         Conversation[]
+  // Improve (feature-specs/29 § 3). Each of these outlives the account: a hard delete nulls the id on the
+  // suggestion, the action, the merge and the export, and removes the roster rows, which are about the person.
+  suggestions           Suggestion[]
+  curatorActions        CuratorAction[]
+  rosters               CuratorRoster[]
+  merges                Merge[]
+  auditExports          AuditExport[]
+  researchRuns          ResearchRun[]
+  researchConversations ResearchConversation[]
+  endorsements          ProposalEndorsement[]
+  /// The month's sends to Improve (feature-specs/48 D5), which go with the account.
+  researchSendMonths    ResearchSendMonth[]
+  /// The seeds offered to this person as a curator (feature-specs/36 § 7.1), which go with the account.
+  curationSeeds         CurationSeed[]
+
+  @@index([organisationId, role])
+}
+
+// The identity provider Keycloak brokered for a sign-in (feature-specs/08 § 4.3, 09 § 4.3).
+enum IdentityProvider {
+  GOOGLE
+  GITHUB
+}
+
+model Identity {
+  id                String           @id @default(uuid())
+  userId            String
+  user              User             @relation(fields: [userId], references: [id])
+  provider          IdentityProvider
+  providerAccountId String
+  email             String
+  createdAt         DateTime         @default(now())
+  lastSignInAt      DateTime         @default(now())
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Seat {
+  id             String       @id @default(uuid())
+  organisationId String
+  organisation   Organisation @relation(fields: [organisationId], references: [id])
+  userId         String?      @unique
+  user           User?        @relation(fields: [userId], references: [id])
+  assignedAt     DateTime?
+
+  @@index([organisationId])
+}
+
+// ---------- security (feature-specs/09 § 9) ----------
+
+// The Phase 1 audit table: sign-ins, sign-outs, revocations, deletion requests, policy denies.
+// `detail` never carries free text or an e-mail; `ipHash` is a salted hash (LGPD).
+model AuthEvent {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  sessionId String?
+  kind      String
+  detail    Json
+  ipHash    String
+  userAgent String
+  traceId   String
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([createdAt])
+}
+
+// Token bucket per "{scope}:{id}:{path}" (09 § 7 step 5, D9); not account data.
+model RateLimitBucket {
+  key       String   @id
+  tokens    Float
+  updatedAt DateTime
+}
+
+// Stored first response of an idempotent POST/PATCH, per user, path and key; 24 h.
+model IdempotencyKey {
+  userId    String
+  path      String
+  key       String
+  bodyHash  String
+  status    Int?
+  response  Json?
+  createdAt DateTime @default(now())
+
+  @@id([userId, path, key])
+  @@index([createdAt])
+}
+
+// One row per signed-in browser: id = sha256 of the cookie token (feature-specs/08 § 4.2, § 5.2).
+model Session {
+  id           String   @id
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  expiresAt    DateTime
+  idpSessionId String?
+  // The broker's id token, kept only as the `id_token_hint` of RP-initiated logout (09 D4, amended 2026-09-23):
+  // without it Keycloak shows a confirmation page. It is not a credential and expires in minutes.
+  idToken      String?
+  createdAt    DateTime @default(now())
+  lastSeenAt   DateTime @default(now())
+  device       String   @default("")
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model Bookmark {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  sectionId String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, sectionId])
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  sectionId String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // One note per user and section (feature-specs/07 D1): `PUT /notes/{sectionId}` is an upsert.
+  @@unique([userId, sectionId])
+  @@index([userId, updatedAt])
+}
+
+// One row per user and path. `completedStops` holds stop ids in state read, plus
+// `stopId/sectionId` markers for a sections stop read part way (05 D2); `completed`
+// mirrors the count of read stops for the TRD contract.
+model ReadingPathProgress {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  path           String
+  pathVersion    String
+  lastSectionId  String
+  completed      Int      @default(0)
+  completedStops String[]
+  startedAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([userId, path])
+}
+
+model Release {
+  id          String           @id
+  gitSha      String           @unique
+  renderHash  String
+  isCurrent   Boolean          @default(false)
+  publishedAt DateTime
+  ingestedAt  DateTime         @default(now())
+  chapters    ChapterVersion[]
+}
+
+model Chapter {
+  number   Int              @id
+  part     Part
+  slug     String           @unique
+  carries  Carries
+  versions ChapterVersion[]
+}
+
+model ChapterVersion {
+  id              String           @id @default(uuid())
+  chapterNumber   Int
+  chapter         Chapter          @relation(fields: [chapterNumber], references: [number])
+  releaseId       String
+  release         Release          @relation(fields: [releaseId], references: [id])
+  version         String
+  sourceLang      Lang             @default(EN)
+  verifyStatus    VerifyStatus
+  redteamStatus   VerifyStatus
+  redteamOpen     Int              @default(0)
+  verifiedAt      DateTime?
+  contentHash     String
+  words           Int
+  derivedLinked   Int
+  derivedTotal    Int
+  citedTotal      Int
+  citedFastMoving Int
+  sections        Section[]
+  editions        Edition[]
+  lab             Lab?
+  sourceRows      SourceRow[]
+  xrefs           CrossReference[]
+
+  /**
+   * One row per chapter per release (invariant 1). An unchanged chapter keeps its version in the next release (04 § 6.10), so the version is not unique per chapter: unit 54c's first merge found that key refusing every second release.
+   */
+  @@unique([chapterNumber, releaseId])
+  @@index([releaseId])
+}
+
+model Edition {
+  id               String         @id @default(uuid())
+  chapterVersionId String
+  chapterVersion   ChapterVersion @relation(fields: [chapterVersionId], references: [id])
+  lang             Lang
+  status           EditionStatus
+  title            String
+  standfirst       String
+
+  @@unique([chapterVersionId, lang])
+}
+
+// Anchors ("21.3", "F-21-03", "21.9 r4", "lab-21") recur in every release, so they are not
+// primary keys: each row has a surrogate id and its anchor is unique within its parent (D19).
+model Section {
+  id               String                       @id @default(uuid())
+  anchor           String
+  chapterVersionId String
+  chapterVersion   ChapterVersion               @relation(fields: [chapterVersionId], references: [id])
+  layer            Layer
+  ordinal          Int
+  titleEn          String
+  titlePt          String?
+  markdownEn       String
+  markdownPt       String?
+  htmlEn           String
+  htmlPt           String?
+  codeBlocks       Json
+  /**
+   * Word count of the layer's markdown, for reading-time estimates (05 D6).
+   */
+  words            Int                          @default(0)
+  /**
+   * The chapter title and the layer's prose as raw plain text: the search index and its headlines (06 D3).
+   */
+  textEn           String                       @default("")
+  /**
+   * Generated in the migration from titleEn and textEn; GIN-indexed.
+   */
+  tsv              Unsupported("tsvector")?
+  /**
+   * The section's embedding at the pinned `hb-embed` target, cosine, HNSW-indexed; null until the embedding job ran (feature-specs/12 § 4.1).
+   */
+  embedding        Unsupported("vector(1024)")?
+  /**
+   * The pinned target that produced it ("infinity/BAAI/bge-m3", self-hosted since 2026-09-25); a pin change re-embeds the release (12 § 3).
+   */
+  embeddingModel   String?
+  embeddedAt       DateTime?
+  figures          Figure[]
+  xrefsFrom        CrossReference[]
+
+  @@unique([chapterVersionId, ordinal])
+  @@unique([chapterVersionId, anchor])
+  @@index([anchor])
+  @@index([chapterVersionId, layer])
+}
+
+model Figure {
+  id            String      @id @default(uuid())
+  anchor        String
+  sectionId     String
+  section       Section     @relation(fields: [sectionId], references: [id])
+  ordinal       Int
+  label         String
+  valueText     String
+  value         Decimal?
+  unit          String?
+  tier          SourceTier
+  fastMoving    Boolean     @default(false)
+  scenarioParam Boolean     @default(false)
+  sourceRowId   String?
+  sourceRow     SourceRow?  @relation(fields: [sourceRowId], references: [id])
+  derive        DeriveLink?
+
+  @@unique([sectionId, anchor])
+  @@index([anchor])
+  @@index([tier, fastMoving])
+}
+
+model DeriveLink {
+  figureId   String @id
+  figure     Figure @relation(fields: [figureId], references: [id])
+  labId      String
+  filePath   String @default("derive.py")
+  line       Int
+  key        String
+  expression String
+}
+
+model SourceRow {
+  id               String                   @id @default(uuid())
+  anchor           String
+  chapterVersionId String
+  chapterVersion   ChapterVersion           @relation(fields: [chapterVersionId], references: [id])
+  ordinal          Int
+  claim            String
+  citation         String
+  url              String?
+  doi              String?
+  tier             SourceTier
+  verifiedAt       DateTime
+  fastMoving       Boolean                  @default(false)
+  /**
+   * Generated in the migration from claim and citation; GIN-indexed (06 § 4.3).
+   */
+  tsv              Unsupported("tsvector")?
+  figures          Figure[]
+
+  @@unique([chapterVersionId, ordinal])
+  @@unique([chapterVersionId, anchor])
+  @@index([verifiedAt])
+}
+
+model CrossReference {
+  id               String         @id @default(uuid())
+  chapterVersionId String
+  chapterVersion   ChapterVersion @relation(fields: [chapterVersionId], references: [id])
+  fromSectionId    String
+  from             Section        @relation(fields: [fromSectionId], references: [id])
+  targetKind       String
+  targetId         String
+
+  @@index([targetId])
+}
+
+model Lab {
+  id                 String                   @id @default(uuid())
+  anchor             String
+  chapterVersionId   String                   @unique
+  chapterVersion     ChapterVersion           @relation(fields: [chapterVersionId], references: [id])
+  folder             String
+  readme             String
+  /**
+   * The README's first heading without the `Lab NN —` prefix (06 § 4.3).
+   */
+  title              String                   @default("")
+  /**
+   * The README as raw plain text, for the search index.
+   */
+  textEn             String                   @default("")
+  /**
+   * Generated in the migration from title and textEn; GIN-indexed.
+   */
+  tsv                Unsupported("tsvector")?
+  expectedRuntimeS   Int?
+  wallClockCapS      Int                      @default(600)
+  cpu                Int                      @default(2)
+  memoryGiB          Int                      @default(4)
+  declaresModelCalls Boolean                  @default(false)
+  egressExtra        String[]
+  ciVerdict          Verdict?
+  ciCheckedAt        DateTime?
+  ciDivergedSince    DateTime?
+  derived            Json
+  files              LabFile[]
+
+  @@index([anchor])
+}
+
+model LabFile {
+  id      String @id @default(uuid())
+  labId   String
+  lab     Lab    @relation(fields: [labId], references: [id])
+  path    String
+  sha256  String
+  content String
+
+  @@unique([labId, path])
+}
+
+// ---------- ledger (feature-specs/14 § 4.1; architecture § 4.3, invariant 16) ----------
+// One hash chain for the whole product, ordered by seq. Not a tenant model: the platform
+// owns the chain and a per-account or per-chapter view is a filter. Written only through
+// lib/ledger/append(); the migration's trigger refuses UPDATE and DELETE at the database.
+
+enum LedgerKind {
+  SUBMITTED
+  GRADED
+  SENSORS
+  DECIDED
+  CURATOR
+  MERGED
+  ANSWER
+  EXPORT
+  // feature-specs/29 § 3, § 5: a research run's record (spec 40 § 9) and a reader's endorsement of a proposal.
+  RESEARCH
+  ENDORSED
+  // feature-specs/45 § 5 (unit 63b): a contributor's withdrawal of a suggestion that waited for a person. Not WITHDRAWN,
+  // which the record timeline already titles an endorsement taken back with.
+  RETRACTED
+  // feature-specs/45 § 3.7 (unit 62b): a reader's deletion of a conversation (D2); its payload names what was deleted, by id.
+  ERASED
+}
+
+model LedgerRecord {
+  seq              Int        @id @default(autoincrement())
+  kind             LedgerKind
+  /// A pseudonymous user id, or a service identity (`service:adjudicator`, `service:export`); never a name or e-mail.
+  actor            String
+  suggestionId     String?
+  chapterVersionId String?
+  /// The kind's payload (lib/schemas/ledger.ts); free text appears only as sha256 hashes.
+  payload          Json
+  createdAt        DateTime   @default(now())
+  prevHash         String
+  hash             String     @unique
+
+  @@index([suggestionId, seq])
+  @@index([chapterVersionId, seq])
+  @@index([kind, createdAt])
+}
+
+// ---------- model gateway (feature-specs/11 § 6; architecture § 5.5, invariants 6 and 7) ----------
+// One virtual key per organisation, or per user for an individual account: exactly one of the two
+// ids is set (the migration's CHECK). The key itself is stored encrypted under GATEWAY_KEY_SECRET,
+// which the workers hold and the web container does not, so the web tier sees that a key exists
+// and when it was rotated, never the key. Both models join the tenant guard by principal, and
+// BudgetLedger is append-only (the client extension refuses an update or a delete).
+// Both foreign keys are RESTRICT (migration 20260923193000_gateway_key_restrict), not Prisma's
+// SET NULL for an optional relation: SET NULL would break the CHECK, and a cascade would destroy
+// the only record of the key the gateway still budgets. Deleting a principal therefore requires
+// revoking its key at the gateway and removing this row first.
+
+model GatewayKey {
+  id              String        @id @default(uuid())
+  organisationId  String?       @unique
+  organisation    Organisation? @relation(fields: [organisationId], references: [id], onDelete: Restrict)
+  userId          String?       @unique
+  user            User?         @relation(fields: [userId], references: [id], onDelete: Restrict)
+  /// The gateway's own id for the key (LiteLLM's `token`, the sha256 of the key): what `/key/info` and `/key/delete` take.
+  litellmKeyId    String        @unique
+  /// AES-256-GCM under GATEWAY_KEY_SECRET (lib/gateway/keys.ts); workers only.
+  keyCiphertext   String
+  maxBudgetUsd    Decimal
+  tokensPerMinute Int
+  createdAt       DateTime      @default(now())
+  rotatedAt       DateTime?
+}
+
+enum BudgetKind {
+  ASSISTANT
+  GRADING
+  ADJUDICATION
+  LAB
+  EMBED
+  RERANK
+  RESEARCH
+}
+
+// One row per completed or refused model call (feature-specs/11 § 5.4): the usage the gateway
+// reported, the cost at lib/gateway/prices.ts, the outcome, and the ids that make the call
+// attributable. The account meter and the observability rows read these; nothing updates them.
+model BudgetLedger {
+  id               String     @id @default(uuid())
+  organisationId   String?
+  userId           String?
+  /// "2026-09": the month the gateway's budget window covers.
+  month            String
+  kind             BudgetKind
+  alias            String
+  /// The pinned id the gateway reported; the alias when the call produced no response.
+  modelId          String
+  inputTokens      Int
+  outputTokens     Int
+  cacheReadTokens  Int        @default(0)
+  cacheWriteTokens Int        @default(0)
+  costUsd          Decimal
+  /// ok | budget | unavailable | refused | provider_refusal
+  outcome          String
+  /// message id, suggestion id, run id
+  ref              String?
+  traceId          String
+  gatewayCallId    String?
+  createdAt        DateTime   @default(now())
+
+  @@index([organisationId, month])
+  @@index([userId, month])
+}
+
+/// Activity: the assistant's conversations (feature-specs/15 § 3; architecture § 4.2). Every row carries `userId`
+/// so the tenant guard of lib/db/client.ts scopes it, and the message text is the only free text here: the purge
+/// of § 8 nulls it and `Citation.claimText` after 30 days, keeping the citations, verdicts, timings and hashes.
+enum MessageRole {
+  USER
+  ASSISTANT
+}
+
+enum AssistantMode {
+  EXPLAIN
+  COMPARE
+  WALK
+  LAB
+  BRIEF
+}
+
+enum FlagKind {
+  ANSWER
+  REFUSAL
+}
+
+model Conversation {
+  id             String    @id @default(uuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+  organisationId String?
+  /// Pinned at creation: a conversation never crosses releases (§ 3).
+  releaseId      String
+  /// Assistant 1 wrote the chapter, the section and the label a conversation was opened on. Since Assistant 2.0
+  /// (feature-specs/23 § 7.1) a conversation has no chapter: the three are null on every new row and nothing reads them.
+  chapter        Int?
+  sectionId      String?
+  locale         String
+  contextLabel   String?
+  createdAt      DateTime  @default(now())
+  lastMessageAt  DateTime  @default(now())
+  textPurgedAt   DateTime?
+  messages       Message[]
+
+  @@index([userId, lastMessageAt])
+}
+
+model Message {
+  id                     String          @id @default(uuid())
+  conversationId         String
+  conversation           Conversation    @relation(fields: [conversationId], references: [id])
+  /// Denormalised tenant column, as Bookmark and Note carry one.
+  userId                 String
+  role                   MessageRole
+  /// 1, 2, … within the conversation; a turn is a USER row then its ASSISTANT row.
+  ordinal                Int
+  mode                   AssistantMode
+  /// ≤ 800 characters for USER; the assistant's claims joined for ASSISTANT; null after the purge.
+  text                   String?
+  refusalCause           String?
+  refusalBeforeRetrieval Boolean?
+  guideVersion           String?
+  guideSha256            String?
+  modelId                String?
+  promptSha256           String?
+  grounded               Decimal?
+  repaired               Boolean         @default(false)
+  substituted            Int             @default(0)
+  citesEdition           String?
+  firstTokenMs           Int?
+  totalMs                Int?
+  tokensIn               Int?
+  tokensOut              Int?
+  cacheReadTokens        Int?
+  /// Retrieval past its 600 ms budget (feature-specs/12 § 7.2): recorded, never a refusal.
+  overBudget             Boolean         @default(false)
+  traceId                String
+  /// The ANSWER record this turn wrote (feature-specs/14 § 4.3).
+  ledgerSeq              Int?
+  ledgerHash             String?
+  /// walk mode (feature-specs/18 § 6, D4): the reader's inputs on the USER row, the run and its values on the ASSISTANT row.
+  aidInputs              Json?
+  /// What the assistant would have said where a claim was replaced (feature-specs/40 § 4, D4): `[{ sectionId, text }]`; never sent to a client; purged with `text`.
+  uncovered              Json?
+  /// The sections retrieval gave the model, cited or not (40 § 4): anchors, metadata that stays.
+  retrievedSections      String[]        @default([])
+  modeResult             Json?
+  createdAt              DateTime        @default(now())
+  citations              Citation[]
+  verdicts               SensorVerdict[]
+  flags                  Flag[]
+  researchRun            ResearchRun?
+
+  @@unique([conversationId, ordinal])
+  @@index([userId, createdAt])
+}
+
+model Citation {
+  id          String  @id @default(uuid())
+  messageId   String
+  message     Message @relation(fields: [messageId], references: [id])
+  userId      String
+  ordinal     Int
+  sectionId   String
+  figureId    String?
+  version     String
+  editionLang String
+  /// The claim's sentence; null after the purge, because it is answer text.
+  claimText   String?
+
+  @@unique([messageId, ordinal])
+  @@index([sectionId])
+}
+
+model SensorVerdict {
+  id        String  @id @default(uuid())
+  messageId String
+  message   Message @relation(fields: [messageId], references: [id])
+  userId    String
+  sensor    String
+  verdict   String
+  detail    String
+  data      Json
+
+  @@unique([messageId, sensor])
+}
+
+model Flag {
+  id        String   @id @default(uuid())
+  messageId String
+  message   Message  @relation(fields: [messageId], references: [id])
+  userId    String
+  kind      FlagKind
+  /// A coded reason (§ 5.4), never free text: a flag is a calibration label, not a second retention problem.
+  reason    String
+  createdAt DateTime @default(now())
+
+  @@unique([messageId, userId])
+  @@index([createdAt])
+}
+
+// ---------- improvement (feature-specs/29 § 3; architecture § 4.2, § 5.4) ----------
+// The rows Improve is made of. They are PLATFORM models, outside the tenant filter (29 § 2, D1): a suggestion is a
+// contribution to the one book every tenant reads, a curator of another organisation must read it, and its record
+// is published in the chapter's history. In exchange they are read and written only through lib/db/improve.ts,
+// which puts the owner-or-curator condition in the query itself.
+//
+// What the migration adds by hand, because Prisma cannot state it (lib/db/RAW_SQL.md):
+//   - a suggestion is deleted only while it is a DRAFT (the trigger `suggestion_kept`); its children cascade from
+//     it, so a draft goes with everything it has and nothing of a submitted suggestion can go at all;
+//   - the form of an id and of every sha256, the pairing of a class with its reason and of an anchor's kind with
+//     the anchor it names, and the few bounds the spec gives in words.
+//
+// None of these rows has a foreign key to a content table (ChapterVersion, Release, Section): they name content
+// by id and by anchor, as Conversation and Citation do, because a content row belongs to one release.
+
+enum SuggestionOrigin {
+  HUMAN
+  RESEARCHER
+  /// A curator's own change: a revert of a merged one (feature-specs/37 § 8; unit 54e). It has no contributor and no run of the suggestion's workflow.
+  CURATOR
+}
+
+enum AnchorKind {
+  SECTION
+  FIGURE
+  SOURCE_ROW
+}
+
+/// What is proposed (feature-specs/30 § 4.1).
+enum ChangeKind {
+  EDIT_TEXT
+  SET_VALUE
+  EDIT_ROW
+  ADD_CLAIM
+  ADD_ROW
+  RESTRUCTURE
+}
+
+/// Computed in code from the anchor and the change kind, never chosen by a person or a model (invariant 8).
+enum ChangeClass {
+  WORDING
+  CITED_FIGURE
+  DERIVED_FIGURE
+  NEW_CLAIM
+  CURATOR_ALWAYS
+}
+
+/// Why a suggestion is CURATOR_ALWAYS; the curator queue's groups.
+enum CuratorReason {
+  SAFETY_OT
+  SCENARIO_PARAMETER
+  STRUCTURE
+  NEW_SOURCE_TIER
+  RUBRIC
+}
+
+enum EvidenceKind {
+  LINK
+  DOI
+  UPLOAD
+  LAB_RUN
+}
+
+enum EvidenceTier {
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+  U
+}
+
+enum EvidenceState {
+  PENDING
+  GRADED
+}
+
+enum Decision {
+  ACCEPT
+  REQUEST_MORE
+  DECLINE
+  CURATOR_REVIEW
+}
+
+/// Where a suggestion is (feature-specs/29 § 3.1); `outcome` says what was last decided.
+enum SuggestionState {
+  DRAFT
+  SUBMITTED
+  INTAKE_DECLINED
+  GRADED
+  SENSED
+  DECIDED
+  CURATOR_QUEUE
+  MERGING
+  MERGED
+  CLOSED
+}
+
+enum SuggestionSensor {
+  SCHEMA
+  ANCHOR_EXISTS
+  EVIDENCE_PARSES
+  RATIONALE_LENGTH
+  DERIVE_CONSISTENCY
+  CROSS_CHAPTER
+  LINT
+}
+
+enum SensorResult {
+  PASS
+  FAIL
+  WARN
+  NA
+}
+
+enum CuratorActionKind {
+  ACCEPT
+  KEEP_REQUEST_MORE
+  DECLINE
+  MERGE
+  REVERT
+}
+
+model Suggestion {
+  /// "S-15-0377": S, the chapter in two digits, a serial per chapter (29 § 4.2). Assigned at creation, never reused.
+  id               String                    @id
+  origin           SuggestionOrigin
+  /// The contributor. Null for a researcher's proposal, and after the contributor's account is hard-deleted.
+  userId           String?
+  user             User?                     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  chapterNumber    Int
+  /// The chapter version it was written against, and that version's release.
+  chapterVersionId String
+  releaseId        String
+  /// The anchor's part and every part a shared figure or row reaches (feature-specs/33 § 4.2). Never empty.
+  parts            Part[]
+  changeKind       ChangeKind
+  changeClass      ChangeClass
+  /// Set exactly when the class is CURATOR_ALWAYS.
+  curatorReason    CuratorReason?
+  /// The ProposalSchema union of feature-specs/31 § 4. Null until the draft's owner has written one.
+  proposal         Json?
+  /// sha256 over the anchor and the normalised proposal (feature-specs/42 § 4.3). Null while `proposal` is.
+  proposalKey      String?
+  /// At most 200 words: the contributor's, or for a researcher's proposal the agent's note.
+  rationale        String?
+  locale           Lang
+  /// Drafted from a research finding (feature-specs/48 § 8.6): provenance, never credit.
+  fromResearch     Boolean                   @default(false)
+  state            SuggestionState           @default(DRAFT)
+  /// The last decision in force.
+  outcome          Decision?
+  score            Int?
+  rubricVersionId  String
+  rubricVersion    RubricVersion             @relation(fields: [rubricVersionId], references: [id])
+  workflowId       String?                   @unique
+  createdAt        DateTime                  @default(now())
+  submittedAt      DateTime?
+  decidedAt        DateTime?
+  closedAt         DateTime?
+  /// When its contributor asked to withdraw it (feature-specs/45 § 5; unit 63b): written by the request, kept when the run closes it, taken back when the run cannot.
+  withdrawnAt      DateTime?
+  /// The reset the suggestion's run sleeps until at a budget cap (feature-specs/33 § 7; unit 50f); null when it is not waiting.
+  budgetResetsAt   DateTime?
+  anchor           Anchor?
+  evidence         EvidenceItem[]
+  sensorVerdicts   SuggestionSensorVerdict[]
+  adjudication     Adjudication?
+  criteria         CriterionVerdict[]
+  curatorActions   CuratorAction[]
+  calibration      CalibrationEvent[]
+  seeds            CurationSeed[]
+  merge            Merge?
+
+  @@index([state, changeClass])
+  @@index([userId, createdAt])
+  @@index([chapterNumber, state])
+  @@index([proposalKey])
+}
+
+/// What a suggestion is about, one to one, as it read when the suggestion was written.
+model Anchor {
+  suggestionId    String     @id
+  suggestion      Suggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  kind            AnchorKind
+  /// "21.3": always set, the section the figure or the row belongs to.
+  sectionAnchor   String
+  /// "F-21-03", for a FIGURE and for nothing else.
+  figureAnchor    String?
+  /// "21.9 r4", for a SOURCE_ROW and for nothing else.
+  sourceRowAnchor String?
+  currentText     String
+  /// Of the anchored row as the pipeline stored it.
+  contentSha256   String
+  existsAtVersion Boolean
+}
+
+model EvidenceItem {
+  id            String        @id @default(uuid())
+  suggestionId  String
+  suggestion    Suggestion    @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  ordinal       Int
+  kind          EvidenceKind
+  state         EvidenceState @default(PENDING)
+  url           String?
+  doi           String?
+  storageKey    String?
+  /// An upload's file name as the contributor's browser gave it: for the list and the curator, never for the grader's input (feature-specs/34 § 25).
+  fileName      String?
+  /// A lab run's id; no relation until Phase 3 has the table.
+  labRunId      String?
+  title         String?
+  host          String?
+  publishedOn   DateTime?     @db.Date
+  ageDays       Int?
+  /// "opened:200" | "unreachable:<cause>" | "unsupported:<type>" | "not_supplied" (feature-specs/32 § 4.4). Null until the fetcher has been.
+  fetchStatus   String?
+  contentSha256 String?
+  /// The text the grader read, in object storage.
+  textKey       String?
+  tier          EvidenceTier?
+  baseScore     Int?
+  relevance     Decimal?
+  recency       Decimal?
+  independence  Decimal?
+  adjustedScore Int?
+  /// The grader's, at most 30 words.
+  reason        String?
+  /// A model id, or "intake-rules".
+  gradedBy      String?
+  gradedAt      DateTime?
+
+  @@unique([suggestionId, ordinal])
+}
+
+/// A suggestion's sensor verdicts. Not the reader's `SensorVerdict`, which is a tenant's row (29 § 8).
+model SuggestionSensorVerdict {
+  id           String           @id @default(uuid())
+  suggestionId String
+  suggestion   Suggestion       @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  sensor       SuggestionSensor
+  result       SensorResult
+  detail       String
+  data         Json
+  createdAt    DateTime         @default(now())
+
+  @@unique([suggestionId, sensor])
+}
+
+/// One per suggestion, replaced by a revision's (feature-specs/33 § 6.4).
+model Adjudication {
+  suggestionId    String            @id
+  suggestion      Suggestion        @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  decision        Decision
+  /// "intake-rules" | "router" | "adjudicator"
+  decidedBy       String
+  score           Int
+  acceptAt        Int?
+  floorAt         Int?
+  sufficientTier  EvidenceTier?
+  failingSensor   SuggestionSensor?
+  guideVersion    String?
+  guideSha256     String?
+  /// Null for a decision no model made: a decline at intake, a route by rule.
+  modelId         String?
+  promptSha256    String?
+  /// The adjudicator's one failure, named, with `decision` CURATOR_REVIEW (feature-specs/33 § 5.4, § 6.1); null when it decided.
+  failure         String?
+  rubricVersionId String
+  rubricVersion   RubricVersion     @relation(fields: [rubricVersionId], references: [id])
+  decidedAt       DateTime
+  traceId         String
+}
+
+model CriterionVerdict {
+  id           String     @id @default(uuid())
+  suggestionId String
+  suggestion   Suggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  /// tier | relevance | recency | independence | corroboration | threshold
+  criterion    String
+  verdict      String
+  /// At most 30 words.
+  reason       String
+
+  @@unique([suggestionId, criterion])
+}
+
+model CuratorAction {
+  id           String            @id @default(uuid())
+  suggestionId String
+  suggestion   Suggestion        @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  /// Null after the curator's account is hard-deleted; the ledger keeps the pseudonym.
+  curatorId    String?
+  curator      User?             @relation(fields: [curatorId], references: [id], onDelete: SetNull)
+  action       CuratorActionKind
+  overrideCode String?
+  criterion    String?
+  /// At most 400 characters.
+  note         String?
+  seeded       Boolean           @default(false)
+  seedMatched  Boolean?
+  /// Milliseconds: a wait of weeks is past what an INTEGER holds (unit 53's review).
+  queueWaitMs  BigInt
+  createdAt    DateTime          @default(now())
+
+  @@index([suggestionId])
+  @@index([overrideCode])
+  @@index([curatorId, createdAt])
+}
+
+/// The TRD's "calibration store": what the adjudicator said beside what the curator did.
+model CalibrationEvent {
+  id                  String            @id @default(uuid())
+  suggestionId        String
+  suggestion          Suggestion        @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  criterion           String?
+  adjudicatorDecision Decision?
+  adjudicatorScore    Int?
+  curatorAction       CuratorActionKind
+  overrideCode        String?
+  seeded              Boolean
+  /// The curator's action the workflow made this event from (feature-specs/33 § 6.3; unit 50e): one event an action.
+  curatorActionId     String?           @unique
+  rubricVersionId     String
+  rubricVersion       RubricVersion     @relation(fields: [rubricVersionId], references: [id])
+  createdAt           DateTime          @default(now())
+
+  @@index([suggestionId])
+  @@index([createdAt])
+  @@index([criterion, createdAt])
+}
+
+/// A rubric review due (feature-specs/36 § 6.3; unit 53d): opened by the workflow's step that wrote the calibration
+/// event which took a criterion's override rate past 20 % in a quarter, one per criterion and quarter. The review
+/// itself, changing the rubric, is a person's work (spec 30 § 8); this row is the record that it is due.
+model RubricReview {
+  /// `R-<rubric version>-<serial>`: R-1.2-0007, the serial the version's next.
+  id              String        @id
+  rubricVersionId String
+  rubricVersion   RubricVersion @relation(fields: [rubricVersionId], references: [id])
+  criterion       String
+  /// The calendar quarter, UTC: 2026-Q4.
+  quarter         String
+  /// The rate that passed the line, with its counts: `overridden` of `reviewed`.
+  rate            Float
+  overridden      Int
+  reviewed        Int
+  openedAt        DateTime      @default(now())
+
+  @@unique([criterion, quarter])
+  @@index([quarter])
+}
+
+/// A seed (feature-specs/36 § 7.1; unit 53e): a suggestion another curator decided, offered again to a curator who has
+/// not seen it, under a fresh id, with that curator's decision as the known answer. Its decision is a curator's action
+/// marked `seeded`, compared with the answer and never signalled. Offered only while `CURATOR_SEED_SHARE` is above 0,
+/// which it is not until Andre sets it (A16).
+model CurationSeed {
+  /// The fresh id the curator sees: the chapter's next serial, taken as a draft takes one, so never a suggestion's.
+  id           String            @id
+  suggestionId String
+  suggestion   Suggestion        @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  curatorId    String
+  curator      User              @relation(fields: [curatorId], references: [id], onDelete: Cascade)
+  /// The known answer: the action another curator took on the suggestion.
+  answer       CuratorActionKind
+  /// What stood when the suggestion was in the queue, as the seed shows it: the adjudication's decision, or none.
+  standing     Decision?
+  offeredAt    DateTime          @default(now())
+  /// The curator's own action on it, once decided.
+  actionId     String?           @unique
+
+  @@unique([curatorId, suggestionId])
+  @@index([curatorId, actionId])
+}
+
+/// The rubric as rows (feature-specs/30 § 5 fills them). `id` is the version: "v1.2".
+model RubricVersion {
+  id            String             @id
+  publishedAt   DateTime
+  appliesAt     DateTime
+  sha256        String
+  tiers         Json
+  adjustments   Json
+  examples      Json
+  thresholds    Threshold[]
+  suggestions   Suggestion[]
+  adjudications Adjudication[]
+  calibration   CalibrationEvent[]
+  reviews       RubricReview[]
+}
+
+model Threshold {
+  id              String        @id @default(uuid())
+  rubricVersionId String
+  rubricVersion   RubricVersion @relation(fields: [rubricVersionId], references: [id])
+  changeClass     ChangeClass
+  acceptAt        Int?
+  floorAt         Int?
+
+  @@unique([rubricVersionId, changeClass])
+}
+
+/// Which curator reviews which part. Written by `npm run roster:set` (29 § 6.3); a row with `until` in the past is history.
+model CuratorRoster {
+  id     String    @id @default(uuid())
+  userId String
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  part   Part
+  since  DateTime
+  until  DateTime?
+
+  @@unique([userId, part])
+}
+
+/// The next serial of each chapter's suggestion ids, taken under a row lock (29 § 4.2).
+model SuggestionCounter {
+  chapterNumber Int @id
+  next          Int
+}
+
+/// An accepted suggestion on its way into the book (feature-specs/37).
+model Merge {
+  suggestionId String     @id
+  suggestion   Suggestion @relation(fields: [suggestionId], references: [id], onDelete: Cascade)
+  branch       String
+  commitSha    String?
+  versionFrom  String
+  versionTo    String?
+  /// patch | minor | major, by the book's rule.
+  bump         String
+  check        Json?
+  mergedById   String?
+  mergedBy     User?      @relation(fields: [mergedById], references: [id], onDelete: SetNull)
+  mergedAt     DateTime?
+  releaseFrom  String
+  releaseTo    String?
+  /// The id of the suggestion that reverted this one, if any.
+  revertedBy   String?
+}
+
+/// An audit pack somebody asked for (feature-specs/38 § 3; unit 55b): the ledger's records in a scope, a range and some kinds.
+model AuditExport {
+  id            String    @id @default(uuid())
+  /// Null after the requester's account is hard-deleted.
+  requestedById String?
+  requestedBy   User?     @relation(fields: [requestedById], references: [id], onDelete: SetNull)
+  /// The request as `AuditExportScopeColumnSchema` has it: the scope, the window and the kinds.
+  scope         Json
+  /// The pack's span in the chain, known once the file is written; null while preparing.
+  fromSeq       Int?
+  toSeq         Int?
+  /// The estimate while preparing, the file's count once ready.
+  records       Int
+  /// The hash of the last record in the pack: what a verifier's recomputation must end on. Null while preparing.
+  headHash      String?
+  storageKey    String?
+  /// PREPARING | READY (38 § 5).
+  state         String
+  createdAt     DateTime  @default(now())
+  readyAt       DateTime?
+
+  @@index([requestedById, createdAt])
+}
+
+// ---------- research (feature-specs/40 § 3; the asker's own rows, under the tenant filter) ----------
+
+enum ResearchState {
+  QUEUED
+  PLANNING
+  READING
+  VALIDATING
+  SUBMITTING
+  DONE
+  SKIPPED
+  WAITING_BUDGET
+  FAILED
+  /// A person's run (feature-specs/48 § 5.6): the writer writes the report.
+  WRITING
+  /// A person's run refused, by a rule at its start or by the planner (48 § 5.2, § 5.3): an end state; the cause is `refusal`.
+  REFUSED
+}
+
+enum ResearchSkip {
+  OFF_USER
+  OFF_ORGANISATION
+  NOT_AN_ANSWER
+  NO_CITATION
+  DEDUPED
+  SAME_QUESTION
+  DAILY_LIMIT
+  BUDGET
+  NOTHING_TO_RESEARCH
+  TEXT_PURGED
+  UNAVAILABLE
+}
+
+enum FindingOutcome {
+  INVALID
+  DUPLICATE
+  /// Became a suggestion (feature-specs/42 § 4.1; unit 59b) and waits for Improve's answer: REFUTED or PROPOSED (42 § 5).
+  SUBMITTED
+  REFUTED
+  PROPOSED
+  /// A person's run's finding that passed the checks and is not yet used (feature-specs/48 § 5.5): its own id for the buttons.
+  VALID
+  /// Made the asker's own draft in Improve (48 § 8.2).
+  DRAFTED
+}
+
+/// A person's research: a conversation of runs (feature-specs/48 § 4). The asker's own row, under the tenant filter by userId.
+model ResearchConversation {
+  id             String        @id @default(uuid())
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organisationId String?
+  /// The language the conversation was opened in; each run carries the language its question was asked in.
+  locale         Lang
+  /// The Assistant answer it was started from (48 A6): the asker's own ASSISTANT message id, read inside their tenant.
+  /// No foreign key, so the Assistant's delete (feature-specs/45 § 3.3) never reaches a research; null from scratch.
+  seedMessageId  String?
+  createdAt      DateTime      @default(now())
+  lastRunAt      DateTime      @default(now())
+  /// Set once every run's text was purged (48 § 17.1).
+  textPurgedAt   DateTime?
+  runs           ResearchRun[]
+
+  @@index([userId, lastRunAt])
+}
+
+/// A research run of one answered turn (feature-specs/40 § 3): the asker's own row, keyed by userId under the tenant filter. The reference to a suggestion points one way, from here.
+model ResearchRun {
+  id             String                @id @default(uuid())
+  /// The assistant message it follows; one run a message. Null once the reader deleted the conversation while the run's
+  /// workflow worked: detached, without its text, and swept once its workflow has ended and 24 h have passed (feature-specs/45 § 3.5).
+  messageId      String?               @unique
+  message        Message?              @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organisationId String?
+  releaseId      String
+  locale         Lang
+  state          ResearchState
+  skip           ResearchSkip?
+  /// A code, never text.
+  failure        String?
+  /// The answer said "the book does not cover this".
+  gap            Boolean
+  /// The sections the answer cited.
+  sectionAnchors String[]
+  questionSha256 String
+  /// The planner's text; purged with the message's (40 § 8.3).
+  brief          String?
+  briefSha256    String?
+  /// The reader's findings and the pages its tools saw (41 § 6.2, § 7), as the asker's own text between the read, the validation and the submission; purged with the brief (40 § 8.3).
+  found          Json?
+  searches       Int                   @default(0)
+  pageReads      Int                   @default(0)
+  /// `research:<messageId>`; null for a run skipped before any workflow.
+  workflowId     String?               @unique
+  traceId        String
+  createdAt      DateTime              @default(now())
+  finishedAt     DateTime?
+  textPurgedAt   DateTime?
+  findings       ResearchFinding[]
+  /// The research conversation a person's run belongs to (feature-specs/48 § 4.2); null for a legacy run of an answered
+  /// turn and for one detached by its conversation's delete (48 § 17.2). Never set together with `messageId` (a CHECK).
+  conversationId String?
+  conversation   ResearchConversation? @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  /// 1, 2, … within its conversation.
+  ordinal        Int?
+  /// The person's question as stored: redacted, at most 800 characters; purged at 30 days (48 § 17.1).
+  question       String?
+  /// The planner's targets: the sections the reader is given (48 § 5.3).
+  targetAnchors  String[]              @default([])
+  /// Live progress (ResearchStepsSchema, 48 § 6); purged with the text.
+  steps          Json?
+  /// The writer's paragraphs (ReportSchema, 48 § 5.7); purged with the text.
+  report         Json?
+  /// The refusal's cause, a value of RESEARCH_REFUSALS: R-SCOPE, R-SCOPE-OT, R-UNVERIFIED or R-PERSONAL (48 § 5.2, § 5.3).
+  refusal        String?
+  /// The gateway's reset, when a call of this run met the person's cap (48 § 7.2).
+  budgetResetsAt DateTime?
+  /// When writeReport called the writer: the run's hb-frontier ledger rows from here are the writer's (48 § 15).
+  writingAt      DateTime?
+  /// A coded reason (FLAG_REASONS), the person's own label on the report (48 § 11.7).
+  flagReason     String?
+  flaggedAt      DateTime?
+
+  @@unique([conversationId, ordinal])
+  @@index([userId, createdAt])
+  @@index([state])
+}
+
+/// What a run found (feature-specs/40 § 3): the asker's own row; the only place a reader's question is tied to a suggestion.
+model ResearchFinding {
+  id            String         @id @default(uuid())
+  /// Null for a `PROPOSED` finding the sweep kept when it deleted its detached run: the asker's proposal outlives its run (feature-specs/45 § 3.5, § 3.6).
+  runId         String?
+  run           ResearchRun?   @relation(fields: [runId], references: [id], onDelete: Cascade)
+  userId        String
+  ordinal       Int
+  outcome       FindingOutcome
+  invalidReason String?
+  suggestionId  String?
+  /// The code a send to Improve failed with (feature-specs/48 § 8.4); never text.
+  failure       String?
+  /// When sendFinding made its suggestion (48 § 8.4). The month's sends are counted in `ResearchSendMonth`, which no delete of a finding reaches (48 § 8.3, D5; review of unit 74).
+  sentAt        DateTime?
+
+  @@unique([runId, ordinal])
+}
+
+/// A person's sends to Improve in a calendar month in UTC (feature-specs/48 § 8.3, D5; review of unit 74): the month's thirty, one row a person a month. The send's transaction takes a place in it, atomically, exactly when a finding becomes a suggestion (lib/db/research.ts `sendFindingTx`); no delete of a finding or a research reaches it, and the account's erasure takes it by the cascade.
+model ResearchSendMonth {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// "2026-10": the calendar month in UTC (`sendsMonthOf`).
+  month  String
+  /// The findings that became a suggestion this month; a duplicate made none and is not one.
+  count  Int    @default(0)
+
+  @@id([userId, month])
+}
+
+/// A reader's name put to a research proposal (feature-specs/42 § 6; unit 59d): the asker's own row, at most one per suggestion, deleted when withdrawn; the ledger keeps both records.
+model ProposalEndorsement {
+  suggestionId String   @id
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+}
+
+/// The platform's marks (feature-specs/40 § 3, § 5): "section:<anchor>" and "question:<sha256>" for the 30-day dedupe, "budget" with `until` the reset. No user, no text.
+model ResearchMark {
+  key   String    @id
+  at    DateTime
+  until DateTime?
+}

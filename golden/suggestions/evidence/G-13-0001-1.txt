@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-03-24, at regulator.example.
+
+In passing: The passage is better put as: "The rate remains a model property — Kadavath and colleagues used self-consistency as one probe of whether models know what they know (Kadavath et al."
+
+Context: The rate is a model property — Kadavath and colleagues used self-consistency as one probe of whether models know what they know (Kadavath et al.

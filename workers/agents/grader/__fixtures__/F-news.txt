@@ -1,0 +1,5 @@
+Tech News Daily
+
+Companies move to idempotent writes after a wave of duplicate orders
+
+Several platforms announced this week that retried writes will carry a key. Analysts quoted in the article said duplicate orders had become 'the cost that matters'. The companies did not share numbers.

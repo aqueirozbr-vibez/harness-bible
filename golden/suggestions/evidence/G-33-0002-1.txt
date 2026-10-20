@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-08-31, at press.example.
+
+f05 30 → is 1, the earlier 0 having been revised.
+
+Context: f05 30 → · 0

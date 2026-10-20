@@ -1,0 +1,13 @@
+# Where Grafana finds its dashboards (feature-specs/21 section 5.3): the folder the compose file mounts from
+# infra/observability/grafana/dashboards. They are generated from lib/metrics/sql (npm run observe:generate), so a
+# change made in Grafana's own editor is not kept: the file is the dashboard.
+apiVersion: 1
+
+providers:
+  - name: harness-bible
+    folder: Harness Bible
+    type: file
+    disableDeletion: true
+    allowUiUpdates: false
+    options:
+      path: /var/lib/grafana/dashboards

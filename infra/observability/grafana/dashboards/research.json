@@ -1,0 +1,569 @@
+{
+  "uid": "hb-research",
+  "title": "Research",
+  "description": "The researcher's series, from the RESEARCH records, the curators' decisions on researchers' proposals, what research spends by run and by payer, and the flags people put on their research, through three views that name no reader (feature-specs/44 § 4, 48 § 7, § 11.7). Every query is a statement of lib/metrics/sql/research; npm run research:metrics prints the same numbers. Generated: change lib/metrics/researchDashboard.ts and run npm run observe:generate.",
+  "tags": [
+    "harness-bible",
+    "research"
+  ],
+  "timezone": "utc",
+  "editable": false,
+  "graphTooltip": 1,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": {
+    "from": "now/M",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "runs that reached the planner",
+      "description": "research runs by how they ended: the runs that reached the planner, from their RESEARCH records, by DONE or by the skip's or the failure's code, and all of them. A turn the hand-over skipped (feature-specs/40 § 5) has no record and is counted by its research.run line in Loki; a record written before unit 61 says what was planned and not how the run ended, and reads as planned and what. Over the dashboard's range, by month: with the default range, the month to date.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- research runs by how they ended: the runs that reached the planner, from their RESEARCH records, by DONE or by the skip's or the failure's code, and all of them.\n-- A turn the hand-over skipped (feature-specs/40 § 5) has no record and is counted by its research.run line in Loki; a record written before unit 61 says what was planned and not how the run ended, and reads as planned and what.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a record was written.\nWITH runs AS (\n  SELECT date_trunc('month'::text, f.day) AS bucket,\n         CASE\n           WHEN f.ended IS NULL THEN 'planned ' || f.planned\n           WHEN f.code IS NULL THEN f.ended\n           ELSE f.ended || ' ' || f.code\n         END AS line\n  FROM \"ResearchFact\" f\n  WHERE f.kind = 'RESEARCH'\n    AND f.day >= $__timeFrom()::timestamp\n    AND f.day < $__timeTo()::timestamp\n)\nSELECT r.bucket,\n       COALESCE(r.line, 'all') AS key,\n       count(*)::float8 AS n,\n       NULL::float8 AS d,\n       count(*)::float8 AS value\nFROM runs r\nGROUP BY GROUPING SETS ((r.bucket, r.line), (r.bucket))\nORDER BY 1, 2\n) s\nWHERE s.key = 'all'\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value"
+      }
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "cost per run",
+      "description": "research cost per run: what the runs' own calls cost in the bucket, in USD, over the runs whose reader the gateway answered in it. A run's calls are the ones that name it (feature-specs/48 § 7.1): its planner, its reader and its writer, and its retrieval's embedding and re-rank, whoever paid; the platform's vetting of the findings people send names a suggestion, not a run, and is not a run's cost. A run that planned nothing costs the runs that read. Over the dashboard's range, by month: with the default range, the month to date.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"cost per run\"\nFROM (\n-- research cost per run: what the runs' own calls cost in the bucket, in USD, over the runs whose reader the gateway answered in it.\n-- A run's calls are the ones that name it (feature-specs/48 § 7.1): its planner, its reader and its writer, and its retrieval's embedding and re-rank, whoever paid; the platform's vetting of the findings people send names a suggestion, not a run, and is not a run's cost. A run that planned nothing costs the runs that read.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a call was made.\nWITH spend AS (\n  SELECT date_trunc('month'::text, s.day) AS bucket,\n         sum(s.\"costUsd\")::float8 AS usd,\n         count(DISTINCT s.run) FILTER (WHERE s.kind = 'RESEARCH' AND s.alias = 'hb-frontier' AND s.outcome = 'ok')::float8 AS reads\n  FROM \"ResearchSpend\" s\n  WHERE s.run IS NOT NULL\n    AND s.day >= $__timeFrom()::timestamp\n    AND s.day < $__timeTo()::timestamp\n  GROUP BY 1\n)\nSELECT p.bucket,\n       ''::text AS key,\n       p.usd AS n,\n       p.reads AS d,\n       p.usd / NULLIF(p.reads, 0) AS value\nFROM spend p\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value"
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "proposals accepted by curators",
+      "description": "researcher proposals by curator decision: the curators' accepts and declines of researchers' proposals in the bucket, each as a share of the decisions in it, from the curator records. The accept line is the researcher's precision of feature-specs/44 § 3, zero in a bucket of declines alone; a curator's merge and a revert are not decisions on a proposal and are not here. Over the dashboard's range, by month: with the default range, the month to date.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- researcher proposals by curator decision: the curators' accepts and declines of researchers' proposals in the bucket, each as a share of the decisions in it, from the curator records.\n-- The accept line is the researcher's precision of feature-specs/44 § 3, zero in a bucket of declines alone; a curator's merge and a revert are not decisions on a proposal and are not here.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a decision was recorded.\nWITH decided AS (\n  SELECT date_trunc('month'::text, f.day) AS bucket,\n         f.action\n  FROM \"ResearchFact\" f\n  WHERE f.kind = 'CURATOR'\n    AND f.day >= $__timeFrom()::timestamp\n    AND f.day < $__timeTo()::timestamp\n), totals AS (\n  SELECT x.bucket,\n         count(*)::float8 AS decisions\n  FROM decided x\n  GROUP BY 1\n), actions AS (\n  SELECT a.action FROM (VALUES ('ACCEPT'), ('DECLINE')) AS a(action)\n)\nSELECT t.bucket,\n       a.action AS key,\n       count(x.action)::float8 AS n,\n       t.decisions AS d,\n       count(x.action)::float8 / t.decisions AS value\nFROM totals t\nCROSS JOIN actions a\nLEFT JOIN decided x ON x.bucket = t.bucket AND x.action = a.action\nGROUP BY t.bucket, a.action, t.decisions\nORDER BY 1, 2\n) s\nWHERE s.key = 'ACCEPT'\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value"
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "research runs by how they ended",
+      "description": "research runs by how they ended: the runs that reached the planner, from their RESEARCH records, by DONE or by the skip's or the failure's code, and all of them. A turn the hand-over skipped (feature-specs/40 § 5) has no record and is counted by its research.run line in Loki; a record written before unit 61 says what was planned and not how the run ended, and reads as planned and what.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- research runs by how they ended: the runs that reached the planner, from their RESEARCH records, by DONE or by the skip's or the failure's code, and all of them.\n-- A turn the hand-over skipped (feature-specs/40 § 5) has no record and is counted by its research.run line in Loki; a record written before unit 61 says what was planned and not how the run ended, and reads as planned and what.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a record was written.\nWITH runs AS (\n  SELECT date_trunc('day'::text, f.day) AS bucket,\n         CASE\n           WHEN f.ended IS NULL THEN 'planned ' || f.planned\n           WHEN f.code IS NULL THEN f.ended\n           ELSE f.ended || ' ' || f.code\n         END AS line\n  FROM \"ResearchFact\" f\n  WHERE f.kind = 'RESEARCH'\n    AND f.day >= $__timeFrom()::timestamp\n    AND f.day < $__timeTo()::timestamp\n)\nSELECT r.bucket,\n       COALESCE(r.line, 'all') AS key,\n       count(*)::float8 AS n,\n       NULL::float8 AS d,\n       count(*)::float8 AS value\nFROM runs r\nGROUP BY GROUPING SETS ((r.bucket, r.line), (r.bucket))\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "findings by outcome",
+      "description": "findings by outcome: what came of each finding of the runs whose records were written in the bucket, and all of them. INVALID and DUPLICATE are the validation's and the door's; PROPOSED and REFUTED are Improve's answer; SUBMITTED is a finding still deciding when its run's wait ran out.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- findings by outcome: what came of each finding of the runs whose records were written in the bucket, and all of them.\n-- INVALID and DUPLICATE are the validation's and the door's; PROPOSED and REFUTED are Improve's answer; SUBMITTED is a finding still deciding when its run's wait ran out.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a record was written.\nWITH found AS (\n  SELECT date_trunc('day'::text, f.day) AS bucket,\n         o.outcome\n  FROM \"ResearchFact\" f\n  CROSS JOIN LATERAL jsonb_array_elements_text(f.findings) AS o(outcome)\n  WHERE f.kind = 'RESEARCH'\n    AND f.day >= $__timeFrom()::timestamp\n    AND f.day < $__timeTo()::timestamp\n)\nSELECT g.bucket,\n       COALESCE(g.outcome, 'all') AS key,\n       count(*)::float8 AS n,\n       NULL::float8 AS d,\n       count(*)::float8 AS value\nFROM found g\nGROUP BY GROUPING SETS ((g.bucket, g.outcome), (g.bucket))\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "research cost per run",
+      "description": "research cost per run: what the runs' own calls cost in the bucket, in USD, over the runs whose reader the gateway answered in it. A run's calls are the ones that name it (feature-specs/48 § 7.1): its planner, its reader and its writer, and its retrieval's embedding and re-rank, whoever paid; the platform's vetting of the findings people send names a suggestion, not a run, and is not a run's cost. A run that planned nothing costs the runs that read.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.value AS \"research cost per run\"\nFROM (\n-- research cost per run: what the runs' own calls cost in the bucket, in USD, over the runs whose reader the gateway answered in it.\n-- A run's calls are the ones that name it (feature-specs/48 § 7.1): its planner, its reader and its writer, and its retrieval's embedding and re-rank, whoever paid; the platform's vetting of the findings people send names a suggestion, not a run, and is not a run's cost. A run that planned nothing costs the runs that read.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a call was made.\nWITH spend AS (\n  SELECT date_trunc('day'::text, s.day) AS bucket,\n         sum(s.\"costUsd\")::float8 AS usd,\n         count(DISTINCT s.run) FILTER (WHERE s.kind = 'RESEARCH' AND s.alias = 'hb-frontier' AND s.outcome = 'ok')::float8 AS reads\n  FROM \"ResearchSpend\" s\n  WHERE s.run IS NOT NULL\n    AND s.day >= $__timeFrom()::timestamp\n    AND s.day < $__timeTo()::timestamp\n  GROUP BY 1\n)\nSELECT p.bucket,\n       ''::text AS key,\n       p.usd AS n,\n       p.reads AS d,\n       p.usd / NULLIF(p.reads, 0) AS value\nFROM spend p\nORDER BY 1\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "timeseries",
+      "title": "researcher proposals by curator decision",
+      "description": "researcher proposals by curator decision: the curators' accepts and declines of researchers' proposals in the bucket, each as a share of the decisions in it, from the curator records. The accept line is the researcher's precision of feature-specs/44 § 3, zero in a bucket of declines alone; a curator's merge and a revert are not decisions on a proposal and are not here.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- researcher proposals by curator decision: the curators' accepts and declines of researchers' proposals in the bucket, each as a share of the decisions in it, from the curator records.\n-- The accept line is the researcher's precision of feature-specs/44 § 3, zero in a bucket of declines alone; a curator's merge and a revert are not decisions on a proposal and are not here.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a decision was recorded.\nWITH decided AS (\n  SELECT date_trunc('day'::text, f.day) AS bucket,\n         f.action\n  FROM \"ResearchFact\" f\n  WHERE f.kind = 'CURATOR'\n    AND f.day >= $__timeFrom()::timestamp\n    AND f.day < $__timeTo()::timestamp\n), totals AS (\n  SELECT x.bucket,\n         count(*)::float8 AS decisions\n  FROM decided x\n  GROUP BY 1\n), actions AS (\n  SELECT a.action FROM (VALUES ('ACCEPT'), ('DECLINE')) AS a(action)\n)\nSELECT t.bucket,\n       a.action AS key,\n       count(x.action)::float8 AS n,\n       t.decisions AS d,\n       count(x.action)::float8 / t.decisions AS value\nFROM totals t\nCROSS JOIN actions a\nLEFT JOIN decided x ON x.bucket = t.bucket AND x.action = a.action\nGROUP BY t.bucket, a.action, t.decisions\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "timeseries",
+      "title": "research calls refused at the cap",
+      "description": "research calls refused at the cap: the research principal's calls the gateway refused because its budget's cap was reached, by whether the day was before the month's twentieth. The platform's principal alone (feature-specs/48 § 7.3): a person's research meets their own cap, which is their budget's and not this series' to count. The view's payer `platform` is the organisation whose \"researchPrincipal\" is true (migration 20261012200000_research_principal), never one found by its name. The one alert of feature-specs/44 § 4 reads the line before-20th: the month's research vetting spent before its twentieth day, which is information and not an incident.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- research calls refused at the cap: the research principal's calls the gateway refused because its budget's cap was reached, by whether the day was before the month's twentieth.\n-- The platform's principal alone (feature-specs/48 § 7.3): a person's research meets their own cap, which is their budget's and not this series' to count. The view's payer `platform` is the organisation whose \"researchPrincipal\" is true (migration 20261012200000_research_principal), never one found by its name. The one alert of feature-specs/44 § 4 reads the line before-20th: the month's research vetting spent before its twentieth day, which is information and not an incident.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a call was refused.\nSELECT date_trunc('day'::text, s.day) AS bucket,\n       CASE WHEN extract(day FROM s.day) < 20 THEN 'before-20th' ELSE 'from-20th' END AS key,\n       count(*)::float8 AS n,\n       NULL::float8 AS d,\n       count(*)::float8 AS value\nFROM \"ResearchSpend\" s\nWHERE s.outcome = 'budget'\n  AND s.payer = 'platform'\n  AND s.day >= $__timeFrom()::timestamp\n  AND s.day < $__timeTo()::timestamp\nGROUP BY 1, 2\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "type": "timeseries",
+      "title": "research flags by reason",
+      "description": "research flags by reason: the flags people put on their research reports and refusals in the bucket, by what was flagged and the coded reason, and all of them. A flag is a person's label on their own run (feature-specs/48 § 11.7), read through a view that holds its day, its kind and its reason and names no person and no run.",
+      "datasource": {
+        "type": "grafana-postgresql-datasource",
+        "uid": "hb-postgres"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 20,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "hb-postgres"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "editorMode": "code",
+          "rawSql": "SELECT s.bucket AS \"time\", s.key AS metric, s.value\nFROM (\n-- research flags by reason: the flags people put on their research reports and refusals in the bucket, by what was flagged and the coded reason, and all of them.\n-- A flag is a person's label on their own run (feature-specs/48 § 11.7), read through a view that holds its day, its kind and its reason and names no person and no run.\n-- Parameters: 1 window start (inclusive), 2 window end (exclusive), 3 the bucket, a unit date_trunc takes. UTC, as stored, by the day a flag was put.\nWITH flagged AS (\n  SELECT date_trunc('day'::text, f.day) AS bucket,\n         f.kind || ' ' || f.reason AS line\n  FROM \"ResearchFlag\" f\n  WHERE f.day >= $__timeFrom()::timestamp\n    AND f.day < $__timeTo()::timestamp\n)\nSELECT g.bucket,\n       COALESCE(g.line, 'all') AS key,\n       count(*)::float8 AS n,\n       NULL::float8 AS d,\n       count(*)::float8 AS value\nFROM flagged g\nGROUP BY GROUPING SETS ((g.bucket, g.line), (g.bucket))\nORDER BY 1, 2\n) s\nORDER BY 1"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "showPoints": "always",
+            "spanNulls": true,
+            "lineWidth": 1,
+            "fillOpacity": 0
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "type": "timeseries",
+      "title": "every run's end, the hand-over's skips included",
+      "description": "Each research run's research.run line, by how it ended and its code: the runs above and the turns the hand-over skipped before the planner (off, deduplicated, the day's limit, the cap, unavailable), which have no RESEARCH record and are counted nowhere else. The lines carry no word of a question.",
+      "datasource": {
+        "type": "loki",
+        "uid": "hb-loki"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 28,
+        "w": 24,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "hb-loki"
+          },
+          "editorMode": "code",
+          "queryType": "range",
+          "expr": "sum by (outcome, code) (count_over_time({service_name=\"hb-lines\"} | kind=\"research\" | stage=\"run\" [$__auto]))",
+          "legendFormat": "{{outcome}} {{code}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 1,
+            "fillOpacity": 60
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      }
+    }
+  ]
+}

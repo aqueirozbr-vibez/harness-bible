@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+The passage is better put as: "In practice, verify: sensor failures per criterion per step; grader invocations."
+
+Context: Verify: sensor failures per criterion per step; grader invocations.

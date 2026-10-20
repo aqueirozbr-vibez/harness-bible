@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2024-08-01, at vendor.example.
+
+The passage is better put as: "In practice, name the counterfactual in writing and have the sponsor sign it."
+
+Context: Name the counterfactual in writing and have the sponsor sign it.

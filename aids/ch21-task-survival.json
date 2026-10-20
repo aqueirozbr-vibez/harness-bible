@@ -1,0 +1,150 @@
+{
+  "id": "21.8-task-survival",
+  "chapter": 21,
+  "section": "21.8",
+  "labId": "lab-21",
+  "script": "derive.py",
+  "messageKey": "ch21TaskSurvival",
+  "inputs": [
+    {
+      "key": "steps",
+      "labelKey": "steps",
+      "unit": "steps",
+      "min": 1,
+      "max": 200,
+      "default": 11,
+      "integer": true
+    },
+    {
+      "key": "calls",
+      "labelKey": "calls",
+      "unit": "calls",
+      "min": 1,
+      "max": 400,
+      "default": 13,
+      "integer": true
+    },
+    {
+      "key": "tokens_per_step",
+      "labelKey": "tokensPerStep",
+      "unit": "tokens",
+      "min": 100,
+      "max": 100000,
+      "default": 7500,
+      "integer": true
+    }
+  ],
+  "edits": [
+    {
+      "line": 5,
+      "find": "11, 13",
+      "with": "{steps}, {calls}"
+    },
+    {
+      "line": 16,
+      "find": "7500",
+      "with": "{tokens_per_step}"
+    }
+  ],
+  "steps": [
+    {
+      "ordinal": 1,
+      "titleKey": "inputs",
+      "reads": [],
+      "line": null
+    },
+    {
+      "ordinal": 2,
+      "titleKey": "noFailure",
+      "reads": [
+        "p_no_failure_13calls_f0.01",
+        "p_no_failure_13calls_f0.02",
+        "p_no_failure_13calls_f0.05"
+      ],
+      "line": 8,
+      "bars": [
+        {
+          "labelKey": "f1",
+          "path": "p_no_failure_13calls_f0.01",
+          "scale": 100,
+          "unit": "%"
+        },
+        {
+          "labelKey": "f2",
+          "path": "p_no_failure_13calls_f0.02",
+          "tone": "ver",
+          "scale": 100,
+          "unit": "%"
+        },
+        {
+          "labelKey": "f5",
+          "path": "p_no_failure_13calls_f0.05",
+          "scale": 100,
+          "unit": "%"
+        }
+      ],
+      "headline": {
+        "kind": "pct",
+        "path": "p_no_failure_13calls_f0.02",
+        "scale": 100
+      }
+    },
+    {
+      "ordinal": 3,
+      "titleKey": "retries",
+      "reads": [
+        "task_success_f0.02_retries1",
+        "task_success_f0.02_retries3",
+        "task_success_f0.05_retries1",
+        "task_success_f0.05_retries3"
+      ],
+      "line": 12,
+      "bars": [
+        {
+          "labelKey": "r1f2",
+          "path": "task_success_f0.02_retries1",
+          "tone": "ver",
+          "scale": 100,
+          "unit": "%"
+        },
+        {
+          "labelKey": "r3f2",
+          "path": "task_success_f0.02_retries3",
+          "scale": 100,
+          "unit": "%"
+        },
+        {
+          "labelKey": "r1f5",
+          "path": "task_success_f0.05_retries1",
+          "scale": 100,
+          "unit": "%"
+        },
+        {
+          "labelKey": "r3f5",
+          "path": "task_success_f0.05_retries3",
+          "scale": 100,
+          "unit": "%"
+        }
+      ],
+      "headline": {
+        "kind": "pct",
+        "path": "task_success_f0.02_retries1",
+        "scale": 100
+      }
+    },
+    {
+      "ordinal": 4,
+      "titleKey": "redo",
+      "reads": [
+        "expected_redo_fraction_no_checkpoint",
+        "extra_tokens_per_1000_tasks_no_checkpoint"
+      ],
+      "line": 17,
+      "headline": {
+        "kind": "pct",
+        "path": "expected_redo_fraction_no_checkpoint",
+        "scale": 100
+      }
+    }
+  ]
+}

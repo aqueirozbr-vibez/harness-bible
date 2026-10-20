@@ -1,0 +1,173 @@
+{
+  "id": "37.8-which-configuration",
+  "chapter": 37,
+  "section": "37.8",
+  "labId": "lab-37",
+  "script": "derive.py",
+  "messageKey": "ch37WhichConfiguration",
+  "inputs": [
+    {
+      "key": "qpd",
+      "labelKey": "qpd",
+      "unit": "per day",
+      "min": 100,
+      "max": 100000,
+      "default": 2000,
+      "integer": true
+    },
+    {
+      "key": "tout",
+      "labelKey": "tout",
+      "unit": "tokens",
+      "min": 50,
+      "max": 4000,
+      "default": 400,
+      "integer": true
+    },
+    {
+      "key": "tcache",
+      "labelKey": "tcache",
+      "unit": "tokens",
+      "min": 0,
+      "max": 6000,
+      "default": 4000,
+      "integer": true
+    },
+    {
+      "key": "esc",
+      "labelKey": "esc",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "default": 10,
+      "scale": 0.01
+    },
+    {
+      "key": "route",
+      "labelKey": "route",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "default": 90,
+      "scale": 0.01
+    }
+  ],
+  "edits": [
+    {
+      "line": 10,
+      "find": "qpd=2000",
+      "with": "qpd={qpd}"
+    },
+    {
+      "line": 10,
+      "find": "tcache=4000",
+      "with": "tcache={tcache}"
+    },
+    {
+      "line": 10,
+      "find": "tout=400",
+      "with": "tout={tout}"
+    },
+    {
+      "line": 10,
+      "find": "esc=0.10",
+      "with": "esc={esc}"
+    },
+    {
+      "line": 10,
+      "find": "route=0.90",
+      "with": "route={route}"
+    }
+  ],
+  "steps": [
+    {
+      "ordinal": 1,
+      "titleKey": "inputs",
+      "reads": [],
+      "line": null
+    },
+    {
+      "ordinal": 2,
+      "titleKey": "costPerTask",
+      "reads": [
+        "queries_per_month",
+        "A/total",
+        "C/total",
+        "saving_A_to_C_pct"
+      ],
+      "line": 24,
+      "bars": [
+        {
+          "labelKey": "a",
+          "path": "A/total",
+          "unit": "USD/month"
+        },
+        {
+          "labelKey": "c",
+          "path": "C/total",
+          "tone": "ver",
+          "unit": "USD/month"
+        }
+      ],
+      "headline": {
+        "kind": "ratio",
+        "of": [
+          "A/total",
+          "C/total"
+        ],
+        "format": "times"
+      },
+      "pricesFrom": "37.9"
+    },
+    {
+      "ordinal": 3,
+      "titleKey": "reviewLoad",
+      "reads": [
+        "sensitivity_B/esc",
+        "C_total_route70",
+        "saving_A_to_C_route70_pct",
+        "sensitivity_B/esc/0.0",
+        "sensitivity_B/esc/0.1",
+        "sensitivity_B/esc/0.3"
+      ],
+      "line": 39,
+      "bars": [
+        {
+          "labelKey": "esc0",
+          "path": "sensitivity_B/esc/0.0",
+          "unit": "USD/month"
+        },
+        {
+          "labelKey": "esc10",
+          "path": "sensitivity_B/esc/0.1",
+          "unit": "USD/month"
+        },
+        {
+          "labelKey": "esc30",
+          "path": "sensitivity_B/esc/0.3",
+          "tone": "ver",
+          "unit": "USD/month"
+        }
+      ],
+      "headline": {
+        "kind": "pct",
+        "path": "saving_A_to_C_route70_pct"
+      }
+    },
+    {
+      "ordinal": 4,
+      "titleKey": "choose",
+      "reads": [
+        "saving_A_to_C_pct",
+        "breakeven_vs_C_queries",
+        "breakeven_vs_C_x"
+      ],
+      "line": 33,
+      "headline": {
+        "kind": "value",
+        "path": "breakeven_vs_C_queries",
+        "unit": "queries per month"
+      }
+    }
+  ]
+}

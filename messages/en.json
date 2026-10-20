@@ -1,0 +1,3355 @@
+{
+  "chrome": {
+    "brand": "Harness Bible",
+    "brandSub": "interactive",
+    "brandLabel": "Harness Bible, home",
+    "navLabel": "Primary",
+    "nav": {
+      "book": "Book",
+      "assistant": "Assistant",
+      "research": "Research",
+      "labs": "Labs",
+      "improve": "Improve"
+    },
+    "search": {
+      "cap": "search",
+      "placeholder": "chapters, labs, registries",
+      "label": "Search the book"
+    },
+    "release": "release {id} · sha {sha}",
+    "lang": {
+      "label": "Edition language"
+    },
+    "account": "Account",
+    "signIn": "Sign in"
+  },
+  "auth": {
+    "metaTitle": "Sign in · The Harness Bible",
+    "cap": "sign in · release {id}",
+    "title": "Sign in to the Harness Bible",
+    "blurb": "Progress, bookmarks and notes are kept per account and follow you across devices and editions.",
+    "panel": {
+      "label": "Sign-in",
+      "meta": "sso",
+      "stamp": "no passwords",
+      "google": "Continue with Google",
+      "github": "Continue with GitHub",
+      "dev": "Continue as the development reader",
+      "retention": "By continuing you accept the retention policy of this account: assistant conversations 30 days as text, then metadata, until you delete them; identity kept for provenance with consent.",
+      "retentionLink": "retention policy"
+    },
+    "return": {
+      "section": "You will return to {id} · {title}",
+      "book": "You will return to the book"
+    },
+    "empty": {
+      "none": "No sign-in provider is configured.",
+      "hint": "Set KEYCLOAK_ISSUER and KEYCLOAK_CLIENT_SECRET, or AUTH_DEV_PROVIDER=1 in development."
+    },
+    "error": {
+      "title": "Sign-in did not complete",
+      "state": "The sign-in took too long or the browser lost its place. Try again.",
+      "denied": "You cancelled at the provider. Nothing was changed.",
+      "email": "The provider did not confirm your e-mail address. Verify it there, then try again.",
+      "notInvited": "This e-mail is not on the pilot list. Ask your organisation admin for an invitation.",
+      "deleted": "This account is pending deletion. Write to support to cancel the request.",
+      "provider": "The provider did not answer. Try again in a minute."
+    },
+    "notice": {
+      "deletionTitle": "Deletion requested",
+      "deletion": "Your sessions were closed. The account is deleted after 30 days; write to support to cancel before then."
+    },
+    "out": {
+      "metaTitle": "Sign out · The Harness Bible",
+      "label": "Sign out",
+      "question": "Sign out of the Harness Bible on this device?",
+      "confirm": "Sign out",
+      "everywhere": "Sign out everywhere",
+      "sessions": "{n, plural, one {# session} other {# sessions}}",
+      "cancel": "Cancel",
+      "already": "You are signed out.",
+      "signIn": "Sign in",
+      "statusbarOut": "sign out"
+    },
+    "statusbar": {
+      "in": "sign in"
+    }
+  },
+  "account": {
+    "metaTitle": "Account · The Harness Bible",
+    "cap": {
+      "individual": "account · individual",
+      "org": "account · {name}"
+    },
+    "facts": {
+      "account": "account",
+      "signIn": "sign-in",
+      "signedInAs": "signed in as",
+      "since": "member since"
+    },
+    "role": {
+      "READER": "reader",
+      "BUILDER": "builder",
+      "CONTRIBUTOR": "contributor",
+      "CURATOR": "curator",
+      "ORG_ADMIN": "admin"
+    },
+    "provider": {
+      "google": "Google",
+      "github": "GitHub"
+    },
+    "profile": {
+      "label": "Profile",
+      "since": "member since {date}",
+      "displayName": "display name",
+      "email": "e-mail",
+      "emailFrom": "from {provider}",
+      "role": "role",
+      "roleNote": "set by the organisation admin",
+      "save": "Save profile",
+      "nameError": "1 to 60 characters"
+    },
+    "prefs": {
+      "label": "Preferences",
+      "meta": "per account · per device",
+      "language": "edition language",
+      "theme": "theme",
+      "shortcuts": "shortcuts",
+      "scopeAccount": "account",
+      "scopeDevice": "device",
+      "light": "Light",
+      "system": "System",
+      "dark": "Dark",
+      "on": "On",
+      "off": "Off"
+    },
+    "sessions": {
+      "label": "Sessions",
+      "open": "{n} open",
+      "device": "device",
+      "signedIn": "signed in",
+      "lastSeen": "last seen",
+      "expires": "expires",
+      "current": "this session",
+      "signOut": "Sign out",
+      "everywhere": "Sign out everywhere",
+      "older": "{k} older sessions not shown"
+    },
+    "device": {
+      "edgeWindows": "Edge on Windows",
+      "chromeWindows": "Chrome on Windows",
+      "firefoxWindows": "Firefox on Windows",
+      "safariMac": "Safari on macOS",
+      "chromeMac": "Chrome on macOS",
+      "safariIphone": "Safari on iPhone",
+      "safariIpad": "Safari on iPad",
+      "chromeAndroid": "Chrome on Android",
+      "unknown": "Unknown browser"
+    },
+    "identities": {
+      "label": "Linked sign-ins",
+      "none": "No provider is linked yet: this session came from the development provider.",
+      "linked": "linked {date}",
+      "lastUsed": "last used {date}",
+      "unlink": "Unlink",
+      "link": "Link {provider}"
+    },
+    "budget": {
+      "title": "Model budget",
+      "gateway": "gateway",
+      "chapter": "ch{n}",
+      "resets": "resets {date}",
+      "used": "used this month · {month}",
+      "of": "{used} of {cap} tokens",
+      "tokens": "tokens",
+      "meterLabel": "Model budget used: {used} of a hard cap of {cap} tokens",
+      "left": "{left} left",
+      "cap": "hard cap {cap}",
+      "noCap": "no cap set",
+      "projection": "At {perDay} tokens a day the cap is reached on {date}. At the cap, calls are refused at the gateway; no overage.",
+      "noProjection": "At this pace the cap is not reached this month.",
+      "atCap": "The cap is reached; calls are refused at the gateway until {reset}.",
+      "nothing": "nothing used yet this month",
+      "breakdown": "breakdown · this month",
+      "consumer": "consumer",
+      "share": "of cap",
+      "assistant": "Assistant",
+      "answers": "{n, plural, =0 {no answers yet} one {# answer} other {# answers}}",
+      "research": "Research",
+      "researchNote": "planner, reader and writer of your researches",
+      "grading": "Grading",
+      "adjudication": "Adjudication",
+      "suggestions": "{n, plural, =0 {no suggestions yet} one {# suggestion} other {# suggestions}}",
+      "retrieval": "Retrieval",
+      "retrievalNote": "embeddings and re-rank",
+      "labs": "Labs",
+      "labsNote": "from Phase 3",
+      "total": "total",
+      "unit": "Tokens are counted at the frontier input price, as the cap is: output weighs more, self-hosted retrieval nothing.",
+      "footer": "enforced at the gateway, not by discipline",
+      "status": "budget {pct}% · hard cap at gateway",
+      "see": "see your budget"
+    },
+    "audit": {
+      "label": "Audit export",
+      "chapter": "ch{n}",
+      "ts": "jsonl · hash chain",
+      "scope": "scope",
+      "perAccount": "Per account",
+      "perChapter": "Per chapter",
+      "chapterField": "chapter",
+      "from": "from",
+      "to": "to",
+      "records": "records",
+      "kind": {
+        "adjudications": "adjudications and withdrawals",
+        "overrides": "overrides",
+        "merges": "merges",
+        "answers": "assistant and research records, and deletions"
+      },
+      "estimate": {
+        "incomplete": "choose a window and at least one kind of record",
+        "counting": "counting the records in range…",
+        "failed": "the records in range could not be counted",
+        "records": "{n, plural, =0 {no records in range} one {{formatted} record in range} other {{formatted} records in range}}"
+      },
+      "button": "Export audit pack",
+      "sending": "Asking…",
+      "preparing": "preparing · {n, plural, one {# record} other {# records}}",
+      "refused": {
+        "limit": "Four audit packs a day: the next can be asked for at {time}.",
+        "nothing": "Nothing in range: there is nothing to export.",
+        "network": "The request did not reach the server, or its answer was lost. Try again: the same request is asked once.",
+        "failed": "The export could not be started ({code})."
+      },
+      "last": {
+        "label": "last export",
+        "none": "none yet",
+        "value": "{date} · {n, plural, one {# record} other {# records}}",
+        "head": "head hash",
+        "verified": "chain verified",
+        "file": "file",
+        "download": "Download the pack",
+        "until": "valid until {time}"
+      },
+      "footer": "a pack verifies with the public key alone: every hash, every link, the head and the signature"
+    },
+    "roster": {
+      "label": "Curator roster",
+      "editorial": "Harness Bible editorial",
+      "visibility": "curators and organisation admins · read-only",
+      "since": "since {date}",
+      "th": {
+        "part": "part",
+        "chapters": "chapters",
+        "curators": "curators",
+        "queue": "queue",
+        "median": "median decision time"
+      },
+      "part": "Part {roman} · {title}",
+      "partTitle": {
+        "P0": "Why now",
+        "P1": "Foundations",
+        "P2": "Harness engineering",
+        "P3": "Industrial application",
+        "P4": "Appendices"
+      },
+      "span": "{first}–{last}",
+      "nobody": "no curator yet",
+      "noDecision": "no decision this quarter",
+      "days": "{d} d",
+      "footer": "curators always decide safety, OT-boundary, scenario-parameter and structure changes",
+      "rubric": "the rubric"
+    },
+    "retention": {
+      "label": "Retention",
+      "meta": "LGPD",
+      "policy": "policy v1.0",
+      "conversations": "assistant conversations",
+      "conversationsValue": "text 30 days, or until you delete it",
+      "thereafter": "thereafter",
+      "thereafterValue": "metadata only",
+      "identity": "contributor identity",
+      "identityValue": "for provenance, with consent",
+      "runs": "saved lab runs",
+      "runsValue": "until a member deletes them",
+      "note": "Deletion is on request. Each request is a record in the audit chain.",
+      "research": "research conversations",
+      "researchValue": "text 30 days, or until you delete them",
+      "request": "Request deletion",
+      "stats": "{n, plural, one {# conversation} other {# conversations}} · oldest text kept until {date}",
+      "statsPurged": "{n, plural, one {# conversation} other {# conversations}} · no text kept",
+      "none": "no conversations yet"
+    },
+    "delete": {
+      "title": "Delete this account?",
+      "body": "Sessions close now; the account and its marks are deleted after 30 days. Type delete to confirm.",
+      "field": "type delete",
+      "word": "delete",
+      "cancel": "Cancel",
+      "confirm": "Request deletion",
+      "mismatch": "Type delete exactly."
+    },
+    "notice": {
+      "title": "Done",
+      "saved": "Saved.",
+      "revoked": "Session signed out.",
+      "linked": "{provider} linked.",
+      "unlinked": "{provider} unlinked.",
+      "role": "Your role is now {role}. A change of role signs this account's other sessions out."
+    },
+    "error": {
+      "title": "The change was not made",
+      "linkedElsewhere": "That {provider} account is linked to another user.",
+      "lastIdentity": "Keep at least one sign-in linked.",
+      "session": "Sign in again to change the account.",
+      "failed": "The change did not save. Retry.",
+      "name": "The display name must be 1 to 60 characters.",
+      "confirm": "Type delete exactly to request deletion.",
+      "pageTitle": "Account did not load",
+      "body": "Trace {traceId}. Retry, or reload the page.",
+      "retry": "Retry"
+    },
+    "statusbar": "account · {email}",
+    "book": {
+      "open": "Book management",
+      "metaTitle": "Book management · The Harness Bible",
+      "back": "← account",
+      "title": "Book management",
+      "who": "curators and organisation admins",
+      "statusbar": "book management · {name}",
+      "error": "Book management did not load"
+    },
+    "devRole": {
+      "READER": "Reads the book, asks the assistant, and keeps marks and reading paths.",
+      "BUILDER": "A reader's rights. The builder's labs arrive with the IDE, which is not built yet.",
+      "CONTRIBUTOR": "Suggests changes with evidence, from a section's Suggest a change and from Improve. Identity verified.",
+      "CURATOR": "A contributor's rights, and reads the suggestions submitted in parts {parts}. Identity verified. The curator queue is not built yet.",
+      "CURATOR_NONE": "A contributor's rights, but on the roster for no part, so nobody else's suggestion is readable. Choose curator again to put this account on it.",
+      "ORG_ADMIN": "A reader's rights. Organisation administration is not built yet.",
+      "unverified": "Identity not verified, so suggesting a change is refused. Choose {role} again to verify it."
+    }
+  },
+  "home": {
+    "metaTitle": "The Harness Bible · release {id}",
+    "cap": "the book · release {id} · pinned",
+    "title": "The Harness Bible",
+    "blurb": "{chapters} chapters in four parts. Every chapter has nine layers, a version and a verification record. {labs} chapters have a lab that CI reproduces each night.",
+    "continue": {
+      "label": "Continue reading",
+      "chapter": "ch{n} {version}",
+      "lastRead": "last read {when}",
+      "cap": "continue reading",
+      "layer": "{chapter} · layer {n} of 9",
+      "path": "{name} path",
+      "pathName": {
+        "executive": "Executive",
+        "builder": "Builder",
+        "foundations": "Foundations"
+      },
+      "meterLabel": "{name} path progress",
+      "of": "{done} of {total}",
+      "resume": "Resume at {section}",
+      "emptyCap": "reading paths",
+      "empty": "No reading yet.",
+      "choose": "Choose a path"
+    },
+    "status": {
+      "label": "Book status",
+      "release": "release {id}",
+      "sha": "sha {sha}",
+      "nightly": "nightly check {when}",
+      "verify": "chapters pass verify",
+      "labs": "labs reproduce",
+      "diverges": "Lab {n} diverges since {when}",
+      "stale": "chapters stale > 90 d",
+      "staleItem": "ch{n} {days} d",
+      "releasePinned": "release · pinned",
+      "redteam": "{count, plural, one {# redteam finding open} other {# redteam findings open}} · ch{n}",
+      "loaderVerify": "verify",
+      "loaderLab": "lab ci",
+      "loaderValue": "{pct}% · {a}/{b}"
+    },
+    "legend": {
+      "label": "legend",
+      "verify": "VERIFY passed",
+      "redteam": "REDTEAM passed",
+      "redteamOpen": "REDTEAM finding open",
+      "staleMark": "stale n d",
+      "stale": "fast-moving figure checked > 90 d ago",
+      "reproducedMark": "reproduced",
+      "reproduced": "lab matches the chapter in CI",
+      "notReproducedMark": "not reproduced",
+      "notReproduced": "lab diverges from the chapter",
+      "noLabMark": "no lab",
+      "noLab": "chapter carries an instrument",
+      "versionMark": "v1.5.0 · 9 d",
+      "version": "version · days since verify"
+    },
+    "part": {
+      "cap": "part {roman} · {title}",
+      "title": {
+        "P0": "why now",
+        "P1": "foundations of language models",
+        "P2": "harness engineering",
+        "P3": "industrial application"
+      },
+      "header": "{count, plural, one {# chapter} other {# chapters}} · {labs, plural, one {# lab} other {# labs}}",
+      "headerProse": "{count, plural, one {# chapter} other {# chapters}} · prose",
+      "curators": "curators {names}"
+    },
+    "tile": {
+      "stale": "stale {days} d",
+      "open": "{n} open",
+      "reading": "reading {section}",
+      "versionDays": "{version} · {days} d",
+      "version": "{version}",
+      "verifyPassed": "VERIFY passed",
+      "verifyNot": "VERIFY not passed",
+      "redteamPassed": "REDTEAM passed",
+      "redteamNot": "REDTEAM not passed",
+      "redteamOpen": "REDTEAM: {n, plural, one {# finding} other {# findings}} open",
+      "reproduced": "reproduced",
+      "notReproduced": "not reproduced",
+      "since": "Lab {n} · since {when}",
+      "noLabProse": "no lab · prose",
+      "noLabInstrument": "no lab · instrument"
+    },
+    "glance": {
+      "label": "part {roman} · at a glance",
+      "counts": "{v}/{n} verify · {r}/{l} labs reproduce",
+      "stale": "{count} stale · ch{n} {what} {days} d"
+    },
+    "appendix": {
+      "label": "part iv · labs and appendices",
+      "labs": "{labs} labs · each with README, environment file, data and a script that prints the reproduced number",
+      "list": "appendices A glossary · B source registry · C data tables · D replication logs · E toolkit"
+    },
+    "statusbar": {
+      "home": "book home · {n} chapters",
+      "lang": "{lang} · source {src}",
+      "release": "pinned release {id}",
+      "counts": "verify {a}/{b} · labs {c}/{d}",
+      "loaded": "loaded {s} s"
+    },
+    "loading": "loading release",
+    "pathsLink": "Reading paths",
+    "error": {
+      "title": "Home did not load",
+      "body": "Trace {traceId}. Retry, or reload the page.",
+      "retry": "Retry"
+    }
+  },
+  "paths": {
+    "metaTitle": "Reading paths · The Harness Bible",
+    "metaTitleOne": "{name} path · The Harness Bible",
+    "cap": "reading paths · release {id}",
+    "title": "Three ways through the book",
+    "blurb": "Each path is a curated sequence of chapters in a fixed order. Progress is kept per account and follows you across devices and editions.",
+    "marks": {
+      "label": "Your marks",
+      "meta": "account",
+      "synced": "synced {when}",
+      "bookmarks": "bookmarks",
+      "notes": "notes",
+      "latest": "latest note · {id}",
+      "none": "No notes yet."
+    },
+    "signIn": {
+      "title": "Sign in to keep progress",
+      "body": "Reading paths work without an account; progress and marks need one.",
+      "account": "Sign in"
+    },
+    "path": {
+      "label": "Path · {name}",
+      "aria": "{name} path",
+      "stops": "{n} stops",
+      "chapters": "{n} chapters",
+      "who": "who it is for",
+      "use": "primary use",
+      "must": "must have",
+      "progress": "your progress",
+      "of": "{done} of {total}",
+      "left": "{time} left",
+      "timeHours": "{h} h {m} min",
+      "timeMin": "{m} min",
+      "meter": "{name} path progress",
+      "sequence": "{name} sequence",
+      "footer": "reading time at 230 words/min · labs extra",
+      "start": "Start path",
+      "resume": "Resume at {id}",
+      "again": "Read again",
+      "reset": "Reset",
+      "at": "· at {id}",
+      "updated": "path updated to {version}; stops you read still count"
+    },
+    "state": {
+      "unread": "not read",
+      "in_progress": "in progress",
+      "read": "read"
+    },
+    "stop": {
+      "stale": "stale {days} d",
+      "lab": "lab {n}"
+    },
+    "reset": {
+      "label": "Reset path",
+      "title": "Reset the {name} path?",
+      "body": "Progress for this path is deleted. Bookmarks and notes are kept.",
+      "cancel": "Cancel",
+      "confirm": "Reset"
+    },
+    "status": {
+      "count": "reading paths · {n}",
+      "active": "{path} {done} of {total} · resume {id}"
+    },
+    "loading": "loading reading paths",
+    "error": {
+      "title": "Action failed",
+      "session": "Sign in to start a path.",
+      "start": "The path did not start. Try again.",
+      "reset": "The path was not reset. Try again.",
+      "pageTitle": "Reading paths did not load",
+      "body": "Trace {traceId}. Retry, or reload the page.",
+      "retry": "Retry"
+    },
+    "groups": {
+      "whyNow": "why now",
+      "chooseAndPay": "choose and pay for it",
+      "comply": "comply",
+      "planAndProve": "plan and prove",
+      "decisionAids": "decision aids · layer 8",
+      "framingAndGuides": "framing and guides",
+      "contextAndKnowledge": "context and knowledge",
+      "execution": "execution",
+      "verificationAndControl": "verification and control",
+      "textAsNumbers": "text as numbers",
+      "architecture": "architecture",
+      "training": "training",
+      "serving": "serving",
+      "measuringAndFailing": "measuring and failing",
+      "cost": "cost"
+    },
+    "stops": {
+      "decisionAids": "Decision aids from 21, 23, 28 and 31"
+    },
+    "audience": {
+      "executive": {
+        "who": "CTO, CDO or operations VP at an industrial company.",
+        "use": "Part III, decision aids and the economics chapters; a brief from the assistant.",
+        "must": "Fast navigation to decision aids; exportable summaries with citations."
+      },
+      "builder": {
+        "who": "Harness or platform engineer.",
+        "use": "Part II with labs open; runs, edits, re-runs; copies reference implementations.",
+        "must": "Browser IDE with the lab's full environment; diff against the chapter's numbers."
+      },
+      "foundations": {
+        "who": "Builders and executives who need the model underneath the harness.",
+        "use": "Part I in order; each chapter's worked numbers before its lab.",
+        "must": "Derived figures linked to derive.py; labs that run on a laptop."
+      }
+    }
+  },
+  "rubric": {
+    "metaTitle": "Evidence rubric · The Harness Bible",
+    "openedFrom": "opened from ch{chapter} · {section} sources",
+    "applies": "applies to all {n} chapters",
+    "graderDesign": "grader design in",
+    "recalibration": "recalibration in",
+    "roster": "the curator roster",
+    "chapterRef": "ch{n}",
+    "title": "Evidence rubric",
+    "download": "Download rubric {version} · JSON",
+    "stamp": "Evidence rubric {version} · published {date} · changes are curator-only and announced",
+    "blurb": "The adjudicator grades each evidence item by tier, then adjusts it for relevance, recency and independence. The suggestion's score is set by its strongest item. A curator decides what the rubric cannot.",
+    "tiers": {
+      "label": "Evidence tiers",
+      "range": "A–G, U",
+      "ts": "base score before adjustment",
+      "th": {
+        "tier": "tier",
+        "name": "name",
+        "examples": "examples",
+        "base": "base"
+      },
+      "badge": "Evidence tier {tier}, {name}",
+      "name": {
+        "A": "Reproducible",
+        "B": "Primary published",
+        "C": "Primary vendor",
+        "D": "Independent analyst",
+        "E": "Practitioner",
+        "F": "Reported",
+        "G": "Opinion",
+        "U": "Unverifiable"
+      },
+      "example": {
+        "A": "A saved lab run in the IDE that reproduces the claimed change. A derive script diff. A runnable notebook with data.",
+        "B": "Peer-reviewed paper. Preprint with code. Standard or regulation text. Official specification. Audited filing.",
+        "C": "Official documentation, pricing page, changelog, release note or model card from the vendor concerned.",
+        "D": "Independent benchmark (Artificial Analysis, Epoch, RouterArena-class). Systematic review. Regulator guidance.",
+        "E": "Named engineer's technical post with method and numbers. Conference talk with slides. Open-source repository with measurements.",
+        "F": "News article. Secondary summary. Textbook without primary citation.",
+        "G": "Social media post. Forum comment. Unsourced blog. Personal assertion.",
+        "U": "Link cannot be opened. Document not supplied. Claim without artefact. Graded as unverifiable, not as weak."
+      }
+    },
+    "rule": {
+      "cap": "scoring rule · stated once",
+      "statement": "The strongest item decides. Ten weak items never equal one strong one.",
+      "formula": "score = max( base × relevance × recency × independence )",
+      "formulaBonus": "+ {bonus} once, if a second independent item is tier {tier} or above",
+      "note": "Never a sum. Never an average. Corroboration adds {bonus} at most."
+    },
+    "chips": {
+      "label": "Source tier ↔ evidence tier",
+      "ts": "book's seven chips",
+      "th": {
+        "chip": "book chip",
+        "evidence": "evidence",
+        "note": "note"
+      },
+      "note": {
+        "DERIVED": "derive.py diff or lab run",
+        "PRIMARY": "published primary text",
+        "VENDOR": "vendor's own page",
+        "ANALYST": "independent of the vendor",
+        "PRACTITIONER": "method and numbers shown",
+        "ILLUSTRATIVE": "an assumption, not evidence; replaced only by A",
+        "OPEN": "unresolved; cannot support a change"
+      },
+      "none": "no chip",
+      "noneNote": "the book never cites these"
+    },
+    "adjustments": {
+      "label": "Adjustment factors",
+      "kind": "multiplicative",
+      "ts": "applied per item",
+      "th": {
+        "factor": "factor",
+        "rule": "rule",
+        "multiplier": "multiplier"
+      },
+      "relevance": {
+        "name": "Relevance",
+        "rule": "Evidence addresses the anchored claim directly / partially / tangentially. Graded with the source opened."
+      },
+      "recency": {
+        "name": "Recency",
+        "rule": "Fast-moving figures only: prices, deadlines, model versions, benchmarks. {windows} / older. Stable facts are unadjusted.",
+        "withinDays": "≤ {n} days",
+        "withinYear": "≤ 1 year"
+      },
+      "independence": {
+        "name": "Independence",
+        "rule": "No stake / the vendor concerned / the contributor's own employer."
+      },
+      "corroboration": {
+        "name": "Corroboration",
+        "rule": "A second independent item at tier {tier} or above. Added once, after the strongest item is chosen.",
+        "value": "+{bonus}, once"
+      },
+      "footer": "the adjudicator does not see contributor identity beyond verified / unverified"
+    },
+    "thresholds": {
+      "label": "Thresholds by change class",
+      "ts": "recalibrated quarterly on overrides",
+      "th": {
+        "class": "change class",
+        "accept": "accept ≥",
+        "floor": "floor",
+        "scale": "0 ─ 100"
+      },
+      "class": {
+        "WORDING": "Wording, clarification, typo",
+        "CITED_FIGURE": "Cited figure, date, price, deadline",
+        "DERIVED_FIGURE": "Derived figure",
+        "NEW_CLAIM": "New claim or source row",
+        "CURATOR_ALWAYS": "Safety, OT-boundary, scenario parameter, structure, rubric, new source tier"
+      },
+      "derivedNote": "· needs a derive script change",
+      "onlyTier": "{tier} only",
+      "curatorAlways": "curator always",
+      "noScore": "no score decides",
+      "bar": "Decline below {floor}, request more from {floor} to {accept}, accept from {accept}",
+      "legend": {
+        "decline": "decline",
+        "requestMore": "request more",
+        "accept": "accept",
+        "sensor": "a failing sensor declines at any score"
+      }
+    },
+    "examples": {
+      "cap": "worked examples",
+      "title": "Four suggestions, graded",
+      "meta": "real records · rubric {version}",
+      "ex": "Ex {n}",
+      "product": "{base} × {relevance} × {recency} × {independence}",
+      "max": "max",
+      "bonus": "+ {bonus}",
+      "corroborates": "{tier} corroborates",
+      "result": "= {score}",
+      "noLift": "no adjustment can lift it",
+      "status": {
+        "ACCEPT": "accepted",
+        "DECLINE": "declined",
+        "REQUEST_MORE": "request more",
+        "CURATOR_REVIEW": "curator review"
+      },
+      "factor": {
+        "relevance": "relevance · {note}",
+        "recency": "recency · {note}",
+        "independence": "independence · {note}"
+      },
+      "relevance": {
+        "direct": "direct",
+        "partial": "partial",
+        "tangential": "tangential"
+      },
+      "recency": {
+        "days": "{n} days",
+        "stable": "stable",
+        "undated": "no date"
+      },
+      "stake": {
+        "none": "no stake",
+        "vendor": "the vendor concerned",
+        "employer": "own employer"
+      },
+      "ex1": {
+        "text": "EU AI Act Annex III date: 2 Aug 2026 → 2 Dec 2027. Official Journal regulation text.",
+        "tierNote": "B · regulation text",
+        "threshold": "≥ {accept} cited date",
+        "outcomeMeta": "v1.3.2 → v1.3.3",
+        "footer": "source row gets a new verification date"
+      },
+      "ex2": {
+        "text": "Routing savings 2.4× → 1.3×. Screenshot of a social media thread.",
+        "tierNote": "G · opinion",
+        "threshold": "< {floor} floor",
+        "note": "Declined at intake, before any model call. Tier B (paper with code) or D (independent benchmark) would suffice.",
+        "outcomeMeta": "0 tokens spent",
+        "footer": "cross-chapter warn · F-23-06 also at 37.4"
+      },
+      "ex3": {
+        "text": "Repair cap 3 → 4. Saved IDE run on the contributor's own golden set.",
+        "tierNote": "A · saved run",
+        "relevanceNote": "their set",
+        "threshold": "< {accept} tier {tier} only",
+        "note": "Named: a tier A run on Lab 22 with the change applied.",
+        "outcomeMeta": "accept {accept} · {tier} only",
+        "footer": "tier A below 100 · the chapter lab run is named"
+      },
+      "ex4": {
+        "text": "Cached-input price $0.30 → $0.25 per M tokens. Vendor page, then a price tracker.",
+        "threshold": "< {accept} cited price",
+        "note": "A second vendor page is not independent. The curator may accept on inspection.",
+        "override": "override recorded",
+        "footer": "OV-IND-02 · independence waived"
+      }
+    },
+    "changelog": {
+      "label": "Rubric changelog",
+      "kind": "curator-only class",
+      "ts": "announced to contributors 30 days before it applies",
+      "current": "· current",
+      "text": {
+        "v1_0": "Seven tiers, A to G. Relevance, recency and independence adjustments.",
+        "v1_1": "Corroboration capped at +10, once. Tier U split from G: a link that cannot be opened scores 0.",
+        "v1_2": "Recency applies to fast-moving figures only. Derived figures accept at 100, tier A only. Thresholds recalibrated quarterly on overrides."
+      }
+    },
+    "statusbar": {
+      "page": "improve · evidence rubric {version}",
+      "release": "pinned release {id}",
+      "sha": "rubric sha {sha}"
+    }
+  },
+  "improve": {
+    "suggest": {
+      "metaTitle": "Suggest a change · The Harness Bible",
+      "anchorLabel": "Anchor",
+      "step": "step 1 of 4 · anchor",
+      "title": "What the change is anchored to",
+      "intro": "A suggestion without an anchor is rejected at intake. Pick a section, a figure or a source row.",
+      "kindLabel": "Anchor type",
+      "kind": {
+        "SECTION": "Section",
+        "FIGURE": "Figure",
+        "SOURCE_ROW": "Source row"
+      },
+      "noFigures": "{id} has no figures.",
+      "noRows": "Chapter {n} has no source rows.",
+      "sectionLabel": "{id} {title}",
+      "figures": {
+        "count": "{count, plural, one {# figure} other {# figures}}"
+      },
+      "rows": {
+        "count": "{count, plural, one {# row} other {# rows}}",
+        "row": "row",
+        "entry": "entry",
+        "tier": "tier",
+        "checked": "checked",
+        "age": "{days} d"
+      },
+      "selected": "selected · {id}",
+      "anchorHash": "anchor{hash}",
+      "anchoredLabel": "Anchored text",
+      "anchoredText": "anchored text at {version}",
+      "anchoredSection": "anchored section at {version}",
+      "sectionNext": "The passage, the claim, the row or the new structure is chosen on the next step.",
+      "chip": "{tier} · {id}",
+      "fastMoving": "fast-moving",
+      "fastMovingStale": "fast-moving · stale",
+      "readBy": {
+        "lead": "Read by",
+        "and": "and by",
+        "end": "."
+      },
+      "strip": {
+        "back": "← back to {id}",
+        "openedFrom": "opened from",
+        "figure": "figure {item}",
+        "row": "row {item}",
+        "stale": "stale · {days} days",
+        "chapterNumber": "ch{n}",
+        "part": "part {roman}",
+        "suggestion": "suggestion",
+        "draft": "draft · not submitted",
+        "revision": "revision · not submitted"
+      },
+      "notFound": {
+        "title": "anchor not found",
+        "body": "{id} does not exist at ch{n} {version}. Choose an anchor at the current version.",
+        "empty": "This page needs an anchor: a section, a figure or a source row of chapter {n}.",
+        "choose": "Choose an anchor"
+      },
+      "role": {
+        "title": "Contributors suggest changes",
+        "body": "A contributor anchors a change to the book and brings the evidence for it. The role is given by your organisation or by the editorial team; this account's role is {role}."
+      },
+      "unverified": {
+        "title": "Verify your identity to suggest a change",
+        "body": "A suggestion needs a verified identity, and identity is verified through the sign-in provider."
+      },
+      "throttled": {
+        "title": "Suggestions paused until {date}",
+        "body": "{declines} suggestions from this account were declined for unverifiable evidence within {days} days. Your drafts can still be read; a new one can be started from {date}."
+      },
+      "phone": {
+        "title": "Suggesting a change needs a wider screen",
+        "body": "Open this page on a tablet or a desktop to suggest a change. Reading, bookmarks and notes work here."
+      },
+      "statusbar": {
+        "chapter": "ch{n}",
+        "anchor": "ch{n} · {id}",
+        "rubric": "rubric {version} · published {date}"
+      },
+      "create": {
+        "changeLabel": "what is proposed",
+        "change": {
+          "EDIT_TEXT": "edit a passage",
+          "ADD_CLAIM": "add a claim",
+          "ADD_ROW": "add a source row",
+          "RESTRUCTURE": "restructure"
+        },
+        "button": "Create draft",
+        "failed": "the draft was not created",
+        "trace": "Trace {traceId}.",
+        "unknown": "The server gave no reason.",
+        "network": "The request did not reach the server. Nothing was created; try again."
+      },
+      "edit": {
+        "metaTitle": "Suggest {id} · The Harness Bible",
+        "title": "Draft suggestion {id}",
+        "anchorFixed": "The anchor is fixed with the draft: a different anchor is a different suggestion.",
+        "statusbar": "ch{n} · {anchor} · {id} draft",
+        "proposed": "Proposed change",
+        "kindCap": {
+          "SET_VALUE": "number",
+          "EDIT_TEXT": "passage",
+          "EDIT_ROW": "source row",
+          "ADD_CLAIM": "new claim",
+          "ADD_ROW": "new source row",
+          "RESTRUCTURE": "structure"
+        },
+        "grader": "grader · small tier",
+        "revisionTitle": "Revision of suggestion {id}",
+        "fixed": "In a revision the anchor and the change stay as submitted: add evidence or change the rationale, then submit again. A different change is a new suggestion.",
+        "revisionStatusbar": "ch{n} · {anchor} · {id} revision"
+      },
+      "class": {
+        "label": "Change class",
+        "detected": "auto-detected",
+        "rubric": "rubric {version}",
+        "accept": "accept at or above",
+        "floor": "decline below (floor)",
+        "recency": "recency factor",
+        "recencyApplies": "applies · fast-moving",
+        "recencyNone": "does not apply · stable",
+        "curator": "curator always",
+        "curatorNo": "no",
+        "curatorYes": "yes · {reason}",
+        "reason": {
+          "SAFETY_OT": "safety and OT boundary",
+          "SCENARIO_PARAMETER": "scenario parameter",
+          "STRUCTURE": "structure",
+          "NEW_SOURCE_TIER": "new source tier",
+          "RUBRIC": "rubric"
+        },
+        "footer": "detected from anchor type and value type",
+        "moved": {
+          "SAFETY_OT": "Class changed to curator always: the proposed text is about operating equipment.",
+          "NEW_SOURCE_TIER": "Class changed to curator always: the proposed row names a source tier the book does not have.",
+          "other": "Class changed to {class}: what is proposed no longer makes it the curator's.",
+          "curator": "Class changed to curator always: {reason}.",
+          "plain": "Class changed to {class}."
+        }
+      },
+      "value": {
+        "before": "before · current",
+        "after": "after · proposed",
+        "unit": "unit",
+        "afterInvalid": "a decimal like 0.25",
+        "change": "{pct}%"
+      },
+      "save": {
+        "saved": "autosaved {time}",
+        "dirty": "unsaved changes",
+        "saving": "saving",
+        "invalid": "not saved · {message}",
+        "failed": "not saved · {message}",
+        "unknown": "the server gave no reason",
+        "network": "the request did not reach the server",
+        "trace": "trace {traceId}"
+      },
+      "source": {
+        "label": "the section's source text at {version}",
+        "use": "Use the selected text",
+        "help": "Select a passage in the source text, as the book's file has it, then use it: a passage copied from the page can differ from the file.",
+        "nothing": "Nothing is selected in the source text."
+      },
+      "check": {
+        "once": "found once in {id}",
+        "none": "not found in {id}'s source text: intake refuses a passage it cannot find",
+        "many": "found {count} times in {id}: add words around it so that it is found once",
+        "figure": "holds figure {figure}: a number is changed by anchoring its figure",
+        "digits": "changes a number: a number is changed by anchoring its figure",
+        "same": "the replacement is the passage unchanged"
+      },
+      "text": {
+        "before": "passage · current",
+        "after": "replacement · proposed"
+      },
+      "claim": {
+        "text": "claim · proposed",
+        "place": "where it goes",
+        "end": "at the end of the section",
+        "after": "after a passage of the section",
+        "passage": "the passage it follows"
+      },
+      "fastMovingField": "fast-moving: a price, a deadline, a model version or a benchmark",
+      "row": {
+        "current": "{field} · current",
+        "proposed": "{field} · proposed",
+        "field": {
+          "claim": "claim",
+          "citation": "citation",
+          "url": "link",
+          "doi": "DOI",
+          "verifiedOn": "verified"
+        },
+        "help": "Leave a proposed field empty to keep the row's own. A row has one link: a DOI written here becomes it."
+      },
+      "newRow": {
+        "claim": "claim",
+        "citation": "citation",
+        "url": "link · optional",
+        "doi": "DOI · optional",
+        "tier": "tier",
+        "another": "a tier the book does not have",
+        "newTier": "the new tier's name",
+        "choose": "choose a tier"
+      },
+      "restructure": {
+        "description": "what changes in the structure"
+      },
+      "problem": {
+        "required": "{field} is empty",
+        "field": {
+          "before": "the passage",
+          "after": "the replacement",
+          "text": "the claim",
+          "placeAfter": "the passage it follows",
+          "claim": "the claim",
+          "citation": "the citation",
+          "newTier": "the new tier's name",
+          "description": "the description"
+        },
+        "unchanged": "change at least one of the row's fields",
+        "invalid": {
+          "url": "a link like https://example.com/page",
+          "doi": "a DOI like 10.1000/182",
+          "verifiedOn": "a date",
+          "newTier": "a tier's name, at most 40 characters",
+          "other": "the server's schema does not accept this field"
+        },
+        "chooseTier": "choose a tier",
+        "tooLong": "the proposal is over 64 KB, the most a save takes: make it shorter"
+      },
+      "evidence": {
+        "title": "Evidence items",
+        "cap": "graded on add · base × relevance × recency × independence",
+        "kind": {
+          "LINK": "link",
+          "DOI": "DOI",
+          "UPLOAD": "upload",
+          "LAB_RUN": "lab run"
+        },
+        "tierPending": "Tier pending",
+        "stake": {
+          "none": "independent",
+          "vendor": "vendor concerned",
+          "employer": "the contributor's employer"
+        },
+        "older": "over 1 year",
+        "status": {
+          "opened": "opened · {status}",
+          "uploaded": "uploaded",
+          "days": "{n, plural, one {# day old} other {# days old}}",
+          "months": "{n, plural, one {# month old} other {# months old}}",
+          "years": "{n, plural, one {# year old} other {# years old}}",
+          "undated": "no date"
+        },
+        "grading": "grading",
+        "stage": "{n} of 3",
+        "doing": {
+          "1": "opening",
+          "2": "reading the text",
+          "3": "classifying tier"
+        },
+        "remove": "Remove",
+        "removeLabel": "Remove evidence item {n}",
+        "cancel": "Cancel",
+        "cancelLabel": "Cancel grading of evidence item {n}",
+        "corroboration": "Corroboration: item {item} is a second independent item at tier {tier} or above.",
+        "corroborationValue": "+{bonus} · once",
+        "empty": {
+          "cap": "evidence · {id}",
+          "title": "No evidence yet.",
+          "body": "Add a link, a DOI or a file. Each item is graded as it is added."
+        },
+        "add": {
+          "cap": "add evidence",
+          "link": "+ Link",
+          "doi": "+ DOI",
+          "upload": "+ Upload",
+          "labRun": "+ Saved lab run",
+          "labRunNote": "arrives with the IDE",
+          "help": "A link that cannot be opened is graded U, not weak. An upload is graded on its content.",
+          "linkLabel": "link to the evidence",
+          "doiLabel": "DOI",
+          "fileLabel": "file to upload",
+          "chooseFile": "choose a file",
+          "noFile": "no file chosen",
+          "submit": "Add",
+          "cancel": "Cancel",
+          "linkInvalid": "an https link, like https://example.com/page",
+          "fileInvalid": "a PDF, a PNG or JPEG image, or a text or Markdown file",
+          "fileTooLarge": "a file of this type may be at most {max}",
+          "uploading": "uploading",
+          "step": {
+            "1": "preparing",
+            "2": "sending the file",
+            "3": "adding the item"
+          },
+          "failed": "the evidence was not added",
+          "network": "No answer came back, so the item may have been added. Adding it again is safe: the same item is not added twice."
+        },
+        "unreachable": {
+          "title": "link could not be opened",
+          "status": "Evidence {n} returned {status}. It is graded U, score 0, not weak. The other items still count.",
+          "cause": "Evidence {n} could not be opened: {why}. It is graded U, score 0, not weak. The other items still count.",
+          "why": {
+            "dns": "its address was not found",
+            "connect": "its server did not answer",
+            "reset": "its server closed the connection",
+            "tls": "its certificate could not be checked",
+            "timeout": "it did not answer in time",
+            "size": "it is larger than the fetcher takes",
+            "redirects": "it redirected too many times",
+            "redirect_target": "it redirected where a link cannot go",
+            "encoding": "its text could not be read",
+            "doi_form": "the DOI is not in a form the resolver takes",
+            "guard": "its address is not one the fetcher opens"
+          },
+          "replace": "Replace evidence"
+        },
+        "unsupported": "U · {type}: a link of this type is not read. An upload of the document would be.",
+        "notSupplied": "U · nothing arrived to read.",
+        "budget": {
+          "title": "budget cap reached",
+          "body": "The gateway refused the grading call: this account is at its budget cap. It resets {date}. Nothing grades this item again by itself: remove it, and add it again after then.",
+          "source": "gateway"
+        },
+        "removeFailed": "the evidence was not removed",
+        "uploadTitle": "uploaded file",
+        "ruled": {
+          "title": "evidence could not be graded",
+          "body": "Evidence {n} could not be graded: {why}. It is graded U, score 0, not weak. The other items still count.",
+          "why": {
+            "media_mismatch": "its bytes are not the type it was sent as",
+            "pdf_too_large": "the PDF is larger than the grader can be sent",
+            "image_too_large": "the image is larger than the grader can be sent",
+            "image_unreadable": "the image's header could not be read",
+            "image_dimensions": "the image is wider or taller than the grader takes",
+            "request_too_large": "with the prompt, it is more than the grader can be sent",
+            "source_changed": "the file was sent again after it was opened",
+            "no_text": "no text could be read from it",
+            "text_missing": "the text read from it is no longer stored",
+            "grader": "the grader could not give it a tier"
+          }
+        },
+        "replaceLabel": "Replace evidence item {n}",
+        "removeNetwork": "The request did not reach the server. Nothing was removed; try again.",
+        "undatedOlder": "no date, so over 1 year",
+        "noType": "no stated type",
+        "announce": {
+          "graded": "Evidence {n}: tier {tier}, score {score}."
+        },
+        "read": {
+          "failed": "the list is not being read again",
+          "stale": "This page is older than the server's answer. Reload it to see the evidence as it is."
+        }
+      },
+      "rationale": {
+        "title": "Rationale",
+        "cap": "plain text · read by the adjudicator",
+        "label": "why the anchored text is wrong and what the evidence shows",
+        "help": "At most 200 words. Evidence carries the claim; the rationale explains it.",
+        "counter": "{n} / {max} words",
+        "over": "More than {max} words: Submit waits until it is shorter.",
+        "tooLong": "the rationale is too long to save; shorten it"
+      },
+      "score": {
+        "label": "Live score",
+        "title": "Score",
+        "rubric": "rubric {version}",
+        "live": "live",
+        "liveAt": "live · {time}",
+        "accept": "accept ≥ {n}",
+        "floor": "floor {n}",
+        "scaleAccept": "accept {n}",
+        "curator": "no score decides this class",
+        "meter": "Score {score} of 100, accept threshold {accept}, floor {floor}",
+        "how": "how it is computed",
+        "rule": "score = strongest item's adjusted score + corroboration, never a sum.",
+        "strongest": "strongest item · {n} · {tier}",
+        "corroboration": "corroboration · {n} · {tier}",
+        "alone": "item {n} alone",
+        "notAdded": "{score} · not added",
+        "item": "item {n}",
+        "total": "score",
+        "sum": "{strongest} + {bonus} = {score}",
+        "none": "No item is graded yet: the score starts with the first."
+      },
+      "prediction": {
+        "title": "Predicted outcome",
+        "when": "if submitted now",
+        "badge": {
+          "ACCEPT": "accept",
+          "REQUEST_MORE": "request more · short by {n}",
+          "REQUEST_MORE_BY_RULE": "request more · tier {tier}",
+          "DECLINE": "decline · under the floor",
+          "CURATOR": "curator always · no score decides"
+        },
+        "say": {
+          "ACCEPT": "At or above accept {accept}. The adjudicator would check the criteria and accept.",
+          "REQUEST_MORE": "Between floor {floor} and accept {accept}. The adjudicator would name the tier that suffices.",
+          "REQUEST_MORE_BY_RULE": "This class takes tier {tier} evidence only: a rule asks for it, with no adjudicator.",
+          "DECLINE": "Under the floor {floor}: declined at intake by rule, with no adjudicator.",
+          "CURATOR": "A curator decides this class. The score is shown and decides nothing.",
+          "none": "Nothing is graded yet, so nothing can be predicted."
+        },
+        "suffice": {
+          "title": "would suffice",
+          "ALONE": "a tier {tier} item",
+          "CORROBORATED": "an independent tier {tier} item",
+          "CORROBORATING": "an independent tier {tier} item",
+          "WITH_A_SECOND": "two independent tier {tier} items",
+          "within": " ≤ {days} days old",
+          "withinShort": " ≤ {days} d",
+          "or": ", or ",
+          "metaAlone": "{name}: {score}",
+          "metaStrongest": "{name} as strongest: {adjusted} + {bonus} = {score}",
+          "metaCorroborating": "{name} corroborating: {strongest} + {bonus} = {score}",
+          "metaTwo": "two {name}: {adjusted} + {bonus} = {score}"
+        },
+        "grading": "{count, plural, one {prediction updates when item {items} finishes grading} other {prediction updates when items {items} finish grading}}"
+      },
+      "identity": {
+        "title": "Identity",
+        "verified": "verified",
+        "unverified": "not verified",
+        "help": "The adjudicator sees only verified or unverified. Your name and employer are not passed to it."
+      },
+      "submit": {
+        "button": "Submit for grading",
+        "save": "Save draft",
+        "saved": "draft saved {time}",
+        "count": "{n} of {max} submitted in 24 h",
+        "consent": "Keep my name with this change, for its provenance.",
+        "waitConsent": "Submit waits for the consent above.",
+        "waitWords": "Submit waits for a rationale of at most {max} words.",
+        "throttled": "{declines} suggestions from this account were declined for unverifiable evidence within {days} days. This draft can still be written; it can be submitted from {date}.",
+        "failed": "nothing was submitted",
+        "network": "The request did not reach the server. Nothing was submitted; try again.",
+        "unsaved": "A field holds something that could not be saved, so nothing was submitted. Correct it, or wait for it to save, then submit.",
+        "sensorSource": "intake sensor",
+        "consentSource": "consent",
+        "sensor": {
+          "SCHEMA": "proposal incomplete",
+          "ANCHOR_EXISTS": "anchor not found",
+          "EVIDENCE_PARSES": "evidence incomplete",
+          "RATIONALE_LENGTH": "rationale length",
+          "CONSENT_REQUIRED": "consent needed"
+        },
+        "chooseAnchor": "Choose an anchor",
+        "revise": "Submit the revision",
+        "saveRevision": "Save"
+      },
+      "anchorChanged": {
+        "title": "the anchor changed in this release",
+        "body": "The draft was written against the text it recorded; the release now reads otherwise. A different text is a different suggestion.",
+        "gone": "The release no longer has this anchor. A different anchor is a different suggestion.",
+        "was": "as the draft recorded it",
+        "now": "as the release has it now"
+      },
+      "deleteDraft": {
+        "trigger": "Delete draft",
+        "title": "Delete draft {id}?",
+        "body": "The draft, its evidence and the files you uploaded for it are deleted. Nothing of it was recorded, and its number is not used again.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "failed": "The draft was not deleted",
+        "network": "The request did not reach the server. Nothing was deleted; try again."
+      }
+    },
+    "home": {
+      "metaTitle": "Improve · The Harness Bible",
+      "cap": "improve",
+      "title": "Improve the book",
+      "what": "A verified contributor proposes a change to a section, a figure or a source row, with evidence. The evidence is graded, and the published rubric's score decides the route: by rule, by the adjudicator, or by a curator. Every step is recorded, so each decision can be checked.",
+      "rubric": "Read the rubric",
+      "new": "New suggestion",
+      "signIn": {
+        "title": "Sign in to suggest a change",
+        "body": "A suggestion is written by a verified contributor.",
+        "link": "Sign in"
+      },
+      "queue": {
+        "title": "Curator queue",
+        "count": "{n, plural, =0 {No suggestion waits in the queue for your parts.} one {# suggestion waits in the queue for your parts.} other {# suggestions wait in the queue for your parts.}}",
+        "link": "Open the queue",
+        "researchLog": "Research log"
+      },
+      "own": {
+        "title": "Your suggestions",
+        "empty": "No suggestion yet.",
+        "id": "id",
+        "anchor": "anchor",
+        "class": "class",
+        "state": "state",
+        "score": "score / accept",
+        "age": "since",
+        "waits": "waits on you",
+        "against": "{score} / {accept}",
+        "since": "{n, plural, =0 {today} one {# day} other {# days}}",
+        "start": "Use New suggestion, or Suggest a change on a section of the book."
+      },
+      "state": {
+        "DRAFT": "draft",
+        "SUBMITTED": "submitted",
+        "INTAKE_DECLINED": "declined at intake",
+        "GRADED": "graded",
+        "SENSED": "checked",
+        "DECIDED": "decided",
+        "CURATOR_QUEUE": "with a curator",
+        "MERGING": "merging",
+        "MERGED": "merged",
+        "CLOSED": "closed"
+      },
+      "outcome": {
+        "ACCEPT": "accepted",
+        "REQUEST_MORE": "more evidence asked",
+        "DECLINE": "declined",
+        "CURATOR_REVIEW": "with a curator"
+      },
+      "statusbar": "improve · release {release}",
+      "proposals": {
+        "title": "Proposals from your questions",
+        "id": "proposal",
+        "anchor": "anchor",
+        "where": "where it is",
+        "name": "your name",
+        "withName": "with your name"
+      },
+      "fromResearch": {
+        "title": "From a research",
+        "research": "research",
+        "anchor": "anchor",
+        "kind": "change",
+        "action": "action",
+        "kept": "findings are kept with their research for 30 days"
+      },
+      "withdrawn": "withdrawn",
+      "withdrawing": "withdrawal sent · being recorded",
+      "notice": {
+        "title": "Done",
+        "deleted": "Draft {id} deleted."
+      }
+    },
+    "new": {
+      "metaTitle": "New suggestion · Improve",
+      "title": "New suggestion",
+      "chapters": "Choose a chapter",
+      "sections": "Choose a section of chapter {n}",
+      "back": "← chapters",
+      "statusbar": "new suggestion · chapter {n}",
+      "statusbarNone": "new suggestion"
+    },
+    "outcome": {
+      "metaTitle": "{id} · The Harness Bible",
+      "cap": "adjudication · {id}",
+      "submitted": "submitted {at}",
+      "decided": "decided {at}",
+      "title": {
+        "SECTION": "{id} <book>{title}</book>",
+        "FIGURE": "Figure {id} · <book>{label}</book>",
+        "SOURCE_ROW": "Row {id} · <book>{claim}</book>"
+      },
+      "decision": {
+        "title": "Decision",
+        "rubric": "rubric {version}",
+        "badge": {
+          "progress": "In progress",
+          "budget": "Waiting for budget",
+          "declined": "Declined",
+          "requestMore": "Request more",
+          "requestMoreByRule": "Request more",
+          "curator": "With a curator",
+          "accepted": "Accepted",
+          "checkFailed": "Check failed",
+          "MERGING": "Merging",
+          "MERGED": "Merged",
+          "closed": "Closed",
+          "recommended": "Recommended",
+          "notProposed": "Not proposed",
+          "withdrawing": "Withdrawing",
+          "withdrawn": "Withdrawn"
+        },
+        "thresholds": "floor {floor} · accept {accept}",
+        "curatorAlways": "curator always",
+        "line": {
+          "progress": {
+            "SUBMITTED": "submitted · grading the evidence",
+            "GRADED": "graded · the sensors run",
+            "SENSED": "checked · the decision is next"
+          },
+          "budget": "waiting for budget · resets {date}",
+          "declined": {
+            "intake": "score {score} · floor {floor} · declined at intake before any model call",
+            "sensor": "score {score} · declined by the {sensor} sensor",
+            "adjudicator": "score {score} · floor {floor} · accept {accept} · declined by the adjudicator"
+          },
+          "requestMore": "score {score}{accept, select, none {} other { · accept {accept}}} · short by the evidence below",
+          "requestMoreByRule": "score {score} · accept {accept} · tier {tier} only",
+          "curator": "score {score} · with a curator · part {parts}{due, select, none {} other { · due {due}}}",
+          "accepted": {
+            "DECIDED": "score {score}{accept, select, none {} other { · accept {accept}}} · accepted",
+            "MERGING": "score {score}{accept, select, none {} other { · accept {accept}}} · merging",
+            "MERGED": "score {score}{accept, select, none {} other { · accept {accept}}} · merged"
+          },
+          "checkFailed": "score {score}{accept, select, none {} other { · accept {accept}}} · accepted · the chapter's check failed",
+          "closed": "score {score} · closed by a curator{code, select, none {} other { · {code}}}",
+          "recommended": "score {score}{accept, select, none {} other { · accept {accept}}} · recommended · with a curator · part {parts}{due, select, none {} other { · due {due}}}",
+          "notProposed": "score {score}{accept, select, none {} other { · accept {accept}}} · short of the acceptance · closed",
+          "checkFailedClosed": "score {score}{accept, select, none {} other { · accept {accept}}} · accepted · the chapter's check failed · closed",
+          "withdrawing": "score {score} · withdrawal sent · being recorded",
+          "withdrawn": "score {score} · withdrawn by its contributor"
+        },
+        "say": {
+          "progress": "The suggestion is being worked through. This page follows it until something is decided.",
+          "budget": "Grading paused at the budget cap. It continues on {date}.",
+          "declined": {
+            "intake": "The score is under the floor, so the suggestion was declined by rule and no model read it.",
+            "sensor": "A deterministic sensor failed; its note is below. Nothing was decided on the evidence.",
+            "adjudicator": "The adjudicator declined it on the criteria below."
+          },
+          "requestMore": "Between the floor and the acceptance. The adjudicator named the evidence that would suffice.",
+          "requestMoreByRule": "This class is accepted on tier {tier} evidence only. A rule asks for it, with no adjudicator.",
+          "curator": "A curator decides this change. The decision so far is below.",
+          "accepted": "At or above the acceptance, with every criterion met.",
+          "checkFailed": "Accepted, and then the chapter's check failed on its branch, so it is back as a request for more. What the check found is under Merge below.",
+          "closed": "A curator closed this suggestion. The curator's note is not shown; its hash is in the record.",
+          "recommended": "At or above the acceptance, with every criterion met: the adjudicator recommends it. A researcher's proposal is merged only on a curator's accept.",
+          "notProposed": "Short of the acceptance. A person's suggestion would be asked for more evidence; a researcher's proposal is closed instead, and nothing is proposed.",
+          "checkFailedClosed": "A curator accepted it, and then the chapter's check failed on its branch. A researcher's proposal is not returned for more: it is closed, and nothing was merged. What the check found is under Merge below.",
+          "withdrawing": "The withdrawal is being recorded. This page follows it until the suggestion is closed.",
+          "withdrawn": "Its contributor withdrew this suggestion. It goes no further; its record stays, with the withdrawal in it."
+        },
+        "footer": {
+          "none": "not decided yet",
+          "rule": "intake rule · 0 tokens",
+          "router": "router · 0 tokens",
+          "adjudicator": "adjudicator · {model} · {tokens} tokens"
+        },
+        "record": "rec#{hash}"
+      },
+      "anchor": {
+        "title": "Anchor · {where}",
+        "exists": "anchor exists",
+        "changed": "anchor changed",
+        "before": "before · current",
+        "after": "after · proposed",
+        "evidence": "Evidence as graded",
+        "noEvidence": "No evidence."
+      },
+      "reasons": {
+        "title": "Reasons",
+        "cap": "one line per rubric criterion",
+        "by": "rubric {version}",
+        "none": "No criterion is decided yet.",
+        "criterion": "criterion",
+        "verdict": "verdict",
+        "reason": "reason",
+        "name": {
+          "tier": "tier",
+          "relevance": "relevance",
+          "recency": "recency",
+          "independence": "independence",
+          "corroboration": "corroboration",
+          "threshold": "threshold"
+        }
+      },
+      "sensors": {
+        "title": "Sensors",
+        "cap": "deterministic",
+        "none": "The sensors have not run yet.",
+        "sensor": "sensor",
+        "verdict": "verdict",
+        "note": "note",
+        "name": {
+          "SCHEMA": "schema",
+          "ANCHOR_EXISTS": "anchor exists",
+          "EVIDENCE_PARSES": "evidence parses",
+          "RATIONALE_LENGTH": "rationale length",
+          "DERIVE_CONSISTENCY": "derive consistency",
+          "CROSS_CHAPTER": "cross-chapter",
+          "LINT": "lint"
+        },
+        "result": {
+          "PASS": "pass",
+          "FAIL": "fail",
+          "WARN": "warn",
+          "NA": "n/a"
+        }
+      },
+      "suffice": {
+        "title": "What would suffice",
+        "accept": "accept ≥ {n}",
+        "named": "One item of tier {tier}.",
+        "how": {
+          "ALONE": "Reaches the acceptance alone at {adjusted}.",
+          "CORROBORATED": "{adjusted} as the strongest, with the present items' {bonus} of corroboration.",
+          "CORROBORATING": "Adds {bonus} of corroboration to the strongest item.",
+          "WITH_A_SECOND": "{adjusted} with a second of the same tier adding {bonus}."
+        }
+      },
+      "actions": {
+        "record": "View full record",
+        "back": "Back to {id}",
+        "override": "a curator may override with a coded reason",
+        "revise": "Revise with new evidence"
+      },
+      "statusbar": "ch{n} · {id}",
+      "aside": "Your other open suggestion and the throttle rule",
+      "request": {
+        "cap": "request",
+        "what": "A tier {tier} run on Lab {n} with the change applied.",
+        "noLab": "The button that opens the lab with this change comes with the IDE, which is not built yet. Until then a curator inspects this request."
+      },
+      "other": {
+        "cap": "also yours · open",
+        "chapter": "ch{n}",
+        "decided": "decided {at}",
+        "submitted": "submitted {at}",
+        "score": "Score",
+        "rubric": "rubric {version}",
+        "accept": "accept {accept}",
+        "acceptTier": "accept {accept} · tier {tier} only",
+        "under": "< {accept}",
+        "reached": "≥ {accept}",
+        "meter": "Score {score} of 100, accept threshold {accept}"
+      },
+      "throttle": {
+        "cap": "throttle rule",
+        "rule": "{max} declines for unverifiable evidence in a month throttles suggestions; you have {n}.",
+        "notCounted": "{id} was graded {tier}, not U. It does not count.",
+        "counts": "{id} was graded U. It counts for {days} days from its decision."
+      },
+      "saw": {
+        "cap": "what the adjudicator saw",
+        "body": "The suggestion, the graded evidence, the sensor verdicts and the anchored text. Of you, only: identity verified.",
+        "versions": "guide {guide} · rubric {rubric}"
+      },
+      "withdraw": {
+        "trigger": "Withdraw",
+        "title": "Withdraw suggestion {id}?",
+        "body": "It is closed now and goes no further, and it is not reopened. Its record stays, with your withdrawal in it.",
+        "cancel": "Cancel",
+        "confirm": "Withdraw",
+        "moved": "It can no longer be withdrawn here; the page now shows where it stands.",
+        "failed": "The suggestion was not withdrawn",
+        "network": "The request did not reach the server. Nothing was withdrawn; try again."
+      }
+    },
+    "record": {
+      "metaTitle": "Record of {id} · The Harness Bible",
+      "cap": "suggestion record · {id}",
+      "contributor": "contributor {who}",
+      "noContributor": "a curator's revert · no contributor",
+      "verified": "identity verified",
+      "unverified": "identity not verified",
+      "actions": {
+        "outcome": "View the decision"
+      },
+      "statusbar": {
+        "where": "ch{n} · {anchor} · {id}",
+        "head": "head {head}"
+      },
+      "change": {
+        "title": "Change",
+        "before": "before",
+        "after": "after",
+        "class": "Class: {name}."
+      },
+      "decision": {
+        "title": "Decision",
+        "rubric": "rubric {version}",
+        "reached": "≥ {accept}",
+        "under": "< {accept}",
+        "floor": "floor {floor}",
+        "sensorsPass": "all sensors pass",
+        "sensorFailed": "the {sensor} sensor failed"
+      },
+      "evidence": {
+        "title": "Evidence",
+        "count": "{n, plural, one {# item} other {# items}}",
+        "none": "No evidence."
+      },
+      "timeline": {
+        "cap": "hash-chained · sha-256, first 12 hex",
+        "count": "{n, plural, one {# record} other {# records}}",
+        "empty": "No record yet.",
+        "footer": "each record hashes its payload and the previous hash",
+        "hash": "prev {prev} · hash {hash}",
+        "head": "head",
+        "title": {
+          "record": "Record",
+          "SUBMITTED": "Submitted",
+          "RESUBMITTED": "Resubmitted · attempt {n}",
+          "GRADED": "Graded",
+          "SENSORS": "Sensors",
+          "DECIDED": {
+            "ACCEPT": "Decided · accept",
+            "REQUEST_MORE": "Decided · request more",
+            "DECLINE": "Decided · decline",
+            "CURATOR_REVIEW": "Decided · to a curator"
+          },
+          "CURATOR": {
+            "ACCEPT": "Curator · approved",
+            "KEEP_REQUEST_MORE": "Curator · kept request more",
+            "DECLINE": "Curator · declined",
+            "MERGE": "Curator · merged",
+            "REVERT": "Curator · reverted"
+          },
+          "MERGED": "Merged",
+          "ENDORSED": "Endorsed",
+          "WITHDRAWN": "Endorsement withdrawn",
+          "EXPORT": "Exported",
+          "UNREADABLE": "Record {seq}",
+          "RETRACTED": "Withdrawn by its contributor"
+        },
+        "body": {
+          "SUBMITTED": "Anchor {anchor} · {class}. {items, plural, =0 {No evidence item} one {One evidence item} other {# evidence items}}. Rationale {words, plural, one {# word} other {# words}}.",
+          "GRADED_ITEM": "Item {n}: tier {tier}, {base} × {relevance} × {recency} × {independence} = {adjusted}.",
+          "GRADED_ITEM_BARE": "Item {n}: tier {tier}, {adjusted}.",
+          "GRADED_SCORE": "Score {score}.",
+          "SENSORS": "{verdicts}.",
+          "DECIDED": {
+            "ACCEPT": "{score} ≥ {accept}: accepted. {criteria, plural, one {One reason} other {# reasons}}, one per criterion.",
+            "REQUEST_MORE": "{score} < {accept}: more evidence asked for.",
+            "CURATOR_REVIEW": "Score {score}: sent to a curator.",
+            "sensor": "Declined: the {sensor} sensor failed.",
+            "declinedByAdjudicator": "Score {score}: declined by the adjudicator.",
+            "declinedByRule": "{score} < floor {floor}: declined by rule, before any model call."
+          },
+          "CURATOR": {
+            "ACCEPT": "{code, select, none {Approved without override.} other {Approved on override {code}{criterion, select, none {} other { · {criterion}}}.}}",
+            "KEEP_REQUEST_MORE": "Kept the request for more evidence.",
+            "DECLINE": "{code, select, none {Declined.} other {Declined on {code}.}}",
+            "MERGE": "Merged.",
+            "REVERT": "Reverted.",
+            "noted": "The curator's note is in the record as its hash."
+          },
+          "MERGED": "{bump}. {from} → {to}. Chapter lint {lint}. Lab {lab}.",
+          "REVERTS": "Reverts {id}.",
+          "ENDORSED": "A reader put their name to it.",
+          "WITHDRAWN": "The reader took their name back.",
+          "EXPORT": "Exported as JSONL, {records, plural, one {# record} other {# records}}, with its signed trailer.",
+          "UNREADABLE": "This record's payload does not read as its kind.",
+          "RETRACTED": "It was closed {where, select, intake {after its decline at intake} more {while more evidence was asked for} other {in a curator's queue}} and goes no further."
+        },
+        "bump": {
+          "patch": "Patch",
+          "minor": "Minor",
+          "major": "Major"
+        },
+        "actor": {
+          "verified": "{who} · verified",
+          "curator": "{who} · part {part}",
+          "grader": "grader · {model} · rubric {rubric}",
+          "sensors": "deterministic · {n, plural, one {# sensor} other {# sensors}}",
+          "adjudicator": "adjudicator guide {guide} · rubric {rubric}",
+          "rules": "intake rules · rubric {rubric}",
+          "router": "router · rubric {rubric}",
+          "merged": "ch{n} {from} → {to}"
+        }
+      },
+      "rail": {
+        "label": "What the merge adds, and the chain",
+        "notMerged": "not merged",
+        "version": {
+          "title": "Version",
+          "chapter": "ch{n}",
+          "pending": "The version the merge makes, with its branch and commit, appears here once merged.",
+          "rule": "Patch for wording and figures, minor for new sections, major for structure.",
+          "release": "release",
+          "mergedBy": "merged by",
+          "notYet": "not yet",
+          "revertedBy": "reverted by"
+        },
+        "gate": {
+          "title": "Lab gate",
+          "cap": "merge condition",
+          "pending": "Not merged: the chapter's lab and lint run at the merge, and their results appear here.",
+          "unchecked": "The merge has not checked its branch yet: the chapter's lab and lint, and the book's suite, appear here once it has.",
+          "lab": "ch{n} lab",
+          "suite": "book suite"
+        },
+        "row": {
+          "title": "Source row · {id}",
+          "cap": "verification",
+          "pending": "Not merged: the row's verification date changes with the merge.",
+          "before": "verified before",
+          "after": "verified now",
+          "age": "age today",
+          "days": "{n, plural, =0 {today} one {# day} other {# days}}"
+        },
+        "credit": {
+          "title": "Credit",
+          "pending": "Not merged: {who} is credited in the chapter's history once merged. No edit is attributed to an agent.",
+          "merged": "{who} is credited for this change in the chapter's history. No edit is attributed to an agent.",
+          "nobody": "Nobody is credited for a revert in the chapter's history. No edit is attributed to an agent.",
+          "research": "Nobody is named for this research proposal until the reader who asked puts their name to it; the researcher is credited nowhere. No edit is attributed to an agent."
+        },
+        "chain": {
+          "title": "Chain integrity",
+          "checked": "checked {at}",
+          "verified": "chain verified · {n, plural, one {# record} other {# records}} · head {head}",
+          "empty": "no records yet",
+          "broken": "chain broken at record {seq} · {field}",
+          "links": "recompute 100% · {n} / {n} links match",
+          "stopped": "The walk stops at the first break: the records after it are not vouched for."
+        },
+        "export": {
+          "button": "Export record",
+          "meta": "JSONL with hash chain · {n} lines"
+        }
+      },
+      "researchOrigin": "origin · research · no contributor",
+      "endorsedBy": "endorsed by {name}"
+    },
+    "history": {
+      "metaTitle": "Chapter {n} history · The Harness Bible",
+      "chapterCap": "chapter {n} · {part}",
+      "cap": "improvement history",
+      "verified": "{version} · verified {date}",
+      "labMark": "lab {id} {verdict}",
+      "lede": "Every version of this chapter since release, with the change, its evidence and the people who made it. Each row links to a hash-chained decision record.",
+      "stats": {
+        "versions": "versions",
+        "contributed": "contributed changes",
+        "inText": "in the current text",
+        "overrides": "curator overrides",
+        "reverted": "reverted",
+        "inPrecision": "in precision",
+        "none": "none",
+        "rule": "bump rule",
+        "patch": "wording, figures",
+        "minor": "new sections",
+        "major": "structure"
+      },
+      "ledger": {
+        "title": "Version ledger",
+        "chapter": "ch{n}",
+        "order": "newest first",
+        "head": "head {head}",
+        "noHead": "no record yet",
+        "columns": {
+          "version": "version",
+          "date": "date",
+          "class": "change class",
+          "anchor": "anchor",
+          "summary": "summary",
+          "evidence": "evidence",
+          "people": "contributor · curator",
+          "record": "record"
+        },
+        "foot": "scores at the rubric version in force on the date · records export as JSONL",
+        "export": "Export chapter records",
+        "exportSignedOut": "sign in to export the records"
+      },
+      "class": {
+        "EDIT_TEXT": "wording",
+        "SET_VALUE": "cited figure",
+        "EDIT_ROW": "source row",
+        "ADD_CLAIM": "new claim",
+        "ADD_ROW": "new source row",
+        "RESTRUCTURE": "new section",
+        "revert": "revert",
+        "curator": "curator",
+        "research": "research",
+        "release": "release",
+        "fromResearch": "from research"
+      },
+      "inspection": "accepted on inspection",
+      "overrideMark": "curator override · {code}",
+      "revertedMark": "reverted in {version} · counted in precision",
+      "revertedMarkNoVersion": "reverted · counted in precision",
+      "revertOf": "Reverted {id}.",
+      "editorial": {
+        "summary": "Chapter published with {layers, plural, one {# layer} other {# layers}}. VERIFY {verify}. Lab {lab}.",
+        "summaryNoLab": "Chapter published with {layers, plural, one {# layer} other {# layers}}. VERIFY {verify}. No lab.",
+        "who": "editorial",
+        "release": "release {id}"
+      },
+      "rail": {
+        "label": "Credit, the layers and the chain",
+        "credit": {
+          "title": "Contributor credit",
+          "order": "alphabetical",
+          "none": "No merged change yet: nobody is credited.",
+          "accepted": "{n, plural, one {# accepted} other {# accepted}}",
+          "reverted": "{n, plural, one {# reverted} other {# reverted}}",
+          "agent": "No edit is attributed to the agent.",
+          "note": "Counts are accepted changes still in the text. This list is not a ranking."
+        },
+        "layers": {
+          "title": "What changed, by layer",
+          "since": "since {version}",
+          "kind": {
+            "wording": "{n, plural, one {# wording} other {# wording}}",
+            "figure": "{n, plural, one {# figure} other {# figures}}",
+            "claim": "{n, plural, one {# claim} other {# claims}}",
+            "rows": "{n, plural, one {# source row} other {# source rows}}",
+            "section": "{n, plural, one {# section} other {# sections}}"
+          },
+          "reverted": "{n, plural, one {# reverted} other {# reverted}}",
+          "override": "{n, plural, one {override} other {# overrides}}",
+          "foot": "grey layers are unchanged since release",
+          "footNone": "no layer has changed since release"
+        },
+        "chain": {
+          "title": "chain check",
+          "ok": "{n, plural, one {# record} other {# records}} · every prev-hash matches",
+          "empty": "no records yet",
+          "broken": "chain broken at record {seq} · {field}",
+          "head": "head {head}"
+        }
+      },
+      "statusbar": {
+        "where": "ch{n} · improvement history",
+        "release": "pinned release {id}"
+      },
+      "verifiedPerson": "verified"
+    },
+    "revert": {
+      "title": "Revert",
+      "sampleTitle": "The month's verdict",
+      "lede": "Reverting makes a change in the other direction: the same check, a new version and a new release, with its own record. Say why.",
+      "sampleLede": "This merged change was drawn into the month's sample. Say that it stands, or revert it, saying why. A revert counts in adjudication precision.",
+      "note": "note",
+      "counter": "{n} of {max}",
+      "noteRequired": "A revert says why: write a note.",
+      "noteOver": "The note is over {max} characters.",
+      "stands": "Stands",
+      "revert": "Revert",
+      "cancel": "Cancel",
+      "confirm": "Press Revert again to undo this change in a new release.",
+      "status": {
+        "stands": "Recorded: the change stands.",
+        "started": "The revert has begun: its merge checks and publishes a release.",
+        "conflict": "It cannot be reverted now: not merged, reverted already, or judged already.",
+        "unavailable": "The workflow engine is not available. Try again in a moment.",
+        "failed": "Not sent. Try again."
+      }
+    },
+    "queue": {
+      "metaTitle": "Curator queue · The Harness Bible",
+      "cap": "curator queue · {who} · part {parts}",
+      "title": "Routed by change class",
+      "open": "{n} open",
+      "marks": {
+        "overdue": "{n} overdue",
+        "dueSoon": "{n} due < 24 h",
+        "inSla": "{n} in sla"
+      },
+      "noParts": "No part of the book is assigned to you on the roster.",
+      "empty": "Nothing waits for your parts.",
+      "col": {
+        "id": "id",
+        "anchor": "anchor · class",
+        "tier": "tier",
+        "score": "score",
+        "age": "age",
+        "sla": "sla"
+      },
+      "group": {
+        "safety": "Safety / OT-boundary",
+        "scenario": "Scenario parameter",
+        "structure": "Structure",
+        "newTier": "New source tier",
+        "inspection": "Request more · for inspection",
+        "ready": "Ready to merge",
+        "merging": "Merging · waiting on a hand",
+        "sampled": "Sampled · accepted tier B",
+        "decided": "Decided today",
+        "researcher": "Researcher proposals"
+      },
+      "groupCount": "{n}",
+      "sampledCount": "{n} · monthly sample",
+      "seedsRevealed": "{n} · seeds revealed",
+      "mergeState": {
+        "READY": "ready to merge",
+        "CHECKING": "checking",
+        "MANUAL": "needs a commit",
+        "NOT_RUN": "lab not run",
+        "UNAVAILABLE": "no repository",
+        "FAILED": "check failed",
+        "ERROR": "a step failed",
+        "NONE": "no merge yet",
+        "MERGING": "merging into main",
+        "MERGED": "merged",
+        "MOVED": "main moved"
+      },
+      "merge": {
+        "title": "Merge",
+        "version": "version",
+        "branch": "branch",
+        "commit": "commit",
+        "lint": "chapter lint",
+        "lab": "chapter lab",
+        "suite": "book suite",
+        "none": "none",
+        "noCommit": "not yet",
+        "reproduce": "{n} / {total} reproduce",
+        "lintResult": {
+          "PASS": "pass",
+          "FAIL": "fail",
+          "NOT_RUN": "not run",
+          "NONE": "none"
+        },
+        "labResult": {
+          "PASS": "reproduces",
+          "FAIL": "does not reproduce",
+          "NOT_RUN": "not run",
+          "NONE": "none"
+        },
+        "said": {
+          "READY": "The chapter's check passed on the branch: it is ready for the curator's merge.",
+          "CHECKING": "The branch is made, and its check runs.",
+          "MANUAL": "This change is made by hand: a curator commits it to the branch in the book's repository, then presses Re-run check.",
+          "NOT_RUN": "The chapter's lab could not be run here, and this change could move a derived figure, so it waits.",
+          "UNAVAILABLE": "The book's repository is not set on this machine, so nothing can be merged yet.",
+          "FAILED": "The chapter's check failed; the suggestion goes back to its contributor as a request for more, and the branch is kept.",
+          "ERROR": "A step of the merge failed. It waits: a curator's Re-run check tries again once what failed is set right.",
+          "NONE": "No merge has begun for this accepted suggestion. A curator's Re-run check starts one.",
+          "MERGING": "A curator merged it: main moves to the branch, release {release} is tagged and published, and the record is written.",
+          "MERGED": "Merged into main and published in release {release}.",
+          "MOVED": "The anchor no longer reads on main what the suggestion recorded: the suggestion is a curator's again, with main's text beside its own.",
+          "FAILED_REVERT": "The chapter's check failed; the revert waits for a curator's commit on the branch and Re-run check."
+        },
+        "movedNow": "On main the anchor now reads: {text}",
+        "movedGone": "On main the anchor is gone.",
+        "hand": "Why by hand",
+        "missing": {
+          "COMMIT": "The branch has no commit beyond main yet.",
+          "DESCENT": "The branch does not descend from main: rebase it onto main.",
+          "CHAPTER": "The branch does not change the anchored chapter.",
+          "DERIVE": "A derived figure changes with its script: the branch must change the lab's derive script too."
+        },
+        "failure": {
+          "does-not-parse": "The book does not build on the branch",
+          "chapter-missing": "The branch has lost the chapter",
+          "unlinked-derived": "A derived figure no longer matches its derive link",
+          "unchanged": "The change leaves the chapter as it is: nothing to merge"
+        },
+        "labReason": "Why",
+        "step": {
+          "prepare": "Preparing the branch",
+          "check": "Checking the branch",
+          "merge": "Merging into main"
+        },
+        "unrelated": "{n, plural, one {Lab {labs} does} other {Labs {labs} do}} not reproduce on this tree either way: the failure is not this change's, and does not block it.",
+        "figures": "Derived figures the lab no longer prints as the branch states them",
+        "figure": "{id} · {value} · {key}",
+        "keys": "Results that moved",
+        "key": "{key}: the branch states {stated}, the run printed {printed}",
+        "absent": "nothing",
+        "diff": "The branch against main",
+        "truncated": "its first {n} characters",
+        "output": "What the lab printed, its end",
+        "release": "release",
+        "mergeButton": "Merge",
+        "cancel": "Cancel",
+        "confirm": "Press Merge again to merge into main and publish a release.",
+        "merging": "Merge sent: main moves to the branch and the release is published.",
+        "recording": "Merge sent, and being recorded.",
+        "mergeRefused": "It is not ready to merge any more.",
+        "mergeFailed": "Merge was not sent. Try again.",
+        "recheck": "Re-run check",
+        "asked": "Asked: the merge prepares and checks again.",
+        "started": "A merge has begun: it prepares and checks.",
+        "refused": "It has no merge to check any more.",
+        "failed": "Re-run check was not sent. Try again."
+      },
+      "span": {
+        "h": "{n} h",
+        "d": "{n} d",
+        "past": {
+          "h": "−{n} h",
+          "d": "−{n} d"
+        }
+      },
+      "reason": {
+        "SAFETY_OT": "safety",
+        "SCENARIO_PARAMETER": "scenario",
+        "STRUCTURE": "structure",
+        "NEW_SOURCE_TIER": "new tier",
+        "RUBRIC": "rubric"
+      },
+      "class": {
+        "WORDING": "wording",
+        "CITED_FIGURE": "cited figure",
+        "DERIVED_FIGURE": "derived figure",
+        "NEW_CLAIM": "new claim",
+        "CURATOR_ALWAYS": "curator always"
+      },
+      "shared": "shared",
+      "action": {
+        "ACCEPT": "accepted",
+        "KEEP_REQUEST_MORE": "kept request more",
+        "DECLINE": "declined",
+        "MERGE": "merged",
+        "REVERT": "reverted"
+      },
+      "statusbar": "improve · curator queue · part {parts}",
+      "change": {
+        "title": "Change",
+        "thresholds": "accept {accept} · floor {floor}",
+        "current": "current · {where}",
+        "proposed": "proposed"
+      },
+      "evidence": {
+        "title": "Evidence",
+        "rubric": "rubric {version}",
+        "cap": "strongest item + corroboration",
+        "none": "No evidence.",
+        "item": "item",
+        "tier": "tier",
+        "base": "base",
+        "rel": "rel",
+        "rec": "rec",
+        "ind": "ind",
+        "score": "score",
+        "sum": "{strongest} strongest",
+        "sumCorroborated": "{strongest} strongest + {bonus} corroboration (item {n}, tier {tier})",
+        "band": "Score {score} against a floor of {floor} and an acceptance of {accept}",
+        "floor": "floor {floor}",
+        "accept": "accept {accept}",
+        "table": "Evidence items, table"
+      },
+      "adjudication": {
+        "title": "Adjudication",
+        "byAdjudicator": "adjudicator guide {guide}",
+        "byRouter": "router",
+        "byRules": "intake rules",
+        "sensors": "Sensors",
+        "criteria": "Criteria",
+        "sufficient": "Named sufficient evidence: a tier {tier} item."
+      },
+      "detail": {
+        "none": "Nothing is selected: the queue is empty.",
+        "chapter": "ch{n}",
+        "submitted": "submitted {at}",
+        "byName": "{name}",
+        "byNameVerified": "{name} · verified",
+        "verifiedContributor": "verified contributor",
+        "contributor": "contributor",
+        "partBy": "part {part} ({curators})",
+        "partNone": "part {part}, which no curator holds",
+        "andOthers": "{first} and {n} more",
+        "routed": "Routed to {parts}.",
+        "shared": "It reaches more than one part, so a curator of any of them may decide; the first to decide decides it.",
+        "stale": "The anchor is stale: last verified {days} days ago.",
+        "sample": {
+          "stands": "stands",
+          "reverted": "reverted",
+          "by": "{who} · {at}",
+          "someone": "a curator"
+        },
+        "open": "Open its page",
+        "record": "View full record",
+        "parts": "part {parts}",
+        "origin": "origin · research",
+        "endorsedBy": "endorsed by {name}",
+        "notEndorsed": "not endorsed"
+      },
+      "decision": {
+        "title": "Curator decision",
+        "actionsLabel": "The curator's decision",
+        "action": {
+          "ACCEPT": "Accept on inspection",
+          "KEEP_REQUEST_MORE": "Keep request more",
+          "DECLINE": "Decline",
+          "ACCEPT_RESEARCH": "Accept"
+        },
+        "criterionOverridden": "criterion overridden · {criterion}",
+        "criterionDisputed": "criterion disputed · {criterion}",
+        "code": "coded reason",
+        "codeChoose": "Choose a coded reason",
+        "codes": {
+          "OV-IND-01": "OV-IND-01 · Independence waived: regulator-mandated disclosure",
+          "OV-IND-02": "OV-IND-02 · Independence waived: sole authoritative source",
+          "OV-REC-01": "OV-REC-01 · Recency: stable fact misclassified as fast-moving",
+          "OV-REL-01": "OV-REL-01 · Relevance graded too low"
+        },
+        "codesFrom": "Codes come from the adjudicator guide v2.1.",
+        "criterion": "criterion disputed",
+        "criterionChoose": "Choose the criterion",
+        "noCodes": "The guide gives no codes for declining an accept: the criterion and the note say why.",
+        "note": "note",
+        "noteCount": "{n} of {max}",
+        "noteRequired": "required",
+        "noteOver": "The note is over {max} characters.",
+        "calibration": {
+          "override": "Overrides are calibration data for the adjudicator. This one counts toward the {criterion} override rate.",
+          "overrideUnnamed": "Overrides are calibration data for the adjudicator. This one counts toward the override rate of the criterion it names.",
+          "counted": "No override: it is calibration data for the adjudicator all the same, one of the decisions the override rates are taken over.",
+          "rules": "The intake rules decided what stands, not the adjudicator: the decision is recorded with its note and is no calibration data.",
+          "none": "No adjudication stands to override: the decision is recorded with its note and is no calibration data."
+        },
+        "submit": {
+          "overrideACCEPT": "Record override and accept",
+          "overrideDECLINE": "Record override and decline",
+          "ACCEPT": "Record and accept",
+          "KEEP_REQUEST_MORE": "Record and keep request more",
+          "DECLINE": "Record and decline"
+        },
+        "cancel": "Cancel",
+        "done": {
+          "ACCEPT": "accepted on inspection",
+          "KEEP_REQUEST_MORE": "kept request more",
+          "DECLINE": "declined",
+          "ACCEPT_RESEARCH": "accepted"
+        },
+        "status": {
+          "recording": "recording",
+          "recorded": "recorded",
+          "conflict": "It can no longer be decided here, most likely because another curator decided it meanwhile. Nothing was recorded; the detail now shows where it stands.",
+          "unavailable": "Workflows are unavailable, so nothing was recorded. Try again shortly.",
+          "failed": "The decision was not recorded. Try again."
+        }
+      },
+      "decided": {
+        "title": "Curator decision",
+        "someone": "a curator whose account is gone",
+        "recording": "recording",
+        "override": "override recorded",
+        "recorded": "decision recorded",
+        "hashes": "prev {prev} → {hash}"
+      },
+      "seed": {
+        "title": "Seed revealed",
+        "chip": "seed · known answer",
+        "yours": "your decision",
+        "answer": "known answer",
+        "knownAnswer": "{action} · known answer {answer}",
+        "match": "match",
+        "diverged": "diverged · to calibration",
+        "legend": "A calibration item with an answer set by a second curator. It looks like any other item until you decide. The chip appears after your decision and shows whether it matched."
+      },
+      "rail": {
+        "label": "Calibration",
+        "quarter": "Q{n} {year}",
+        "minimum": "A measure is given from {min} decisions in the quarter; under that, its counts and a dash.",
+        "override": {
+          "title": "Override rate",
+          "cap": "per criterion",
+          "target": "target {pct} %",
+          "review": "review {pct} %",
+          "scale": "scale 0–{pct} %",
+          "counts": "{n} of {of}",
+          "rate": "{pct} %",
+          "triggered": "rubric review triggered",
+          "footer": "share of curator-reviewed decisions overridden on that criterion"
+        },
+        "kappa": {
+          "title": "Adjudicator κ",
+          "cap": "vs curators",
+          "status": {
+            "none": "no reading",
+            "retire": "under the floor",
+            "below": "below gate",
+            "gate": "at the gate"
+          },
+          "retire": "retire {value}",
+          "gate": "gate {value}",
+          "counts": "{agreed} of {pairs} agree on accepting",
+          "say": {
+            "none": "Under {min} items both decided, κ says nothing yet.",
+            "retire": "Under the retirement floor of {retire}.",
+            "below": "Above the retirement floor. Below the gate of {gate}.",
+            "gate": "At or above the gate of {gate}."
+          }
+        },
+        "precision": {
+          "title": "Adjudication precision",
+          "rate": "{pct} %",
+          "status": {
+            "none": "no reading",
+            "within": "within target",
+            "over": "over target"
+          },
+          "reverted": "accepted, later reverted",
+          "counts": "{n} of {of}",
+          "target": "target",
+          "targetValue": "< {pct} %",
+          "rubric": "public rubric {version}"
+        },
+        "researchLog": "Research log"
+      },
+      "research": "research"
+    },
+    "proposal": {
+      "header": "proposal for the book",
+      "notAnswer": "not part of the answer",
+      "sources": "what it rests on",
+      "score": "Improve · score {score} · accept at {acceptAt}",
+      "scoreOnly": "Improve · score {score}",
+      "curatorAlways": "curator always · no score decides · {reason}",
+      "note": "researcher's note",
+      "noteUnread": "written by the researcher from the pages it read; the adjudicator did not read it",
+      "where": {
+        "queue": "with a curator · part {part} · decision by {date}",
+        "merging": "being merged",
+        "merged": "accepted · in {version}",
+        "declined": "declined by a curator",
+        "notMerged": "not merged · the chapter's check failed"
+      },
+      "withName": "with your name",
+      "endorse": "Add my name",
+      "unendorse": "Remove my name",
+      "consentMore": "Curators and the chapter's history will see your name beside this proposal; your question stays yours.",
+      "consentHelp": "tick the box to add your name",
+      "failed": "could not add your name · try again later",
+      "rate": "too many changes in a minute · try again shortly",
+      "record": "View record",
+      "failedRemove": "could not remove your name · try again later",
+      "settled": "this proposal no longer takes names",
+      "settledWithName": "this proposal no longer takes names · with your name",
+      "notReport": "not part of the report"
+    },
+    "researchLog": {
+      "metaTitle": "Research log · Harness Bible",
+      "cap": "improve",
+      "title": "Research log",
+      "what": "What the researcher ran, found and proposed, month by month for twelve months, and the proposals Improve refuted or a curator declined. Nothing here names who asked.",
+      "queue": "Curator queue",
+      "empty": "no research yet",
+      "statusbar": "research log · release {release}",
+      "months": {
+        "title": "By month",
+        "month": "month",
+        "runs": "runs",
+        "nothing": "planned nothing",
+        "failed": "planner failed",
+        "invalid": "invalid",
+        "duplicate": "duplicate",
+        "refuted": "refuted",
+        "proposed": "proposed",
+        "searches": "searches",
+        "pageReads": "page reads",
+        "table": "Runs by month, table",
+        "refused": "refused",
+        "valid": "valid",
+        "sent": "sent"
+      },
+      "refuted": {
+        "title": "Refuted and declined",
+        "none": "Nothing refuted or declined in these twelve months.",
+        "date": "closed",
+        "id": "proposal",
+        "anchor": "anchor",
+        "class": "class",
+        "tier": "tier",
+        "score": "score · floor · accept",
+        "by": "closed by",
+        "scoreLine": "{score} · {floor} · {accept}",
+        "table": "Refuted and declined proposals, table"
+      },
+      "refutedBy": {
+        "floor": "floor",
+        "sensor": "{sensor}",
+        "rule": "rule · request more",
+        "adjudicatorRequest": "adjudicator · request more",
+        "adjudicatorDecline": "adjudicator · decline",
+        "curator": "curator",
+        "check": "check"
+      }
+    }
+  },
+  "reader": {
+    "metaTitle": "{section} {title} · Chapter {n} · The Harness Bible",
+    "rail": {
+      "label": "Chapter instrument panel"
+    },
+    "outline": {
+      "label": "Book outline",
+      "range": "Chapters {from}–{to}",
+      "path": "reading path",
+      "keys": "keys",
+      "condensedLabel": "Book outline, condensed",
+      "expand": "Expand outline",
+      "chapter": "Chapter {n}, {title}",
+      "currentChapter": "Chapter {n}, {title}, section {id}"
+    },
+    "keys": {
+      "section": "next / previous section",
+      "chapter": "previous / next chapter",
+      "lab": "open lab",
+      "ask": "ask the assistant",
+      "research": "open research",
+      "bookmark": "bookmark this section",
+      "note": "write a note",
+      "search": "search the book",
+      "escape": "close the side panel or peek",
+      "help": "show this map",
+      "mapLabel": "Keyboard map",
+      "mapTitle": "Keys",
+      "close": "Close keyboard map",
+      "offNote": "single-key shortcuts are off while focus is in a field"
+    },
+    "header": {
+      "cap": "chapter {n} · part {roman}",
+      "source": "source language {src} · {edition} edition at parity",
+      "sourcePending": "source language {src} · {edition} edition pending",
+      "original": "see original in {src}"
+    },
+    "section": {
+      "layer": "layer {n} of 9"
+    },
+    "layer": {
+      "1": "Intuition",
+      "2": "Mechanism",
+      "3": "Worked numbers",
+      "4": "Measurement",
+      "5": "Failure",
+      "6": "Frontier",
+      "7": "Industrial application",
+      "8": "Decision aids",
+      "9": "Sources"
+    },
+    "code": {
+      "copy": "Copy",
+      "copyLabel": "Copy code",
+      "copied": "copied",
+      "open": "Open in Labs",
+      "region": "Code"
+    },
+    "inst": {
+      "label": "Chapter {n}",
+      "verified": "verified {date}",
+      "verify": "verify",
+      "redteam": "redteam",
+      "lab": "lab {n}",
+      "passed": "passed",
+      "failed": "failed",
+      "unverified": "unverified",
+      "redteamOpen": "passed · {n} open",
+      "noLab": "no lab",
+      "verdict": {
+        "REPRODUCED": "reproduced",
+        "NOT_REPRODUCED": "not reproduced",
+        "KILLED": "killed",
+        "ERROR": "error"
+      },
+      "lastRun": "last lab run",
+      "lastRunValue": "{by} · {when}",
+      "derived": "derived figures",
+      "derivedValue": "{linked} / {total} linked",
+      "cited": "cited figures",
+      "citedValue": "{total} · {fast} fast-moving",
+      "oldest": "oldest check",
+      "oldestValue": "{days} days",
+      "words": "words",
+      "history": "improvement history · {n}",
+      "condensedLabel": "Chapter {n} instrument, condensed"
+    },
+    "figures": {
+      "label": "Figures in {id}",
+      "figure": "figure",
+      "value": "value",
+      "tier": "tier",
+      "scenario": "scenario",
+      "stale": "stale {days} d"
+    },
+    "tier": {
+      "derLabel": "der",
+      "abbr": {
+        "PRIMARY": "pri",
+        "VENDOR": "ven",
+        "ANALYST": "anl",
+        "PRACTITIONER": "pra",
+        "ILLUSTRATIVE": "ill",
+        "DERIVED": "ƒ",
+        "OPEN": "opn"
+      }
+    },
+    "sources": {
+      "claim": "claim or figure",
+      "source": "source",
+      "link": "link",
+      "doi": "doi",
+      "linkLabel": "Open the source of row r{ordinal} in a new tab: {citation}",
+      "tier": "tier",
+      "verified": "verified",
+      "stale": "stale"
+    },
+    "marks": {
+      "bookmark": "Bookmark this section",
+      "bookmarked": "Bookmarked · remove",
+      "bookmarkLabel": "Bookmark section {id}",
+      "flag": "bookmarked",
+      "noteLabel": "note · {id}",
+      "counter": "{n} / {max}",
+      "editorLabel": "Note on section {id}",
+      "status": {
+        "none": "no note yet",
+        "saved": "saved {when}",
+        "dirty": "unsaved changes",
+        "saving": "saving",
+        "deleted": "note deleted",
+        "error": "not saved · {message}",
+        "tooLong": "{max} characters at most"
+      },
+      "save": "Save note",
+      "delete": "Delete note",
+      "confirm": {
+        "title": "Delete the note on {id}?",
+        "body": "The text is deleted. The bookmark, if any, is kept.",
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "error": {
+        "unknownSection": "{id} is not in release {release}",
+        "noSession": "sign in to keep marks",
+        "failed": "the mark was not saved"
+      }
+    },
+    "actions": {
+      "cap": "from this section",
+      "run": "Run Lab {n}",
+      "runtime": "~ {min} min",
+      "ask": "Ask about {id}",
+      "suggest": "Suggest a change",
+      "anchor": "anchor {id}"
+    },
+    "render": {
+      "cap": "render check",
+      "ok": "content hash matches release {id}",
+      "bad": "content hash differs from release {id}"
+    },
+    "peek": {
+      "label": "Peek: {id}",
+      "title": "Peek · {id}",
+      "verified": "verified {date}",
+      "open": "open in place",
+      "side": "open side by side",
+      "sideSoon": "arrives with the assistant dock",
+      "missing": "Not in this release."
+    },
+    "mobile": {
+      "toc": "Contents",
+      "tocSub": "{id} of {n}.9",
+      "ask": "Ask about {id}",
+      "askSub": "answers cite the {edition} edition",
+      "strip": "Ch. {n}",
+      "stripLabel": "Chapter {n} instrument",
+      "barLabel": "Chapter actions",
+      "close": "Close contents"
+    },
+    "notice": {
+      "unverifiedTitle": "Unverified",
+      "unverified": "This chapter changed after its last verification run. Figures may not match the labs.",
+      "staleTitle": "Stale > 90 d",
+      "stale": "{k, plural, one {# figure} other {# figures}} in this section {k, plural, one {was} other {were}} last checked more than 90 days ago. They still show; treat them as dated."
+    },
+    "statusbar": {
+      "section": "ch{n} · {id} {title}"
+    }
+  },
+  "search": {
+    "metaTitle": "Results for {q} · The Harness Bible",
+    "metaTitleEmpty": "Search · The Harness Bible",
+    "cap": "search · chapters, labs, registries · release {id}",
+    "capPending": "search · chapters, labs, registries · release {id} · PT edition pending",
+    "title": "Results for",
+    "titleEmpty": "Search the book",
+    "summary": "{count, plural, one {# result} other {# results}} · {ms} ms",
+    "also": "also matched {terms}",
+    "sort": {
+      "label": "Sort results",
+      "relevance": "Relevance",
+      "book": "Book order",
+      "verified": "Recently verified"
+    },
+    "note": {
+      "none": "No filters applied. Showing every match. Pick a layer or a source tier on the left to narrow the list.",
+      "some": "{k, plural, one {# filter} other {# filters}} set · {count, plural, one {# match} other {# matches}}",
+      "clear": "Clear all"
+    },
+    "filters": {
+      "title": "Filters",
+      "label": "Filters",
+      "help": "No filters set. Each group narrows the results; groups combine with AND.",
+      "helpSet": "{k, plural, one {# filter} other {# filters}} set",
+      "apply": "Apply",
+      "clear": "Clear all"
+    },
+    "group": {
+      "part": "part",
+      "layer": "layer",
+      "tier": "source tier",
+      "age": "verification age",
+      "type": "type"
+    },
+    "part": {
+      "P0": "Part 0 · why now",
+      "P1": "Part I · foundations",
+      "P2": "Part II · harness engineering",
+      "P3": "Part III · industrial application"
+    },
+    "labsNoLayer": "Labs carry no layer · {n, plural, one {# result} other {# results}}",
+    "age": {
+      "d30": "≤ 30 d",
+      "d90": "≤ 90 d",
+      "stale": "> 90 d · stale figure"
+    },
+    "type": {
+      "section": "Chapter section",
+      "lab": "Lab",
+      "row": "Registry row"
+    },
+    "kind": {
+      "section": "chapter section",
+      "lab": "lab · readme",
+      "row": "registry row"
+    },
+    "tier": {
+      "PRIMARY": "primary",
+      "VENDOR": "vendor",
+      "ANALYST": "analyst",
+      "PRACTITIONER": "practitioner",
+      "ILLUSTRATIVE": "illustrative",
+      "DERIVED": "derived",
+      "OPEN": "open",
+      "SCENARIO": "scenario"
+    },
+    "hit": {
+      "layer": "layer {n} · {name}",
+      "noLayer": "lab · no layer",
+      "sources": "layer 9 · sources",
+      "context": "ch{n} · {title}",
+      "labContext": "Lab {n} · README",
+      "rowContext": "ch{n} · Sources · row r{k}",
+      "verified": "verified {d} d",
+      "unverified": "unverified",
+      "ci": "ci {when}",
+      "rowChecked": "row checked",
+      "stale": "stale · {row} {d} d",
+      "reproduced": "reproduced",
+      "notReproduced": "not reproduced",
+      "deriveTitle": "derive.py line {line}"
+    },
+    "list": {
+      "label": "Search results",
+      "showing": "showing {shown} of {count}",
+      "more": "Show {n} more"
+    },
+    "index": {
+      "label": "Index",
+      "built": "built {when}",
+      "chapters": "chapters",
+      "chaptersValue": "{n} · {sections} sections",
+      "labs": "labs",
+      "labsValue": "{n} readmes",
+      "rows": "registry rows",
+      "edition": "edition",
+      "editionEn": "EN",
+      "editionParity": "EN · PT at parity",
+      "hash": "index hash"
+    },
+    "query": {
+      "label": "Query",
+      "ms": "{ms} ms",
+      "under": "under 500 ms target",
+      "over": "over 500 ms target",
+      "parse": "parse",
+      "lexical": "lexical",
+      "vector": "vector",
+      "vectorUnavailable": "— · unavailable",
+      "vectorIndexing": "— · indexing",
+      "assemble": "assemble",
+      "terms": "terms",
+      "results": "{count, plural, one {# result} other {# results}}"
+    },
+    "actions": {
+      "cap": "from this search",
+      "ask": "Ask about {q}",
+      "lab": "Open Lab {n}",
+      "labTime": "~ {min} min",
+      "save": "Save search",
+      "saveMeta": "account",
+      "saveSoon": "not in this release"
+    },
+    "marks": {
+      "cap": "marks",
+      "stale": "stale",
+      "staleText": "a cited figure in the section is > 90 d old",
+      "term": "term",
+      "termText": "matched text"
+    },
+    "empty": {
+      "cap": "search",
+      "prompt": "Type a term: a concept, a chapter number, a lab, a source.",
+      "none": "No match for \"{q}\" in release {id}.",
+      "hint": "Try a shorter word; the index stems English words, so \"idempotent\" also finds \"idempotency\".",
+      "stop": "Those words are not indexed.",
+      "filtered": "No match under these filters."
+    },
+    "statusbar": {
+      "search": "search · {q}",
+      "results": "{count, plural, one {# result} other {# results}} · {ms} ms",
+      "plain": "search"
+    },
+    "loading": "searching",
+    "error": {
+      "title": "Search did not run",
+      "body": "Trace {traceId}. Retry, or reload the page.",
+      "retry": "Retry"
+    }
+  },
+  "marks": {
+    "metaTitle": "Bookmarks and notes · The Harness Bible",
+    "cap": "your marks · account",
+    "capSynced": "your marks · account · synced {when}",
+    "title": "Bookmarks and notes",
+    "blurb": "Marks belong to your account and follow you across devices and editions.",
+    "bookmarks": {
+      "label": "Bookmarks",
+      "order": "book order",
+      "list": "Bookmarks",
+      "remove": "Remove",
+      "shown": "{n} of {n} shown"
+    },
+    "notes": {
+      "label": "Notes",
+      "order": "newest first",
+      "list": "Notes",
+      "open": "Open",
+      "delete": "Delete",
+      "shown": "{n} of {n} shown"
+    },
+    "row": {
+      "context": "ch{n} · {title}",
+      "layer": "layer {n} · {name}",
+      "gone": "not in release {id}"
+    },
+    "empty": {
+      "bookmarks": "No bookmarks yet.",
+      "bookmarksHint": "Press b in any section, or use Bookmark this section in the rail.",
+      "notes": "No notes yet.",
+      "notesHint": "The note field sits under the actions of every section."
+    },
+    "notice": {
+      "title": "Done",
+      "removed": "Bookmark on {id} removed.",
+      "deleted": "Note on {id} deleted."
+    },
+    "error": {
+      "title": "The mark was not changed",
+      "remove": "The bookmark was not removed. Retry.",
+      "delete": "The note was not deleted. Retry.",
+      "session": "Sign in to change marks.",
+      "pageTitle": "Marks did not load",
+      "body": "Trace {traceId}. Retry, or reload the page.",
+      "retry": "Retry"
+    },
+    "statusbar": {
+      "counts": "your marks · {b, plural, one {# bookmark} other {# bookmarks}} · {n, plural, one {# note} other {# notes}}",
+      "plain": "your marks"
+    }
+  },
+  "api": {
+    "errors": {
+      "INVALID_INPUT": "The request is malformed; the detail names the field.",
+      "IDEMPOTENCY_KEY_REQUIRED": "Send an Idempotency-Key header holding a UUID.",
+      "NO_SESSION": "Sign in to use this endpoint.",
+      "BUDGET_EXCEEDED": "The model budget for this organisation is reached.",
+      "ROLE_REQUIRED": "This needs a higher role.",
+      "FORBIDDEN": "You cannot do this to that resource.",
+      "BAD_ORIGIN": "Send this request from the site itself.",
+      "METHOD_NOT_ALLOWED": "This is a download: ask for it with GET.",
+      "NOT_FOUND": "Not found in the pinned release.",
+      "UNKNOWN_SECTION": "That section is not in the pinned release.",
+      "CONFLICT": "The request conflicts with the current state.",
+      "IN_PROGRESS": "The same request is still running; wait for it.",
+      "NOT_DERIVED": "That figure is not derived; it has no derive line.",
+      "PAYLOAD_TOO_LARGE": "The body is over 64 KB.",
+      "UNSUPPORTED_MEDIA": "Send application/json.",
+      "UNPROCESSABLE": "The request is valid but cannot be applied; the detail says why.",
+      "NOTE_TOO_LONG": "A note is at most 2000 characters.",
+      "IDEMPOTENCY_MISMATCH": "This Idempotency-Key was used with a different body.",
+      "RATE_LIMITED": "Too many requests; wait for the Retry-After seconds.",
+      "AUTH_NOT_CONFIGURED": "Sign-in is not configured on this deployment.",
+      "CONTEXT_INVALID": "That chapter, section or lab is not in the pinned release.",
+      "RELEASE_CHANGED": "This conversation is pinned to an earlier release; open a new one.",
+      "TURN_IN_PROGRESS": "The previous turn is still running; wait for it.",
+      "TEXT_TOO_LONG": "A question is at most 800 characters.",
+      "FLAG_DUPLICATE": "This message is already flagged.",
+      "ASSISTANT_UNAVAILABLE": "The assistant is unavailable; the answer was not written.",
+      "NOTHING_TO_EXPORT": "This conversation has no ledger record to export.",
+      "AID_UNKNOWN": "That decision aid is not this chapter's.",
+      "AID_INPUTS": "An input is outside its range; the detail names the field.",
+      "AID_RUN_FAILED": "The script did not finish at these inputs. Nothing was explained.",
+      "INTERNAL": "The request did not complete. Quote the trace id to support.",
+      "ANCHOR_REQUIRED": "A suggestion points at a section, a figure or a source row; this one points at nothing.",
+      "ANCHOR_UNKNOWN": "That anchor is not in the pinned release.",
+      "CHANGE_KIND_INVALID": "That kind of change is not made on that kind of anchor.",
+      "SUGGESTION_THROTTLED": "Suggestions from this account are paused until the date in the detail.",
+      "CONSENT_REQUIRED": "Submitting keeps your identity with the suggestion, for provenance; say so to submit.",
+      "INTAKE_SCHEMA": "The proposal does not say exactly what would change; the detail names the field.",
+      "INTAKE_ANCHOR_EXISTS": "The anchor is not in the pinned release as the draft recorded it; the detail says what it reads now.",
+      "INTAKE_EVIDENCE_PARSES": "The evidence is not complete; the detail names the item and what it lacks.",
+      "INTAKE_RATIONALE_LENGTH": "The rationale is not between 1 and 200 words; the detail has the count.",
+      "STORAGE_UNAVAILABLE": "File storage is not configured on this deployment. Nothing was stored.",
+      "SIGNED_URL_INVALID": "This upload link is not valid or has expired. Ask for a new one.",
+      "UPLOAD_TYPE_MISMATCH": "The file is not of the type this link was made for; the detail names the type.",
+      "UPLOAD_TOO_LARGE": "The file is over the size limit; the detail has the limit in bytes. Nothing was stored.",
+      "EVIDENCE_KIND_NOT_YET": "Saved lab runs arrive with the IDE.",
+      "EVIDENCE_LIMIT": "A suggestion holds at most ten evidence items. Remove one to add another.",
+      "UPLOAD_KEY_INVALID": "This upload key is not one of this suggestion's.",
+      "UPLOAD_NOT_FOUND": "No file has arrived under this upload key. Upload it first, then add it.",
+      "DOI_INVALID": "This is not a DOI. A DOI looks like 10.1000/182.",
+      "WORKFLOWS_UNAVAILABLE": "The workflow engine did not answer, so nothing was done. Try again shortly.",
+      "OVERRIDE_CODE_REQUIRED": "Accepting against the adjudicator needs a coded reason from the adjudicator guide.",
+      "OVERRIDE_CODE_INVALID": "That code is not the adjudicator guide's, or it is not the criterion's.",
+      "OVERRIDE_CODE_NOT_TAKEN": "This decision takes no override code.",
+      "OVERRIDE_CRITERION_REQUIRED": "Declining against the adjudicator needs the criterion disputed.",
+      "OVERRIDE_CRITERION_NOT_TAKEN": "This decision takes no criterion: only an override names one.",
+      "OVERRIDE_NOTE_REQUIRED": "This decision needs a note of at most 400 characters.",
+      "NOT_FOR_RESEARCH": "A research proposal is accepted or declined: nobody would answer a request for more.",
+      "RESEARCH_IN_PROGRESS": "A research is under way in this conversation. Wait for it to end.",
+      "ACCOUNT_DELETION_REQUESTED": "This account is being deleted. Nothing new can be started.",
+      "RESEARCH_OFF_ORGANISATION": "Research is off for your organisation. Ask its admin.",
+      "RESEARCH_DAILY_LIMIT": "30 researches were started in the last 24 hours. Try again later.",
+      "RESEARCH_UNAVAILABLE": "Research is not available here now. Try again later.",
+      "SEED_INVALID": "That answer cannot start a research. Start from scratch instead.",
+      "FINDING_USED": "This finding was already used.",
+      "FINDING_PURGED": "This finding's text was removed after 30 days.",
+      "PROPOSAL_DUPLICATE": "The same change is already proposed in Improve.",
+      "RESEARCH_SENDS_LIMIT": "30 findings were sent this month. The next can be sent when the month resets."
+    }
+  },
+  "notFound": {
+    "cap": "pinned release",
+    "title": "This page is not in the pinned release.",
+    "body": "The section, chapter or lab you asked for is not part of the release the book is pinned to.",
+    "home": "Back to the book"
+  },
+  "aids": {
+    "ch37WhichConfiguration": {
+      "title": "Which configuration?",
+      "inputs": {
+        "qpd": "queries per day",
+        "tout": "output tokens per query",
+        "tcache": "cached input tokens per query",
+        "esc": "share escalated to reasoning (%)",
+        "route": "share routed to the small model (%)"
+      },
+      "steps": {
+        "inputs": "your inputs",
+        "costPerTask": "cost per task, A against C",
+        "reviewLoad": "does the escalation share change the ranking",
+        "choose": "choose, then re-measure"
+      },
+      "bars": {
+        "a": "A",
+        "c": "C",
+        "esc0": "escalation 0%",
+        "esc10": "escalation 10%",
+        "esc30": "escalation 30%"
+      }
+    },
+    "ch21TaskSurvival": {
+      "title": "Will the task survive its worker?",
+      "inputs": {
+        "steps": "steps per task",
+        "calls": "model and tool calls per task",
+        "tokensPerStep": "tokens per step"
+      },
+      "steps": {
+        "inputs": "your inputs",
+        "noFailure": "probability of no transient failure",
+        "retries": "success with retries",
+        "redo": "work redone without checkpoints"
+      },
+      "bars": {
+        "f1": "1% per call",
+        "f2": "2% per call",
+        "f5": "5% per call",
+        "r1f2": "1 retry at 2%",
+        "r3f2": "3 retries at 2%",
+        "r1f5": "1 retry at 5%",
+        "r3f5": "3 retries at 5%"
+      }
+    }
+  },
+  "assistant": {
+    "noCover": "the book does not cover this",
+    "refusal": {
+      "R-SCOPE": "The book does not cover this.",
+      "R-SCOPE-OT": "The book gives no advice on operating control systems.",
+      "R-RECOMPUTE": "This assistant does not compute figures.",
+      "R-UNVERIFIED": "This chapter has not been verified yet.",
+      "cause": {
+        "R-SCOPE": "scope · out of scope",
+        "R-SCOPE-OT": "scope · control-system operation",
+        "R-RECOMPUTE": "scope · recomputation request",
+        "R-UNVERIFIED": "scope · unverified chapter",
+        "R-PERSONAL": "scope · your own system"
+      },
+      "beforeRetrieval": "refused before retrieval",
+      "covers": "what the book does cover",
+      "label": "Refusal",
+      "refused": "refused",
+      "causeLine": "cause · {cause}",
+      "before": "{code} · refused before retrieval",
+      "after": "{code} · refused after the answer",
+      "flag": "Flag this refusal",
+      "R-PERSONAL": "Research does not search the web about a person's or an organisation's own systems. Ask about what the book covers."
+    },
+    "verdict": {
+      "derive": "derive",
+      "scope": "scope",
+      "citation": "citation sensor",
+      "mode": "mode",
+      "edition": "edition",
+      "grader": "grader",
+      "latency": "latency",
+      "inCorpus": "in corpus",
+      "replaced": "{n} claims out of scope, replaced",
+      "figuresFound": "{found} / {total} figures found at cited location",
+      "resolve": "{n} / {total} citations resolve in {edition} {version}",
+      "grounded": "grounded {score} · isolated context",
+      "notGraded": "not graded",
+      "firstToken": "first token {first} s · complete {total} s",
+      "citesEdition": "cites the {edition} edition"
+    },
+    "budget": "Model budget reached for this organisation; resets {date}.",
+    "dock": {
+      "title": "Assistant",
+      "grounded": "grounded on release {id}",
+      "guide": "guide {version}",
+      "openFull": "Open assistant full page",
+      "close": "Close assistant",
+      "modeCap": "mode",
+      "modeLabel": "Assistant mode",
+      "notChat": "not chat · answers from the book only",
+      "mode": {
+        "explain": "Explain",
+        "compare": "Compare",
+        "walk": "Walk a decision aid",
+        "lab": "Explain a lab run",
+        "brief": "Executive brief"
+      },
+      "contextBook": "context · the book · {verified} of {total} chapters verified",
+      "emptyCap": "assistant",
+      "empty": "Ask about anything in the book and the answer cites it.",
+      "scope": "scope: book · labs · registries · cookbook map",
+      "conversationLabel": "Conversation",
+      "currentTurn": "Current turn",
+      "earlierTurn": "Earlier turn",
+      "you": "you · {time}",
+      "assistantTurn": "assistant · {mode} · {time}",
+      "cites": "{lang} · cites {edition} edition {version}",
+      "step": {
+        "running": "running",
+        "retrieving": "retrieving",
+        "drafting": "drafting",
+        "checking": "checking",
+        "grading": "grading",
+        "repairing": "repairing"
+      },
+      "formLabel": "Ask the assistant",
+      "ask": "ask about the book",
+      "counter": "{n} / {max}",
+      "draftAbout": "About {id}: ",
+      "placeholder": "Ask about the book, its labs or its registries.",
+      "language": "language",
+      "citesHelp": "answers cite the {edition} edition",
+      "submit": "Ask",
+      "pinned": "this conversation is pinned to release {id}; start a new one",
+      "newConversation": "New conversation",
+      "error": {
+        "title": "Action failed",
+        "retry": "Retry"
+      },
+      "copy": "Copy with citations",
+      "copied": "copied",
+      "openLab": "Open Lab {n}",
+      "startResearch": "Start a research",
+      "counts": "{c} citations · {f} figures",
+      "labCitation": "Lab {n} · README",
+      "verdicts": "sensor verdicts",
+      "pass": "{n} of {m} pass",
+      "groundedShort": "grounded {score}",
+      "mark": {
+        "pass": "pass",
+        "warn": "warn",
+        "fail": "fail",
+        "info": "info"
+      },
+      "log": "log {trace} · logged per ch29",
+      "hash": "hash {h} · prev {p}",
+      "hashOnly": "hash {h}",
+      "cited": "cited",
+      "citedLine": "{n, plural, one {One passage} other {# passages}} in {section} are cited in the open answer. They are highlighted below.",
+      "statusDocked": "assistant docked · {mode}",
+      "answering": "answering",
+      "firstToken": "first token {s} s",
+      "firstTokenNone": "first token —",
+      "phoneTitle": "The assistant needs a wider screen",
+      "phoneBody": "Open this page on a tablet or a desktop to ask the assistant. Reading, bookmarks and notes work here."
+    },
+    "flag": {
+      "answer": "Flag this answer",
+      "title": {
+        "answer": "Flag this answer?",
+        "refusal": "Flag this refusal?"
+      },
+      "body": "The flag enters the grader's calibration set with this answer's verdicts. No text is sent. It leaves the set if you delete the conversation.",
+      "reason": "reason",
+      "reasons": {
+        "wrong_citation": "wrong citation",
+        "missing_citation": "missing citation",
+        "wrong_number": "wrong number",
+        "should_refuse": "should have refused",
+        "should_not_refuse": "should not have refused",
+        "other": "other"
+      },
+      "confirm": "Flag",
+      "cancel": "Cancel",
+      "flagged": "flagged · {reason}"
+    },
+    "log": {
+      "label": "Conversation log",
+      "title": "Log",
+      "turns": "{n, plural, one {# turn} other {# turns}}",
+      "turn": "t{n} · {time}",
+      "citations": "{mode} · {n, plural, one {# citation} other {# citations}}",
+      "replaced": "{n, plural, one {# claim replaced} other {# claims replaced}}",
+      "flagged": "· flagged",
+      "failed": "unavailable",
+      "answering": "answering",
+      "pass": "pass",
+      "refused": "refused",
+      "key": "verdict key",
+      "keyPass": "pass · all sensors",
+      "keyRefused": "refused · scope",
+      "keyRunning": "in progress",
+      "earlier": "earlier conversations",
+      "earlierLine": "{date} · {turns, plural, one {# turn} other {# turns}} · {pass} pass",
+      "earlierRefused": " · {n} refused",
+      "none": "no earlier conversations",
+      "noCitations": "no citations",
+      "export": "export JSONL",
+      "toggle": "Log · {n, plural, one {# turn} other {# turns}}",
+      "close": "Close the log",
+      "rowLabel": "Turn {n}, {mark}",
+      "claims": "{mode} · {n, plural, one {# claim} other {# claims}}"
+    },
+    "page": {
+      "metaTitle": "Assistant · The Harness Bible",
+      "title": "Assistant",
+      "listLabel": "Your conversations",
+      "conversationsTitle": "conversations",
+      "conversations": "{n, plural, one {# conversation} other {# conversations}}",
+      "empty": "No conversations yet. Ask your first question.",
+      "more": "Show 20 more",
+      "statusList": "assistant · {n, plural, one {# conversation} other {# conversations}}",
+      "viewLabel": "Assistant page regions",
+      "viewDock": "Assistant",
+      "viewConversations": "Conversations",
+      "viewStats": "Statistics"
+    },
+    "stats": {
+      "label": "Assistant statistics",
+      "title": "assistant stats",
+      "yours": "your turns",
+      "windowLabel": "Statistics window",
+      "month": "this month",
+      "all": "all time",
+      "citationRate": "citation rate",
+      "refusalRate": "refusal rate",
+      "firstToken": "first token p95",
+      "grounded": "grounded p50",
+      "groundedBasis": "p10 {p10} · n = {n}",
+      "flagRate": "flag rate",
+      "cacheShare": "cache read share",
+      "ofAnswers": "{n} / {d} answers",
+      "ofTurns": "{n} / {d} turns",
+      "samples": "n = {n}",
+      "floor": "floor {value}",
+      "ceiling": "ceiling {value}",
+      "limit": "limit {value}",
+      "belowFloor": "below floor",
+      "aboveCeiling": "above ceiling",
+      "overLimit": "over limit",
+      "payerYou": "your account",
+      "payerOrg": "your organisation",
+      "byCause": "refusals by cause",
+      "thCause": "cause",
+      "thTurns": "turns",
+      "thShare": "share",
+      "edition": "cites another edition",
+      "purged": "text purged",
+      "purgedValue": "{n, plural, one {# conversation} other {# conversations}}",
+      "keptUntil": "text kept until",
+      "foot": "release {id} · counted from your own turns",
+      "empty": "No turns in this window yet.",
+      "meterLabel": "{name}: {value}; {mark}"
+    },
+    "walk": {
+      "withheld": "The script's values are shown above; the explanation was withheld.",
+      "matched": "derive output matched · {n} of {m}",
+      "none": "This release has no decision aid yet.",
+      "pick": "decision aid",
+      "formLabel": "Run a decision aid",
+      "range": "between {min} and {max}",
+      "integer": "whole numbers only",
+      "number": "enter a number",
+      "run": "Run at these inputs",
+      "you": "you · {time} · mode changed to walk a decision aid",
+      "userLine": "Walk {section} with our inputs",
+      "title": "Walk · {section}",
+      "turnLabel": "Turn {n}, walking decision aid {section}",
+      "step": "step {n} of {m}",
+      "stepsLabel": "steps",
+      "done": "done",
+      "now": "now",
+      "inputs": "Your inputs",
+      "editInputs": "Edit inputs",
+      "runLine": "{lab}/derive.py",
+      "exit": "exit {code} · {s} s",
+      "stepCap": "step {n} · {title}",
+      "sameAsBook": "Your inputs equal the book's scenario, so the result equals the book's figure.",
+      "prices": "Prices come from source rows verified {date}",
+      "missing": "the script did not write this value",
+      "back": "Back",
+      "flagStep": "Flag this step",
+      "flagStepTitle": "Flag step {n} · {title}?",
+      "next": "Next: {title}",
+      "finish": "Done",
+      "walked": "walked · {n} steps · {headline}",
+      "reopen": "Open the walk again",
+      "failed": "The script did not finish at these inputs. Nothing was explained.",
+      "band": "The assistant is walking this aid with your inputs. Step {n} of {m}.",
+      "walking": "walking",
+      "modeShort": "walk",
+      "logStep": "step {n}/{m}",
+      "logRun": "{mode} · derive run {k}",
+      "statusWalk": "assistant docked · walk · step {n} of {m}",
+      "runMs": "derive run {s} s",
+      "derive": "ƒ {chapter} derive L{line}.",
+      "deriveTitle": "derive.py line {line}",
+      "barLabel": "{label}: {value}"
+    },
+    "compare": {
+      "first": "compare · chapter",
+      "with": "compare with · chapter",
+      "choose": "choose a chapter",
+      "swap": "swap",
+      "unverified": "unverified",
+      "help": "pick the chapter to compare with",
+      "label": "compare chapter {a} with chapter {b} on…",
+      "placeholder": "Where do chapters 37 and 15 agree on caching?",
+      "open": "the book leaves this open · {point}",
+      "openTitle": "left open",
+      "context": "context · ch{a} {va} ↔ ch{b} {vb}",
+      "side": "ch{n} · {title}",
+      "sideBare": "ch{n}",
+      "noSide": "the other side"
+    },
+    "lab": {
+      "label": "ask about Lab {n}",
+      "noLabs": "This release has no lab yet.",
+      "choose": "choose a lab",
+      "placeholder": "What does Lab 21 reproduce, and which figures does it check?",
+      "context": "context · Lab {n} · ch{n} {v} · last run {verdict} · {date}",
+      "contextNoRun": "context · Lab {n} · ch{n} {v} · last run none yet",
+      "kvLab": "lab",
+      "kvRun": "last run",
+      "kvRuntime": "expected runtime",
+      "kvModel": "model calls",
+      "ci": "CI",
+      "none": "none",
+      "declared": "declared",
+      "notYet": "none yet",
+      "notDeclared": "not declared",
+      "figures": "figures Lab {n} checks",
+      "thFigure": "figure",
+      "thChapter": "chapter",
+      "thRun": "last run",
+      "match": "= match",
+      "diverge": "≠ diverge",
+      "deriveTitle": "derive.py line {line}",
+      "phase3": "labs open in Phase 3"
+    },
+    "brief": {
+      "label": "ask for a brief on…",
+      "placeholder": "Should we route review to a small model first?",
+      "cap": "executive brief · {decision}",
+      "recommends": "recommends",
+      "conditional": "conditional",
+      "leavesOpen": "leaves open",
+      "from": "from Part III · {n, plural, one {# chapter} other {# chapters}} cited",
+      "contextOutside": "context · Part III · ch34–40"
+    },
+    "mode": {
+      "name": "mode",
+      "short": {
+        "explain": "explain",
+        "compare": "compare",
+        "walk": "walk",
+        "lab": "lab",
+        "brief": "brief"
+      }
+    },
+    "purged": "text purged after 30 days · citations and verdicts kept",
+    "purgedShort": "text purged",
+    "research": {
+      "label": "research",
+      "word": {
+        "queued": "queued",
+        "reading": "searching the web",
+        "checking": "checking with Improve",
+        "proposals": "{n, plural, one {# proposal} other {# proposals}} for the book",
+        "nothing": "nothing to propose",
+        "waiting": "waiting for budget",
+        "budget": "skipped",
+        "deduped": "skipped",
+        "sameQuestion": "skipped",
+        "dailyLimit": "skipped",
+        "noCitation": "not run",
+        "off": "off",
+        "offOrganisation": "off for your organisation",
+        "notRun": "not run",
+        "failed": "failed"
+      },
+      "detail": {
+        "waiting": "resets {date}",
+        "budget": "the month's budget is spent · resets {date}",
+        "deduped": "these sections were researched {days, plural, =0 {today} one {# day ago} other {# days ago}}",
+        "sameQuestion": "this question was researched {days, plural, =0 {today} one {# day ago} other {# days ago}}",
+        "dailyLimit": "{n} runs today",
+        "noCitation": "nothing cited"
+      }
+    },
+    "delete": {
+      "trigger": "Delete conversation",
+      "streaming": "available when the answer has finished",
+      "title": "Delete the conversation on {chapters}?",
+      "titleNone": "Delete this conversation?",
+      "body": "Its questions, answers, citations and flags are deleted now. Automatic research still running on it stops at its next step, unless it has already sent a finding to Improve. A research you started from one of its answers is a conversation of its own on the Research page, and is not deleted with it. The audit chain keeps one record per answer, as hashes without words, and records this deletion.",
+      "bodyProposal": "A proposal that comes from it stays under Improve, where you can remove your name until it is merged.",
+      "export": "Export JSONL first",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "done": "Done · Conversation deleted.",
+      "failed": "The conversation was not deleted",
+      "settling": "The last answer is still being saved · try again in a moment",
+      "network": "The request did not reach the server. Nothing was deleted; try again."
+    }
+  },
+  "research": {
+    "page": {
+      "metaTitle": "Research · The Harness Bible",
+      "title": "Research",
+      "viewLabel": "Research page regions",
+      "viewResearch": "Research",
+      "viewConversations": "Conversations",
+      "viewStats": "Statistics",
+      "statusList": "research · {n, plural, one {# conversation} other {# conversations}}",
+      "statusToday": "{n} of {max} today"
+    },
+    "dock": {
+      "title": "Research",
+      "reads": "reads the web",
+      "release": "release {id}",
+      "guide": "guide researcher {version}",
+      "frame": "not part of the book · from the web · checked by code, not by Improve",
+      "log": "Research log",
+      "empty": "Ask what the book should know from outside it.",
+      "fromAnswer": "From an answer: under any answer in the Assistant, press Start a research.",
+      "openAssistant": "Open the Assistant",
+      "openFull": "Open the Research page",
+      "close": "Close research",
+      "phoneTitle": "Research needs a wider screen here",
+      "phoneBody": "Open the Research page, which works on a phone."
+    },
+    "composer": {
+      "formLabel": "Start a research",
+      "ask": "Research question",
+      "counter": "{n} / {max}",
+      "language": "language",
+      "placeholder": "e.g. what changed in prompt-caching prices since 21.3 was verified",
+      "submit": "Start",
+      "citesHelp": "searches the web · spends your model budget",
+      "scope": "about the book only · it refuses what is not, as the Assistant does",
+      "inProgress": "a research is under way in this conversation",
+      "dailyLimit": "{max} researches today · the next at {time}",
+      "budget": "your budget is spent · resets {date}"
+    },
+    "seed": {
+      "cap": "from the Assistant · answer of {date} · cites {sections}",
+      "capNone": "from the Assistant · answer of {date}",
+      "open": "Open the answer",
+      "body": "This research reads the answer and the sections it cited. Nothing is spent until you press Start.",
+      "scratch": "Start from scratch instead",
+      "invalidTitle": "Answer not usable",
+      "invalid": "That answer cannot start a research: it was refused, deleted, or its words were removed after 30 days.",
+      "deleted": "from an answer that was deleted"
+    },
+    "run": {
+      "label": "research {n}",
+      "you": "you · {time}",
+      "cap": "research · {time} · {duration}",
+      "capStarted": "research · {time}",
+      "purged": "its words were removed after 30 days"
+    },
+    "line": {
+      "label": "research",
+      "word": {
+        "queued": "queued",
+        "planning": "planning",
+        "reading": "reading",
+        "checking": "checking",
+        "writing": "writing",
+        "done": "done",
+        "refused": "refused",
+        "notStarted": "not started",
+        "stopped": "stopped",
+        "failed": "failed",
+        "notRun": "not run"
+      },
+      "detail": {
+        "planning": "reading the book",
+        "reading": "the web",
+        "checking": "the findings",
+        "writing": "the report",
+        "done": "{f, plural, =0 {no finding} one {# finding} other {# findings}} · {p, plural, one {# page} other {# pages}}",
+        "donePurged": "{f, plural, =0 {no finding} one {# finding} other {# findings}} · {o, plural, one {# page opened} other {# pages opened}}",
+        "notStarted": "your budget is spent · resets {date}",
+        "stopped": "your budget ran out · resets {date}",
+        "abandoned": "no answer from the engine",
+        "purged": "its text was removed"
+      },
+      "followLost": "still under way · reload to follow"
+    },
+    "steps": {
+      "label": "steps",
+      "folded": "steps · {n}",
+      "caption": "steps · {s, plural, one {# search} other {# searches}} · {p, plural, one {# page} other {# pages}}",
+      "planning": "planning",
+      "sections": "sections {ids}",
+      "searchPending": "search “{query}”",
+      "search": "search “{query}” · {n, plural, one {# result} other {# results}}",
+      "pagePending": "opening {host}",
+      "page": "read {host} · {title}",
+      "pageUntitled": "read {host}",
+      "unreachable": "{host} · did not open",
+      "checking": "checking the findings",
+      "writing": "writing"
+    },
+    "report": {
+      "cap": "report · from the web, not from the book · not checked by Improve"
+    },
+    "pages": {
+      "cap": "pages read · {n} · {opened} opened",
+      "opened": "opened",
+      "inSearch": "in search {n}",
+      "newTab": "opens in a new tab"
+    },
+    "findings": {
+      "cap": "finding {i} of {n} · a proposed change to the book",
+      "checks": "it passed the code's checks; Improve and a curator decide",
+      "sources": "sources",
+      "note": "researcher's note",
+      "noteFrom": "written by the researcher from the pages it read",
+      "drafted": "drafted · {id}",
+      "sent": "sent · being checked by Improve",
+      "proposed": "sent · proposed",
+      "refuted": "sent · not proposed",
+      "duplicate": "already proposed as {id}",
+      "duplicateHidden": "already proposed in Improve",
+      "purged": "This finding's text was removed after 30 days.",
+      "draft": "Draft it in Improve",
+      "draftHelp": "grades its sources on your model budget",
+      "send": "Send to Improve",
+      "sendTitle": "Send this finding to Improve?",
+      "sendBody": "It becomes a researcher's proposal: Improve opens its sources, grades them, and a curator decides. Your question is not sent. If it is proposed, you can add your name. A submission is a record and is not taken back.",
+      "sendConfirm": "Send",
+      "sendCancel": "Cancel",
+      "openDraft": "Open draft",
+      "sending": "sending to Improve",
+      "followLost": "reload to follow",
+      "anchorGone": "The book has changed at {anchor} since this research. Start a new research to look again.",
+      "unconfigured": "could not be sent here · research proposals are not configured",
+      "noRubric": "could not be sent · Improve has no rubric in force · try again later",
+      "unreadable": "could not be sent · start a new research to look again",
+      "unavailable": "Improve could not take it now · try again later",
+      "sendsLimit": "{max} findings sent this month · the next on {date}"
+    },
+    "actions": {
+      "cost": "US$ {cost} · {s, plural, one {# search} other {# searches}} · {p, plural, one {# page opened} other {# pages opened}}",
+      "copy": "Copy report",
+      "copied": "copied"
+    },
+    "refusal": {
+      "foot": "{code} · refused before any search"
+    },
+    "list": {
+      "label": "Your researches",
+      "title": "researches",
+      "count": "{n, plural, one {# research} other {# researches}}",
+      "new": "New research",
+      "empty": "No researches yet. Ask your first question.",
+      "more": "Show 20 more",
+      "noSections": "no sections",
+      "lineRuns": "{runs, plural, one {# run} other {# runs}}",
+      "lineFindings": "{f, plural, =0 {no finding} one {# finding} other {# findings}}",
+      "lineUsed": "{u} used",
+      "seeded": "from an answer",
+      "purged": "text removed",
+      "runs": "Runs of the open research",
+      "run": "r{n} · {time} · {word}",
+      "runDone": "r{n} · {time} · {word} · {p, plural, one {# page} other {# pages}} · {f, plural, =0 {no finding} one {# finding} other {# findings}}",
+      "close": "Close the researches",
+      "export": "export JSONL"
+    },
+    "stats": {
+      "title": "research statistics",
+      "runs": "runs",
+      "cost": "cost",
+      "sources": "sources read",
+      "findings": "findings",
+      "flagged": "flagged reports",
+      "ends": "{done} done · {refused} refused · {stopped} stopped · {failed} failed",
+      "usd": "US$ {cost}",
+      "perRun": "US$ {cost} per run",
+      "searches": "{n, plural, one {# search} other {# searches}}",
+      "pagesOpened": "{n, plural, one {# page opened} other {# pages opened}}",
+      "pagesSeen": "{n, plural, one {# page seen} other {# pages seen}}",
+      "pagesSeenNone": "— pages seen",
+      "findingsLine": "{passed} passed the checks · {used} turned into improvements · {accepted} accepted",
+      "keptUntil": "research text is kept until {date}",
+      "empty": "No research runs in this window yet."
+    },
+    "errors": {
+      "notStarted": "The research did not start",
+      "retry": "Retry",
+      "network": "The request did not reach the server. Nothing was started; try again."
+    },
+    "notice": {
+      "unavailableTitle": "Research unavailable",
+      "unavailable": "Research is not available here: the workflow engine is not running.",
+      "offOrganisationTitle": "Research off",
+      "offOrganisation": "Research is off for your organisation."
+    },
+    "flag": {
+      "report": "Flag this report",
+      "refusal": "Flag this refusal",
+      "title": {
+        "report": "Flag this report?",
+        "refusal": "Flag this refusal?"
+      },
+      "body": "The flag is a label for the operator, who reads flagged reports by reason. No text is sent. It is deleted with the research.",
+      "reason": "reason",
+      "reasons": {
+        "wrong_citation": "a source does not say this",
+        "missing_citation": "a statement has no source",
+        "wrong_number": "wrong number",
+        "should_refuse": "should have refused",
+        "should_not_refuse": "should not have refused",
+        "other": "other"
+      },
+      "confirm": "Flag",
+      "cancel": "Cancel",
+      "flagged": "flagged · {reason}"
+    },
+    "delete": {
+      "trigger": "Delete research",
+      "title": "Delete the research on {chapters}?",
+      "titleNone": "Delete this research?",
+      "body": "Its questions, reports, pages and findings are deleted now. A research still running stops at its next step; what it already spent stays spent. A draft you made from a finding stays yours in Improve, and a finding Improve already took stays there, where you can remove your name until it is merged. The audit chain keeps one record per run, as hashes without words, and records this deletion.",
+      "export": "Export JSONL first",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "network": "The request did not reach the server. Nothing was deleted; try again.",
+      "done": "Done · Research deleted.",
+      "failed": "The research was not deleted"
+    },
+    "edit": {
+      "cap": "from your research",
+      "note": "written by the researcher from the pages it read; it is not your rationale — the adjudicator reads only what you write",
+      "notAdded": "{n, plural, one {# source of the finding is} other {# sources of the finding are}} not among your evidence: add them as links",
+      "prefilled": "prefilled by the researcher from the pages it read · read it before you submit",
+      "open": "Open the research"
+    }
+  }
+}

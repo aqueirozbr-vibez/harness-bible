@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-08-31, at press.example.
+
+The passage is better put as: "In practice, aWS Bedrock AgentCore's documentation covers isolated long-running sessions, memory, and a tool gateway; it stops before workflow semantics and idempotency."
+
+Context: AWS Bedrock AgentCore's documentation covers isolated long-running sessions, memory, and a tool gateway; it stops before workflow semantics and idempotency.

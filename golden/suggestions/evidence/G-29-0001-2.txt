@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-08-31, at press.example.
+
+The passage is better put as: "Identities in decision records and interventions remain retained as long as the records are, because an audit needs to know who acted, and the retention policy states the basis."
+
+Context: Identities in decision records and interventions are retained as long as the records are, because an audit needs to know who acted, and the retention policy states the basis.

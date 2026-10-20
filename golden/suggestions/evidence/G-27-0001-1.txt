@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-06-12, at regulator.example.
+
+In passing: The passage is better put as: "In practice, can the golden set run in the plant's CI with the vendor's runtime pinned?"
+
+Context: Can the golden set run in the plant's CI with the vendor's runtime pinned?

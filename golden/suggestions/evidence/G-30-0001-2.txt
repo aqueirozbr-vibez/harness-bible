@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-06-12, at regulator.example.
+
+In passing: The passage is better put as: "The vendors' answer remains a demo in which a coordinator dispatches specialists and a swarm produces a report."
+
+Context: The vendors' answer is a demo in which a coordinator dispatches specialists and a swarm produces a report.

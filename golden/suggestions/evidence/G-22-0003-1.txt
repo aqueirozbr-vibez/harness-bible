@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-03-24, at vendor.example.
+
+In passing: Self-Refine: ~20 points absolute average improvement The source: Madaan et al., "Self-Refine," 2023, arXiv 2303.17651.
+
+Context: Self-Refine: ~20 points absolute average improvement — Madaan et al., "Self-Refine," 2023, arXiv 2303.17651

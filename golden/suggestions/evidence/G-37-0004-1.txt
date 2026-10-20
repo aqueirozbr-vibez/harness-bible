@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-06-12, at regulator.example.
+
+In passing: Cache read ~90% off; Anthropic write surcharge 1.25× / 2×; batch ~50% The source: OpenAI, Anthropic, Google pricing documentation.
+
+Context: Cache read ~90% off; Anthropic write surcharge 1.25× / 2×; batch ~50% — OpenAI, Anthropic, Google pricing documentation

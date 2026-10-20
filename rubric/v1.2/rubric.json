@@ -1,0 +1,120 @@
+{
+  "version": "v1.2",
+  "publishedAt": "2026-07-01",
+  "appliesAt": "2026-07-01",
+  "tiers": {
+    "A": { "base": 100, "stakeAtBest": "none" },
+    "B": { "base": 85, "stakeAtBest": "none" },
+    "C": { "base": 70, "stakeAtBest": "vendor" },
+    "D": { "base": 60, "stakeAtBest": "none" },
+    "E": { "base": 40, "stakeAtBest": "none" },
+    "F": { "base": 25, "stakeAtBest": "none" },
+    "G": { "base": 5, "stakeAtBest": "none" },
+    "U": { "base": 0, "stakeAtBest": "none" }
+  },
+  "adjustments": {
+    "relevance": { "direct": 1, "partial": 0.6, "tangential": 0.2 },
+    "recency": {
+      "windows": [
+        { "withinDays": 90, "factor": 1 },
+        { "withinDays": 365, "factor": 0.7 }
+      ],
+      "older": 0.3,
+      "stable": 1
+    },
+    "independence": { "none": 1, "vendor": 0.8, "employer": 0.7 },
+    "corroboration": { "bonus": 10, "minTier": "D" }
+  },
+  "thresholds": {
+    "WORDING": { "acceptAt": 40, "floorAt": 5, "onlyTier": null },
+    "CITED_FIGURE": { "acceptAt": 70, "floorAt": 25, "onlyTier": null },
+    "DERIVED_FIGURE": { "acceptAt": 100, "floorAt": 100, "onlyTier": "A" },
+    "NEW_CLAIM": { "acceptAt": 85, "floorAt": 40, "onlyTier": null },
+    "CURATOR_ALWAYS": null
+  },
+  "chips": {
+    "PRIMARY": "B",
+    "VENDOR": "C",
+    "ANALYST": "D",
+    "PRACTITIONER": "E",
+    "ILLUSTRATIVE": null,
+    "DERIVED": "A",
+    "OPEN": "U"
+  },
+  "examples": [
+    {
+      "id": "S-36-0198",
+      "section": "36.3",
+      "changeKind": "EDIT_ROW",
+      "changeClass": "CITED_FIGURE",
+      "fastMoving": true,
+      "items": [
+        { "tier": "B", "relevance": "direct", "stake": "none", "ageDays": 9, "base": 85, "factors": { "relevance": 1, "recency": 1, "independence": 1 }, "adjusted": 85 }
+      ],
+      "score": 85,
+      "strongestItem": 0,
+      "corroboratedBy": null,
+      "acceptAt": 70,
+      "floorAt": 25,
+      "route": "ADJUDICATE",
+      "decision": "ACCEPT"
+    },
+    {
+      "id": "S-23-0412",
+      "section": "23.3",
+      "changeKind": "SET_VALUE",
+      "changeClass": "CITED_FIGURE",
+      "fastMoving": true,
+      "items": [
+        { "tier": "G", "relevance": "direct", "stake": "none", "ageDays": 19, "base": 5, "factors": { "relevance": 1, "recency": 1, "independence": 1 }, "adjusted": 5 }
+      ],
+      "score": 5,
+      "strongestItem": 0,
+      "corroboratedBy": null,
+      "acceptAt": 70,
+      "floorAt": 25,
+      "route": "DECLINE_AT_INTAKE",
+      "decision": "DECLINE"
+    },
+    {
+      "id": "S-22-0356",
+      "section": "22.8",
+      "changeKind": "SET_VALUE",
+      "changeClass": "DERIVED_FIGURE",
+      "fastMoving": false,
+      "items": [
+        { "tier": "A", "relevance": "partial", "stake": "none", "ageDays": null, "base": 100, "factors": { "relevance": 0.6, "recency": 1, "independence": 1 }, "adjusted": 60 }
+      ],
+      "score": 60,
+      "strongestItem": 0,
+      "corroboratedBy": null,
+      "acceptAt": 100,
+      "floorAt": 100,
+      "route": "REQUEST_MORE_BY_RULE",
+      "decision": "REQUEST_MORE"
+    },
+    {
+      "id": "S-15-0377",
+      "section": "15.9",
+      "changeKind": "EDIT_ROW",
+      "changeClass": "CITED_FIGURE",
+      "fastMoving": true,
+      "items": [
+        { "tier": "C", "relevance": "direct", "stake": "vendor", "ageDays": 12, "base": 70, "factors": { "relevance": 1, "recency": 1, "independence": 0.8 }, "adjusted": 56 },
+        { "tier": "D", "relevance": "direct", "stake": "none", "ageDays": 150, "base": 60, "factors": { "relevance": 1, "recency": 0.7, "independence": 1 }, "adjusted": 42 }
+      ],
+      "score": 66,
+      "strongestItem": 0,
+      "corroboratedBy": 1,
+      "acceptAt": 70,
+      "floorAt": 25,
+      "route": "ADJUDICATE",
+      "decision": "REQUEST_MORE"
+    }
+  ],
+  "changelog": [
+    { "version": "v1.0", "on": "2026-01-15" },
+    { "version": "v1.1", "on": "2026-04-01" },
+    { "version": "v1.2", "on": "2026-07-01" }
+  ]
+}

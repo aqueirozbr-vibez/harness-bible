@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-03-24, at regulator.example.
+
+In passing: Indirect injection; adaptive attacks The source: Greshake et al. 2023; Nasr et al. 2025 (ch28).
+
+Context: Indirect injection; adaptive attacks — Greshake et al. 2023; Nasr et al. 2025 (ch28)

@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+FrugalGPT up to 98% The source: Chen, Zaharia, Zou, FrugalGPT, 2023, arXiv 2305.05176.
+
+Context: FrugalGPT up to 98% — Chen, Zaharia, Zou, FrugalGPT, 2023, arXiv 2305.05176

@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2024-08-01, at vendor.example.
+
+The lab's run derives 91 for 5 → 89 →.
+
+Context: 5 → 89 → · 90

@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-03-24, at regulator.example.
+
+In passing: The passage is better put as: "A change that adds a rule without a sensor remains merged only with the rule marked unenforced."
+
+Context: A change that adds a rule without a sensor is merged only with the rule marked unenforced.

@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2024-08-01, at regulator.example.
+
+A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+Context: The paper offers three ways of arriving at the ratio.

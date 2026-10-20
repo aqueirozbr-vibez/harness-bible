@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Reader · Chapter 21</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" data-theme="light" style="width: 1440px; height: 1320px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <header class="topbar">
+    <a class="brand" href="#"><span class="glyph">✢</span><b>Harness Bible</b><span class="faint">interactive</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#" aria-current="page">Book</a>
+      <a href="#">Assistant</a>
+      <a href="#">Labs</a>
+      <a href="#">Improve</a>
+    </nav>
+    <div class="grow" style="display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+      <label class="row" style="flex: 1 1 auto; max-width: 420px; height: 32px; border: 1px solid var(--rule); padding: 0 10px; gap: 8px;">
+        <span class="cap">search</span>
+        <input class="grow" style="border: 0; background: transparent; font: inherit; font-size: 13px; color: var(--ink); height: 30px; outline: none;" value="" placeholder="chapters, labs, registries" aria-label="Search the book">
+        <span class="kbd">/</span>
+      </label>
+      <span class="tex">release 2026.09 · sha 7f3a9c1e</span>
+    </div>
+    <div class="row" style="padding: 0 16px; gap: 12px; border-left: 1px solid var(--rule);">
+      <div class="langtoggle" role="group" aria-label="Edition language">
+        <button aria-pressed="true">EN</button><button aria-pressed="false">PT</button>
+      </div>
+      <a href="#" class="small muted">Account</a>
+    </div>
+  </header>
+
+  <div style="flex: 1 1 auto; display: grid; grid-template-columns: 280px minmax(0, 1fr) 344px; min-height: 0;">
+
+    <!-- outline -->
+    <aside class="rr" style="padding: 20px 20px 20px 24px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;" aria-label="Book outline">
+      <div class="col" style="gap: 4px;">
+        <span class="cap">part ii · harness engineering</span>
+        <div class="between"><span class="h4">Chapters 16–33</span><span class="meta">18</span></div>
+      </div>
+      <ul class="outline col" style="gap: 0;">
+        <li><a href="#"><span class="n">19</span>Context engineering</a></li>
+        <li><a href="#"><span class="n">20</span>Retrieval and knowledge</a></li>
+        <li><a href="#" aria-current="page"><span class="n">21</span>Control plane and durable execution</a>
+          <ul class="col rl" style="margin: 4px 0 8px 12px; padding-left: 12px;">
+            <li><a href="#"><span class="n">21.1</span>Intuition</a></li>
+            <li><a href="#"><span class="n">21.2</span>Mechanism</a></li>
+            <li><a href="#" aria-current="location"><span class="n">21.3</span>Worked numbers</a></li>
+            <li><a href="#"><span class="n">21.4</span>Measurement</a></li>
+            <li><a href="#"><span class="n">21.5</span>Failure</a></li>
+            <li><a href="#"><span class="n">21.6</span>Frontier</a></li>
+            <li><a href="#"><span class="n">21.7</span>Industrial application</a></li>
+            <li><a href="#"><span class="n">21.8</span>Decision aids</a></li>
+            <li><a href="#"><span class="n">21.9</span>Sources</a></li>
+          </ul>
+        </li>
+        <li><a href="#"><span class="n">22</span>The agent loop and workflow patterns</a></li>
+        <li><a href="#"><span class="n">23</span>Model layer, routing, gateways</a></li>
+        <li><a href="#"><span class="n">24</span>Memory</a></li>
+        <li><a href="#"><span class="n">25</span>Tools, MCP, execution environments</a></li>
+        <li><a href="#"><span class="n">26</span>Sensors and verification</a></li>
+      </ul>
+      <div class="rt" style="padding-top: 14px; display: flex; flex-direction: column; gap: 8px;">
+        <span class="cap">reading path</span>
+        <div class="between small"><span>Builder</span><span class="meta">7 of 14</span></div>
+        <div class="meter"><i style="width: 50%;"></i></div>
+      </div>
+      <div class="rt" style="padding-top: 14px; display: flex; flex-direction: column; gap: 6px;">
+        <span class="cap">keys</span>
+        <div class="row small muted"><span class="kbd">j</span><span class="kbd">k</span> next / previous section</div>
+        <div class="row small muted"><span class="kbd">g</span><span class="kbd">l</span> open lab</div>
+        <div class="row small muted"><span class="kbd">a</span> ask about this section</div>
+      </div>
+    </aside>
+
+    <!-- reading column -->
+    <main style="padding: 36px 56px 40px 64px; display: flex; flex-direction: column; gap: 28px; overflow: hidden; position: relative;">
+      <div class="col" style="gap: 12px;">
+        <div class="row" style="gap: 10px;">
+          <span class="cap">chapter 21 · part ii</span>
+          <span class="cap">·</span>
+          <span class="cap">source language en · pt edition at parity</span>
+        </div>
+        <h1 class="h1" style="max-width: 720px;">Control plane and durable execution</h1>
+        <p class="muted" style="font-size: 17px; line-height: 26px; max-width: 680px;">A task that outlives its worker must resume where it stopped, and must not repeat what it already did to the plant.</p>
+      </div>
+
+      <section class="col rt-s" style="gap: 18px; padding-top: 18px;">
+        <div class="between" style="max-width: 680px;">
+          <div class="row" style="gap: 12px;"><span class="meta">21.3</span><h2 class="h2">Worked numbers</h2></div>
+          <span class="cap">layer 3 of 9</span>
+        </div>
+        <div class="prose">
+          <p>The scenario agent raises a maintenance work order for pump P-101 in 11 steps, three of which write to external systems. At 2,000 queries a day and an assumed worker loss of <span class="fig-ill">0.4% per step</span> <span class="chip t-ill"><i>ill</i> illustrative</span>, a task meets at least one worker failure with probability <span class="fig-der">4.3%</span> <span class="derive" title="derive.py line 38">ƒ derive L38</span>.</p>
+          <p>That is <span class="fig-der">86 interrupted tasks a day</span> <span class="derive">ƒ L41</span>. A loop that restarts from step 1 repeats five steps on average, and three in eleven of those are writes: <span class="fig-der">117 duplicate side effects a day</span> <span class="derive">ƒ L47</span>. A durable workflow with idempotency keys on every write activity repeats none, which <a class="xref" href="#">Lab 21</a> reproduces by killing the worker at step 7.</p>
+          <p>Retries do not remove the need for keys. Temporal's default retry policy starts at a 1 s interval with a backoff coefficient of 2.0 <span class="chip t-ven"><i>ven</i> vendor · 21.9 r4</span>; a retried write without a key is a second write. Section <a class="xref" href="#">26.3</a> gives the sensor that catches it; <a class="xref" href="#">ch31</a> puts the approval gate before the first write, not after.</p>
+        </div>
+
+        <figure class="box" style="max-width: 680px; background: var(--surface);">
+          <div class="inst-h" style="border-bottom-color: var(--rule);"><span class="t">Figure 21.3</span><span class="sep">·</span><span>mermaid · rendered</span><span class="ts">alt text available</span></div>
+          <div style="padding: 20px 20px 16px; display: flex; align-items: center; gap: 0; font-family: var(--mono); font-size: 12px;">
+            <div class="box-s" style="padding: 8px 10px; background: var(--bg);">step 6<br><span class="faint">write · key k6</span></div>
+            <div style="flex: 1 1 auto; text-align: center; color: var(--ink-3);">──▶</div>
+            <div style="padding: 8px 10px; border: 1px solid var(--fail); color: var(--fail); background: var(--fail-bg);">worker lost<br><span>at step 7</span></div>
+            <div style="flex: 1 1 auto; text-align: center; color: var(--ink-3);">──▶</div>
+            <div class="box-s" style="padding: 8px 10px; background: var(--bg);">replay history<br><span class="faint">steps 1–6 skipped</span></div>
+            <div style="flex: 1 1 auto; text-align: center; color: var(--ink-3);">──▶</div>
+            <div style="padding: 8px 10px; border: 1px solid var(--ver); color: var(--ver); background: var(--ver-bg);">resume step 7<br><span>0 duplicate writes</span></div>
+          </div>
+          <figcaption class="small muted rt" style="padding: 10px 14px;">A durable workflow replays its event history on a new worker and resumes at the first incomplete activity.</figcaption>
+        </figure>
+
+        <div class="code" style="max-width: 680px;">
+          <div class="code-h"><span>lab-21/derive.py</span><span class="faint">· lines 36–47 · python 3.12</span><span class="grow"></span>
+            <button class="btn btn-sm btn-q" aria-label="Copy code">Copy</button>
+            <a class="btn btn-sm" href="#">Open in Labs</a>
+          </div>
+          <div class="code-b"><span class="ln" data-n="36"><span class="n">p_step</span> = 0.004  <span class="c"># illustrative, 21.3</span></span><span class="ln" data-n="37"><span class="n">steps</span>, <span class="n">writes</span>, <span class="n">qpd</span> = 11, 3, 2_000</span><span class="ln hl" data-n="38"><span class="n">p_task</span> = 1 - (1 - p_step) ** steps          <span class="c"># 0.0431</span></span><span class="ln" data-n="39"></span><span class="ln" data-n="40"><span class="k">def</span> <span class="fn">interrupted</span>(): </span><span class="ln hl" data-n="41">    <span class="k">return</span> round(qpd * p_task)                <span class="c"># 86</span></span><span class="ln" data-n="42"></span><span class="ln" data-n="43"><span class="k">def</span> <span class="fn">duplicate_writes</span>(durable=False):</span><span class="ln" data-n="44">    <span class="k">if</span> durable: <span class="k">return</span> 0</span><span class="ln" data-n="45">    mean_repeat = (steps - 1) / 2            <span class="c"># 5.0</span></span><span class="ln" data-n="46">    share_writes = writes / steps</span><span class="ln hl" data-n="47">    <span class="k">return</span> round(interrupted() * mean_repeat * share_writes)  <span class="c"># 117</span></span></div>
+        </div>
+      </section>
+
+      <!-- peek panel for 26.3 -->
+      <div class="peek" style="position: absolute; left: 420px; top: 470px; width: 380px; display: flex; flex-direction: column;" role="dialog" aria-label="Peek: section 26.3">
+        <div class="inst-h"><span class="t">Peek · 26.3</span><span class="sep">·</span><span>v1.4.2</span><span class="ts"><span class="kbd">esc</span></span></div>
+        <div style="padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+          <span class="cap">sensors and verification · mechanism</span>
+          <p class="small" style="line-height: 20px;">An idempotency sensor compares each write activity's key against the workflow's history and blocks a second write with the same key before it reaches the tool.</p>
+          <div class="row" style="gap: 6px;"><span class="st st-ok">verified 04 Sep 2026</span></div>
+        </div>
+        <div class="inst-f" style="justify-content: space-between;"><a class="xref" href="#">open in place</a><a class="xref" href="#">open side by side</a></div>
+      </div>
+    </main>
+
+    <!-- right rail -->
+    <aside class="rl" style="padding: 24px 24px 24px 20px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;" aria-label="Chapter instrument panel">
+      <section class="inst">
+        <div class="inst-h"><span class="t">Chapter 21</span><span class="sep">·</span><span>v1.5.0</span><span class="ts">verified 12 Sep 2026</span></div>
+        <div class="inst-b" style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="between"><span class="flabel">verify</span><span class="st st-ok">passed</span></div>
+          <div class="between"><span class="flabel">redteam</span><span class="st st-ok">passed · 0 open</span></div>
+          <div class="between"><span class="flabel">lab 21</span><span class="st-block sb-ok">reproduced</span></div>
+          <dl class="kv rt" style="padding-top: 12px; margin: 0;">
+            <dt>last lab run</dt><dd>ci · 12 Sep 09:41</dd>
+            <dt>derived figures</dt><dd>14 / 14 linked</dd>
+            <dt>cited figures</dt><dd>9 · 2 fast-moving</dd>
+            <dt>oldest check</dt><dd>41 days</dd>
+            <dt>words</dt><dd>9,180</dd>
+          </dl>
+        </div>
+        <div class="inst-f" style="justify-content: space-between;"><a class="xref" href="#">improvement history · 6</a><span class="tex">#c41e·07b2</span></div>
+      </section>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Figures in 21.3</span><span class="ts">7</span></div>
+        <table class="tbl" style="font-size: 12.5px;">
+          <thead><tr><th>figure</th><th class="n">value</th><th>tier</th></tr></thead>
+          <tbody>
+            <tr><td>steps per task</td><td class="n">11</td><td><span class="meta">scenario</span></td></tr>
+            <tr><td>queries per day</td><td class="n">2,000</td><td><span class="meta">scenario</span></td></tr>
+            <tr><td>worker loss / step</td><td class="n">0.4%</td><td><span class="chip t-ill"><i>ill</i></span></td></tr>
+            <tr><td>interrupted / day</td><td class="n">86</td><td><span class="chip t-der"><i>ƒ</i> der</span></td></tr>
+            <tr><td>duplicate writes / day</td><td class="n">117</td><td><span class="chip t-der"><i>ƒ</i> der</span></td></tr>
+            <tr><td>retry initial interval</td><td class="n">1 s</td><td><span class="chip t-ven"><i>ven</i></span></td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="col" style="gap: 10px;">
+        <span class="cap">from this section</span>
+        <a class="btn" href="#" style="justify-content: space-between;"><span>Run Lab 21</span><span class="meta">~ 3 min</span></a>
+        <a class="btn" href="#" style="justify-content: space-between;"><span>Ask about 21.3</span><span class="kbd">a</span></a>
+        <a class="btn" href="#" style="justify-content: space-between;"><span>Suggest a change</span><span class="meta">anchor 21.3</span></a>
+      </section>
+
+      <div class="rt" style="padding-top: 12px; display: flex; flex-direction: column; gap: 4px;">
+        <span class="cap">render check</span>
+        <span class="meta">content hash matches release 2026.09</span>
+        <span class="tex">b64 Zm9yZ2UtMjEtdjEuNS4w</span>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="statusbar">
+    <span>ch21 · 21.3 worked numbers</span>
+    <span>EN · source EN</span>
+    <span>pinned release 2026.09</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);">loaded 0.41 s</span>
+  </footer>
+</div>
+
+
+</body>
+</html>

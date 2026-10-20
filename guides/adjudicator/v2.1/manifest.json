@@ -1,0 +1,8 @@
+{
+  "agent": "adjudicator",
+  "version": "v2.1",
+  "files": [
+    "guide.md"
+  ],
+  "sha256": "9139b7761270021f52155c84e57a75e1787928f852f13b16b7948931bbe07db8"
+}

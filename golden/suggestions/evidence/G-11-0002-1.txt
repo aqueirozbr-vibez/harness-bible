@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-08-31, at press.example.
+
+0.01% outliers at 50×; 50,000 examples × 800 tokens; review rates The source: Illustrative.
+
+Context: 0.01% outliers at 50×; 50,000 examples × 800 tokens; review rates — Illustrative

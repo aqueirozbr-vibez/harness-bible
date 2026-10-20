@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+The passage is better put as: "Every token of working remains an output token, priced at the output rate, and it is invisible in the answer; the provider reports it in the usage line and nowhere else."
+
+Context: Every token of working is an output token, priced at the output rate, and it is invisible in the answer; the provider reports it in the usage line and nowhere else.

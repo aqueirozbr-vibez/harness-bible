@@ -1,0 +1,55 @@
+# LiteLLM proxy configuration: the model gateway as code (feature-specs/11 § 3).
+# The compose `gateway` service mounts this file read-only at /app/config.yaml.
+#
+# The application never names a provider model: it names one of the four aliases below and the gateway maps it
+# to the pinned id (§ 3.2). A pin change is a configuration release, reviewed like a guide.
+#
+# Every key is an os.environ reference. The values exist only in the gateway container's environment
+# (infra/gateway/.env, git-ignored; a vault mount in staging and production) and never in the application (§ 3.3).
+# The two self-hosted aliases have no per-token price at all, which is not the same as a price nobody recorded:
+# their ledger rows are written at cost 0 and are not marked `hb.price_unknown` (lib/gateway/prices.ts).
+# Prices are LiteLLM's own cost map for the pinned ids (checked at the pinned image: claude-opus-5 $5 / $25,
+# claude-haiku-4-5 $1 / $5, cache reads at the provider's rate, cache writes at 1.25× input), so the gateway
+# tracks spend and enforces max_budget itself; lib/gateway/prices.ts (unit 25c) repeats them for the ledger only.
+
+model_list:
+  - model_name: hb-frontier
+    litellm_params:
+      model: anthropic/claude-opus-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+  - model_name: hb-small
+    litellm_params:
+      model: anthropic/claude-haiku-4-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+  # Self-hosted since 2026-09-25 (Andre, 2026-09-24: self-host, but so a service can replace it later). These two
+  # aliases are the whole of the coupling: the application asks for `hb-embed` and `hb-rerank` and never learns
+  # what answers, so moving to a provider is an edit to these four lines plus a re-index (the vectors of one model
+  # are not comparable with another's). Both models are MIT, pinned by revision in docker-compose.yml, and serve
+  # 1,024-dimension vectors, which is what `Section.embedding` already holds, so no migration follows a swap.
+  - model_name: hb-embed
+    litellm_params:
+      model: infinity/BAAI/bge-m3
+      api_base: http://embeddings:7997
+      api_key: os.environ/INFINITY_API_KEY
+  - model_name: hb-rerank
+    litellm_params:
+      model: infinity/BAAI/bge-reranker-base
+      api_base: http://reranker:7998
+      api_key: os.environ/INFINITY_API_KEY
+
+litellm_settings:
+  # Model spans and cost to Langfuse (§ 3.5); the Langfuse keys are gateway-only environment. The OTel exporter
+  # stays off until the collector exists (feature-specs/21).
+  success_callback: ["langfuse"]
+  failure_callback: ["langfuse"]
+  # No message body leaves the gateway for a callback (feature-specs/45 D6; unit 64). LiteLLM replaces the messages,
+  # the prompt and the response with "redacted-by-litellm" before Langfuse, on success and on failure. Langfuse then
+  # keeps spans, timings and costs and no text, so a conversation its reader deletes has no copy there. Checked at the
+  # pinned image (LiteLLM 1.102.1): the proxy sets each key of this block on the litellm module, and its logging redacts
+  # on this global unless a request turns it off by header or parameter, which nothing of the application sends
+  # (tests/gateway-config.test.ts). The spend logs keep no prompt either: `store_prompts_in_spend_logs` is off by default.
+  turn_off_message_logging: true
+
+general_settings:
+  # Mints and deletes virtual keys (§ 3.4): held by the gateway container and the workers, never by the web tier.
+  master_key: os.environ/LITELLM_MASTER_KEY

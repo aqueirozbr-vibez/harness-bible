@@ -1,0 +1,1304 @@
+<title>Harness Bible Style Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Harness Bible Interactive — style guide page. Tokens mirror hb.css v0.9.0 exactly.
+   In the product every rule below lives under .hb; here the page itself is the scope. */
+:root{
+  --bg:#F1F1EC; --bg-2:#E7E8E1; --bg-3:#DCDDD4; --surface:#F7F7F3;
+  --ink:#141512; --ink-2:#44463F; --ink-3:#5F6158;
+  --rule:#C9CAC0; --rule-2:#A9ABA0; --rule-strong:#141512;
+  --act:#A34E00; --act-hover:#833E00; --on-act:#FFFFFF; --act-bg:#F2E3D2;
+  --ver:#0E5C70; --ver-bg:#D9E7EA;
+  --fail:#A3261C; --fail-bg:#F3DDD8;
+  --warn:#7A5800; --warn-bg:#EFE3C2;
+  --code-bg:#E9EAE3; --sel:#CFE0E4; --focus:#0E5C70;
+  --term-bg:#141512; --term-ink:#F1F1EC;
+  --sans:"IBM Plex Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#111210; --bg-2:#191A17; --bg-3:#23241F; --surface:#161714;
+    --ink:#E9E9E2; --ink-2:#BDBEB4; --ink-3:#92948A;
+    --rule:#34362F; --rule-2:#4A4C44; --rule-strong:#E9E9E2;
+    --act:#F0913F; --act-hover:#F5A763; --on-act:#111210; --act-bg:#2B1C0E;
+    --ver:#6CBFD3; --ver-bg:#12262C;
+    --fail:#F2735F; --fail-bg:#2C1512;
+    --warn:#E2B84A; --warn-bg:#272010;
+    --code-bg:#191A17; --sel:#1E3A42; --focus:#6CBFD3;
+    --term-bg:#0A0B09; --term-ink:#E9E9E2;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#111210; --bg-2:#191A17; --bg-3:#23241F; --surface:#161714;
+  --ink:#E9E9E2; --ink-2:#BDBEB4; --ink-3:#92948A;
+  --rule:#34362F; --rule-2:#4A4C44; --rule-strong:#E9E9E2;
+  --act:#F0913F; --act-hover:#F5A763; --on-act:#111210; --act-bg:#2B1C0E;
+  --ver:#6CBFD3; --ver-bg:#12262C;
+  --fail:#F2735F; --fail-bg:#2C1512;
+  --warn:#E2B84A; --warn-bg:#272010;
+  --code-bg:#191A17; --sel:#1E3A42; --focus:#6CBFD3;
+  --term-bg:#0A0B09; --term-ink:#E9E9E2;
+  color-scheme:dark;
+}
+/* scoped theme wrappers: show both palettes side by side regardless of page theme */
+.th-l{
+  --bg:#F1F1EC; --bg-2:#E7E8E1; --bg-3:#DCDDD4; --surface:#F7F7F3;
+  --ink:#141512; --ink-2:#44463F; --ink-3:#5F6158;
+  --rule:#C9CAC0; --rule-2:#A9ABA0; --rule-strong:#141512;
+  --act:#A34E00; --act-hover:#833E00; --on-act:#FFFFFF; --act-bg:#F2E3D2;
+  --ver:#0E5C70; --ver-bg:#D9E7EA; --fail:#A3261C; --fail-bg:#F3DDD8;
+  --warn:#7A5800; --warn-bg:#EFE3C2; --code-bg:#E9EAE3; --sel:#CFE0E4; --focus:#0E5C70;
+  --term-bg:#141512; --term-ink:#F1F1EC;
+  background:var(--bg); color:var(--ink);
+}
+.th-d{
+  --bg:#111210; --bg-2:#191A17; --bg-3:#23241F; --surface:#161714;
+  --ink:#E9E9E2; --ink-2:#BDBEB4; --ink-3:#92948A;
+  --rule:#34362F; --rule-2:#4A4C44; --rule-strong:#E9E9E2;
+  --act:#F0913F; --act-hover:#F5A763; --on-act:#111210; --act-bg:#2B1C0E;
+  --ver:#6CBFD3; --ver-bg:#12262C; --fail:#F2735F; --fail-bg:#2C1512;
+  --warn:#E2B84A; --warn-bg:#272010; --code-bg:#191A17; --sel:#1E3A42; --focus:#6CBFD3;
+  --term-bg:#0A0B09; --term-ink:#E9E9E2;
+  background:var(--bg); color:var(--ink);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased;font-feature-settings:"ss02";overflow-x:hidden}
+h1,h2,h3,h4,p,ul,ol,figure,pre,dl,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+::selection{background:var(--sel)}
+.num,td.n,th.n{font-variant-numeric:tabular-nums}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ── type (hb.css) ─────────────────────────────── */
+.mono{font-family:var(--mono)}
+.cap{font-family:var(--mono);font-size:12px;line-height:16px;color:var(--ink-3);letter-spacing:.01em;text-transform:lowercase}
+.meta{font-family:var(--mono);font-size:12px;line-height:16px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.label{font-family:var(--mono);font-size:11px;line-height:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.tex{font-family:var(--mono);font-size:11px;color:var(--ink-3);opacity:.8;letter-spacing:.02em}
+.h-display{font-size:56px;line-height:60px;font-weight:400;letter-spacing:-.02em;text-wrap:balance}
+.h1{font-size:40px;line-height:46px;font-weight:500;letter-spacing:-.015em;text-wrap:balance}
+.h2{font-size:28px;line-height:34px;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+.h3{font-size:20px;line-height:26px;font-weight:600}
+.h4{font-size:16px;line-height:22px;font-weight:600}
+.prose{font-size:17px;line-height:28px;color:var(--ink);max-width:680px}
+.prose p+p{margin-top:16px}
+.ui{font-size:14px;line-height:20px}
+.small{font-size:13px;line-height:18px}
+.muted{color:var(--ink-2)}
+.faint{color:var(--ink-3)}
+.bignum{font-family:var(--mono);font-size:88px;line-height:88px;font-weight:400;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.midnum{font-family:var(--mono);font-size:40px;line-height:44px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.glyph{font-family:var(--mono);color:var(--act)}
+
+/* ── rules & structure ─────────────────────────── */
+.rt{border-top:1px solid var(--rule)} .rb{border-bottom:1px solid var(--rule)}
+.rl{border-left:1px solid var(--rule)} .rr{border-right:1px solid var(--rule)}
+.rt-s{border-top:1.5px solid var(--rule-strong)} .rb-s{border-bottom:1.5px solid var(--rule-strong)}
+.box{border:1px solid var(--rule)} .box-s{border:1px solid var(--rule-strong)}
+.band{background:var(--bg-2)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column}
+.grow{flex:1 1 auto;min-width:0}
+.between{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+/* ── chrome ────────────────────────────────────── */
+.statusbar{min-height:28px;display:flex;align-items:stretch;flex-wrap:wrap;border-top:1px solid var(--rule-strong);font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--bg)}
+.statusbar > *{padding:0 12px;border-right:1px solid var(--rule);min-height:28px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.langtoggle{display:inline-flex;border:1px solid var(--rule-strong);font-family:var(--mono);font-size:12px}
+.langtoggle button{padding:0 10px;height:28px;min-width:40px}
+.langtoggle button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* ── instrument panel ──────────────────────────── */
+.inst{border:1px solid var(--rule-strong);background:var(--bg)}
+.inst-h{display:flex;align-items:center;gap:8px;min-height:32px;padding:0 12px;border-bottom:1px solid var(--rule-strong);font-family:var(--mono);font-size:11px;color:var(--ink-2);white-space:nowrap;overflow:hidden}
+.inst-h .t{color:var(--ink);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.inst-h .sep{color:var(--rule-2)}
+.inst-h .ts{margin-left:auto;color:var(--ink-3)}
+.inst-b{padding:16px}
+.inst-f{display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-height:32px;padding:0 12px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.kv{display:grid;grid-template-columns:auto 1fr;column-gap:16px;row-gap:8px;font-size:13px;align-items:baseline}
+.kv dt{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-transform:lowercase}
+.kv dd{margin:0;text-align:right;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+
+/* ── chips: source tiers ───────────────────────── */
+.chip{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border:1px solid var(--ink);font-family:var(--mono);font-size:11px;line-height:1;white-space:nowrap;vertical-align:2px;color:var(--ink);background:transparent}
+.chip i{font-style:normal;font-weight:600}
+.t-pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.t-ven{border:1px solid var(--ink)}
+.t-anl{border:3px double var(--ink);padding:0 5px}
+.t-pra{border:1px dashed var(--ink-2);color:var(--ink-2)}
+.t-ill{border:1px dotted var(--warn);color:var(--warn);background:var(--warn-bg)}
+.t-der{border:1px solid var(--ver);color:var(--ver);background:var(--ver-bg)}
+.t-opn{border:1px dotted var(--ink-3);color:var(--ink-3)}
+.derive{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 5px;border:1px solid var(--ver);color:var(--ver);font-family:var(--mono);font-size:10.5px;vertical-align:2px;white-space:nowrap;text-decoration:none}
+.xref{font-family:var(--mono);font-size:.86em;color:var(--ver);border-bottom:1px dotted var(--ver);white-space:nowrap;text-decoration:none}
+.fig-ill{background:var(--warn-bg);box-shadow:0 1px 0 var(--warn);padding:0 2px}
+.fig-der{box-shadow:0 1px 0 var(--ver)}
+.cite{display:inline-flex;align-items:center;height:20px;padding:0 6px;border:1px solid var(--ver);color:var(--ver);font-family:var(--mono);font-size:11px;white-space:nowrap;vertical-align:1px}
+.nocover{font-family:var(--mono);font-size:12px;color:var(--ink-3);border:1px dashed var(--rule-2);padding:2px 6px;display:inline-block}
+
+/* ── status marks ──────────────────────────────── */
+.st{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.st::before{content:"";width:8px;height:8px;flex:none;background:currentColor}
+.st-ok{color:var(--ver)} .st-fail{color:var(--fail)} .st-warn{color:var(--warn)}
+.st-mute{color:var(--ink-3)} .st-mute::before{background:transparent;border:1px solid currentColor}
+.st-run{color:var(--act)} .st-run::before{background:transparent;border:1px solid currentColor;box-shadow:inset 4px 0 0 currentColor}
+.st-block{display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 8px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.sb-ok{background:var(--ver-bg);color:var(--ver);border:1px solid var(--ver)}
+.sb-fail{background:var(--fail);color:var(--bg);border:1px solid var(--fail)}
+.sb-warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn)}
+.sb-mute{color:var(--ink-3);border:1px dashed var(--rule-2)}
+.sb-act{background:var(--act-bg);color:var(--act);border:1px solid var(--act)}
+
+/* ── evidence tiers ────────────────────────────── */
+.ev{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;flex:none;font-family:var(--mono);font-size:13px;font-weight:600;line-height:1}
+.ev-a{background:var(--ink);color:var(--bg);box-shadow:inset 0 0 0 2px var(--bg),0 0 0 1px var(--ink)}
+.ev-b{background:var(--ink);color:var(--bg)}
+.ev-c{border:2px solid var(--ink)}
+.ev-d{border:2px solid var(--ink-2);color:var(--ink-2)}
+.ev-e{border:1px solid var(--ink-2);color:var(--ink-2)}
+.ev-f{border:1px dashed var(--ink-3);color:var(--ink-3)}
+.ev-g{border:1px dotted var(--fail);color:var(--fail)}
+.ev-u{border:1px dotted var(--ink-3);color:var(--ink-3);text-decoration:line-through}
+.ev-lg{width:40px;height:40px;font-size:20px}
+.score{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ── buttons ───────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;min-height:36px;padding:0 14px;border:1px solid var(--rule-strong);font-size:14px;font-weight:500;white-space:nowrap;color:var(--ink);background:transparent;text-decoration:none}
+.btn:hover{background:var(--bg-2)}
+.btn-p{background:var(--act);border-color:var(--act);color:var(--on-act)}
+.btn-p:hover{background:var(--act-hover)}
+.btn-q{border-color:transparent;color:var(--ink-2)}
+.btn-d{border-color:var(--fail);color:var(--fail)}
+.btn-lg{height:44px;padding:0 18px}
+.btn-sm{height:28px;min-height:28px;padding:0 10px;font-size:13px}
+.btn[disabled]{color:var(--ink-3);border-color:var(--rule);background:transparent;cursor:not-allowed}
+.kbd{display:inline-flex;align-items:center;height:18px;padding:0 5px;border:1px solid var(--rule-2);font-family:var(--mono);font-size:10.5px;color:var(--ink-2)}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--rule)}
+@media (pointer:coarse){
+  .btn,.btn-sm,.iconbtn,.seg button,.langtoggle button{min-height:44px;min-width:44px}
+  .toc a{min-height:44px;display:flex;align-items:center}
+}
+
+/* ── inputs ────────────────────────────────────── */
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field > label,.flabel{font-family:var(--mono);font-size:11px;color:var(--ink-2);text-transform:lowercase;letter-spacing:.01em}
+.input,.select,.textarea{width:100%;height:40px;padding:0 12px;border:1px solid var(--ink-2);background:var(--surface);color:var(--ink);font:inherit;font-size:14px;border-radius:0}
+.textarea{height:auto;min-height:96px;padding:10px 12px;line-height:22px;resize:vertical}
+.input.mono{font-family:var(--mono);font-size:13px}
+.input.err{border-color:var(--fail);box-shadow:inset 3px 0 0 var(--fail)}
+.help{font-size:12px;color:var(--ink-3)}
+.help.err{color:var(--fail)}
+.check{display:inline-flex;align-items:center;gap:8px;font-size:13px}
+.check input{width:16px;height:16px;accent-color:var(--ink);margin:0}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--ink-2)}
+.seg button{height:32px;padding:0 12px;font-size:13px;border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.counter{font-family:var(--mono);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* ── tables ────────────────────────────────────── */
+.scroll{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--ink-3);text-align:left;text-transform:lowercase;padding:8px 10px;border-bottom:1.5px solid var(--rule-strong);white-space:nowrap;vertical-align:bottom}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl td.n,.tbl th.n{text-align:right;font-family:var(--mono);font-size:12.5px}
+.tbl tr.sel td{background:var(--sel)}
+.tbl tfoot td{border-bottom:0;border-top:1.5px solid var(--rule-strong);font-family:var(--mono);font-size:12px}
+.tbl td.m{font-family:var(--mono);font-size:12px}
+.tbl caption{caption-side:top;text-align:left;padding:0 0 8px}
+.d-match{color:var(--ver)} .d-div{color:var(--fail)} .d-new{color:var(--act)}
+tr.row-div td{background:var(--fail-bg)}
+tr.row-new td{background:var(--act-bg)}
+
+/* ── timeline ──────────────────────────────────── */
+.tl{display:flex;flex-direction:column}
+.tl-i{display:grid;grid-template-columns:120px 24px minmax(0,1fr);column-gap:12px;min-height:56px}
+.tl-t{font-family:var(--mono);font-size:11px;color:var(--ink-3);padding-top:2px;text-align:right}
+.tl-m{position:relative;display:flex;justify-content:center}
+.tl-m::before{content:"";position:absolute;top:0;bottom:0;left:11px;width:1px;background:var(--rule-2)}
+.tl-i:last-child .tl-m::before{bottom:auto;height:14px}
+.tl-m i{position:relative;width:11px;height:11px;margin-top:3px;background:var(--ink);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--ink)}
+.tl-m i.o{background:var(--bg)}
+.tl-m i.f{background:var(--fail);box-shadow:0 0 0 1px var(--fail)}
+.tl-m i.v{background:var(--ver);box-shadow:0 0 0 1px var(--ver)}
+.tl-b{padding-bottom:18px;min-width:0}
+.hash{font-family:var(--mono);font-size:11px;color:var(--ink-3);overflow-wrap:anywhere}
+
+/* ── code & output ─────────────────────────────── */
+.code{background:var(--code-bg);border:1px solid var(--rule);font-family:var(--mono);font-size:12.5px;line-height:20px;min-width:0}
+.code-h{display:flex;align-items:center;gap:8px;min-height:32px;padding:0 4px 0 12px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.code-b{padding:10px 0;white-space:pre;overflow-x:auto}
+.ln{display:block;padding:0 14px 0 0;min-width:max-content}
+.ln::before{content:attr(data-n);display:inline-block;width:44px;padding-right:14px;text-align:right;color:var(--ink-3)}
+.ln.hl{background:var(--ver-bg);box-shadow:inset 2px 0 0 var(--ver)}
+.ln.hl-f{background:var(--fail-bg);box-shadow:inset 2px 0 0 var(--fail)}
+.ln.hl-a{background:var(--act-bg);box-shadow:inset 2px 0 0 var(--act)}
+.code .k{color:var(--act)} .code .s{color:var(--ver)} .code .c{color:var(--ink-3);font-style:italic} .code .fn{font-weight:600}
+.term{background:var(--term-bg);color:var(--term-ink);border:1px solid var(--rule);font-family:var(--mono);font-size:12px;line-height:19px;padding:12px 14px;white-space:pre;overflow-x:auto}
+
+/* ── meters & loaders ──────────────────────────── */
+.meter{height:8px;border:1px solid var(--ink-2);background:transparent;position:relative;overflow:visible}
+.meter > i{position:absolute;left:0;top:0;bottom:0;background:var(--ink)}
+.meter.warn > i{background:var(--warn)} .meter.fail > i{background:var(--fail)} .meter.ver > i{background:var(--ver)}
+.meter .mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fail)}
+.meter .mark.ok{background:var(--ver)}
+.loader{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.02em;white-space:pre-wrap}
+.blocks{font-family:var(--mono);letter-spacing:-.05em}
+.caret::after{content:"▮";margin-left:2px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ── empty & error states ──────────────────────── */
+.empty{border:1px dashed var(--rule-2);padding:32px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.error{border:1px solid var(--fail);box-shadow:inset 3px 0 0 var(--fail);padding:14px 16px;background:var(--fail-bg)}
+.notice{border:1px solid var(--warn);box-shadow:inset 3px 0 0 var(--warn);padding:12px 16px;background:var(--warn-bg)}
+.peek{border:1px solid var(--rule-strong);background:var(--surface)}
+
+/* ── page layout (guide only) ──────────────────── */
+.wrap{max-width:1280px;margin:0 auto;padding-inline:24px;padding-block:24px 64px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+.toc{border:1px solid var(--rule-strong);background:var(--bg)}
+.toc .inst-h{position:static}
+.toc ol{display:flex;flex-wrap:wrap;gap:0 16px;padding:8px 12px 12px}
+.toc a{display:flex;gap:8px;align-items:baseline;padding:5px 0;font-size:13px;color:var(--ink-2);text-decoration:none}
+.toc a:hover{color:var(--ink)}
+.toc .n{font-family:var(--mono);font-size:11px;color:var(--ink-3);min-width:20px}
+@media (min-width:1000px){
+  .layout{grid-template-columns:212px minmax(0,1fr);gap:40px;align-items:start}
+  .toc{position:sticky;top:env(safe-area-inset-top,0px);max-height:100vh;overflow:auto}
+  .toc ol{flex-direction:column;flex-wrap:nowrap;gap:0}
+}
+main{min-width:0}
+section.sec{padding-top:56px;scroll-margin-top:16px}
+.sec-h{display:flex;flex-direction:column;gap:6px;padding-bottom:14px;border-bottom:1.5px solid var(--rule-strong);margin-bottom:24px}
+.sec-h .between{align-items:baseline}
+.lede{font-size:15px;line-height:24px;color:var(--ink-2);max-width:680px}
+.sub{margin-top:40px}
+.sub > .cap{display:block;margin-bottom:4px}
+.sub > .h3{margin-bottom:12px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:24px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:24px}
+.spec{display:grid;grid-template-columns:minmax(0,1fr);gap:0;border:1px solid var(--rule)}
+.spec > .stage{padding:20px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-width:0}
+.spec > .note{padding:10px 16px;border-top:1px solid var(--rule);font-size:13px;line-height:19px;color:var(--ink-2)}
+.spec > .note b{color:var(--ink);font-weight:600}
+.pr{counter-reset:p}
+.pr li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.pr li:first-child{border-top:1px solid var(--rule)}
+.pr .h4{margin-bottom:4px}
+.sw{display:inline-block;width:28px;height:18px;border:1px solid var(--rule-2);vertical-align:middle}
+.sp-bar{height:12px;background:var(--ink)}
+.callout{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border:1px solid var(--act);color:var(--act);font-family:var(--mono);font-size:10.5px;font-weight:600;flex:none}
+.anat{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px 12px;align-items:baseline;font-size:13px;line-height:19px}
+.dd-pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
+.dd{border-top:1.5px solid var(--rule-strong);padding-top:10px;min-width:0}
+.dd > .cap{display:block;margin-bottom:10px}
+.dd.no > .cap::before{content:"✕ ";color:var(--fail)}
+.dd.yes > .cap::before{content:"✢ ";color:var(--act)}
+.mock{min-height:170px;padding:16px;border:1px solid var(--rule);overflow:hidden}
+.why{margin-top:10px;font-size:13px;line-height:19px;color:var(--ink-2)}
+.rule-demo{height:0;width:100%}
+.keymap td:first-child{white-space:nowrap}
+.tax li{font-family:var(--mono);font-size:12.5px;line-height:24px}
+.tax li li{padding-left:22px}
+.hdr-title{display:flex;flex-direction:column;gap:12px}
+.fam{font-size:44px;line-height:48px;letter-spacing:-.01em}
+.twocol{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px}
+
+/* generic-SaaS anti-patterns (drawn deliberately, only inside .mock.no) */
+.gen-card{border-radius:14px;box-shadow:0 8px 22px color-mix(in srgb,var(--ink) 16%,transparent);background:var(--surface);padding:14px;font-family:var(--sans)}
+.gen-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gen-hero{border-radius:16px;padding:18px;background:linear-gradient(135deg,var(--ver-bg),var(--act-bg));display:flex;gap:14px;align-items:center}
+.gen-blob{width:64px;height:64px;border-radius:50%;background:linear-gradient(160deg,var(--act),var(--ver));flex:none;opacity:.75}
+.gen-disc{display:inline-block;width:18px;height:18px;border-radius:50%;vertical-align:-4px;margin-right:8px}
+.gen-pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:8px 16px;background:var(--ver);color:var(--bg);font-weight:600;box-shadow:0 6px 16px color-mix(in srgb,var(--ink) 20%,transparent)}
+.gen-btn{border-radius:10px;padding:8px 14px;background:var(--ver);color:var(--bg);font-weight:600;display:inline-block}
+
+@media (max-width:640px){
+  .wrap{padding-inline:16px}
+  .h-display{font-size:40px;line-height:44px}
+  .h1{font-size:32px;line-height:38px}
+  .bignum{font-size:64px;line-height:64px}
+  .fam{font-size:32px;line-height:36px}
+  .tl-i{grid-template-columns:76px 24px minmax(0,1fr);column-gap:8px}
+  .empty{padding:20px}
+  .gen-grid{grid-template-columns:1fr}
+  .inst-h{flex-wrap:wrap;white-space:normal;padding-block:6px;row-gap:2px}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="wrap">
+
+<!-- 0 · header instrument -->
+<header class="inst" id="top" aria-labelledby="sg-title">
+  <div class="inst-h">
+    <span class="t">Style guide</span><span class="sep">·</span><span>v0.9.0</span><span class="sep">·</span><span>21 Sep 2026</span><span class="sep">·</span><span>release 2026.09</span>
+    <span class="ts">sha 7f3a9c1e</span>
+  </div>
+  <div class="inst-b hdr-title">
+    <p class="cap">harness bible interactive · design system</p>
+    <h1 class="h-display" id="sg-title">The style guide</h1>
+    <p class="prose">Harness Bible Interactive turns a 41-chapter engineering reference into a book you can navigate, an assistant that answers only from it, an IDE for its labs and a wiki that improves on graded evidence. The interface is a lab bench. Every panel is a labelled, versioned instrument; every number says where it came from; every state is written in form as well as colour. Nothing here decorates. If an element does not carry information, it is removed.</p>
+    <p class="small muted" style="max-width:680px"><span class="label" style="margin-right:6px">Provenance</span>The reference site typesafe.ai was consulted for sensibility — mono metadata, thin rules, restraint. Its exact tokens could not be sampled from the fetched page, so every value below is a chosen default per the brief, recorded in hb.css v0.9.0.</p>
+  </div>
+  <div class="inst-f">
+    <span>source hb.css v0.9.0</span><span>·</span><span>23 colour tokens</span><span>·</span><span>9 spacing steps</span><span>·</span><span>radii 0</span><span>·</span><span>elevation none</span>
+    <span style="margin-left:auto" class="row">
+      <span id="theme-label">theme</span>
+      <span class="seg" role="group" aria-labelledby="theme-label" style="border-color:var(--rule-strong)">
+        <button type="button" id="theme-light" data-theme-set="light" aria-pressed="false">Light</button>
+        <button type="button" id="theme-auto" data-theme-set="auto" aria-pressed="true">System</button>
+        <button type="button" id="theme-dark" data-theme-set="dark" aria-pressed="false">Dark</button>
+      </span>
+    </span>
+  </div>
+</header>
+
+<div class="layout" style="margin-top:24px">
+
+<nav class="toc" aria-label="Style guide contents">
+  <div class="inst-h"><span class="t">Contents</span><span class="ts">14 §</span></div>
+  <ol>
+    <li><a href="#s01"><span class="n">01</span>Principles</a></li>
+    <li><a href="#s02"><span class="n">02</span>Colour</a></li>
+    <li><a href="#s03"><span class="n">03</span>Typography</a></li>
+    <li><a href="#s04"><span class="n">04</span>Space, rules, radii</a></li>
+    <li><a href="#s05"><span class="n">05</span>Source tiers</a></li>
+    <li><a href="#s06"><span class="n">06</span>Status states</a></li>
+    <li><a href="#s07"><span class="n">07</span>Evidence tiers</a></li>
+    <li><a href="#s08"><span class="n">08</span>Instrument panel</a></li>
+    <li><a href="#s09"><span class="n">09</span>Components</a></li>
+    <li><a href="#s10"><span class="n">10</span>PT / EN strings</a></li>
+    <li><a href="#s11"><span class="n">11</span>Voice</a></li>
+    <li><a href="#s12"><span class="n">12</span>Accessibility</a></li>
+    <li><a href="#s13"><span class="n">13</span>Do and don't</a></li>
+    <li><a href="#top"><span class="n">↑</span>Top</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<!-- 1 · principles -->
+<section class="sec" id="s01" aria-labelledby="h01" style="padding-top:0">
+  <div class="sec-h">
+    <p class="cap">§ 01 · principles</p>
+    <h2 class="h2" id="h01">Five rules that decide every other rule</h2>
+  </div>
+  <ol class="pr">
+    <li><span class="glyph h3">✢</span><div><h3 class="h4">Every panel is an instrument.</h3><p class="small muted">A panel has a label, a version and a timestamp before it has content. If you cannot name what it measures, it is not a panel.</p></div></li>
+    <li><span class="glyph h3">✢</span><div><h3 class="h4">Numbers carry provenance.</h3><p class="small muted">Every figure carries a source-tier chip, a derive link or an illustrative mark. A bare number is a defect, not a style choice.</p></div></li>
+    <li><span class="glyph h3">✢</span><div><h3 class="h4">State in form, not only colour.</h3><p class="small muted">Verified, stale and failed differ in shape, line and word as well as hue. The interface reads correctly in greyscale and in print.</p></div></li>
+    <li><span class="glyph h3">✢</span><div><h3 class="h4">Parity is a layout constraint.</h3><p class="small muted">Portuguese and English ship together. Every label is sized for the longer edition; nothing truncates; figures are identical in both.</p></div></li>
+    <li><span class="glyph h3">✢</span><div><h3 class="h4">The harness is visible.</h3><p class="small muted">Versions, hashes, budgets, rubric scores and run logs are shown, not hidden behind a friendly surface. The reader is an engineer.</p></div></li>
+  </ol>
+</section>
+
+<!-- 2 · colour -->
+<section class="sec" id="s02" aria-labelledby="h02">
+  <div class="sec-h">
+    <p class="cap">§ 02 · colour tokens</p>
+    <div class="between"><h2 class="h2" id="h02">Colour</h2><span class="meta">23 tokens × 2 themes · contrast measured vs --bg</span></div>
+    <p class="lede">Lab paper in light, instrument black in dark. Four semantic hues, each with one job. Contrast is measured with the WCAG 2.x formula against <span class="mono">--bg</span> of the same theme.</p>
+  </div>
+
+  <div class="g2" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">
+    <div class="inst th-l" role="region" aria-label="Light theme tokens">
+      <div class="inst-h"><span class="t">Light</span><span class="sep">·</span><span>lab paper</span><span class="ts">bg #F1F1EC</span></div>
+      <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>token</th><th>hex</th><th>role</th><th class="n">vs bg</th></tr></thead>
+        <tbody>
+          <tr><td class="m"><span class="sw" style="background:var(--bg)"></span> --bg</td><td class="m">#F1F1EC</td><td>page</td><td class="n">—</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--bg-2)"></span> --bg-2</td><td class="m">#E7E8E1</td><td>band, hover</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--bg-3)"></span> --bg-3</td><td class="m">#DCDDD4</td><td>pressed, rail</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--surface)"></span> --surface</td><td class="m">#F7F7F3</td><td>inputs, peeks</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ink)"></span> --ink</td><td class="m">#141512</td><td>text, strong rule</td><td class="n">16.18</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ink-2)"></span> --ink-2</td><td class="m">#44463F</td><td>secondary, control borders</td><td class="n">8.45</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ink-3)"></span> --ink-3</td><td class="m">#5F6158</td><td>captions, faint</td><td class="n">5.55</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--rule)"></span> --rule</td><td class="m">#C9CAC0</td><td>row rules · decorative</td><td class="n">1.46</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--rule-2)"></span> --rule-2</td><td class="m">#A9ABA0</td><td>dashed, timeline spine · decorative</td><td class="n">2.05</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--rule-strong)"></span> --rule-strong</td><td class="m">#141512</td><td>instrument frame, header rule</td><td class="n">16.18</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--act)"></span> --act</td><td class="m">#A34E00</td><td>actions only</td><td class="n">5.08</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--act-hover)"></span> --act-hover</td><td class="m">#833E00</td><td>primary hover</td><td class="n">6.98</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--on-act)"></span> --on-act</td><td class="m">#FFFFFF</td><td>text on --act</td><td class="n">5.76*</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--act-bg)"></span> --act-bg</td><td class="m">#F2E3D2</td><td>new row, running block</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ver)"></span> --ver</td><td class="m">#0E5C70</td><td>verification, links</td><td class="n">6.66</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ver-bg)"></span> --ver-bg</td><td class="m">#D9E7EA</td><td>verified tint</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--fail)"></span> --fail</td><td class="m">#A3261C</td><td>failure, diverge, killed</td><td class="n">6.50</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--fail-bg)"></span> --fail-bg</td><td class="m">#F3DDD8</td><td>error tint</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--warn)"></span> --warn</td><td class="m">#7A5800</td><td>stale, illustrative, request more</td><td class="n">5.75</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--warn-bg)"></span> --warn-bg</td><td class="m">#EFE3C2</td><td>notice tint</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--code-bg)"></span> --code-bg</td><td class="m">#E9EAE3</td><td>code panes</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--sel)"></span> --sel</td><td class="m">#CFE0E4</td><td>selected row, text selection</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--focus)"></span> --focus</td><td class="m">#0E5C70</td><td>focus ring</td><td class="n">6.66</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="inst-f">* white on --act · ver on ver-bg 5.95 · warn on warn-bg 5.10</div>
+    </div>
+
+    <div class="inst th-d" role="region" aria-label="Dark theme tokens">
+      <div class="inst-h"><span class="t">Dark</span><span class="sep">·</span><span>instrument black</span><span class="ts">bg #111210</span></div>
+      <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>token</th><th>hex</th><th>role</th><th class="n">vs bg</th></tr></thead>
+        <tbody>
+          <tr><td class="m"><span class="sw" style="background:var(--bg)"></span> --bg</td><td class="m">#111210</td><td>page</td><td class="n">—</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--bg-2)"></span> --bg-2</td><td class="m">#191A17</td><td>band, hover</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--bg-3)"></span> --bg-3</td><td class="m">#23241F</td><td>pressed, rail</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--surface)"></span> --surface</td><td class="m">#161714</td><td>inputs, peeks</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ink)"></span> --ink</td><td class="m">#E9E9E2</td><td>text, strong rule</td><td class="n">15.40</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ink-2)"></span> --ink-2</td><td class="m">#BDBEB4</td><td>secondary, control borders</td><td class="n">10.01</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ink-3)"></span> --ink-3</td><td class="m">#92948A</td><td>captions, faint</td><td class="n">6.11</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--rule)"></span> --rule</td><td class="m">#34362F</td><td>row rules · decorative</td><td class="n">1.53</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--rule-2)"></span> --rule-2</td><td class="m">#4A4C44</td><td>dashed, timeline spine · decorative</td><td class="n">2.15</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--rule-strong)"></span> --rule-strong</td><td class="m">#E9E9E2</td><td>instrument frame, header rule</td><td class="n">15.40</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--act)"></span> --act</td><td class="m">#F0913F</td><td>actions only</td><td class="n">7.90</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--act-hover)"></span> --act-hover</td><td class="m">#F5A763</td><td>primary hover</td><td class="n">9.47</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--on-act)"></span> --on-act</td><td class="m">#111210</td><td>text on --act</td><td class="n">7.90*</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--act-bg)"></span> --act-bg</td><td class="m">#2B1C0E</td><td>new row, running block</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ver)"></span> --ver</td><td class="m">#6CBFD3</td><td>verification, links</td><td class="n">8.97</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--ver-bg)"></span> --ver-bg</td><td class="m">#12262C</td><td>verified tint</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--fail)"></span> --fail</td><td class="m">#F2735F</td><td>failure, diverge, killed</td><td class="n">6.61</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--fail-bg)"></span> --fail-bg</td><td class="m">#2C1512</td><td>error tint</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--warn)"></span> --warn</td><td class="m">#E2B84A</td><td>stale, illustrative, request more</td><td class="n">10.01</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--warn-bg)"></span> --warn-bg</td><td class="m">#272010</td><td>notice tint</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--code-bg)"></span> --code-bg</td><td class="m">#191A17</td><td>code panes</td><td class="n">surface</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--sel)"></span> --sel</td><td class="m">#1E3A42</td><td>selected row, text selection</td><td class="n">tint</td></tr>
+          <tr><td class="m"><span class="sw" style="background:var(--focus)"></span> --focus</td><td class="m">#6CBFD3</td><td>focus ring</td><td class="n">8.97</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="inst-f">* --bg on --act · ver on ver-bg 7.49 · warn on warn-bg 8.60</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">semantic assignment</span>
+    <h3 class="h3">One hue, one job</h3>
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>hue</th><th>token</th><th>means</th><th>used for</th><th>never used for</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sw" style="background:var(--act)"></span> warm</td><td class="m">--act</td><td>something you can do, or is being done</td><td>primary button, running state, "new" in diffs, ✢ glyph</td><td>emphasis, headings, success</td></tr>
+        <tr><td><span class="sw" style="background:var(--ver)"></span> cool</td><td class="m">--ver</td><td>checked against a source or a run</td><td>verified, reproduced, derived chips, xrefs, citations, focus</td><td>calls to action</td></tr>
+        <tr><td><span class="sw" style="background:var(--fail)"></span> red</td><td class="m">--fail</td><td>failed or declined</td><td>not reproduced, diverge, killed, declined, field errors, destructive button</td><td>warnings, stale content</td></tr>
+        <tr><td><span class="sw" style="background:var(--warn)"></span> ochre</td><td class="m">--warn</td><td>provisional</td><td>stale &gt; 90 days, illustrative figures, request more</td><td>errors, actions</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small muted" style="margin-top:12px;max-width:680px">Semantic colour is never the only signal: each state also carries a word, a shape (filled, hollow or half-filled square) or a line style. <span class="mono">--rule</span> and <span class="mono">--rule-2</span> are decorative only (1.46 / 1.53 and 2.05 / 2.15); any boundary that identifies a control uses <span class="mono">--ink-2</span> or stronger, at 8.45 : 1 or better.</p>
+  </div>
+</section>
+
+<!-- 3 · typography -->
+<section class="sec" id="s03" aria-labelledby="h03">
+  <div class="sec-h">
+    <p class="cap">§ 03 · typography</p>
+    <div class="between"><h2 class="h2" id="h03">Typography</h2><span class="meta">2 families · 14 roles</span></div>
+    <p class="lede">A humanist grotesk for prose and interface; a monospace for everything that is a measurement, an identifier or metadata. The split is semantic: if you would copy it into a terminal or a spreadsheet, it is mono.</p>
+  </div>
+
+  <div class="g2">
+    <div class="box" style="padding:20px">
+      <p class="cap">--sans · prose and ui</p>
+      <p class="fam" style="margin:8px 0 10px">IBM Plex Sans</p>
+      <p class="small"><span style="font-weight:400">Regular 400</span> · <span style="font-weight:500">Medium 500</span> · <span style="font-weight:600">SemiBold 600</span> · <span style="font-style:italic">Italic 400</span></p>
+      <p class="meta" style="margin-top:10px;overflow-wrap:anywhere">"IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif</p>
+    </div>
+    <div class="box" style="padding:20px">
+      <p class="cap">--mono · metadata, numbers, ids</p>
+      <p class="fam mono" style="margin:8px 0 10px">IBM Plex Mono</p>
+      <p class="small mono"><span style="font-weight:400">400</span> · <span style="font-weight:500">500</span> · <span style="font-weight:600">600</span> · 0123456789 · ƒ ✢ ▮▯ █░</p>
+      <p class="meta" style="margin-top:10px;overflow-wrap:anywhere">"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace</p>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">specimen · size / line-height in px</span>
+    <h3 class="h3">Scale</h3>
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>class</th><th class="n">size/lh</th><th>weight · tracking</th><th>specimen</th></tr></thead>
+      <tbody>
+        <tr><td class="m">.h-display</td><td class="n">56/60</td><td class="m">400 · −.02em</td><td><span class="h-display" style="display:block;min-width:280px">The heuristic becomes the algorithm</span></td></tr>
+        <tr><td class="m">.h1</td><td class="n">40/46</td><td class="m">500 · −.015em</td><td><span class="h1" style="display:block;min-width:260px">Control plane and durable execution</span></td></tr>
+        <tr><td class="m">.h2</td><td class="n">28/34</td><td class="m">500 · −.01em</td><td><span class="h2" style="display:block">21.3 Worked numbers</span></td></tr>
+        <tr><td class="m">.h3</td><td class="n">20/26</td><td class="m">600</td><td><span class="h3" style="display:block">Retries without duplicate side effects</span></td></tr>
+        <tr><td class="m">.h4</td><td class="n">16/22</td><td class="m">600</td><td><span class="h4" style="display:block">When an activity must be idempotent</span></td></tr>
+        <tr><td class="m">.prose</td><td class="n">17/28</td><td class="m">400 · max 680px</td><td><span class="prose" style="display:block;min-width:260px">The agent raises a maintenance work order for pump P-101 in 11 steps, three of which write to external systems.</span></td></tr>
+        <tr><td class="m">.ui</td><td class="n">14/20</td><td class="m">400 / 500</td><td><span class="ui">Open Lab 21 in the IDE</span></td></tr>
+        <tr><td class="m">.small</td><td class="n">13/18</td><td class="m">400</td><td><span class="small">Resets 01 Oct. Hard cap at the gateway.</span></td></tr>
+        <tr><td class="m">.meta</td><td class="n">12/16</td><td class="m">mono 400 · tnum</td><td><span class="meta">v1.5.0 · verified 12 Sep 2026 · sha 7f3a9c1e</span></td></tr>
+        <tr><td class="m">.label</td><td class="n">11/14</td><td class="m">mono · upper · .06em</td><td><span class="label">Instrument</span></td></tr>
+        <tr><td class="m">.cap</td><td class="n">12/16</td><td class="m">mono · lower · .01em</td><td><span class="cap">worked numbers</span></td></tr>
+        <tr><td class="m">.tex</td><td class="n">11</td><td class="m">mono · chrome only</td><td><span class="tex">3f9a61c0de27 → a07b44e19f5c</span></td></tr>
+        <tr><td class="m">.midnum</td><td class="n">40/44</td><td class="m">mono · −.02em</td><td><span class="midnum">36.5%</span></td></tr>
+        <tr><td class="m">.bignum</td><td class="n">88/88</td><td class="m">mono · −.04em</td><td><span class="bignum">117</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="g2" style="margin-top:20px">
+      <p class="small muted"><b style="color:var(--ink)">Tabular numerals.</b> Every number that sits in a column, a meter, a counter or a timestamp uses <span class="mono">font-variant-numeric: tabular-nums</span> (<span class="mono">.num</span>, <span class="mono">td.n</span>, <span class="mono">.meta</span>). Numbers in running prose stay proportional.</p>
+      <p class="small muted"><b style="color:var(--ink)">Captions above headings.</b> A lowercase mono <span class="mono">.cap</span> sits above a heading as a quiet classifier ("worked numbers", "not chat"). It never repeats the heading and never ends in a full stop.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · spacing, rules, radii, elevation -->
+<section class="sec" id="s04" aria-labelledby="h04">
+  <div class="sec-h">
+    <p class="cap">§ 04 · space, rules, radii, elevation</p>
+    <h2 class="h2" id="h04">Space and structure</h2>
+    <p class="lede">A 4px base. Structure comes from rules and whitespace, not from containers that float.</p>
+  </div>
+  <div class="twocol">
+    <div>
+      <p class="cap" style="margin-bottom:8px">spacing scale · 4px base</p>
+      <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>token</th><th class="n">px</th><th style="width:60%">bar</th></tr></thead>
+        <tbody>
+          <tr><td class="m">--s1</td><td class="n">4</td><td><div class="sp-bar" style="width:var(--s1)"></div></td></tr>
+          <tr><td class="m">--s2</td><td class="n">8</td><td><div class="sp-bar" style="width:var(--s2)"></div></td></tr>
+          <tr><td class="m">--s3</td><td class="n">12</td><td><div class="sp-bar" style="width:var(--s3)"></div></td></tr>
+          <tr><td class="m">--s4</td><td class="n">16</td><td><div class="sp-bar" style="width:var(--s4)"></div></td></tr>
+          <tr><td class="m">--s5</td><td class="n">24</td><td><div class="sp-bar" style="width:var(--s5)"></div></td></tr>
+          <tr><td class="m">--s6</td><td class="n">32</td><td><div class="sp-bar" style="width:var(--s6)"></div></td></tr>
+          <tr><td class="m">--s7</td><td class="n">48</td><td><div class="sp-bar" style="width:var(--s7)"></div></td></tr>
+          <tr><td class="m">--s8</td><td class="n">64</td><td><div class="sp-bar" style="width:var(--s8)"></div></td></tr>
+          <tr><td class="m">--s9</td><td class="n">96</td><td><div class="sp-bar" style="width:var(--s9)"></div></td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="small muted" style="margin-top:10px">s1–s3 inside components; s4–s5 between related blocks; s6–s7 between sections; s8–s9 page margins on wide screens only.</p>
+    </div>
+    <div>
+      <p class="cap" style="margin-bottom:8px">rules and line meanings</p>
+      <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>line</th><th>specimen</th><th>means</th></tr></thead>
+        <tbody>
+          <tr><td class="m">1px --rule</td><td><div class="rule-demo" style="border-top:1px solid var(--rule);width:72px"></div></td><td>separation: table rows, boxes, footers</td></tr>
+          <tr><td class="m">1px --rule-strong</td><td><div class="rule-demo" style="border-top:1px solid var(--rule-strong);width:72px"></div></td><td>instrument frame and header</td></tr>
+          <tr><td class="m">1.5px --rule-strong</td><td><div class="rule-demo" style="border-top:1.5px solid var(--rule-strong);width:72px"></div></td><td>table header, section head, totals</td></tr>
+          <tr><td class="m">dashed</td><td><div class="rule-demo" style="border-top:1px dashed var(--rule-2);width:72px"></div></td><td>absent or not yet: empty state, no lab, practitioner</td></tr>
+          <tr><td class="m">dotted</td><td><div class="rule-demo" style="border-top:1px dotted var(--ink-3);width:72px"></div></td><td>provisional or traversable: illustrative, open, xref underline</td></tr>
+          <tr><td class="m">double</td><td><div class="rule-demo" style="border-top:3px double var(--ink);width:72px"></div></td><td>analyst chip only</td></tr>
+          <tr><td class="m">3px inset bar</td><td><div style="width:72px;height:14px;box-shadow:inset 3px 0 0 var(--fail);border:1px solid var(--fail)"></div></td><td>error, notice, invalid field</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+  <div class="g2" style="margin-top:32px">
+    <div class="box-s" style="padding:20px">
+      <p class="cap">radii</p>
+      <p class="midnum" style="margin:6px 0">0</p>
+      <p class="small muted">Everywhere: buttons, inputs, chips, panels, focus rings, meters. A corner is a measurement boundary; rounding it suggests a consumer object.</p>
+    </div>
+    <div class="box-s" style="padding:20px">
+      <p class="cap">elevation</p>
+      <p class="midnum" style="margin:6px 0">none</p>
+      <p class="small muted">No drop shadows. Layers are shown by a strong rule and a surface change (<span class="mono">.peek</span>: 1px --rule-strong on --surface). Shadows blur in dark mode, fail in print and imply a stack that a reference does not have. <span class="mono">box-shadow</span> appears in hb.css only as a hard inset bar or underline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · source tiers -->
+<section class="sec" id="s05" aria-labelledby="h05">
+  <div class="sec-h">
+    <p class="cap">§ 05 · provenance on every figure</p>
+    <div class="between"><h2 class="h2" id="h05">Source-tier chips</h2><span class="meta">7 tiers · .chip .t-*</span></div>
+    <p class="lede">Every figure in the book carries one chip. The tier is legible in line form alone — solid, single, double, dashed, dotted — so the system survives greyscale, print and colour-vision differences.</p>
+  </div>
+  <div class="scroll">
+  <table class="tbl">
+    <thead><tr><th>chip</th><th>class</th><th>encoding</th><th>use when the figure comes from</th><th>example in the book</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip t-pri"><i>pri</i> primary</span></td><td class="m">.t-pri</td><td>solid ink fill</td><td>the original: statute, standard, paper, official filing</td><td class="small">EU AI Act text, Official Journal <a class="xref" href="#s05">36.3</a></td></tr>
+      <tr><td><span class="chip t-ven"><i>ven</i> vendor</span></td><td class="m">.t-ven</td><td>single 1px rule</td><td>the maker of the thing: docs, pricing page, vendor benchmark</td><td class="small">Temporal default retry 1 s, backoff 2.0 <a class="xref" href="#s05">21.2</a></td></tr>
+      <tr><td><span class="chip t-anl"><i>anl</i> analyst</span></td><td class="m">.t-anl</td><td>3px double rule</td><td>an independent analyst or benchmark</td><td class="small">independent price tracker <a class="xref" href="#s05">15.9</a></td></tr>
+      <tr><td><span class="chip t-pra"><i>pra</i> practitioner</span></td><td class="m">.t-pra</td><td>dashed, --ink-2</td><td>a practitioner write-up or talk</td><td class="small">field report on router savings <a class="xref" href="#s05">23.3</a></td></tr>
+      <tr><td><span class="chip t-ill"><i>ill</i> illustrative</span></td><td class="m">.t-ill</td><td>dotted ochre on --warn-bg</td><td>a value chosen to show a mechanism; always spelled out</td><td class="small">0.4% worker failure per step <a class="xref" href="#s05">21.3</a></td></tr>
+      <tr><td><span class="chip t-der"><i>der</i> derived</span></td><td class="m">.t-der</td><td>cool fill, 1px --ver</td><td>computed from other figures by derive.py; paired with ƒ</td><td class="small">86 interrupted tasks/day <span class="derive">ƒ L38</span></td></tr>
+      <tr><td><span class="chip t-opn"><i>opn</i> open</span></td><td class="m">.t-opn</td><td>dotted, --ink-3</td><td>source unresolved; tracked in the chapter registry</td><td class="small">cannot back a decision aid</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="g2" style="margin-top:32px">
+    <div class="spec">
+      <div class="stage"><p class="prose" style="font-size:16px;line-height:27px">A worker fails on <span class="fig-ill">0.4%</span> <span class="chip t-ill"><i>ill</i> illustrative</span> of steps, so <span class="fig-der">4.3%</span> of 11-step tasks meet a failure <span class="derive">ƒ L37</span> and <span class="fig-der">86</span> tasks a day are interrupted <span class="derive">ƒ L38</span>. Retries start at 1 s <span class="chip t-ven"><i>ven</i> vendor</span>. See <a class="xref" href="#s05">26.3</a>, <a class="xref" href="#s05">ch12</a>, <a class="xref" href="#s05">Lab 21</a>.</p></div>
+      <div class="note"><b>In prose.</b> Chip follows the figure it qualifies. Illustrative figures get <span class="mono">.fig-ill</span> (ochre wash + underline); derived figures get <span class="mono">.fig-der</span> (cool underline) and a <span class="mono">.derive</span> link to the exact derive.py line.</div>
+    </div>
+    <div class="spec">
+      <div class="stage" style="flex-direction:column;align-items:flex-start;gap:12px">
+        <div class="row"><span class="derive">ƒ L38</span><span class="small muted">derive link · opens derive.py at line 38</span></div>
+        <div class="row"><a class="xref" href="#s05">26.3</a><a class="xref" href="#s05">ch12</a><a class="xref" href="#s05">Lab 21</a><span class="small muted">xref · opens in place or in a side panel</span></div>
+        <div class="row"><span class="cite">[3] Temporal docs</span><span class="small muted">assistant citation</span></div>
+        <div class="row"><span class="nocover">The book does not cover this.</span><span class="small muted">assistant refusal</span></div>
+      </div>
+      <div class="note"><b>Links are cool.</b> Every traversal — derive line, section, chapter, lab, citation — uses <span class="mono">--ver</span> and a dotted or solid rule, never the warm action colour.</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">taxonomy</span>
+    <h3 class="h3">How a figure is classified</h3>
+    <ul class="tax box" style="padding:16px" aria-label="Figure classification tree">
+      <li><span class="glyph">✢</span> figure in chapter N
+        <ul>
+          <li><span class="glyph">✢</span> cited — carries pri / ven / anl / pra, links to source row in N.9</li>
+          <li><span class="glyph">✢</span> derived — carries der + ƒ Lnn, reproduced by derive.py in CI</li>
+          <li><span class="glyph">✢</span> illustrative — carries ill, spelled out in text, never in a decision aid alone</li>
+          <li><span class="glyph">✢</span> open — carries opn, blocks promotion to a decision aid</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- 6 · status -->
+<section class="sec" id="s06" aria-labelledby="h06">
+  <div class="sec-h">
+    <p class="cap">§ 06 · verification and lab status</p>
+    <div class="between"><h2 class="h2" id="h06">Status states</h2><span class="meta">.st inline · .st-block block</span></div>
+    <p class="lede">Nine states. Inline marks sit in running text and tables; blocks head an instrument or a run. The square's form — filled, hollow, half-filled — repeats the meaning of the colour.</p>
+  </div>
+  <div class="scroll">
+  <table class="tbl">
+    <thead><tr><th>inline</th><th>block</th><th>meaning</th><th>trigger · today</th></tr></thead>
+    <tbody>
+      <tr><td><span class="st st-ok">Verified</span></td><td><span class="st-block sb-ok">Verified</span></td><td>every VERIFY check passes on this version</td><td class="small">verify pipeline passes at release · 41 of 41 chapters</td></tr>
+      <tr><td><span class="st st-ok">Redteam passed</span></td><td><span class="st-block sb-ok">Redteam passed</span></td><td>no open red-team finding</td><td class="small">last red-team round closed · 40 of 41; ch30 has 1 open finding</td></tr>
+      <tr><td><span class="st st-warn">Stale &gt; 90 d</span></td><td><span class="st-block sb-warn">Stale &gt; 90 d</span></td><td>a fast-moving figure's source is older than 90 days</td><td class="small">age check nightly · ch15 price rows 97 d, ch36 regulation dates 94 d</td></tr>
+      <tr><td><span class="st st-mute">Unverified</span></td><td><span class="st-block sb-mute">Unverified</span></td><td>content changed since the last verify run</td><td class="small">a merge lands before its verify run completes</td></tr>
+      <tr><td><span class="st st-ok">Reproduced</span></td><td><span class="st-block sb-ok">Reproduced</span></td><td>the lab suite matches the book in CI</td><td class="small">CI against the pinned release · 34 of 35 labs</td></tr>
+      <tr><td><span class="st st-fail">Not reproduced</span></td><td><span class="st-block sb-fail">Not reproduced</span></td><td>a lab result diverges from the book</td><td class="small">Lab 23 since 15 Sep 2026: router savings diverge after a pinned model version changed</td></tr>
+      <tr><td><span class="st st-run caret">Running</span></td><td><span class="st-block sb-act">Running</span></td><td>a run or grading job is in progress</td><td class="small">user presses Run; adjudication starts</td></tr>
+      <tr><td><span class="st st-fail">Killed</span></td><td><span class="st-block sb-fail">Killed</span></td><td>a run was stopped before it finished</td><td class="small">user kills it, sandbox limit or model budget cap reached</td></tr>
+      <tr><td><span class="st st-mute">No lab</span></td><td><span class="st-block sb-mute">No lab</span></td><td>chapter has an instrument or checklist instead</td><td class="small">ch00, 33, 34, 36, 38, 39</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="small muted" style="margin-top:12px;max-width:680px">Status text is always the full uppercase word — never an icon alone, never abbreviated below "Stale &gt; 90 d". The running mark blinks once per 1.1 s and holds still under reduced motion.</p>
+</section>
+
+<!-- 7 · evidence -->
+<section class="sec" id="s07" aria-labelledby="h07">
+  <div class="sec-h">
+    <p class="cap">§ 07 · evidence rubric v1.2 · published 01 Jul 2026</p>
+    <div class="between"><h2 class="h2" id="h07">Evidence tier badges</h2><span class="meta">.ev .ev-a … .ev-u</span></div>
+    <p class="lede">Every item attached to a suggestion is graded A to G, or U. The badge's weight falls with its strength: double frame, solid, heavy rule, light rule, dashed, dotted. Only G is red, because it is the one tier that should stop a reader.</p>
+  </div>
+  <div class="scroll">
+  <table class="tbl">
+    <thead><tr><th>badge</th><th>tier</th><th class="n">base</th><th>encoding</th><th>typical item</th><th>source chip</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ev ev-a">A</span></td><td>Reproducible</td><td class="n">100</td><td>solid + inset frame</td><td>saved IDE run or lab run anyone can repeat</td><td><span class="chip t-der"><i>der</i> derived</span></td></tr>
+      <tr><td><span class="ev ev-b">B</span></td><td>Primary published</td><td class="n">85</td><td>solid ink</td><td>paper with code, regulation text, standard</td><td><span class="chip t-pri"><i>pri</i> primary</span></td></tr>
+      <tr><td><span class="ev ev-c">C</span></td><td>Primary vendor</td><td class="n">70</td><td>2px ink rule</td><td>vendor docs or pricing page</td><td><span class="chip t-ven"><i>ven</i> vendor</span></td></tr>
+      <tr><td><span class="ev ev-d">D</span></td><td>Independent analyst</td><td class="n">60</td><td>2px ink-2 rule</td><td>independent benchmark or tracker</td><td><span class="chip t-anl"><i>anl</i> analyst</span></td></tr>
+      <tr><td><span class="ev ev-e">E</span></td><td>Practitioner</td><td class="n">40</td><td>1px ink-2 rule</td><td>engineering blog, talk</td><td><span class="chip t-pra"><i>pra</i> practitioner</span></td></tr>
+      <tr><td><span class="ev ev-f">F</span></td><td>Reported</td><td class="n">25</td><td>dashed ink-3</td><td>press or second-hand report</td><td class="small muted">none — not citable alone</td></tr>
+      <tr><td><span class="ev ev-g">G</span></td><td>Opinion</td><td class="n">5</td><td>dotted --fail</td><td>social media thread, screenshot</td><td class="small muted">none</td></tr>
+      <tr><td><span class="ev ev-u">U</span></td><td>Unverifiable</td><td class="n">0</td><td>dotted, struck through</td><td>dead link, private data</td><td><span class="chip t-opn"><i>opn</i> open</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="g2" style="margin-top:32px">
+    <div>
+      <p class="cap" style="margin-bottom:8px">scoring rule</p>
+      <p class="small" style="max-width:520px">Score = the strongest item's adjusted score, plus 10 once for a second independent item at D or better. Never a sum. Adjustments multiply: relevance 1.0 / 0.6 / 0.2; recency, fast-moving only, ≤ 90 d 1.0 / ≤ 1 y 0.7 / older 0.3; independence none 1.0 / vendor concerned 0.8 / contributor's employer 0.7.</p>
+      <div class="scroll" style="margin-top:14px">
+      <table class="tbl">
+        <thead><tr><th>change class</th><th class="n">accept ≥</th><th class="n">floor</th></tr></thead>
+        <tbody>
+          <tr><td>wording</td><td class="n">40</td><td class="n">5</td></tr>
+          <tr><td>cited figure, date, price, deadline</td><td class="n">70</td><td class="n">25</td></tr>
+          <tr><td>derived figure</td><td class="n">100 (A only)</td><td class="n">100</td></tr>
+          <tr><td>new claim or source row</td><td class="n">85</td><td class="n">40</td></tr>
+          <tr><td>safety, OT boundary, scenario parameter, structure</td><td class="n" colspan="2">curator always</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="inst">
+      <div class="inst-h"><span class="t">Grading</span><span class="sep">·</span><span>S-15-0377</span><span class="ts">rubric v1.2</span></div>
+      <div class="inst-b">
+        <div class="row" style="gap:16px;align-items:flex-start;flex-wrap:nowrap">
+          <span class="ev ev-c ev-lg">C</span>
+          <div class="grow">
+            <p class="small">Vendor pricing page · direct · 12 days · vendor concerned</p>
+            <p class="score small muted">70 × 1.0 × 1.0 × 0.8 = <b style="color:var(--ink)">56</b></p>
+          </div>
+        </div>
+        <div class="row rt" style="gap:16px;align-items:flex-start;flex-wrap:nowrap;margin-top:12px;padding-top:12px">
+          <span class="ev ev-d ev-lg">D</span>
+          <div class="grow">
+            <p class="small">Independent price tracker · direct · 5 months · independent</p>
+            <p class="score small muted">60 × 1.0 × 0.7 × 1.0 = 42 → corroboration +10</p>
+          </div>
+        </div>
+        <div class="between rt-s" style="margin-top:14px;padding-top:12px">
+          <span class="score midnum">66</span>
+          <span class="st-block sb-warn">Request more</span>
+        </div>
+        <p class="small muted" style="margin-top:8px">66 &lt; 70 for a cited price. An independent tier D item ≤ 90 days old, or a tier B filing, would suffice.</p>
+      </div>
+      <div class="inst-f"><span>anchor 15.9 r12</span><span>·</span><span>$0.30 → $0.25 per M tokens</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · instrument -->
+<section class="sec" id="s08" aria-labelledby="h08">
+  <div class="sec-h">
+    <p class="cap">§ 08 · the core component</p>
+    <div class="between"><h2 class="h2" id="h08">Instrument panel</h2><span class="meta">.inst › .inst-h · .inst-b · .inst-f</span></div>
+    <p class="lede">Everything the product shows — a chapter summary, a lab run, a grading result, a budget — sits in an instrument. Label, version and timestamp come first, in that order.</p>
+  </div>
+  <div class="twocol">
+    <div class="inst" role="region" aria-label="Chapter 21 instrument, example">
+      <div class="inst-h">
+        <span class="callout" aria-hidden="true">1</span><span class="t">Chapter 21</span><span class="sep">·</span><span class="callout" aria-hidden="true">2</span><span>v1.5.0</span>
+        <span class="ts"><span class="callout" aria-hidden="true" style="margin-right:6px">3</span>verified 12 Sep 2026</span>
+      </div>
+      <div class="inst-b">
+        <div class="row" style="justify-content:space-between;align-items:flex-start"><div><p class="cap"><span class="callout" aria-hidden="true" style="margin-right:6px">4</span>control plane and durable execution</p><p class="h3" style="margin-top:6px">Duplicate side effects per day</p></div></div>
+        <div class="row" style="gap:24px;margin-top:12px;align-items:flex-end">
+          <div><p class="cap">without durable execution</p><p class="bignum">117</p></div>
+          <div><p class="cap">with</p><p class="bignum" style="color:var(--ver)">0</p></div>
+        </div>
+        <p class="small muted" style="margin-top:10px"><span class="chip t-der"><i>der</i> derived</span> <span class="derive">ƒ L41</span> Scenario P-101, 2,000 queries/day, 86 interrupted tasks/day.</p>
+        <dl class="kv rt" style="margin-top:16px;padding-top:14px">
+          <dt>layers</dt><dd>9 of 9</dd>
+          <dt>lab</dt><dd><span class="st st-ok">Reproduced</span></dd>
+          <dt>verify</dt><dd><span class="st st-ok">Verified</span></dd>
+          <dt>redteam</dt><dd><span class="st st-ok">Redteam passed</span></dd>
+        </dl>
+      </div>
+      <div class="inst-f"><span class="callout" aria-hidden="true">5</span><span>release 2026.09</span><span>·</span><span>sha 7f3a9c1e</span><span style="margin-left:auto" class="row"><a class="btn btn-sm" href="#s08">Open chapter</a><a class="btn btn-sm btn-p" href="#s08">Run Lab 21</a></span></div>
+    </div>
+    <div>
+      <p class="cap" style="margin-bottom:10px">anatomy</p>
+      <div class="anat">
+        <span class="callout">1</span><p><b>Label</b> <span class="mono small">.inst-h .t</span> — uppercase mono, what the instrument measures. Chapter, lab, suggestion id or budget name.</p>
+        <span class="callout">2</span><p><b>Version</b> — semver of the thing measured, after a <span class="mono">.sep</span> middle dot. Omit only if the object is unversioned.</p>
+        <span class="callout">3</span><p><b>Timestamp</b> <span class="mono small">.ts</span> — right-aligned, faint. States the event, not just the time: "verified 12 Sep 2026", "ran 10:14".</p>
+        <span class="callout">4</span><p><b>Body</b> <span class="mono small">.inst-b</span> — 16px padding. A caption, one heading, at most one big number, then a <span class="mono">.kv</span> list.</p>
+        <span class="callout">5</span><p><b>Footer</b> <span class="mono small">.inst-f</span> — provenance texture (release, sha) and at most two actions, primary last.</p>
+      </div>
+      <p class="small muted" style="margin-top:16px">Frame is 1px <span class="mono">--rule-strong</span>; header rule strong, footer rule light. Instruments tile edge to edge in a ruled grid with no gap, or stand apart by <span class="mono">--s5</span>. They never nest.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · components -->
+<section class="sec" id="s09" aria-labelledby="h09">
+  <div class="sec-h">
+    <p class="cap">§ 09 · components</p>
+    <div class="between"><h2 class="h2" id="h09">Components</h2><span class="meta">every class below exists in hb.css</span></div>
+  </div>
+
+  <div class="sub" style="margin-top:0">
+    <span class="cap">buttons · .btn</span>
+    <h3 class="h3">Buttons</h3>
+    <div class="spec">
+      <div class="stage">
+        <button type="button" class="btn btn-p" id="b-run">Run</button>
+        <button type="button" class="btn" id="b-save">Save run</button>
+        <button type="button" class="btn" id="b-attach">Attach as evidence</button>
+        <button type="button" class="btn btn-q" id="b-cancel">Cancel</button>
+        <button type="button" class="btn btn-d" id="b-kill">Kill run</button>
+        <button type="button" class="btn" id="b-submit" disabled aria-describedby="b-submit-why">Submit for grading</button>
+        <span class="help" id="b-submit-why">Attach one evidence item first.</span>
+      </div>
+      <div class="stage rt">
+        <button type="button" class="btn btn-p btn-lg" id="b-lg">Run Lab 21</button>
+        <button type="button" class="btn btn-sm" id="b-sm">Open in IDE</button>
+        <button type="button" class="iconbtn" id="b-close" aria-label="Close side panel"><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" fill="none"/></svg></button>
+        <span class="small muted">Search <span class="kbd">/</span> · next section <span class="kbd">j</span></span>
+      </div>
+      <div class="note"><b>Labels say exactly what happens.</b> One warm primary per view. Destructive actions are outlined red, never filled. Disabled buttons state why beside them. Heights 36 / 44 / 28; 44 on touch.</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">inputs · .field .input .textarea .seg .langtoggle</span>
+    <h3 class="h3">Inputs</h3>
+    <div class="spec">
+      <div class="stage" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:20px;align-items:start">
+        <div class="field">
+          <label for="f-anchor">anchor</label>
+          <input class="input mono" id="f-anchor" value="36.3" autocomplete="off">
+          <span class="help">Section, figure (F-23-06) or source row (15.9 r12).</span>
+        </div>
+        <div class="field">
+          <label for="f-url">evidence url</label>
+          <input class="input err" id="f-url" value="x.com/thread/1834" aria-invalid="true" aria-describedby="f-url-err">
+          <span class="help err" id="f-url-err">Tier G · score 5 is below the floor of 25 for a cited figure. Attach a tier B paper with code or a tier D benchmark.</span>
+        </div>
+        <div class="field">
+          <label for="f-class">change class</label>
+          <select class="select" id="f-class">
+            <option>cited figure, date, price, deadline</option>
+            <option>wording</option>
+            <option>derived figure</option>
+            <option>new claim or source row</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="between"><label for="f-reason" style="font-family:var(--mono);font-size:11px;color:var(--ink-2)">reason for change</label><span class="counter" id="f-reason-count" aria-live="polite">0 / 280</span></div>
+          <textarea class="textarea" id="f-reason" maxlength="280" aria-describedby="f-reason-count">Official Journal text moves Annex III obligations to 2 Dec 2027.</textarea>
+        </div>
+        <div class="field">
+          <span class="flabel" id="f-scope-l">scope</span>
+          <div class="seg" role="group" aria-labelledby="f-scope-l" data-group>
+            <button type="button" id="f-scope-ch" aria-pressed="true">Chapter</button>
+            <button type="button" id="f-scope-part" aria-pressed="false">Part</button>
+            <button type="button" id="f-scope-book" aria-pressed="false">Whole book</button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="flabel" id="f-lang-l">edition</span>
+          <div class="row">
+            <div class="langtoggle" role="group" aria-labelledby="f-lang-l" data-group>
+              <button type="button" id="f-lang-en" aria-pressed="true" lang="en">EN</button>
+              <button type="button" id="f-lang-pt" aria-pressed="false" lang="pt-BR">PT</button>
+            </div>
+            <label class="check" for="f-illus"><input type="checkbox" id="f-illus" checked> Show illustrative marks</label>
+          </div>
+        </div>
+      </div>
+      <div class="note"><b>Labels are lowercase mono above the field, always visible.</b> Borders use <span class="mono">--ink-2</span> (≥ 3 : 1). Errors add a 3px inset bar, red border and a help line that says what failed and what would pass. Counters are tabular and live.</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">tables · .tbl</span>
+    <h3 class="h3">Tables</h3>
+    <div class="spec">
+      <div class="scroll" style="padding:4px 0 0">
+      <table class="tbl">
+        <caption class="cap" style="padding:8px 10px">lab suite · CI · release 2026.09</caption>
+        <thead><tr><th>lab</th><th>chapter</th><th>status</th><th class="n">last run</th><th class="n">steps</th></tr></thead>
+        <tbody>
+          <tr><td class="m">Lab 21</td><td>Control plane and durable execution</td><td><span class="st st-ok">Reproduced</span></td><td class="n">15 Sep 2026</td><td class="n">11</td></tr>
+          <tr class="sel"><td class="m">Lab 23</td><td>Model layer, routing, gateways</td><td><span class="st st-fail">Not reproduced</span></td><td class="n">15 Sep 2026</td><td class="n">—</td></tr>
+          <tr><td class="m">Lab 37</td><td>Economics and TCO</td><td><span class="st st-ok">Reproduced</span></td><td class="n">15 Sep 2026</td><td class="n">—</td></tr>
+          <tr><td class="m">—</td><td>Regulation (ch36)</td><td><span class="st st-mute">No lab</span></td><td class="n">—</td><td class="n">—</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="3">35 labs · 34 reproduced · 1 not reproduced</td><td class="n">97.1%</td><td></td></tr></tfoot>
+      </table>
+      </div>
+      <div class="note"><b>Heavy header, light rows.</b> Headers lowercase mono; numbers right-aligned and tabular; selected row uses <span class="mono">--sel</span>; totals sit under a 1.5px rule. No zebra striping, no vertical rules.</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">diff · book vs run</span>
+    <h3 class="h3">Diff table</h3>
+    <div class="spec">
+      <div class="scroll">
+      <table class="tbl">
+        <caption class="cap" style="padding:8px 10px">lab 23 · book v1.4.1 vs CI run 15 Sep 2026 · specimen values</caption>
+        <thead><tr><th>measure</th><th class="n">book</th><th class="n">run</th><th>result</th></tr></thead>
+        <tbody>
+          <tr><td>quality retention</td><td class="n">95%</td><td class="n">95%</td><td class="d-match mono small">= match</td></tr>
+          <tr class="row-div"><td>cost reduction at 95% retention</td><td class="n">2.4×</td><td class="n">1.7×</td><td class="d-div mono small">≠ diverge</td></tr>
+          <tr class="row-new"><td>pinned small-model version</td><td class="n">—</td><td class="n">changed</td><td class="d-new mono small">+ new</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="note"><b>Symbol and word, then colour.</b> = match (cool), ≠ diverge (red row), + new (warm row). The book value is always the left column.</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">ledger · each record carries prev-hash and hash</span>
+    <h3 class="h3">Timeline</h3>
+    <div class="spec">
+      <div class="stage" style="display:block">
+        <p class="meta" style="margin-bottom:14px">S-36-0198 · anchor 36.3 · adjudicator guide v2.1 · rubric v1.2</p>
+        <ol class="tl" aria-label="S-36-0198 record chain">
+          <li class="tl-i"><span class="tl-t">02 Sep 10:14</span><span class="tl-m"><i class="o"></i></span><div class="tl-b"><p class="small"><b>Submitted</b> · "2 Aug 2026" → "2 Dec 2027"</p><p class="hash">prev c41e07a9b2d3 · hash 3f9a61c0de27</p></div></li>
+          <li class="tl-i"><span class="tl-t">02 Sep 10:15</span><span class="tl-m"><i></i></span><div class="tl-b"><p class="small"><b>Graded</b> · <span class="ev ev-b" style="width:18px;height:18px;font-size:11px">B</span> Official Journal · 85 ≥ 70</p><p class="hash">prev 3f9a61c0de27 · hash a07b44e19f5c</p></div></li>
+          <li class="tl-i"><span class="tl-t">02 Sep 10:16</span><span class="tl-m"><i></i></span><div class="tl-b"><p class="small"><b>Sensors</b> · anchor PASS · lint PASS</p><p class="hash">prev a07b44e19f5c · hash 5d2e8c3b71a0</p></div></li>
+          <li class="tl-i"><span class="tl-t">02 Sep 10:22</span><span class="tl-m"><i class="v"></i></span><div class="tl-b"><p class="small"><b>Decided</b> <span class="st st-ok">Accepted</span></p><p class="hash">prev 5d2e8c3b71a0 · hash e8146fa2c93d</p></div></li>
+          <li class="tl-i"><span class="tl-t">03 Sep 16:40</span><span class="tl-m"><i class="v"></i></span><div class="tl-b"><p class="small"><b>Curator approved</b> · M. Tavares, Part III</p><p class="hash">prev e8146fa2c93d · hash 92c0d7e45b18</p></div></li>
+          <li class="tl-i"><span class="tl-t">03 Sep 17:05</span><span class="tl-m"><i></i></span><div class="tl-b"><p class="small"><b>Merged</b> · ch36 v1.3.2 → v1.3.3 (patch)</p><p class="hash">prev 92c0d7e45b18 · hash 1b6fe3a08c47</p></div></li>
+        </ol>
+      </div>
+      <div class="note"><b>Markers:</b> hollow = received, filled = processed, cool = approved, red = declined or failed. Hashes are 12 hex characters and show the chain explicitly; exports carry the same values.</div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">code · .code .ln · output · .term</span>
+    <h3 class="h3">Code and output panes</h3>
+    <div class="g2">
+      <div class="code" role="region" aria-label="derive.py for chapter 21, lines 35 to 41, line 38 highlighted">
+        <div class="code-h"><span>ch21/derive.py</span><span class="faint">· L35–41</span><span style="margin-left:auto" class="row"><button type="button" class="btn btn-sm btn-q" id="c-copy">Copy</button></span></div>
+        <div class="code-b"><span class="ln" data-n="35"><span class="c"># scenario: P-101 work order, fixed parameters</span></span><span class="ln" data-n="36">STEPS, QUERIES, P_STEP = <span class="s">11</span>, <span class="s">2000</span>, <span class="s">0.004</span>  <span class="c"># ill</span></span><span class="ln" data-n="37">p_task = <span class="s">1</span> - (<span class="s">1</span> - P_STEP) ** STEPS          <span class="c"># 0.0431</span></span><span class="ln hl" data-n="38">interrupted = <span class="k">round</span>(QUERIES * p_task)       <span class="c"># 86</span></span><span class="ln" data-n="39"></span><span class="ln" data-n="40"><span class="k">def</span> <span class="fn">duplicates</span>(durable: bool) -&gt; int:</span><span class="ln" data-n="41">    <span class="k">return</span> <span class="s">0</span> <span class="k">if</span> durable <span class="k">else</span> side_effects(interrupted)</span></div>
+      </div>
+      <div>
+        <div class="term" role="region" aria-label="Terminal output of derive.py for chapter 21">$ python ch21/derive.py --check
+p_task              0.0431   ok
+interrupted/day     86       ok  L38
+duplicates/day      117      ok  L41
+duplicates/durable  0        ok
+4 of 4 figures match book v1.5.0</div>
+        <p class="small muted" style="margin-top:10px">Line highlights: cool <span class="mono">.hl</span> for the line a <span class="derive">ƒ L38</span> link opens, red <span class="mono">.hl-f</span> for the failing line, warm <span class="mono">.hl-a</span> for the line being edited. Syntax uses three hues and italics only. Code regions carry an aria-label naming file and range.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub">
+    <span class="cap">meters · loaders · status strings</span>
+    <h3 class="h3">Meters and loaders</h3>
+    <div class="g3">
+      <div class="inst">
+        <div class="inst-h"><span class="t">Model budget</span><span class="ts">resets 01 Oct</span></div>
+        <div class="inst-b">
+          <p class="midnum">73.6%</p>
+          <div class="meter warn" role="meter" aria-label="Model budget used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="73.6" style="margin-top:10px"><i style="width:73.6%"></i></div>
+          <p class="meta" style="margin-top:8px">1.84 M of 2.50 M tokens · hard cap at gateway</p>
+        </div>
+      </div>
+      <div class="inst">
+        <div class="inst-h"><span class="t">Judge agreement</span><span class="ts">ch12 · ch27</span></div>
+        <div class="inst-b">
+          <p class="midnum">κ 0.68</p>
+          <div class="meter" role="meter" aria-label="Judge kappa against human labels; floor 0.6, gate 0.7" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.68" style="margin-top:10px"><i style="width:68%"></i><span class="mark" style="left:60%"></span><span class="mark ok" style="left:70%"></span></div>
+          <p class="meta" style="margin-top:8px">floor 0.60 · gate 0.70 · below gate</p>
+        </div>
+      </div>
+      <div class="inst">
+        <div class="inst-h"><span class="t">Status strings</span><span class="ts">live</span></div>
+        <div class="inst-b col" style="gap:8px">
+          <p class="loader" role="status">sandbox   <span class="blocks">████████░░</span>  80%  3.1 s</p>
+          <p class="loader">grading   <span class="blocks">▮▮▮▮▮▮▯▯▯▯</span>  2 of 3 items</p>
+          <p class="loader">lab 21    <span class="st st-run caret">Running</span>  step 7 of 11</p>
+          <p class="loader">index     ready · 41 chapters · 7f3a9c1e</p>
+        </div>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:12px;max-width:680px">Meters are 8px, framed in <span class="mono">--ink-2</span>, filled flat; threshold marks are 2px ticks and are named in the aria-label and the caption. Loaders always show a number — percentage, count or seconds. No spinners, no skeleton shimmer.</p>
+  </div>
+
+  <div class="sub">
+    <span class="cap">empty · error · notice</span>
+    <h3 class="h3">Empty and error states</h3>
+    <div class="g3">
+      <div class="empty">
+        <p class="cap">no runs yet</p>
+        <p class="ui">Lab 21 has not been run in this account.</p>
+        <p class="small muted">A run takes about 40 s and uses IDE minutes, not model budget.</p>
+        <button type="button" class="btn btn-p btn-sm" id="e-run">Run Lab 21</button>
+      </div>
+      <div class="error" role="alert">
+        <p class="label" style="color:var(--fail)">Sandbox did not start</p>
+        <p class="ui" style="margin-top:6px">No sandbox was ready within 5 s. Your code is saved.</p>
+        <div class="row" style="margin-top:10px"><button type="button" class="btn btn-sm" id="e-retry">Retry</button><a class="btn btn-sm btn-q" href="#s09">Open last run</a></div>
+      </div>
+      <div class="notice">
+        <p class="label" style="color:var(--warn)">Stale &gt; 90 d</p>
+        <p class="ui" style="margin-top:6px">Price rows in 15.9 were last checked 97 days ago.</p>
+        <p class="small muted" style="margin-top:6px">Figures still show. Treat them as dated.</p>
+      </div>
+    </div>
+    <p class="small muted" style="margin-top:12px;max-width:680px">Empty states are dashed — the thing is absent, not broken — and offer the one action that fills them. Errors name what failed, what was kept and what to do next.</p>
+  </div>
+</section>
+
+<!-- 10 · PT/EN -->
+<section class="sec" id="s10" aria-labelledby="h10">
+  <div class="sec-h">
+    <p class="cap">§ 10 · parity</p>
+    <div class="between"><h2 class="h2" id="h10">Portuguese and English strings</h2><span class="meta">pt-BR · en-GB</span></div>
+    <p class="lede">Both editions ship together. Budget 30% extra length for Portuguese prose; short labels can double. Size every control to its content, never to a fixed width.</p>
+  </div>
+  <div class="scroll">
+  <table class="tbl">
+    <thead><tr><th>en</th><th class="n">chars</th><th>pt-BR</th><th class="n">chars</th><th class="n">Δ</th></tr></thead>
+    <tbody>
+      <tr><td>Attach as evidence</td><td class="n">18</td><td lang="pt-BR">Anexar como evidência</td><td class="n">21</td><td class="n">+17%</td></tr>
+      <tr><td>Save run</td><td class="n">8</td><td lang="pt-BR">Salvar execução</td><td class="n">15</td><td class="n">+88%</td></tr>
+      <tr><td>Request more</td><td class="n">12</td><td lang="pt-BR">Solicitar mais evidências</td><td class="n">25</td><td class="n">+108%</td></tr>
+      <tr><td>Not reproduced</td><td class="n">14</td><td lang="pt-BR">Não reproduzido</td><td class="n">15</td><td class="n">+7%</td></tr>
+      <tr><td>The book does not cover this</td><td class="n">28</td><td lang="pt-BR">O livro não cobre este tema</td><td class="n">27</td><td class="n">−4%</td></tr>
+      <tr><td>Verified 12 Sep 2026</td><td class="n">20</td><td lang="pt-BR">Verificado em 12 set 2026</td><td class="n">25</td><td class="n">+25%</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="g2" style="margin-top:28px">
+    <div class="spec">
+      <div class="stage" id="pt-stage">
+        <span class="flabel" id="pt-l">preview edition</span>
+        <div class="langtoggle" role="group" aria-labelledby="pt-l" id="pt-toggle">
+          <button type="button" id="pt-en" aria-pressed="true" data-lang="en">EN</button>
+          <button type="button" id="pt-pt" aria-pressed="false" data-lang="pt">PT</button>
+        </div>
+        <div class="row" style="width:100%;margin-top:6px" aria-live="polite">
+          <button type="button" class="btn btn-p" id="pt-b1" data-en="Save run" data-pt="Salvar execução">Save run</button>
+          <button type="button" class="btn" id="pt-b2" data-en="Attach as evidence" data-pt="Anexar como evidência">Attach as evidence</button>
+          <span class="st-block sb-warn" data-en="Request more" data-pt="Solicitar mais evidências">Request more</span>
+          <span class="st st-fail" data-en="Not reproduced" data-pt="Não reproduzido">Not reproduced</span>
+          <span class="meta" data-en="Verified 12 Sep 2026" data-pt="Verificado em 12 set 2026">Verified 12 Sep 2026</span>
+        </div>
+      </div>
+      <div class="note"><b>Wrap, never truncate.</b> Button rows and status rows use <span class="mono">flex-wrap</span>; a label that does not fit moves to the next line whole. No ellipsis on any label, heading, status or chip. Long table cells wrap; only ids and hashes may break anywhere.</div>
+    </div>
+    <div>
+      <p class="cap" style="margin-bottom:8px">formats per locale</p>
+      <div class="scroll">
+      <table class="tbl">
+        <thead><tr><th>kind</th><th>en-GB</th><th>pt-BR</th></tr></thead>
+        <tbody>
+          <tr><td>decimal</td><td class="m">1,000.5</td><td class="m">1.000,5</td></tr>
+          <tr><td>percentage</td><td class="m">36.5%</td><td class="m">36,5%</td></tr>
+          <tr><td>date</td><td class="m">12 Sep 2026</td><td class="m">12 set 2026</td></tr>
+          <tr><td>date + time</td><td class="m">03 Sep 17:05</td><td class="m">03 set 17:05</td></tr>
+          <tr><td>currency</td><td class="m">$0.25 per M tokens</td><td class="m">US$ 0,25 por M tokens</td></tr>
+          <tr><td>ratio</td><td class="m">13×</td><td class="m">13×</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="small muted" style="margin-top:10px">Figures are identical across editions: same value, same precision, same derive line. Only separators and month names change. 24-hour clock in both. Ids, versions, hashes and code never localise.</p>
+      <p class="small" style="margin-top:12px" lang="pt-BR">“Retry policy” <span class="meta" lang="en">[en]</span> — <span class="muted">marcador de idioma da fonte: citações e títulos de fontes ficam no idioma original, seguidos de [en] ou [pt] em mono.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · voice -->
+<section class="sec" id="s11" aria-labelledby="h11">
+  <div class="sec-h">
+    <p class="cap">§ 11 · voice</p>
+    <h2 class="h2" id="h11">Voice</h2>
+    <p class="lede">Write like the book: short declarative sentences, specifics over adjectives, British spelling. The reader is an engineer checking a claim.</p>
+  </div>
+  <ul class="tax" style="margin-bottom:24px">
+    <li class="small" style="font-family:var(--sans)"><span class="glyph">✢</span> No exclamation marks. No "seamless", "powerful", "unlock", "supercharge".</li>
+    <li class="small" style="font-family:var(--sans)"><span class="glyph">✢</span> British spelling: organisation, colour, licence, behaviour, analyse, optimise.</li>
+    <li class="small" style="font-family:var(--sans)"><span class="glyph">✢</span> Buttons are verbs that describe the result: Run, Save run, Attach as evidence, Submit for grading.</li>
+    <li class="small" style="font-family:var(--sans)"><span class="glyph">✢</span> Errors say what failed, what was kept and what to do next.</li>
+    <li class="small" style="font-family:var(--sans)"><span class="glyph">✢</span> A number replaces an adjective whenever one exists.</li>
+  </ul>
+  <div class="scroll">
+  <table class="tbl">
+    <thead><tr><th>don't</th><th>do</th></tr></thead>
+    <tbody>
+      <tr><td class="faint"><s>Success! Your run was saved.</s></td><td>Run saved. 11 steps, 0 duplicate side effects.</td></tr>
+      <tr><td class="faint"><s>AI-powered insights to supercharge your costs.</s></td><td>Configuration C costs 13× less per task than A in the scenario. <span class="chip t-der"><i>der</i> derived</span></td></tr>
+      <tr><td class="faint"><s>Oops, something went wrong.</s></td><td>No sandbox was ready within 5 s. Your code is saved. Retry, or open the last run.</td></tr>
+      <tr><td class="faint"><s>Great suggestion! We'll take a look.</s></td><td>Request more: an independent tier D item ≤ 90 days old, or a tier B filing, would suffice.</td></tr>
+      <tr><td class="faint"><s>Optimize your model's behavior.</s></td><td>Optimise routing behaviour: Lab 23 shows where savings diverge.</td></tr>
+      <tr><td class="faint"><s>Hmm, I'm not sure about that.</s></td><td>The book does not cover this. Nearest section: <a class="xref" href="#s11">23.3</a>.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- 12 · accessibility -->
+<section class="sec" id="s12" aria-labelledby="h12">
+  <div class="sec-h">
+    <p class="cap">§ 12 · wcag 2.2 aa</p>
+    <h2 class="h2" id="h12">Accessibility</h2>
+    <p class="lede">Accessibility is a release gate, not a review item. These rules are checked in CI against every artboard and page.</p>
+  </div>
+  <div class="twocol">
+    <div class="scroll">
+    <table class="tbl">
+      <thead><tr><th>criterion</th><th>rule</th></tr></thead>
+      <tbody>
+        <tr><td class="m">contrast</td><td>Text ≥ 4.5 : 1 (lowest in use: ink-3 5.55 light, act 5.08 light). Control boundaries and focus ≥ 3 : 1. Rules are decorative.</td></tr>
+        <tr><td class="m">focus visible</td><td>2px solid <span class="mono">--focus</span>, offset 2px, on every interactive element. Never removed, never colour-only on a filled button.</td></tr>
+        <tr><td class="m">target size</td><td>≥ 24 × 24px on desktop (2.5.8); ≥ 44 × 44px on touch, applied by <span class="mono">pointer: coarse</span>.</td></tr>
+        <tr><td class="m">figures</td><td>Every chart and diagram has a text alternative giving the numbers it shows, plus its source tier.</td></tr>
+        <tr><td class="m">code</td><td>Code regions are labelled with file and line range; line numbers are generated, not read aloud.</td></tr>
+        <tr><td class="m">never colour alone</td><td>Status has a word and a shape; chips have a line form; diffs have = ≠ +.</td></tr>
+        <tr><td class="m">reduced motion</td><td>Under <span class="mono">prefers-reduced-motion</span>, no blinking caret, no smooth scroll, no transitions.</td></tr>
+        <tr><td class="m">language</td><td><span class="mono">lang</span> set per edition and on every quoted source in the other language.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div>
+      <p class="cap" style="margin-bottom:8px">keyboard map · press ? anywhere</p>
+      <div class="scroll">
+      <table class="tbl keymap">
+        <thead><tr><th>key</th><th>action</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">/</span></td><td>Search the book</td></tr>
+          <tr><td><span class="kbd">j</span> <span class="kbd">k</span></td><td>Next / previous section</td></tr>
+          <tr><td><span class="kbd">[</span> <span class="kbd">]</span></td><td>Previous / next chapter</td></tr>
+          <tr><td><span class="kbd">g</span> <span class="kbd">l</span></td><td>Go to this chapter's lab</td></tr>
+          <tr><td><span class="kbd">a</span></td><td>Ask the assistant about this section</td></tr>
+          <tr><td><span class="kbd">esc</span></td><td>Close the side panel or peek</td></tr>
+          <tr><td><span class="kbd">?</span></td><td>Show this map</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="small muted" style="margin-top:10px">Single-key shortcuts are off while focus is in a field and can be turned off in settings (2.1.4).</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 · do / don't -->
+<section class="sec" id="s13" aria-labelledby="h13">
+  <div class="sec-h">
+    <p class="cap">§ 13 · against the generic</p>
+    <h2 class="h2" id="h13">Do and don't</h2>
+    <p class="lede">Each pair shows a familiar SaaS pattern on the left, drawn on purpose, and the instrument version on the right.</p>
+  </div>
+
+  <div class="col" style="gap:40px">
+    <div class="dd-pair">
+      <div class="dd no"><span class="cap">don't · rounded shadowed cards</span>
+        <div class="mock" aria-hidden="true"><div class="gen-grid">
+          <div class="gen-card"><p class="small muted">Labs</p><p class="h3">34</p></div>
+          <div class="gen-card"><p class="small muted">Chapters</p><p class="h3">41</p></div>
+        </div></div>
+        <p class="why">Floating cards imply objects to pick up. They hide which one is current and say nothing about when or how it was measured.</p></div>
+      <div class="dd yes"><span class="cap">do · ruled instrument grid</span>
+        <div class="mock" style="padding:0;border-color:var(--rule-strong)"><div class="inst-h"><span class="t">Release 2026.09</span><span class="ts">21 Sep 2026</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr">
+            <div class="inst-b rr"><p class="cap">labs reproduced</p><p class="midnum">34<span class="faint" style="font-size:20px">/35</span></p></div>
+            <div class="inst-b"><p class="cap">chapters verified</p><p class="midnum">41<span class="faint" style="font-size:20px">/41</span></p></div>
+          </div></div>
+        <p class="why">Edge-to-edge cells under one header. The denominator and the date are part of the number.</p></div>
+    </div>
+
+    <div class="dd-pair">
+      <div class="dd no"><span class="cap">don't · gradient hero with illustration</span>
+        <div class="mock" aria-hidden="true"><div class="gen-hero"><span class="gen-blob"></span><div><p class="h3">Build smarter agents</p><p class="small muted">Everything you need, in one place.</p><span class="gen-btn small" style="margin-top:8px">Get started</span></div></div></div>
+        <p class="why">A promise with no figure in it. The illustration fills the space a number should occupy.</p></div>
+      <div class="dd yes"><span class="cap">do · one big number with provenance</span>
+        <div class="mock"><p class="cap">ch37 · economics and tco</p><p class="bignum" style="margin-top:6px">13×</p><p class="small" style="margin-top:6px">cheaper per task: configuration C (routed, cached, batched) against A. Cache hit rate 62%. <span class="chip t-der"><i>der</i> derived</span> <span class="derive">ƒ L52</span></p></div>
+        <p class="why">One number where the number is the point, with its tier and its derive line.</p></div>
+    </div>
+
+    <div class="dd-pair">
+      <div class="dd no"><span class="cap">don't · emoji or icon section markers</span>
+        <div class="mock" aria-hidden="true">
+          <p class="h4" style="margin-bottom:10px"><span class="gen-disc" style="background:var(--act)"></span>Quick wins</p>
+          <p class="h4" style="margin-bottom:10px"><span class="gen-disc" style="background:var(--ver)"></span>Deep dive</p>
+          <p class="h4"><span class="gen-disc" style="background:var(--fail)"></span>Watch out</p>
+          <p class="tex" style="margin-top:10px">coloured discs stand in for emoji</p>
+        </div>
+        <p class="why">Pictograms carry mood, not structure. They render differently on every platform and are read aloud as noise.</p></div>
+      <div class="dd yes"><span class="cap">do · ✢ taxonomy and lowercase captions</span>
+        <div class="mock"><p class="cap">21.5 · failure</p>
+          <ul class="tax" style="margin-top:6px">
+            <li><span class="glyph">✢</span> worker crash mid-activity</li>
+            <li><span class="glyph">✢</span> retry without idempotency key
+              <ul><li><span class="glyph">✢</span> duplicate work order</li><li><span class="glyph">✢</span> duplicate notification</li></ul></li>
+          </ul></div>
+        <p class="why">The glyph marks a node; indentation carries the hierarchy; the caption names the layer.</p></div>
+    </div>
+
+    <div class="dd-pair">
+      <div class="dd no"><span class="cap">don't · coloured pill toast</span>
+        <div class="mock" aria-hidden="true" style="display:flex;align-items:center;justify-content:center"><span class="gen-pill">Success! Run saved</span></div>
+        <p class="why">Celebrates instead of reporting. Disappears before it can be read, and says nothing about the run.</p></div>
+      <div class="dd yes"><span class="cap">do · declarative status line</span>
+        <div class="mock" style="padding:0;display:flex;flex-direction:column;justify-content:flex-end">
+          <div class="statusbar" role="status"><span><span class="st st-ok">Saved</span></span><span>Lab 21 run r-0412</span><span>11 steps</span><span>0 duplicates</span><span>10:14:07</span></div>
+        </div>
+        <p class="why">A persistent line in the status bar: what happened, to what, with the numbers and the time.</p></div>
+    </div>
+
+    <div class="dd-pair">
+      <div class="dd no"><span class="cap">don't · vague capability copy</span>
+        <div class="mock" aria-hidden="true"><p class="h3">AI-powered insights</p><p class="small muted" style="margin-top:6px">Unlock seamless, powerful routing that cuts costs dramatically.</p><span class="gen-btn small" style="margin-top:12px">Learn more</span></div>
+        <p class="why">Adjectives with no referent. Nothing here can be checked.</p></div>
+      <div class="dd yes"><span class="cap">do · specific figure with chip</span>
+        <div class="mock"><p class="cap">31.4 · worked numbers</p><p class="midnum" style="margin-top:6px">36.5%</p><p class="small" style="margin-top:6px">of tasks routed to human review in the P-101 scenario. <span class="chip t-der"><i>der</i> derived</span> See <a class="xref" href="#s13">ch31</a>.</p></div>
+        <p class="why">A figure, a scope and a source tier. The reader can follow it to the line that computed it.</p></div>
+    </div>
+
+    <div class="dd-pair">
+      <div class="dd no"><span class="cap">don't · contributor leaderboard</span>
+        <div class="mock" aria-hidden="true">
+          <div class="gen-card" style="padding:10px 14px">
+            <p class="small"><b>1</b> <span class="gen-disc" style="background:var(--warn)"></span>K. Nakamura <span style="float:right">1,240 pts</span></p>
+            <p class="small" style="margin-top:8px"><b>2</b> <span class="gen-disc" style="background:var(--rule-2)"></span>P. Walsh <span style="float:right">980 pts</span></p>
+            <p class="small" style="margin-top:8px"><b>3</b> <span class="gen-disc" style="background:var(--act-bg)"></span>T. Osei <span style="float:right">870 pts</span></p>
+          </div></div>
+        <p class="why">Ranking rewards volume, and volume is what the evidence rubric exists to resist.</p></div>
+      <div class="dd yes"><span class="cap">do · alphabetical credit</span>
+        <div class="mock"><p class="cap">contributors · release 2026.09 · alphabetical</p>
+          <p class="small" style="margin-top:8px;line-height:24px">D. Albuquerque · K. Nakamura · T. Osei · F. Rezende · P. Walsh</p>
+          <p class="meta" style="margin-top:8px">merged suggestions are credited in each chapter's changelog</p></div>
+        <p class="why">Credit without rank. Merged work is visible where it changed the book.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer class="rt-s" style="margin-top:64px;padding-top:14px">
+  <div class="between"><p class="meta">Harness Bible Interactive · style guide v0.9.0 · tokens hb.css v0.9.0 · release 2026.09 · 21 Sep 2026</p><p class="tex">sha 7f3a9c1e</p></div>
+</footer>
+
+</main>
+</div>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  var themeBtns=document.querySelectorAll('[data-theme-set]');
+  function setTheme(t){
+    if(t==='light'||t==='dark'){root.setAttribute('data-theme',t)}else{root.removeAttribute('data-theme');t='auto'}
+    for(var i=0;i<themeBtns.length;i++){themeBtns[i].setAttribute('aria-pressed',String(themeBtns[i].getAttribute('data-theme-set')===t))}
+    try{localStorage.setItem('hb-sg-theme',t)}catch(e){}
+  }
+  var saved='auto';
+  try{saved=localStorage.getItem('hb-sg-theme')||'auto'}catch(e){}
+  setTheme(saved);
+  for(var i=0;i<themeBtns.length;i++){themeBtns[i].addEventListener('click',function(){setTheme(this.getAttribute('data-theme-set'))})}
+
+  var groups=document.querySelectorAll('[data-group]');
+  for(var g=0;g<groups.length;g++){(function(grp){
+    var bs=grp.querySelectorAll('button');
+    for(var j=0;j<bs.length;j++){bs[j].addEventListener('click',function(){
+      for(var k=0;k<bs.length;k++){bs[k].setAttribute('aria-pressed','false')}
+      this.setAttribute('aria-pressed','true');
+    })}
+  })(groups[g])}
+
+  var ta=document.getElementById('f-reason'),ct=document.getElementById('f-reason-count');
+  if(ta&&ct){var upd=function(){ct.textContent=ta.value.length+' / 280'};ta.addEventListener('input',upd);upd()}
+
+  var pt=document.getElementById('pt-toggle');
+  if(pt){
+    var pbs=pt.querySelectorAll('button');
+    var items=document.querySelectorAll('#pt-stage [data-en]');
+    for(var p=0;p<pbs.length;p++){pbs[p].addEventListener('click',function(){
+      var lang=this.getAttribute('data-lang');
+      for(var q=0;q<pbs.length;q++){pbs[q].setAttribute('aria-pressed',String(pbs[q]===this))}
+      for(var r=0;r<items.length;r++){
+        items[r].textContent=items[r].getAttribute('data-'+lang);
+        items[r].setAttribute('lang',lang==='pt'?'pt-BR':'en');
+      }
+    })}
+  }
+})();
+</script>

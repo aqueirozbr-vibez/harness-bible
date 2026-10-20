@@ -1,0 +1,417 @@
+# Development services. `docker compose up db` (feature-specs/04 § 2); `docker compose up keycloak` (feature-specs/09 § 3.6);
+# `docker compose up db gateway` (feature-specs/11 § 3.6); `docker compose up workers` (feature-specs/11 § 7.1);
+# `docker compose --profile observe up -d` (feature-specs/21 § 5.2: the collector, Tempo, Loki and Grafana);
+# `docker compose up -d temporal-namespace` (feature-specs/28 § 3: the workflow engine with its schema and namespace).
+# The pgvector image carries the vector extension for Phase 2; Phase 1 needs only pg_trgm.
+services:
+  db:
+    # PostgreSQL 17, the major version of the local cluster this database was dumped from (unit 26a, 2026-09-23):
+    # a pg_dump 17 file sets `transaction_timeout`, which a 16 server does not know, so the restore into
+    # pgvector/pgvector:pg16 failed at the first statement (feature-specs/12 § 8; architecture § 12).
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: hb
+      POSTGRES_PASSWORD: hb
+      POSTGRES_DB: harness_bible
+    ports:
+      - "5432:5432"
+    networks: [default, hb-internal]
+    volumes:
+      # A 17 server cannot read a 16 data directory, so the image bump names a new volume; the old `hb-pgdata`
+      # (an empty schema and an empty `litellm`) is left on the machine as the way back.
+      - hb-pgdata-17:/var/lib/postgresql/data
+      # The gateway's own database, created once when the volume is first initialised (feature-specs/11 § 3.1).
+      - ./infra/gateway/init.sql:/docker-entrypoint-initdb.d/10-litellm.sql:ro
+  keycloak:
+    # Run `npm run auth:kc:render` first: Keycloak's import substitutes nothing, so the `${env.*}` placeholders
+    # of the realm file are rendered into infra/keycloak/.rendered/ (git-ignored) before the mount.
+    image: quay.io/keycloak/keycloak:26.4
+    command: ["start-dev", "--import-realm", "--vault", "file", "--vault-dir", "/opt/keycloak/vault"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HTTP_PORT: "8081"
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./infra/keycloak/.rendered/realm-harness-bible.json:/opt/keycloak/data/import/realm-harness-bible.json:ro
+      - ./infra/keycloak/vault:/opt/keycloak/vault:ro
+  gateway:
+    # The LiteLLM proxy: the only path to a model (feature-specs/11 § 3; architecture § 2.1, § 5.5). Configuration
+    # is infra/gateway/litellm.yaml; the provider key is infra/gateway/.env (git-ignored) and exists in this
+    # container alone. It holds no Langfuse key: those are the collector's (feature-specs/49 § 4). Pinned by digest:
+    # main-stable resolved to LiteLLM 1.102.1 on 2026-09-23, whose cost map carries the pinned model ids; a new pin
+    # is a reviewed change to this line.
+    image: ghcr.io/berriai/litellm:main-stable@sha256:87f34979b9f8cb274fac90ca8a4fdda07d8480de22755562a26adeb95ce20d02
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    env_file:
+      - path: ./infra/gateway/.env
+        required: false
+    environment:
+      # From the project .env (compose reads it for interpolation): generated locally, never committed (feature-specs/11 § 8).
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?LITELLM_MASTER_KEY is unset in .env (see .env.example)}
+      # LiteLLM's own database (infra/gateway/init.sql). LITELLM_DATABASE_URL overrides it on a machine whose 5432 is
+      # not the compose db (before unit 26 the development database is a local cluster).
+      DATABASE_URL: ${LITELLM_DATABASE_URL:-postgresql://hb:hb@db:5432/litellm}
+      # The bearer the two self-hosted model servers require (feature-specs/12 § 3); generated locally like the rest.
+      INFINITY_API_KEY: ${INFINITY_API_KEY:?INFINITY_API_KEY is unset in .env (see .env.example)}
+      # No road to Langfuse but the collector's (feature-specs/49 § 4, § 5.2). Blank whatever infra/gateway/.env still
+      # holds: this block overrides env_file, and both of LiteLLM's Langfuse loggers read an empty value as unset, so
+      # neither the `langfuse` callback nor `langfuse_otel` can send to Langfuse from here. The `langfuse` callback
+      # also builds a second, "upstream" client whenever UPSTREAM_LANGFUSE_SECRET_KEY is set at all
+      # (litellm/integrations/langfuse/langfuse.py:264-279 in the pinned image); with its public key empty that client
+      # is disabled too. A key belongs in infra/observability/.env, which only the collector reads.
+      LANGFUSE_PUBLIC_KEY: ""
+      LANGFUSE_SECRET_KEY: ""
+      LANGFUSE_HOST: ""
+      LANGFUSE_OTEL_HOST: ""
+      UPSTREAM_LANGFUSE_PUBLIC_KEY: ""
+      UPSTREAM_LANGFUSE_SECRET_KEY: ""
+      UPSTREAM_LANGFUSE_HOST: ""
+    # Published on the loopback interface alone: the proxy answers to its master key, so it is not offered to the
+    # LAN (feature-specs/11 § 8 names http://localhost:4000; the stub binds 127.0.0.1 for the same reason).
+    ports:
+      - "127.0.0.1:4000:4000"
+    networks: [default, hb-internal]
+    volumes:
+      - ./infra/gateway/litellm.yaml:/app/config.yaml:ro
+    depends_on:
+      - db
+      - embeddings
+      - reranker
+  embeddings:
+    # The self-hosted embedder behind `hb-embed` (feature-specs/12 § 3; Andre, 2026-09-24: self-host, but so a
+    # service can replace it later). The application never learns this exists: it asks the gateway for an alias,
+    # and only infra/gateway/litellm.yaml maps the alias to this container, so a move to a provider is one edit
+    # there plus a re-index.
+    #
+    # BAAI/bge-m3 pinned by its revision: MIT, multilingual (the PT editions), an 8,192-token window for sections
+    # that run to 33,000 characters, and **1,024-dimension vectors**, the size `Section.embedding` already is, so
+    # nothing migrates. Measured on this machine (16 cores, no GPU, 2026-09-25): a warm query embedding 133 ms,
+    # inside the 600 ms retrieval budget; a 6,000-character section 5.2 s, so re-indexing the release is a
+    # half-hour batch job, not an interactive cost.
+    #
+    # One model per container and a memory bound: the two models in one container were killed by the OOM killer
+    # (exit 137) inside Docker's 8 GB.
+    image: michaelf34/infinity:0.0.77-cpu@sha256:94db836145f609c508f3f296f3b9bd0e78ae088025e879664d073dfd9f929e96
+    command:
+      - v2
+      - --model-id=BAAI/bge-m3
+      - --revision=5617a9f61b028005a4858fdac845db406aefb181
+      - --served-model-name=BAAI/bge-m3
+      - --engine=torch
+      - --device=cpu
+      # One document per forward pass. The server's own default is 32, which `/models` reports, and it is a count
+      # of documents, not of tokens: the book's longest section is 32,250 characters (~8,000 tokens, the model's
+      # whole window) and attention cost grows with the square of that, so a batch of 32 long sections was killed
+      # by the OOM killer at 6 GB (exit 137, 2026-09-25). At 1 the release is embedded without truncating anyone's
+      # text, which is the property worth paying for: a truncated tail is a part of the book nobody can find.
+      - --batch-size=1
+      - --model-warmup
+      - --port=7997
+      - --api-key=${INFINITY_API_KEY:?INFINITY_API_KEY is unset in .env (see .env.example)}
+    environment:
+      HF_HOME: /cache
+    mem_limit: 6g
+    # No published port: the gateway reaches it by service name on the internal network, and nothing else may.
+    # `default` is here for one reason: the first start downloads the pinned weights from the model hub into
+    # hb-model-cache. Once that volume is warm the service never reaches the network again, so a deployment that
+    # provisions the volume can drop `default` from this line and leave the server with no route off the host.
+    networks: [default, hb-internal]
+    volumes:
+      - hb-model-cache:/cache
+  reranker:
+    # The self-hosted cross-encoder behind `hb-rerank` (feature-specs/12 § 7.1), same reasoning as `embeddings`.
+    # BAAI/bge-reranker-base pinned by revision: MIT, multilingual, 278M parameters, a 512-token window — from
+    # which `RERANK_DOCUMENT_CHARACTERS` is derived rather than invented. A re-ranker's output is a score, so
+    # unlike the embedder it carries no dimension constraint and the smallest usable model wins.
+    #
+    # **Not started for local work**, and measured rather than assumed (2026-09-25, 50 figure questions of the
+    # golden set against release 2026.09):
+    #
+    #   fused order, this service stopped:  29 of 50 in the candidates, 18 of 50 in the eight, p50 257 ms
+    #   with this service running:          29 of 50 in the candidates, 16 of 50 in the eight, p50 8.9 s
+    #
+    # On a processor the cross-encoder is both slower and slightly worse than the order it is meant to improve,
+    # because it judges each section by its first RERANK_DOCUMENT_CHARACTERS and the figure a question asks about
+    # is usually deeper in. `docker compose up db gateway embeddings` is therefore the local stack: the gateway
+    # cannot reach this service, `rerank` raises, and retrieval keeps the fused order, which is the documented
+    # degradation (feature-specs/12 § 7.2, D8) and not a failure. Start it to exercise the re-rank path itself;
+    # a service or a GPU host is what makes it both fast and an improvement.
+    image: michaelf34/infinity:0.0.77-cpu@sha256:94db836145f609c508f3f296f3b9bd0e78ae088025e879664d073dfd9f929e96
+    command:
+      - v2
+      - --model-id=BAAI/bge-reranker-base
+      - --revision=2cfc18c9415c912f9d8155881c133215df768a70
+      - --served-model-name=BAAI/bge-reranker-base
+      - --engine=torch
+      - --device=cpu
+      # Documents reach it already cut to RERANK_DOCUMENT_CHARACTERS, so the square term is bounded and 8 fit.
+      - --batch-size=8
+      - --model-warmup
+      - --port=7998
+      - --api-key=${INFINITY_API_KEY:?INFINITY_API_KEY is unset in .env (see .env.example)}
+    environment:
+      HF_HOME: /cache
+    mem_limit: 2g
+    # `default` for the first start's download alone, as on `embeddings` above.
+    networks: [default, hb-internal]
+    volumes:
+      - hb-model-cache:/cache
+  workers:
+    # The workers process (feature-specs/11 § 7.1): the only container that calls the gateway. It publishes no
+    # port and sits on `hb-internal` alone, which has no route off this host; the web container reaches it there
+    # with the bearer WORKERS_TOKEN. Image: infra/workers/Dockerfile (the tracker's first-party-containers
+    # question, option A). It holds GATEWAY_KEY_SECRET and LITELLM_MASTER_KEY; the individual caps of § 8 (D5)
+    # are owed, so an individual key is refused until they are set.
+    build:
+      context: .
+      dockerfile: infra/workers/Dockerfile
+    environment:
+      # The two services above at their compose addresses; the project .env holds the host's own (localhost) forms,
+      # which this container cannot reach: `hb-internal` has no route off it.
+      DATABASE_URL: postgresql://hb:hb@db:5432/harness_bible
+      GATEWAY_URL: http://gateway:4000
+      WORKERS_URL: http://workers:4002
+      WORKERS_TOKEN: ${WORKERS_TOKEN:?WORKERS_TOKEN is unset in .env (see .env.example)}
+      GATEWAY_KEY_SECRET: ${GATEWAY_KEY_SECRET:?GATEWAY_KEY_SECRET is unset in .env (see .env.example)}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?LITELLM_MASTER_KEY is unset in .env (see .env.example)}
+      # The workflow engine by its compose name (feature-specs/28 § 4): this container is also its worker, polling
+      # both task queues. The namespace is the one the `temporal-namespace` step registered.
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-harness-bible}
+    networks: [hb-internal]
+    depends_on:
+      db:
+        condition: service_started
+      gateway:
+        condition: service_started
+      temporal-namespace:
+        condition: service_completed_successfully
+  # ---- The workflow engine (feature-specs/28 § 3; architecture § 1, § 2.1): Temporal, self-hosted, its history in
+  # two databases of its own in the `db` server. Three services, two of which run once: the schema, the server, the
+  # namespace. `docker compose up -d temporal-namespace` brings up all three in order. Improve's and the researcher's
+  # workflows run on it (unit 45 onwards); the reader and the assistant need none of it.
+  #
+  # Temporal's own published arrangement (temporalio/samples-server, compose/docker-compose-postgres.yml), read on
+  # 2026-10-05: the image that set up its own schema stopped at 1.29, and from 1.30 the schema is a step of the admin
+  # image. Server and admin tools are pinned to one version and by digest; a new pin is a reviewed change to both lines.
+  temporal-schema:
+    # Runs once and exits: creates `temporal` (history) and `temporal_visibility` in the `db` server and brings their
+    # schema to this version's. Run again on a server that has them, it changes nothing, so it is safe on a database
+    # that already holds data, which the database's own init scripts are not. The script is inline, as observe-init's
+    # is: a mounted .sh is checked out with CRLF endings on Windows and would not run.
+    image: temporalio/admin-tools:1.31.3@sha256:76a70ead160808b54acdbc98944dfc07990d9637dda999118a2d9ee1f58b9bc9
+    environment:
+      SQL_PASSWORD: hb
+    entrypoint:
+      - sh
+      - -c
+      - |
+        set -eu
+        until nc -z -w 5 db 5432; do sleep 1; done
+        for target in "temporal temporal" "temporal_visibility visibility"; do
+          set -- $$target
+          temporal-sql-tool --plugin postgres12 --ep db -p 5432 -u hb --db "$$1" create
+          temporal-sql-tool --plugin postgres12 --ep db -p 5432 -u hb --db "$$1" setup-schema -v 0.0
+          temporal-sql-tool --plugin postgres12 --ep db -p 5432 -u hb --db "$$1" update-schema -d "/etc/temporal/schema/postgresql/v12/$$2/versioned"
+        done
+        echo "temporal schema is ready"
+    networks: [hb-internal]
+    restart: "no"
+    depends_on:
+      - db
+  temporal:
+    # The server: frontend, history, matching and its own internal worker in one process. It builds its configuration
+    # from this environment alone (the image carries no config file). No authorizer: on this machine the engine is
+    # reachable from the loopback and the internal network only, and says so explicitly rather than by default; a
+    # deployment's mTLS is its own configuration (feature-specs/28 § 8).
+    image: temporalio/server:1.31.3@sha256:b4a78d2186e558aa3502be08d576086c3a82fccdf6184cb4c819eb27bea7bd63
+    environment:
+      DB: postgres12
+      DB_PORT: "5432"
+      POSTGRES_SEEDS: db
+      POSTGRES_USER: hb
+      POSTGRES_PWD: hb
+      BIND_ON_IP: 0.0.0.0
+      DYNAMIC_CONFIG_FILE_PATH: config/dynamicconfig/hb.yaml
+      TEMPORAL_ALLOW_NO_AUTH: "true"
+    # Published on the loopback interface alone, as the gateway is: whoever reaches this port can start, signal and
+    # read workflows. The app and the workers on the host dial 127.0.0.1:7233; a container dials temporal:7233.
+    ports:
+      - "127.0.0.1:7233:7233"
+    networks: [default, hb-internal]
+    volumes:
+      - ./infra/temporal/dynamicconfig.yaml:/etc/temporal/config/dynamicconfig/hb.yaml:ro
+    # The probe and its numbers are the published arrangement's.
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "7233"]
+      interval: 5s
+      timeout: 3s
+      start_period: 30s
+      retries: 60
+    depends_on:
+      temporal-schema:
+        condition: service_completed_successfully
+  temporal-namespace:
+    # Runs once and exits: registers the deployment's namespace when the server is healthy. Run again, it finds the
+    # namespace and changes nothing. The waits (30 attempts, 5 s apart) are the published arrangement's.
+    image: temporalio/admin-tools:1.31.3@sha256:76a70ead160808b54acdbc98944dfc07990d9637dda999118a2d9ee1f58b9bc9
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      # From the project .env, the same variable the app and the workers read (lib/env.ts).
+      TEMPORAL_NAMESPACE: ${TEMPORAL_NAMESPACE:-harness-bible}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        set -eu
+        attempt=0
+        until temporal operator cluster health >/dev/null 2>&1; do
+          attempt=$$((attempt + 1))
+          if [ "$$attempt" -ge 30 ]; then echo "the server did not become healthy"; exit 1; fi
+          sleep 5
+        done
+        if temporal operator namespace describe -n "$$TEMPORAL_NAMESPACE" >/dev/null 2>&1; then
+          echo "namespace $$TEMPORAL_NAMESPACE exists"
+        else
+          temporal operator namespace create -n "$$TEMPORAL_NAMESPACE"
+          echo "namespace $$TEMPORAL_NAMESPACE created"
+        fi
+    networks: [hb-internal]
+    restart: "no"
+    depends_on:
+      temporal:
+        condition: service_healthy
+  temporal-ui:
+    # Temporal's own web UI, off by default: `docker compose --profile workflows-ui up -d temporal-ui`, then
+    # http://localhost:8233. It shows workflow histories, which hold ids, enumerations and hashes and never a
+    # person's words (feature-specs/28 § 5.3). Its news fetch and version notice are off: nothing of it leaves the machine.
+    profiles: ["workflows-ui"]
+    image: temporalio/ui:2.55.0@sha256:3899d5cf749b5555c9f798d46f2423b1d6190ea391ca713db5d1bba961759e58
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_DEFAULT_NAMESPACE: ${TEMPORAL_NAMESPACE:-harness-bible}
+      TEMPORAL_DISABLE_NEWS_FETCH: "true"
+      TEMPORAL_NOTIFY_ON_NEW_VERSION: "false"
+    ports:
+      - "127.0.0.1:8233:8080"
+    networks: [default, hb-internal]
+    depends_on:
+      temporal:
+        condition: service_healthy
+  # ---- The observability stack (feature-specs/21 § 5.2). Off by default: `docker compose --profile observe up -d`.
+  # Four services and one that runs once. Nothing here is needed to develop or to test: without
+  # OTEL_EXPORTER_OTLP_ENDPOINT the product exports nothing (D3). Every image is pinned by digest, the tag beside it
+  # naming the version that digest was on 2026-10-04; each of the three vendors' usage reports is switched off, so
+  # nothing of the stack leaves the machine (architecture § 1) but what the collector sends to Langfuse, and that only
+  # once infra/observability/.env names an endpoint and an environment (feature-specs/49 § 5.5). The published ports
+  # are on the loopback alone.
+  otel-collector:
+    # The one address telemetry is sent to: OTLP/HTTP on 4318 for spans, and the product's JSON lines from files; and
+    # the one road to Langfuse (feature-specs/49 § 2, § 5.5).
+    profiles: ["observe"]
+    image: otel/opentelemetry-collector-contrib:0.161.0@sha256:fd328de2552466ad78385e1b1289c3f2402b1c45f265b252aab1955b42845ac1
+    command: ["--config", "/etc/otelcol-contrib/config.yaml"]
+    # The five Langfuse variables (feature-specs/49 § 4): the project's two keys, its OTLP endpoint, the environment
+    # label and the collector's half of the text switch. Andre writes the file from infra/observability/.env.example;
+    # nothing here sets any of them, so each is a separate act, and without the file nothing goes to Langfuse.
+    env_file:
+      - path: ./infra/observability/.env
+        required: false
+    ports:
+      - "127.0.0.1:4318:4318"
+    # `default` is its road off the machine, to Langfuse, and where the gateway reaches it; `hb-internal` is where the
+    # compose `workers` container reaches it, as it reaches the gateway.
+    networks: [default, hb-internal]
+    volumes:
+      - ./infra/observability/otel-collector.yaml:/etc/otelcol-contrib/config.yaml:ro
+      # Where the lines are: the directory the scheduled jobs append to (infra/schedules: /var/log/hb on a host,
+      # %LOCALAPPDATA%\harness-bible\logs for the Windows tasks). HB_LOG_DIR names it; the default is a folder
+      # of this checkout, git-ignored.
+      - ${HB_LOG_DIR:-./var/log/hb}:/var/log/hb:ro
+    tmpfs:
+      # The file receiver's bookmarks. In memory: they outlive a restart of the process, not of the container,
+      # and a new container reads from the end of each file, which is the safe side (otel-collector.yaml).
+      # Owned by the image's own user (10001): the default mount is root's, and the receiver then cannot start.
+      - /var/lib/otelcol:uid=10001,gid=10001,mode=0700
+    depends_on:
+      - tempo
+      - loki
+  tempo:
+    # Traces. No published port: the collector writes to it and Grafana reads from it, by service name.
+    profiles: ["observe"]
+    image: grafana/tempo:3.0.0@sha256:1ce31d6d7ffab62189685e8c47881d4a561c5d38bd0dbd66e40ca83cef07923d
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./infra/observability/tempo.yaml:/etc/tempo.yaml:ro
+  loki:
+    # The product's lines. No published port, as above.
+    profiles: ["observe"]
+    image: grafana/loki:3.7.8@sha256:1107dd5274e0ada47e42472b7a7e71f3b2a2fe878878108f3e2f9e51528f0193
+    command: ["-config.file=/etc/loki/hb.yaml"]
+    volumes:
+      - ./infra/observability/loki.yaml:/etc/loki/hb.yaml:ro
+  observe-init:
+    # Runs once and exits: creates the dashboard's read-only role in the application database and sets its password
+    # (infra/observability/init.sql). The database's own init scripts run only on an empty volume, and this one must
+    # be applicable to a database that already has data.
+    profiles: ["observe"]
+    image: pgvector/pgvector:pg17
+    environment:
+      PGPASSWORD: hb
+      HB_METRICS_PASSWORD: ${HB_METRICS_PASSWORD:-hb_metrics}
+    entrypoint:
+      - sh
+      - -c
+      - |
+        until pg_isready -h db -U hb -d harness_bible -q; do sleep 1; done
+        psql -h db -U hb -d harness_bible -v ON_ERROR_STOP=1 -q -f /init.sql
+        echo "ALTER ROLE hb_metrics PASSWORD :'password';" | psql -h db -U hb -d harness_bible -v ON_ERROR_STOP=1 -q -v password="$$HB_METRICS_PASSWORD"
+        echo "hb_metrics is ready"
+    volumes:
+      - ./infra/observability/init.sql:/init.sql:ro
+    restart: "no"
+    depends_on:
+      - db
+  grafana:
+    # Dashboards over three provisioned sources: the application database through hb_metrics, Tempo and Loki
+    # (infra/observability/grafana/provisioning). http://localhost:3001; the admin password is GRAFANA_ADMIN_PASSWORD.
+    profiles: ["observe"]
+    image: grafana/grafana:13.2.3@sha256:b28bae15e219c998fb0e0424ed724930cc61b1f61fb404d47c862f9a23f9e572
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      # The PostgreSQL source's password, read by the provisioning file; the development default is the role's own.
+      HB_METRICS_PASSWORD: ${HB_METRICS_PASSWORD:-hb_metrics}
+      # Nothing leaves the machine: no usage report, no update checks, no news feed.
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+    ports:
+      - "127.0.0.1:3001:3000"
+    volumes:
+      # Each provisioning folder on its own, so the image's other, empty ones stay where Grafana looks for them.
+      - ./infra/observability/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./infra/observability/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./infra/observability/grafana/provisioning/alerting:/etc/grafana/provisioning/alerting:ro
+      # The assistant dashboard, generated from lib/metrics/sql (npm run observe:generate); its alert rules are
+      # under provisioning/alerting, generated by the same command.
+      - ./infra/observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      observe-init:
+        condition: service_completed_successfully
+      tempo:
+        condition: service_started
+      loki:
+        condition: service_started
+networks:
+  # No route off the host (`internal`): the workers reach the database and the gateway by service name and
+  # nothing else. Both of those keep the default network too, where their loopback publications and the
+  # gateway's own route to the provider live.
+  hb-internal:
+    internal: true
+volumes:
+  hb-pgdata-17: {}
+  # The model weights (a few GB), so a restart does not download them again.
+  hb-model-cache: {}

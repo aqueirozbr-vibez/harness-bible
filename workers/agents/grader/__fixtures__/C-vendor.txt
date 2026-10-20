@@ -1,0 +1,7 @@
+Provider Two — Pricing
+
+Team plan: 20 requests a second, 24-hour idempotency keys on every write, replay on a repeated key at no charge.
+
+Retries are billed as requests unless the Idempotency-Key header is present.
+
+Effective 14 July 2026.

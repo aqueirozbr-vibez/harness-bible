@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, undated, at regulator.example.
+
+A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+Context: A GPU has two ceilings: how many floating-point operations it can do per second, and how many bytes it can move from memory per second.

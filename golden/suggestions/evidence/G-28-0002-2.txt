@@ -1,0 +1,5 @@
+A thread on a public forum, dated 2026-10-07, at forum.example.
+
+The passage is better put as: "In practice, this requires a model; the lab gates it behind an environment variable and prints the cost estimate."
+
+Context: This requires a model; the lab gates it behind an environment variable and prints the cost estimate.

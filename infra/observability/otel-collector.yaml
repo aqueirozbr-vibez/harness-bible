@@ -1,0 +1,202 @@
+# The collector (feature-specs/21 § 5.2; architecture § 7): the one address the product's telemetry is sent to.
+#
+# Two things come in, and they go to three places:
+#   - spans, over OTLP/HTTP on 4318, from the web tier, the workers and the scheduled jobs
+#     (OTEL_EXPORTER_OTLP_ENDPOINT; lib/telemetry/tracer.ts) and, from unit 80, the gateway's one span a model call
+#     -> Tempo (the `traces` pipeline), and -> Langfuse (the `traces/langfuse` pipeline, feature-specs/49 § 5.5);
+#   - the product's own JSON lines, read from the files under /var/log/hb -> Loki.
+#
+# Only the product's lines reach Loki. A line that is not JSON, or whose `kind` is not one the product prints, is
+# dropped here: the files may hold npm's banners or a stack trace, and nothing that was not written to be a record
+# is kept as one. The kinds are the ones the code prints (tests/observability.test.ts compares the two lists).
+#
+# The collector is the one road to Langfuse (feature-specs/49 § 2, L1): it alone holds the Langfuse keys, read from
+# infra/observability/.env (git-ignored; compose's env_file), and nothing else of the product talks to Langfuse. The
+# two traces pipelines share the receiver, which hands each pipeline its own copy, so nothing the Langfuse pipeline
+# removes or rewrites reaches Tempo. What may leave is named, not what must be removed: an attribute a later image or
+# a later span builder adds stays on this machine until a list here names it (§ 5.5). Checked three ways: the image's
+# own `validate`, tests/observability.test.ts (the file as text), and tests/observability-collector.test.ts (this file
+# run in the pinned image over recorded spans, HB_COLLECTOR_TEST=1).
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+  file_log:
+    include:
+      - /var/log/hb/*.log
+    # New lines only. A line carries no time of its own, so its time in Loki is when it was read: starting at the
+    # beginning would file last week's lines under today and tell the purge alert a job ran when it did not.
+    start_at: end
+    include_file_name: true
+    storage: file_storage
+    operators:
+      - type: json_parser
+        parse_from: body
+        on_error: drop_quiet
+      - type: filter
+        expr: 'not (attributes.kind in ["span", "model_call", "job", "policy", "retrieve", "aid_run", "answer", "research"])'
+
+extensions:
+  # Where the file receiver remembers how far it has read, so a restart of the process neither repeats nor skips.
+  file_storage:
+    directory: /var/lib/otelcol
+    create_directory: true
+  # The Langfuse project's keys, as HTTP Basic: the public key the user, the secret key the password (49 § 4, § 5.4).
+  # Unset, the extension still starts on a placeholder, and nothing is sent: filter/langfuse drops every span while
+  # the endpoint or the environment is empty. A key is never written here, only its variable's name.
+  basicauth/langfuse:
+    client_auth:
+      username: ${env:LANGFUSE_PUBLIC_KEY:-unset}
+      password: ${env:LANGFUSE_SECRET_KEY:-unset}
+
+processors:
+  batch: {}
+  # Loki turns `service.name` into the label a query starts from: {service_name="hb-lines"}.
+  resource/lines:
+    attributes:
+      - key: service.name
+        value: hb-lines
+        action: upsert
+
+  # Tempo receives no gateway span (49 § 5.5). The gateway's own span carries the key's metadata with the principal,
+  # `system` among its parameters and, for a call that failed, the request's messages (49 § 5.2, § 9.2): no span in
+  # Tempo may carry a prompt, a person or a key (21 § 5.1). The product's `gen_ai.*` span already gives Tempo the
+  # call's model, tokens, cost and timing.
+  filter/tempo:
+    error_mode: ignore
+    traces:
+      span:
+        - 'resource.attributes["service.name"] == "hb-gateway"'
+
+  # The Langfuse road, first: what never goes (49 § 5.5). A span that matches any condition is dropped; so is every
+  # span event, so an exception's message and stack trace never leave. The first three conditions read the
+  # configuration, not the span, and drop everything: nothing is sent while the endpoint or the environment is empty
+  # (an absent infra/observability/.env included), and Langfuse Cloud receives only spans labelled `development`
+  # (Andre's L1: development telemetry of test accounts may leave the region, production never; a host name ignores
+  # case, so the match does). The fourth names who may send at all: the product's three services
+  # (lib/telemetry/tracer.ts's TelemetryService) and the gateway. Any other program on this machine that speaks OTLP
+  # to 4318, an SDK's default address, would otherwise reach Langfuse with its resource, span names and status
+  # messages; it still reaches Tempo, which stays here.
+  filter/langfuse:
+    error_mode: ignore
+    traces:
+      span:
+        - '"${env:LANGFUSE_OTLP_ENDPOINT:-}" == ""'
+        - '"${env:LANGFUSE_TRACING_ENVIRONMENT:-}" == ""'
+        - 'IsMatch("${env:LANGFUSE_OTLP_ENDPOINT:-}", "(?i)cloud\\.langfuse\\.com") and "${env:LANGFUSE_TRACING_ENVIRONMENT:-}" != "development"'
+        - 'not IsMatch(resource.attributes["service.name"], "^hb-(web|workers|jobs|gateway)$$")'
+        # A request is not an agent's work, and the Research page asks for its run every 2 s.
+        - 'name == "http.request"'
+        # The scheduled jobs.
+        - 'name == "job"'
+        # The release's embedding job, about a thousand calls a release, stays in Tempo (D3): the product's span from
+        # unit 81, which names its agent, and the gateway's generation, which the same header names.
+        - 'attributes["hb.agent"] == "embed.release"'
+        - 'attributes["langfuse.generation.name"] == "embed.release"'
+        # Of the gateway's spans only the generation goes: no proxy-internal span, no raw request.
+        - 'resource.attributes["service.name"] == "hb-gateway" and attributes["langfuse.observation.type"] != "generation"'
+      spanevent:
+        - 'true'
+
+  # Every resource is cut to its name: the gateway's `deployment.environment` (`production`, the logger's default),
+  # `model_id` and the SDK's own attributes do not leave, nor the product's `service.namespace`, nor whatever a later
+  # SDK adds. The environment Langfuse shows is set below, on every span.
+  transform/langfuse-resource:
+    error_mode: ignore
+    trace_statements:
+      - 'keep_keys(resource.attributes, ["service.name"])'
+
+  # The product's spans (everything that is not the gateway's).
+  # - A span marked `hb.parent: request` hangs from a request's span, which this road drops, and Langfuse files a
+  #   trace only when its root is sent: the span becomes a root here, and only here (49 § 5.6). Tempo keeps its parent.
+  # - A model call's span reads as its agent, from unit 81 (49 § 6.2).
+  # - The keep-list is exactly PRODUCT_LANGFUSE_KEYS of lib/telemetry/langfuse.ts (a test compares the two): no
+  #   principal, no subject, no path, no `http.*`, no usage or model (the generation beneath carries them), and the
+  #   `hb.parent` mark once used.
+  transform/langfuse-app:
+    error_mode: ignore
+    trace_statements:
+      - conditions:
+          - 'resource.attributes["service.name"] != "hb-gateway"'
+        statements:
+          - 'set(span.parent_span_id, SpanID(0x0000000000000000)) where span.attributes["hb.parent"] == "request"'
+          - 'set(span.name, span.attributes["hb.agent"]) where span.attributes["hb.agent"] != nil'
+          - >-
+            keep_keys(span.attributes, [
+            "gen_ai.operation.name",
+            "hb.aid.exit_code", "hb.aid.id", "hb.aid.runner", "hb.aid.timed_out",
+            "hb.alias", "hb.candidates", "hb.citations.resolved", "hb.citations.total", "hb.code", "hb.cost_usd",
+            "hb.edition.cited", "hb.edition.locale", "hb.edition.mismatch", "hb.embed_ms", "hb.first_token_ms",
+            "hb.gateway.call_id", "hb.grounded", "hb.guide.sha256", "hb.guide.version", "hb.job", "hb.message_id",
+            "hb.mode", "hb.outcome", "hb.over_budget", "hb.policy", "hb.price_unknown", "hb.prompt.sha256", "hb.purpose",
+            "hb.refusal.cause", "hb.repaired", "hb.rerank_ms",
+            "hb.research.dropped", "hb.research.findings", "hb.research.page_reads", "hb.research.paragraphs",
+            "hb.research.proposed", "hb.research.refuted", "hb.research.run_id", "hb.research.searches",
+            "hb.secret.detected", "hb.secret.redacted", "hb.sql_ms", "hb.substituted", "hb.total_ms", "hb.vector_ready"
+            ])
+
+  # The gateway's generation (from unit 80; inert until then).
+  # - Its name is the agent's, from the `langfuse_generation_name` header (unit 81), and an embedder's call is typed so.
+  # - Its cost is where Langfuse reads a total: `gen_ai.usage.cost`, from the logger's `llm.cost.total`.
+  # - Its text goes only with the collector's half of the switch on (49 § 9.1), and never from a call that failed
+  #   (LiteLLM logs a failure unredacted, § 9.2) or from the evidence grader's PDF or image row (§ 9.3).
+  # - The keep-list is one anchored pattern of exactly these (`keep_keys` takes exact names): the observation's type
+  #   and text, the guide's version, the model, the token counts and the usage. Everything else stays: the key's
+  #   metadata with the principal, `user.id`, `session.id`, `litellm.key_alias`, `litellm.team_id`,
+  #   `llm.invocation_parameters` with `system`, the input and output duplicates, `error.*` (`$$` is the
+  #   configuration's escape of `$`, the pattern's end).
+  transform/langfuse-gateway:
+    error_mode: ignore
+    trace_statements:
+      - conditions:
+          - 'resource.attributes["service.name"] == "hb-gateway"'
+        statements:
+          - 'set(span.name, span.attributes["langfuse.generation.name"]) where span.attributes["langfuse.generation.name"] != nil'
+          - 'set(span.attributes["gen_ai.usage.cost"], span.attributes["llm.cost.total"]) where span.attributes["llm.cost.total"] != nil'
+          - 'set(span.attributes["langfuse.observation.type"], "embedding") where IsMatch(span.name, "^embed\\.")'
+          - 'delete_key(span.attributes, "langfuse.observation.input") where span.status.code == STATUS_CODE_ERROR or span.name == "evidence.grade.bytes" or "${env:LANGFUSE_MESSAGE_TEXT:-off}" != "on"'
+          - 'delete_key(span.attributes, "langfuse.observation.output") where span.status.code == STATUS_CODE_ERROR or span.name == "evidence.grade.bytes" or "${env:LANGFUSE_MESSAGE_TEXT:-off}" != "on"'
+          - 'keep_matching_keys(span.attributes, "^(langfuse\\.observation\\.(type|input|output)|langfuse\\.version|llm\\.model_name|llm\\.token_count\\..+|gen_ai\\.usage\\..+|gen_ai\\.(request|response)\\.model)$$")'
+
+  # Every span that goes is labelled with the environment named in infra/observability/.env.
+  transform/langfuse-all:
+    error_mode: ignore
+    trace_statements:
+      - 'set(span.attributes["langfuse.environment"], "${env:LANGFUSE_TRACING_ENVIRONMENT:-}")'
+
+exporters:
+  otlp_grpc/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+  otlp_http/loki:
+    endpoint: http://loki:3100/otlp
+  # Langfuse's OTLP endpoint (49 § 5.4): the region's `…/api/public/otel`, written without a trailing slash; the
+  # path of traces is added here. `traces_endpoint` and not `endpoint`: an `endpoint` that is set and empty, as a
+  # copied example leaves it, is refused at start, which would stop Tempo's and Loki's pipelines with it. Empty or
+  # unset, nothing is ever dialled, because filter/langfuse has already dropped every span. Retry and the in-memory
+  # queue are the exporter's own defaults: a 401 or another 4xx is logged with its status and not retried (49 § 11).
+  otlp_http/langfuse:
+    traces_endpoint: ${env:LANGFUSE_OTLP_ENDPOINT:-http://127.0.0.1:9}/v1/traces
+    auth:
+      authenticator: basicauth/langfuse
+    # Langfuse's current data model shows a span at once with it; without it, up to ten minutes later (49 § 5.4).
+    headers:
+      x-langfuse-ingestion-version: "4"
+
+service:
+  extensions: [file_storage, basicauth/langfuse]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [filter/tempo, batch]
+      exporters: [otlp_grpc/tempo]
+    traces/langfuse:
+      receivers: [otlp]
+      processors: [filter/langfuse, transform/langfuse-resource, transform/langfuse-app, transform/langfuse-gateway, transform/langfuse-all, batch]
+      exporters: [otlp_http/langfuse]
+    logs:
+      receivers: [file_log]
+      processors: [resource/lines, batch]
+      exporters: [otlp_http/loki]

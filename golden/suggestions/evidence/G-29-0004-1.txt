@@ -1,0 +1,5 @@
+A screenshot, with no source named, dated 2026-10-01, at screenshots.example.
+
+Audit completeness and replay time on production harnesses The source: None published.
+
+(The image shows a table cell with the value, cropped; nothing names where it was taken from.)

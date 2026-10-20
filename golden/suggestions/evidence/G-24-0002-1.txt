@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-06-12, at press.example.
+
+In passing: A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+Context: Anthropic's memory-tool documentation and Managed Agents' memory feature describe a model-writable directory and a background filing pass and stop at the product.

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Design rationale</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" data-theme="light" style="width: 1440px; height: 1840px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <!-- document header -->
+  <header class="rb-s" style="padding: 24px 48px 22px; display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 56px; align-items: start;">
+    <div class="col" style="gap: 8px;">
+      <span class="cap">harness bible interactive · design rationale · one page</span>
+      <h1 class="h1">Rationale</h1>
+      <span class="meta">rationale v0.9.0 · PRD 2026-09-21 · hb.css v0.9.0 · release 2026.09 · sha 7f3a9c1e</span>
+      <p class="prose" style="margin-top: 10px; max-width: 720px;">The product is built on its own harness, so the interface shows the harness. Every screen names its version, its sources and its verdicts. A reader should trust a number exactly as far as its evidence goes, and no further.</p>
+    </div>
+    <section class="inst" aria-label="What we sampled">
+      <div class="inst-h"><span class="t">What we sampled</span><span class="sep">·</span><span>reference site</span><span class="ts">21 Sep 2026</span></div>
+      <div class="inst-b col" style="gap: 10px;">
+        <p class="small">The reference site, typesafe.ai, could not be sampled for exact tokens. Its CSS is not exposed in the fetched page. The palette and type are chosen defaults per the brief.</p>
+        <dl class="kv" style="margin: 0;">
+          <dt>ground</dt><dd>near-black ink on lab-paper off-white</dd>
+          <dt>warm accent</dt><dd><span style="color: var(--act);">■</span> actions only</dd>
+          <dt>cool accent</dt><dd><span style="color: var(--ver);">■</span> verification only</dd>
+          <dt>type</dt><dd>IBM Plex Sans · IBM Plex Mono</dd>
+        </dl>
+      </div>
+      <div class="inst-f"><span>tokens are ours, not sampled</span><span class="tex" style="margin-left: auto;">source · brief</span></div>
+    </section>
+  </header>
+
+  <main style="padding: 20px 48px 24px; display: flex; flex-direction: column; gap: 10px;">
+    <div class="between">
+      <span class="cap">decision map · 18 decisions · each traced to a PRD requirement and a chapter of the book</span>
+      <span class="cap">quotes abridged · section names as in the PRD</span>
+    </div>
+
+    <table class="tbl" style="font-size: 12.5px; line-height: 18px; table-layout: fixed;">
+      <colgroup>
+        <col style="width: 44px;">
+        <col style="width: 196px;">
+        <col style="width: 330px;">
+        <col style="width: 530px;">
+        <col style="width: 244px;">
+      </colgroup>
+      <thead>
+        <tr><th>#</th><th>decision</th><th>what it looks like</th><th>prd requirement served</th><th>book chapter</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="meta">01</td>
+          <td><b>The Book is the spine</b></td>
+          <td><span class="meta">ch21 · 21.3 · v1.5.0</span><br><span class="muted">Assistant, Labs and Improve open as side panels from a chapter, never as separate apps.</span></td>
+          <td>“Four capabilities, one content model, one audit trail.”<br><span class="meta faint">Summary · Capabilities 1–4</span></td>
+          <td><a class="xref" href="#">ch20</a> Retrieval<br><span class="muted">Chapter version as the currency filter.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">02</td>
+          <td><b>Instrument panels</b></td>
+          <td><span class="label">Chapter 21</span> <span class="meta">· v1.5.0 · verified 12 Sep 2026</span><br><span class="muted">Label, version, timestamp. Render hash in the footer.</span></td>
+          <td>“Each chapter shows its version, last verification date, VERIFY/REDTEAM status.” “Rendered content matches the pinned Git release by hash.”<br><span class="meta faint">Capability 1 · NFR Content integrity</span></td>
+          <td><a class="xref" href="#">ch29</a> Observability and audit<br><span class="muted">Every artefact carries version and hash.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">03</td>
+          <td><b>Seven source-tier chips and derive chips</b></td>
+          <td><span class="chip t-pri"><i>pri</i> primary</span> <span class="chip t-ven"><i>ven</i> vendor</span> <span class="derive">ƒ L38</span><br><span class="muted">Shape encodes the tier, not colour alone.</span></td>
+          <td>“Every derived number links to the line in its derive.py that produced it; every cited figure links to its source row.”<br><span class="meta faint">Capability 1 · Navigable content</span></td>
+          <td>N.9 Sources · <a class="xref" href="#">ch26</a><br><span class="muted">Citation checks as sensors.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">04</td>
+          <td><b>Illustrative marking</b></td>
+          <td><span class="fig-ill">0.4% per step</span> <span class="chip t-ill"><i>ill</i> illustrative</span><br><span class="muted">Ochre tint, dotted rule, always spelled out.</span></td>
+          <td>“Every illustrative figure is visibly labelled.” “Every figure is derived, cited, or labelled illustrative.”<br><span class="meta faint">Capability 1 · Problem and goals</span></td>
+          <td><a class="xref" href="#">ch13</a> Failure science<br><span class="muted">An unlabelled assumption reads as fact.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">05</td>
+          <td><b>Peek panel for cross-references</b></td>
+          <td><a class="xref" href="#">26.3</a> <span class="meta">→ peek · v1.4.2 · </span><span class="kbd">esc</span><br><span class="muted">The target opens beside the text; the reader keeps their place.</span></td>
+          <td>“Every cross-reference (ch12, 26.3, Lab 21) is a link that opens the target in place or in a side panel.”<br><span class="meta faint">Capability 1 · Navigable content</span></td>
+          <td><a class="xref" href="#">ch19</a> Context engineering<br><span class="muted">Protect the working context.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">06</td>
+          <td><b>Mono and sans split</b></td>
+          <td><span class="meta">F-23-06 · 2.4× · sha 7f3a9c1e</span><br><span class="muted">Mono for ids, numbers, versions and hashes. Sans for prose and controls.</span></td>
+          <td>“Numbers in answers are copied from the chapter text or the derive script, never recomputed or estimated.”<br><span class="meta faint">Capability 2 · Assistant</span></td>
+          <td><a class="xref" href="#">ch26</a> Sensors<br><span class="muted">Mono marks what a sensor can check.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">07</td>
+          <td><b>Lab verdict as the one big element, then the diff</b></td>
+          <td><span class="st-block sb-fail">not reproduced</span> <span class="meta">2.4× → 1.7×</span><br><span class="muted">Verdict first. Match, diverge and new rows below it.</span></td>
+          <td>“The output pane shows the lab's REPRODUCED / NOT REPRODUCED verdict and a diff of each derived figure against the chapter's stated value.”<br><span class="meta faint">Capability 3 · Browser IDE</span></td>
+          <td><a class="xref" href="#">ch27</a> Graders<br><span class="muted">Regression gate in CI.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">08</td>
+          <td><b>Sandbox status bar</b></td>
+          <td><span class="meta">egress deny · caps · budget 73.6%</span><br><span class="muted">Always visible in the IDE. Kills and denials are stated, not hidden.</span></td>
+          <td>“Egress default-deny.” “Resource caps per session.” “The cap is enforced at the gateway (ch23), not by discipline.”<br><span class="meta faint">Capability 3 · NFR Security, Cost control</span></td>
+          <td><a class="xref" href="#">ch25</a> Tools · <a class="xref" href="#">ch23</a> Gateways<br><span class="muted">Limits live outside the code.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">09</td>
+          <td><b>Citation chips and “not covered”</b></td>
+          <td><span class="cite">ch21 · 21.3</span> <span class="nocover">the book does not cover this</span><br><span class="muted">One chip per claim.</span></td>
+          <td>“Every answer cites chapter and section for each claim; a claim with no citation is replaced by ‘the book does not cover this’.”<br><span class="meta faint">Capability 2 · Assistant</span></td>
+          <td><a class="xref" href="#">ch20</a> Retrieval · <a class="xref" href="#">ch26</a><br><span class="muted">Citation by section id, then checked.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">10</td>
+          <td><b>Refusal as a first-class state</b></td>
+          <td><span class="st st-mute">outside the book</span><br><span class="muted">A full panel: the reason, and the chapter's measurement protocol to use instead.</span></td>
+          <td>“Outside scope the assistant says so and points to the chapter's measurement protocol.” “No advice on operating control systems.”<br><span class="meta faint">Capability 2 · Assistant</span></td>
+          <td><a class="xref" href="#">ch13</a> Refusal · <a class="xref" href="#">ch35</a> OT/IT<br><span class="muted">What an agent must never touch.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">11</td>
+          <td><b>Evidence badges and live score</b></td>
+          <td><span class="row" style="gap: 6px;"><span class="ev ev-b">B</span><span class="ev ev-c">C</span><span class="ev ev-g">G</span><span class="ev ev-u">U</span><span class="meta">score 66 / 70</span></span><span class="muted">The score updates as each item is graded.</span></td>
+          <td>“The suggestion's score is the strongest item's adjusted score, not the sum, so ten weak items never equal one strong one.”<br><span class="meta faint">Evidence grading rubric · v1.2</span></td>
+          <td><a class="xref" href="#">ch27</a> Graders<br><span class="muted">Fixed rubric, reason per criterion.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">12</td>
+          <td><b>“Request more” names a tier</b></td>
+          <td><span class="st-block sb-warn">request more</span> <span class="meta">tier D ≤ 90 d, or B</span><br><span class="muted">The contributor sees what would suffice.</span></td>
+          <td>“Request more (score between floor and threshold — names the tier of evidence that would suffice).”<br><span class="meta faint">Capability 4 · Agentic wiki improvement</span></td>
+          <td><a class="xref" href="#">ch31</a> · <a class="xref" href="#">ch22</a> Repair<br><span class="muted">Reasons feed the next attempt.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">13</td>
+          <td><b>Hash-chained timeline</b></td>
+          <td><span class="hash">prev e93f27a1d05b · hash 2c68f0b9e417</span><br><span class="muted">Each record shows its hash and its predecessor's.</span></td>
+          <td>“Every adjudication, override, merge, and assistant answer is a chained record exportable per account and per chapter.”<br><span class="meta faint">NFR Auditability · Capability 4</span></td>
+          <td><a class="xref" href="#">ch29</a> Observability and audit<br><span class="muted">Hash-chained logs, replay.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">14</td>
+          <td><b>Curator queue with seeded items and override-rate meter</b></td>
+          <td><span class="row" style="gap: 8px;"><span class="meter fail" style="width: 120px; display: block; flex: none;"><i style="width: 71.3%;"></i><span class="mark" style="left: 66.7%;"></span></span><span class="meta">independence 21.4%</span></span><span class="muted">Seeded items are not flagged to the curator.</span></td>
+          <td>“Routed by change class; seeded items; override rate.” “A criterion above 20% triggers a rubric review.”<br><span class="meta faint">Architecture · Leading indicators</span></td>
+          <td><a class="xref" href="#">ch31</a> Human-in-the-loop · <a class="xref" href="#">ch32</a><br><span class="muted">Overrides as calibration.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">15</td>
+          <td><b>No leaderboards, no time on page</b></td>
+          <td><span class="meta">accepted 4 · tiers B C C D</span><br><span class="muted">Contributor pages show changes and evidence. No ranks, streaks or timers.</span></td>
+          <td>“What is not measured: time on page, messages per session, suggestions per contributor as a leaderboard — each rewards volume over evidence.”<br><span class="meta faint">Metrics and success criteria</span></td>
+          <td><a class="xref" href="#">ch08</a> Reward hacking · <a class="xref" href="#">ch37</a><br><span class="muted">Measure outcomes, not activity.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">16</td>
+          <td><b>PT/EN parity and a 30% string budget</b></td>
+          <td><span class="meta">Save run · Salvar execução</span><br><span class="muted">Labels wrap, never truncate. Columns are sized for the PT string.</span></td>
+          <td>“Portuguese and English at parity for content, assistant, and UI; figures identical across editions.”<br><span class="meta faint">NFR Languages · Capability 1</span></td>
+          <td><a class="xref" href="#">ch01</a> Tokens<br><span class="muted">Per-language cost; PT runs longer.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">17</td>
+          <td><b>WCAG 2.2 AA tokens and a keyboard map</b></td>
+          <td><span class="row" style="gap: 4px;"><span class="kbd">j</span><span class="kbd">k</span><span class="kbd">g</span><span class="kbd">l</span><span class="kbd">a</span><span class="kbd">/</span><span class="meta">text ≥ 5.1 : 1</span></span><span class="muted">Both themes pass. State is never colour alone.</span></td>
+          <td>“WCAG 2.2 AA; keyboard navigation; screen-reader labels on figures and code.” “Keyboard shortcuts.”<br><span class="meta faint">NFR Accessibility · Capability 1</span></td>
+          <td><a class="xref" href="#">ch26</a> Sensors<br><span class="muted">Contrast is a check, not a taste.</span></td>
+        </tr>
+        <tr>
+          <td class="meta">18</td>
+          <td><b>No gradients, shadows or cards</b></td>
+          <td><span class="meta">radius 0 · 1 px rules · fill = state</span><br><span class="muted">Fill appears only where a state needs it.</span></td>
+          <td>“The Bible's claims are runnable and verifiable, but a PDF hides both.” The chrome must not hide them either.<br><span class="meta faint">Problem and goals</span></td>
+          <td><a class="xref" href="#">ch13</a> Calibration<br><span class="muted">Show no more confidence than the evidence.</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </main>
+
+  <footer class="statusbar" style="margin-top: auto;">
+    <span>rationale · 18 decisions</span>
+    <span>PRD 2026-09-21 · 15 pages</span>
+    <span>theme light</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);">release 2026.09 · sha 7f3a9c1e</span>
+  </footer>
+</div>
+
+
+</body>
+</html>

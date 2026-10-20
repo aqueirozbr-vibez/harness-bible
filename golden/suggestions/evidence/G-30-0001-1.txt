@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+The passage is better put as: "The vendors' answer remains a demo in which a coordinator dispatches specialists and a swarm produces a report."
+
+Context: The vendors' answer is a demo in which a coordinator dispatches specialists and a swarm produces a report.

@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-10-07, at press.example.
+
+The lab's run derives 1 for figure.
+
+Context: figure · 0

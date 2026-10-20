@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-08-31, at press.example.
+
+The passage is better put as: "The arithmetic remains the change's expected value against the golden set's power to see it."
+
+Context: The arithmetic is the change's expected value against the golden set's power to see it.

@@ -1,0 +1,65 @@
+name: Feature request
+description: Propose a change in what the app does. Behaviour is specified before it is built.
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Behaviour changes start here, then become a spec (new or amended) in `context/feature-specs/` before any code. See CONTRIBUTING.md.
+        A change to the book's content goes to the book's repository, or through Improve in the app.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Reader
+        - Search
+        - Assistant
+        - Research
+        - Improve
+        - Curator queue
+        - Ledger or audit
+        - Book management or account
+        - Labs IDE (not built yet)
+        - Policies (OPA)
+        - Workers, workflows or agents
+        - Content pipeline
+        - Gateway or budgets
+        - Observability
+        - Developer experience or documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: Who is it for, and what can they not do today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you propose
+      description: The behaviour, the screens or endpoints it touches, and how you would know it works.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: textarea
+    id: invariants
+    attributes:
+      label: Invariants and costs
+      description: |
+        Does it touch an invariant in context/architecture.md § 11, a model call, a budget, identity or the ledger?
+        Does it need a number (a limit, a threshold, a price) that no spec gives yet? Say which.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues and the feature specs.
+          required: true

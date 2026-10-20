@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+The usual order of a rule and its exception is the rule first.
+
+Context: Method: for each question, length, and position, build the context, ask, score deterministically; three runs per cell.

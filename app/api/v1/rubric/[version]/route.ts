@@ -1,0 +1,5 @@
+import { rubricByVersion } from "@/lib/api/endpoints/rubric";
+import { handler } from "@/lib/api/handler";
+
+/* Built by the one pipeline (feature-specs/09 § 7); the spec lives in lib/api/endpoints. `current` has its own folder, which Next matches first. */
+export const GET = handler(rubricByVersion);

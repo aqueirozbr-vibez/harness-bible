@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-08-31, at vendor.example.
+
+raised gpt-4 s humaneval pass@1 from is 81 %, the earlier 80% having been revised.
+
+Context: raised gpt-4 s humaneval pass@1 from · 80%

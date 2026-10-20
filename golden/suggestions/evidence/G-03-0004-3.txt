@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, undated, at regulator.example.
+
+Pre-norm stabilizes deep transformers The source: Xiong et al., ICML 2020, arXiv 2002.04745.
+
+Context: Pre-norm stabilizes deep transformers — Xiong et al., ICML 2020, arXiv 2002.04745

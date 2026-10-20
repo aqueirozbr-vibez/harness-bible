@@ -1,0 +1,231 @@
+/* Harness Bible Interactive — hb.css · tokens + components · v0.9.0
+   Scope: every rule lives under .hb so artboards stay self-contained.
+   Theme: <div class="hb" data-theme="light|dark">. Radii 0. Elevation none. */
+
+.hb{
+  /* colour — light (lab paper) */
+  --bg:#F1F1EC; --bg-2:#E7E8E1; --bg-3:#DCDDD4; --surface:#F7F7F3;
+  --ink:#141512; --ink-2:#44463F; --ink-3:#5F6158;
+  --rule:#C9CAC0; --rule-2:#A9ABA0; --rule-strong:#141512;
+  --act:#A34E00; --act-hover:#833E00; --on-act:#FFFFFF; --act-bg:#F2E3D2;
+  --ver:#0E5C70; --ver-bg:#D9E7EA;
+  --fail:#A3261C; --fail-bg:#F3DDD8;
+  --warn:#7A5800; --warn-bg:#EFE3C2;
+  --code-bg:#E9EAE3; --sel:#CFE0E4; --focus:#0E5C70;
+  /* type */
+  --sans:"IBM Plex Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  /* spacing — 4px base */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+  background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:14px; line-height:1.45;
+  box-sizing:border-box; -webkit-font-smoothing:antialiased; font-feature-settings:"ss02";
+}
+.hb[data-theme="dark"]{
+  --bg:#111210; --bg-2:#191A17; --bg-3:#23241F; --surface:#161714;
+  --ink:#E9E9E2; --ink-2:#BDBEB4; --ink-3:#92948A;
+  --rule:#34362F; --rule-2:#4A4C44; --rule-strong:#E9E9E2;
+  --act:#F0913F; --act-hover:#F5A763; --on-act:#111210; --act-bg:#2B1C0E;
+  --ver:#6CBFD3; --ver-bg:#12262C;
+  --fail:#F2735F; --fail-bg:#2C1512;
+  --warn:#E2B84A; --warn-bg:#272010;
+  --code-bg:#191A17; --sel:#1E3A42; --focus:#6CBFD3;
+}
+.hb *,.hb *::before,.hb *::after{box-sizing:border-box}
+.hb h1,.hb h2,.hb h3,.hb h4,.hb p,.hb ul,.hb ol,.hb figure,.hb pre{margin:0}
+.hb ul,.hb ol{padding:0;list-style:none}
+.hb a{color:inherit;text-decoration:none}
+.hb button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+.hb :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.hb .num,.hb td.n,.hb th.n{font-variant-numeric:tabular-nums}
+
+/* ── type ───────────────────────────────────────────── */
+.hb .mono{font-family:var(--mono)}
+.hb .cap{font-family:var(--mono);font-size:12px;line-height:16px;color:var(--ink-3);letter-spacing:.01em;text-transform:lowercase}
+.hb .meta{font-family:var(--mono);font-size:12px;line-height:16px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.hb .label{font-family:var(--mono);font-size:11px;line-height:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.hb .tex{font-family:var(--mono);font-size:11px;color:var(--ink-3);opacity:.8;letter-spacing:.02em} /* chrome texture: hashes, ids */
+.hb .h-display{font-size:56px;line-height:60px;font-weight:400;letter-spacing:-.02em;text-wrap:balance}
+.hb .h1{font-size:40px;line-height:46px;font-weight:500;letter-spacing:-.015em;text-wrap:balance}
+.hb .h2{font-size:28px;line-height:34px;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+.hb .h3{font-size:20px;line-height:26px;font-weight:600}
+.hb .h4{font-size:16px;line-height:22px;font-weight:600}
+.hb .prose{font-size:17px;line-height:28px;color:var(--ink);max-width:680px}
+.hb .prose p+p{margin-top:16px}
+.hb .ui{font-size:14px;line-height:20px}
+.hb .small{font-size:13px;line-height:18px}
+.hb .muted{color:var(--ink-2)}
+.hb .faint{color:var(--ink-3)}
+.hb .bignum{font-family:var(--mono);font-size:88px;line-height:88px;font-weight:400;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.hb .midnum{font-family:var(--mono);font-size:40px;line-height:44px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.hb .glyph{font-family:var(--mono);color:var(--act)} /* ✢ taxonomy marker */
+
+/* ── rules & structure ─────────────────────────────── */
+.hb .rt{border-top:1px solid var(--rule)} .hb .rb{border-bottom:1px solid var(--rule)}
+.hb .rl{border-left:1px solid var(--rule)} .hb .rr{border-right:1px solid var(--rule)}
+.hb .rt-s{border-top:1.5px solid var(--rule-strong)} .hb .rb-s{border-bottom:1.5px solid var(--rule-strong)}
+.hb .box{border:1px solid var(--rule)}
+.hb .box-s{border:1px solid var(--rule-strong)}
+.hb .band{background:var(--bg-2)}
+.hb .row{display:flex;align-items:center;gap:8px}
+.hb .col{display:flex;flex-direction:column}
+.hb .grow{flex:1 1 auto;min-width:0}
+.hb .between{display:flex;align-items:center;justify-content:space-between;gap:12px}
+
+/* ── app chrome ────────────────────────────────────── */
+.hb .topbar{height:48px;display:flex;align-items:stretch;border-bottom:1px solid var(--rule-strong);background:var(--bg)}
+.hb .brand{display:flex;align-items:center;gap:10px;padding:0 20px;border-right:1px solid var(--rule);font-family:var(--mono);font-size:13px;font-weight:500;white-space:nowrap}
+.hb .brand b{font-weight:600}
+.hb .nav{display:flex;align-items:stretch}
+.hb .nav a{display:flex;align-items:center;padding:0 18px;font-size:14px;color:var(--ink-2);border-right:1px solid var(--rule);min-height:44px}
+.hb .nav a[aria-current]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--ink);font-weight:500}
+.hb .statusbar{height:28px;display:flex;align-items:center;gap:0;border-top:1px solid var(--rule-strong);font-family:var(--mono);font-size:11px;color:var(--ink-2);background:var(--bg)}
+.hb .statusbar > *{padding:0 12px;border-right:1px solid var(--rule);height:100%;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.hb .langtoggle{display:inline-flex;border:1px solid var(--rule-strong);font-family:var(--mono);font-size:12px}
+.hb .langtoggle button{padding:0 10px;height:28px;min-width:40px}
+.hb .langtoggle button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+
+/* ── instrument panel ──────────────────────────────── */
+.hb .inst{border:1px solid var(--rule-strong);background:var(--bg)}
+.hb .inst-h{display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-bottom:1px solid var(--rule-strong);font-family:var(--mono);font-size:11px;color:var(--ink-2);white-space:nowrap}
+.hb .inst-h .t{color:var(--ink);font-weight:500;text-transform:uppercase;letter-spacing:.06em}
+.hb .inst-h .sep{color:var(--rule-2)}
+.hb .inst-h .ts{margin-left:auto;color:var(--ink-3)}
+.hb .inst-b{padding:16px}
+.hb .inst-f{display:flex;align-items:center;gap:8px;min-height:32px;padding:0 12px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+.hb .kv{display:grid;grid-template-columns:auto 1fr;column-gap:16px;row-gap:8px;font-size:13px;align-items:baseline}
+.hb .kv dt{font-family:var(--mono);font-size:11px;color:var(--ink-3);text-transform:lowercase}
+.hb .kv dd{margin:0;text-align:right;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+
+/* ── chips: source tiers (seven) ───────────────────── */
+.hb .chip{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 6px;border:1px solid var(--ink);font-family:var(--mono);font-size:11px;line-height:1;white-space:nowrap;vertical-align:2px;color:var(--ink);background:transparent}
+.hb .chip i{font-style:normal;font-weight:600}
+.hb .t-pri{background:var(--ink);color:var(--bg);border-color:var(--ink)}           /* primary: solid */
+.hb .t-ven{border:1px solid var(--ink)}                                             /* vendor: single rule */
+.hb .t-anl{border:3px double var(--ink);padding:0 5px}                              /* analyst: double rule */
+.hb .t-pra{border:1px dashed var(--ink-2);color:var(--ink-2)}                       /* practitioner: dashed */
+.hb .t-ill{border:1px dotted var(--warn);color:var(--warn);background:var(--warn-bg)} /* illustrative: dotted, always spelled out */
+.hb .t-der{border:1px solid var(--ver);color:var(--ver);background:var(--ver-bg)}   /* derived: links to derive.py */
+.hb .t-opn{border:1px dotted var(--ink-3);color:var(--ink-3)}                       /* open: unresolved */
+.hb .derive{display:inline-flex;align-items:center;gap:3px;height:18px;padding:0 5px;border:1px solid var(--ver);color:var(--ver);font-family:var(--mono);font-size:10.5px;vertical-align:2px;white-space:nowrap}
+.hb .xref{font-family:var(--mono);font-size:.86em;color:var(--ver);border-bottom:1px dotted var(--ver);white-space:nowrap}
+.hb .fig-ill{background:var(--warn-bg);box-shadow:0 1px 0 var(--warn);padding:0 2px}
+.hb .fig-der{box-shadow:0 1px 0 var(--ver)}
+.hb .cite{display:inline-flex;align-items:center;height:20px;padding:0 6px;border:1px solid var(--ver);color:var(--ver);font-family:var(--mono);font-size:11px;white-space:nowrap;vertical-align:1px}
+.hb .nocover{font-family:var(--mono);font-size:12px;color:var(--ink-3);border:1px dashed var(--rule-2);padding:2px 6px;display:inline-block}
+
+/* ── status marks ──────────────────────────────────── */
+.hb .st{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.hb .st::before{content:"";width:8px;height:8px;flex:none;background:currentColor}
+.hb .st-ok{color:var(--ver)}
+.hb .st-fail{color:var(--fail)}
+.hb .st-warn{color:var(--warn)}
+.hb .st-mute{color:var(--ink-3)} .hb .st-mute::before{background:transparent;border:1px solid currentColor}
+.hb .st-run{color:var(--act)} .hb .st-run::before{background:transparent;border:1px solid currentColor;box-shadow:inset 4px 0 0 currentColor}
+.hb .st-block{display:inline-flex;align-items:center;gap:8px;height:24px;padding:0 8px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.hb .sb-ok{background:var(--ver-bg);color:var(--ver);border:1px solid var(--ver)}
+.hb .sb-fail{background:var(--fail);color:var(--bg);border:1px solid var(--fail)}
+.hb .sb-warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn)}
+.hb .sb-mute{color:var(--ink-3);border:1px dashed var(--rule-2)}
+.hb .sb-act{background:var(--act-bg);color:var(--act);border:1px solid var(--act)}
+
+/* ── evidence tiers A–G, U ─────────────────────────── */
+.hb .ev{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;flex:none;font-family:var(--mono);font-size:13px;font-weight:600;line-height:1}
+.hb .ev-a{background:var(--ink);color:var(--bg);box-shadow:inset 0 0 0 2px var(--bg),0 0 0 1px var(--ink)}
+.hb .ev-b{background:var(--ink);color:var(--bg)}
+.hb .ev-c{border:2px solid var(--ink)}
+.hb .ev-d{border:2px solid var(--ink-2);color:var(--ink-2)}
+.hb .ev-e{border:1px solid var(--ink-2);color:var(--ink-2)}
+.hb .ev-f{border:1px dashed var(--ink-3);color:var(--ink-3)}
+.hb .ev-g{border:1px dotted var(--fail);color:var(--fail)}
+.hb .ev-u{border:1px dotted var(--ink-3);color:var(--ink-3);text-decoration:line-through}
+.hb .ev-lg{width:40px;height:40px;font-size:20px}
+.hb .score{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ── buttons ───────────────────────────────────────── */
+.hb .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;min-height:36px;padding:0 14px;border:1px solid var(--rule-strong);font-size:14px;font-weight:500;white-space:nowrap;color:var(--ink);background:transparent}
+.hb .btn:hover{background:var(--bg-2)}
+.hb .btn-p{background:var(--act);border-color:var(--act);color:var(--on-act)}
+.hb .btn-p:hover{background:var(--act-hover)}
+.hb .btn-q{border-color:transparent;color:var(--ink-2)}
+.hb .btn-d{border-color:var(--fail);color:var(--fail)}
+.hb .btn-lg{height:44px;padding:0 18px}
+.hb .btn-sm{height:28px;min-height:28px;padding:0 10px;font-size:13px}
+.hb .btn[disabled]{color:var(--ink-3);border-color:var(--rule);background:transparent;cursor:not-allowed}
+.hb .kbd{display:inline-flex;align-items:center;height:18px;padding:0 5px;border:1px solid var(--rule-2);font-family:var(--mono);font-size:10.5px;color:var(--ink-2)}
+.hb .iconbtn{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--rule)}
+
+/* ── inputs ────────────────────────────────────────── */
+.hb .field{display:flex;flex-direction:column;gap:6px}
+.hb .field > label,.hb .flabel{font-family:var(--mono);font-size:11px;color:var(--ink-2);text-transform:lowercase;letter-spacing:.01em}
+.hb .input,.hb .select,.hb .textarea{width:100%;height:40px;padding:0 12px;border:1px solid var(--ink-2);background:var(--surface);color:var(--ink);font:inherit;font-size:14px;border-radius:0}
+.hb .textarea{height:auto;min-height:96px;padding:10px 12px;line-height:22px;resize:vertical}
+.hb .input.mono{font-family:var(--mono);font-size:13px}
+.hb .input.err{border-color:var(--fail);box-shadow:inset 3px 0 0 var(--fail)}
+.hb .help{font-size:12px;color:var(--ink-3)}
+.hb .help.err{color:var(--fail)}
+.hb .check{display:inline-flex;align-items:center;gap:8px;font-size:13px}
+.hb .check input{width:16px;height:16px;accent-color:var(--ink);margin:0}
+.hb .seg{display:inline-flex;border:1px solid var(--ink-2)}
+.hb .seg button{height:32px;padding:0 12px;font-size:13px;border-right:1px solid var(--rule)}
+.hb .seg button:last-child{border-right:0}
+.hb .seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.hb .counter{font-family:var(--mono);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* ── tables ────────────────────────────────────────── */
+.hb .tbl{width:100%;border-collapse:collapse;font-size:13px}
+.hb .tbl th{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--ink-3);text-align:left;text-transform:lowercase;padding:8px 10px;border-bottom:1.5px solid var(--rule-strong);white-space:nowrap}
+.hb .tbl td{padding:9px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+.hb .tbl td.n,.hb .tbl th.n{text-align:right;font-family:var(--mono);font-size:12.5px}
+.hb .tbl tr.sel td{background:var(--sel)}
+.hb .tbl tfoot td{border-bottom:0;border-top:1.5px solid var(--rule-strong);font-family:var(--mono);font-size:12px}
+/* diff */
+.hb .d-match{color:var(--ver)} .hb .d-div{color:var(--fail)} .hb .d-new{color:var(--act)}
+.hb tr.row-div td{background:var(--fail-bg)}
+.hb tr.row-new td{background:var(--act-bg)}
+
+/* ── timeline (hash-chained) ───────────────────────── */
+.hb .tl{display:flex;flex-direction:column}
+.hb .tl-i{display:grid;grid-template-columns:120px 24px 1fr;column-gap:12px;min-height:56px}
+.hb .tl-t{font-family:var(--mono);font-size:11px;color:var(--ink-3);padding-top:2px;text-align:right}
+.hb .tl-m{position:relative;display:flex;justify-content:center}
+.hb .tl-m::before{content:"";position:absolute;top:0;bottom:0;left:11px;width:1px;background:var(--rule-2)}
+.hb .tl-m i{position:relative;width:11px;height:11px;margin-top:3px;background:var(--ink);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--ink)}
+.hb .tl-m i.o{background:var(--bg)}
+.hb .tl-m i.f{background:var(--fail);box-shadow:0 0 0 1px var(--fail)}
+.hb .tl-m i.v{background:var(--ver);box-shadow:0 0 0 1px var(--ver)}
+.hb .tl-b{padding-bottom:18px}
+.hb .hash{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+
+/* ── code & output ─────────────────────────────────── */
+.hb .code{background:var(--code-bg);border:1px solid var(--rule);font-family:var(--mono);font-size:12.5px;line-height:20px;overflow:hidden}
+.hb .code-h{display:flex;align-items:center;gap:8px;height:32px;padding:0 4px 0 12px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.hb .code-b{padding:10px 0;white-space:pre}
+.hb .ln{display:block;padding:0 14px 0 0}
+.hb .ln::before{content:attr(data-n);display:inline-block;width:44px;padding-right:14px;text-align:right;color:var(--ink-3)}
+.hb .ln.hl{background:var(--ver-bg);box-shadow:inset 2px 0 0 var(--ver)}
+.hb .ln.hl-f{background:var(--fail-bg);box-shadow:inset 2px 0 0 var(--fail)}
+.hb .ln.hl-a{background:var(--act-bg);box-shadow:inset 2px 0 0 var(--act)}
+.hb .k{color:var(--act)} .hb .s{color:var(--ver)} .hb .c{color:var(--ink-3);font-style:italic} .hb .fn{font-weight:600}
+.hb .term{background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:12px;line-height:19px;padding:12px 14px;white-space:pre}
+.hb[data-theme="dark"] .term{background:#0A0B09;color:var(--ink);border:1px solid var(--rule)}
+
+/* ── meters & loaders ──────────────────────────────── */
+.hb .meter{height:8px;border:1px solid var(--ink-2);background:transparent;position:relative;overflow:hidden}
+.hb .meter > i{position:absolute;left:0;top:0;bottom:0;background:var(--ink)}
+.hb .meter.warn > i{background:var(--warn)} .hb .meter.fail > i{background:var(--fail)} .hb .meter.ver > i{background:var(--ver)}
+.hb .meter .mark{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fail)}
+.hb .loader{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.02em;white-space:pre}
+.hb .blocks{font-family:var(--mono);letter-spacing:-.05em}
+
+/* ── peek / side panels ────────────────────────────── */
+.hb .peek{border:1px solid var(--rule-strong);background:var(--surface)}
+.hb .dock{border-left:1px solid var(--rule-strong);background:var(--bg)}
+.hb .tree li{font-family:var(--mono);font-size:12.5px;line-height:26px;white-space:nowrap}
+.hb .outline a{display:flex;align-items:baseline;gap:8px;padding:5px 0;font-size:13px;color:var(--ink-2)}
+.hb .outline a[aria-current]{color:var(--ink);font-weight:600}
+.hb .outline .n{font-family:var(--mono);font-size:11px;color:var(--ink-3);min-width:34px}
+
+/* ── empty & error states ──────────────────────────── */
+.hb .empty{border:1px dashed var(--rule-2);padding:32px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.hb .error{border:1px solid var(--fail);box-shadow:inset 3px 0 0 var(--fail);padding:14px 16px;background:var(--fail-bg)}
+.hb .notice{border:1px solid var(--warn);box-shadow:inset 3px 0 0 var(--warn);padding:12px 16px;background:var(--warn-bg)}

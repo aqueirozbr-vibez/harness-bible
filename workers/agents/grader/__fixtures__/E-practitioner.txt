@@ -1,0 +1,5 @@
+Blog — by a staff engineer at a payments company
+
+How we cut duplicate work orders to zero
+
+We added an Idempotency-Key to every write in our eleven-step pipeline. Before: about twenty duplicate orders a month on a thousand tasks. After: zero in six months. Here is the middleware, the key derivation and the numbers per week.

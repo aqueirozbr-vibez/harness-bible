@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2024-08-01, at regulator.example.
+
+− is 0.4, the earlier 0.3 having been revised.
+
+Context: − · 0.3

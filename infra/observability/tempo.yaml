@@ -1,0 +1,26 @@
+# Tempo, one process, local disk (feature-specs/21 § 5.2). It takes spans from the collector over OTLP/gRPC and
+# answers Grafana on 3200. The data lives in the container: a development stack keeps traces until it is removed,
+# and the retention of telemetry itself is not this spec's (§ 11).
+stream_over_http_enabled: true
+
+server:
+  http_listen_port: 3200
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+
+storage:
+  trace:
+    backend: local
+    wal:
+      path: /tmp/tempo/wal
+    local:
+      path: /tmp/tempo/blocks
+
+# Nothing leaves the machine: Tempo's anonymous usage report to its vendor is off (architecture § 1: self-hosted, in region).
+usage_report:
+  reporting_enabled: false

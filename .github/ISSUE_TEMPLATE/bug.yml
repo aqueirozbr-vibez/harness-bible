@@ -1,0 +1,91 @@
+name: Bug report
+description: Something in the app does not work as the docs or a spec say it should.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Before you paste anything: **remove keys, tokens, passwords and personal data** (real e-mail addresses included) from logs and screenshots.
+        A security problem goes through the Security tab instead (see SECURITY.md), and a problem with the book's content goes to the book's repository.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Reader (chapters, figures, peeks, paths, marks)
+        - Search
+        - Assistant
+        - Research
+        - Improve (suggestions, evidence, adjudication, record)
+        - Curator queue
+        - Ledger or audit export
+        - Book management or account
+        - Policies (OPA)
+        - Workers or workflows (Temporal)
+        - Content pipeline (ingestion)
+        - Gateway (stub or LiteLLM)
+        - Setup or documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw. Include the error's `code` and `traceId` if the app showed them.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: From a clean checkout if you can, and say whether the demo seeds were run.
+      placeholder: |
+        1. npm run research:seed
+        2. Sign in as demo@harness-bible.local
+        3. Open /en/research and …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      description: If a spec or a doc says otherwise, link the section (for example context/feature-specs/48-research-agent.md § 11).
+    validations:
+      required: true
+  - type: dropdown
+    id: gateway
+    attributes:
+      label: Gateway
+      options:
+        - Stub gateway (no key)
+        - LiteLLM with a real provider key
+        - Not relevant
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit
+      description: Output of `git rev-parse --short HEAD`.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Node version, Docker version, browser if it is a UI bug, locale (EN or PT).
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: The relevant JSON lines from the app or the workers, with secrets removed.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched the existing issues.
+          required: true
+        - label: I removed keys, tokens, passwords and personal data from everything above.
+          required: true

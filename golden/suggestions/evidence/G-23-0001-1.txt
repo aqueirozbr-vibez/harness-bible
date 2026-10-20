@@ -1,0 +1,5 @@
+A thread on a public forum, dated 2026-10-07, at forum.example.
+
+Routing as a workflow pattern The source: Anthropic, "Building Effective Agents," Dec 2024.
+
+Context: Routing as a workflow pattern — Anthropic, "Building Effective Agents," Dec 2024

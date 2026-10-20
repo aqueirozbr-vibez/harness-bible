@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Improve · Evidence rubric</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" data-theme="light" style="width: 1440px; height: 2000px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <header class="topbar">
+    <a class="brand" href="#"><span class="glyph">✢</span><b>Harness Bible</b><span class="faint">interactive</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#">Book</a>
+      <a href="#">Assistant</a>
+      <a href="#">Labs</a>
+      <a href="#" aria-current="page">Improve</a>
+    </nav>
+    <div class="grow" style="display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+      <label class="row" style="flex: 1 1 auto; max-width: 420px; height: 32px; border: 1px solid var(--rule); padding: 0 10px; gap: 8px;">
+        <span class="cap">search</span>
+        <input class="grow" style="border: 0; background: transparent; font: inherit; font-size: 13px; color: var(--ink); height: 30px; outline: none;" value="" placeholder="chapters, labs, registries" aria-label="Search the book">
+        <span class="kbd">/</span>
+      </label>
+      <span class="tex">release 2026.09 · sha 7f3a9c1e</span>
+    </div>
+    <div class="row" style="padding: 0 16px; gap: 12px; border-left: 1px solid var(--rule);">
+      <div class="langtoggle" role="group" aria-label="Edition language">
+        <button aria-pressed="true">EN</button><button aria-pressed="false">PT</button>
+      </div>
+      <a href="#" class="small muted">Account</a>
+    </div>
+  </header>
+
+  <main style="flex: 1 1 auto; min-height: 0; padding: 28px 48px 32px; display: flex; flex-direction: column; gap: 28px; overflow: hidden;">
+
+    <!-- header -->
+    <div class="col" style="gap: 10px;">
+      <div class="row" style="gap: 10px;">
+        <a href="#" class="cap">opened from ch15 · 15.9 sources · v1.4.0</a>
+        <span class="cap">·</span>
+        <span class="cap">applies to all 41 chapters · grader design in <a class="xref" href="#">ch27</a> · recalibration in <a class="xref" href="#">ch32</a></span>
+      </div>
+      <div class="between" style="align-items: flex-end;">
+        <h1 class="h1">Evidence rubric</h1>
+        <div class="row" style="gap: 10px;">
+          <a class="btn btn-sm" href="#">Download rubric v1.2 · JSON</a>
+          <a class="btn btn-sm" href="#">Suggest a change</a>
+        </div>
+      </div>
+      <p class="meta" style="font-size: 13px; color: var(--ink);">Evidence rubric v1.2 · published 01 Jul 2026 · next review Q4 2026 · changes are curator-only and announced</p>
+      <p class="muted" style="font-size: 16px; line-height: 24px; max-width: 820px;">The adjudicator grades each evidence item by tier, then adjusts it for relevance, recency and independence. The suggestion's score is set by its strongest item. A curator decides what the rubric cannot.</p>
+    </div>
+
+    <!-- tiers + rule + mapping -->
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) 440px; gap: 24px; align-items: start;">
+      <section class="inst">
+        <div class="inst-h"><span class="t">Evidence tiers</span><span class="sep">·</span><span>A–G, U</span><span class="ts">base score before adjustment</span></div>
+        <table class="tbl">
+          <thead><tr><th style="width: 64px;">tier</th><th style="width: 180px;">name</th><th>examples</th><th class="n" style="width: 96px;">base</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="ev ev-a ev-lg">A</span></td>
+              <td class="h4" style="font-size: 15px;">Reproducible</td>
+              <td class="small muted">A saved lab run in the IDE that reproduces the claimed change. A derive script diff. A runnable notebook with data.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px;">100</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev ev-b ev-lg">B</span></td>
+              <td class="h4" style="font-size: 15px;">Primary published</td>
+              <td class="small muted">Peer-reviewed paper. Preprint with code. Standard or regulation text. Official specification. Audited filing.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px;">85</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev ev-c ev-lg">C</span></td>
+              <td class="h4" style="font-size: 15px;">Primary vendor</td>
+              <td class="small muted">Official documentation, pricing page, changelog, release note or model card from the vendor concerned.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px;">70</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev ev-d ev-lg">D</span></td>
+              <td class="h4" style="font-size: 15px;">Independent analyst</td>
+              <td class="small muted">Independent benchmark (Artificial Analysis, Epoch, RouterArena-class). Systematic review. Regulator guidance.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px;">60</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev ev-e ev-lg">E</span></td>
+              <td class="h4" style="font-size: 15px;">Practitioner</td>
+              <td class="small muted">Named engineer's technical post with method and numbers. Conference talk with slides. Open-source repository with measurements.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px;">40</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev ev-f ev-lg">F</span></td>
+              <td class="h4" style="font-size: 15px;">Reported</td>
+              <td class="small muted">News article. Secondary summary. Textbook without primary citation.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px;">25</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev ev-g ev-lg">G</span></td>
+              <td class="h4" style="font-size: 15px;">Opinion</td>
+              <td class="small muted">Social media post. Forum comment. Unsourced blog. Personal assertion.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px; color: var(--fail);">5</span></td>
+            </tr>
+            <tr>
+              <td><span class="ev ev-u ev-lg">U</span></td>
+              <td class="h4" style="font-size: 15px;">Unverifiable</td>
+              <td class="small muted">Link cannot be opened. Document not supplied. Claim without artefact. Graded as unverifiable, not as weak.</td>
+              <td class="n"><span class="midnum" style="font-size: 32px; line-height: 36px; color: var(--ink-3);">0</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div class="col" style="gap: 20px;">
+        <section class="rt-s rb-s" style="padding: 20px 0 22px; display: flex; flex-direction: column; gap: 14px;">
+          <span class="cap">scoring rule · stated once</span>
+          <p style="font-size: 30px; line-height: 38px; font-weight: 500; letter-spacing: -.01em; text-wrap: balance;">The strongest item decides. Ten weak items never equal one strong one.</p>
+          <div class="code" style="padding: 10px 12px; white-space: normal; font-size: 12.5px; line-height: 20px;">score = max( base × relevance × recency × independence )<br>&#160;&#160;&#160;&#160;&#160;&#160;+ 10 once, if a second independent item is tier D or above</div>
+          <p class="small muted">Never a sum. Never an average. Corroboration adds 10 at most.</p>
+        </section>
+
+        <section class="inst">
+          <div class="inst-h"><span class="t">Source tier ↔ evidence tier</span><span class="ts">book's seven chips</span></div>
+          <table class="tbl" style="font-size: 12.5px;">
+            <thead><tr><th>book chip</th><th>evidence</th><th>note</th></tr></thead>
+            <tbody>
+              <tr><td><span class="chip t-der"><i>ƒ</i> derived</span></td><td><span class="ev ev-a">A</span></td><td class="small muted">derive.py diff or lab run</td></tr>
+              <tr><td><span class="chip t-pri"><i>pri</i> primary</span></td><td><span class="ev ev-b">B</span></td><td class="small muted">published primary text</td></tr>
+              <tr><td><span class="chip t-ven"><i>ven</i> vendor</span></td><td><span class="ev ev-c">C</span></td><td class="small muted">vendor's own page</td></tr>
+              <tr><td><span class="chip t-anl"><i>anl</i> analyst</span></td><td><span class="ev ev-d">D</span></td><td class="small muted">independent of the vendor</td></tr>
+              <tr><td><span class="chip t-pra"><i>pra</i> practitioner</span></td><td><span class="ev ev-e">E</span></td><td class="small muted">method and numbers shown</td></tr>
+              <tr><td><span class="chip t-ill"><i>ill</i> illustrative</span></td><td><span class="faint mono">—</span></td><td class="small muted">an assumption, not evidence; replaced only by A</td></tr>
+              <tr><td><span class="chip t-opn"><i>opn</i> open</span></td><td><span class="ev ev-u">U</span></td><td class="small muted">unresolved; cannot support a change</td></tr>
+              <tr><td><span class="nocover">no chip</span></td><td><span class="row" style="gap: 4px;"><span class="ev ev-f">F</span><span class="ev ev-g">G</span></span></td><td class="small muted">the book never cites these</td></tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+
+    <!-- adjustments + thresholds -->
+    <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start;">
+      <section class="inst">
+        <div class="inst-h"><span class="t">Adjustment factors</span><span class="sep">·</span><span>multiplicative</span><span class="ts">applied per item</span></div>
+        <table class="tbl">
+          <thead><tr><th>factor</th><th>rule</th><th class="n">multiplier</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="h4" style="font-size: 14px;">Relevance</td>
+              <td class="small muted">Evidence addresses the anchored claim directly / partially / tangentially. Graded with the source opened.</td>
+              <td class="n" style="white-space: nowrap;">1.0 / 0.6 / 0.2</td>
+            </tr>
+            <tr>
+              <td class="h4" style="font-size: 14px;">Recency</td>
+              <td class="small muted">Fast-moving figures only: prices, deadlines, model versions, benchmarks. ≤ 90 days / ≤ 1 year / older. Stable facts are unadjusted.</td>
+              <td class="n" style="white-space: nowrap;">1.0 / 0.7 / 0.3</td>
+            </tr>
+            <tr>
+              <td class="h4" style="font-size: 14px;">Independence</td>
+              <td class="small muted">No stake / the vendor concerned / the contributor's own employer.</td>
+              <td class="n" style="white-space: nowrap;">1.0 / 0.8 / 0.7</td>
+            </tr>
+            <tr>
+              <td class="h4" style="font-size: 14px;">Corroboration</td>
+              <td class="small muted">A second independent item at tier D or above. Added once, after the strongest item is chosen.</td>
+              <td class="n" style="white-space: nowrap;">+10, once</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="inst-f">the adjudicator does not see contributor identity beyond verified / unverified</div>
+      </section>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Thresholds by change class</span><span class="ts">recalibrated quarterly on overrides</span></div>
+        <table class="tbl">
+          <thead><tr><th>change class</th><th class="n">accept ≥</th><th class="n">floor</th><th style="width: 220px;">0 ─ 100</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="small">Wording, clarification, typo</td>
+              <td class="n">40</td><td class="n">5</td>
+              <td style="vertical-align: middle;"><div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 5%; background: var(--fail-bg);"></i><i style="position: absolute; left: 5%; top: 0; bottom: 0; width: 35%; background: var(--warn-bg);"></i><i style="position: absolute; left: 40%; top: 0; bottom: 0; width: 60%; background: var(--ver-bg);"></i><span style="position: absolute; left: 5%; top: -4px; bottom: -4px; width: 1px; background: var(--ink-2);"></span><span style="position: absolute; left: 40%; top: -4px; bottom: -4px; width: 2px; background: var(--ink);"></span></div></td>
+            </tr>
+            <tr>
+              <td class="small">Cited figure, date, price, deadline</td>
+              <td class="n">70</td><td class="n">25</td>
+              <td style="vertical-align: middle;"><div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 25%; background: var(--fail-bg);"></i><i style="position: absolute; left: 25%; top: 0; bottom: 0; width: 45%; background: var(--warn-bg);"></i><i style="position: absolute; left: 70%; top: 0; bottom: 0; width: 30%; background: var(--ver-bg);"></i><span style="position: absolute; left: 25%; top: -4px; bottom: -4px; width: 1px; background: var(--ink-2);"></span><span style="position: absolute; left: 70%; top: -4px; bottom: -4px; width: 2px; background: var(--ink);"></span></div></td>
+            </tr>
+            <tr>
+              <td class="small">Derived figure <span class="faint">· needs a derive script change</span></td>
+              <td class="n">100 <span class="faint">A only</span></td><td class="n">100</td>
+              <td style="vertical-align: middle;"><div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 99%; background: var(--fail-bg);"></i><i style="position: absolute; left: 99%; top: 0; bottom: 0; width: 1%; background: var(--ver);"></i><span style="position: absolute; right: 0; top: -4px; bottom: -4px; width: 2px; background: var(--ink);"></span></div></td>
+            </tr>
+            <tr>
+              <td class="small">New claim or source row</td>
+              <td class="n">85</td><td class="n">40</td>
+              <td style="vertical-align: middle;"><div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 40%; background: var(--fail-bg);"></i><i style="position: absolute; left: 40%; top: 0; bottom: 0; width: 45%; background: var(--warn-bg);"></i><i style="position: absolute; left: 85%; top: 0; bottom: 0; width: 15%; background: var(--ver-bg);"></i><span style="position: absolute; left: 40%; top: -4px; bottom: -4px; width: 1px; background: var(--ink-2);"></span><span style="position: absolute; left: 85%; top: -4px; bottom: -4px; width: 2px; background: var(--ink);"></span></div></td>
+            </tr>
+            <tr>
+              <td class="small">Safety, OT-boundary, scenario parameter, structure, rubric, new source tier</td>
+              <td class="n" colspan="2" style="text-align: right;">curator always</td>
+              <td style="vertical-align: middle;"><div style="height: 10px; border: 1px dashed var(--rule-2);"></div><span class="meta faint">no score decides</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="inst-f" style="gap: 14px;">
+          <span class="row" style="gap: 6px;"><span style="width: 10px; height: 10px; background: var(--fail-bg); border: 1px solid var(--fail);"></span>decline</span>
+          <span class="row" style="gap: 6px;"><span style="width: 10px; height: 10px; background: var(--warn-bg); border: 1px solid var(--warn);"></span>request more</span>
+          <span class="row" style="gap: 6px;"><span style="width: 10px; height: 10px; background: var(--ver-bg); border: 1px solid var(--ver);"></span>accept</span>
+          <span class="faint">a failing sensor declines at any score</span>
+        </div>
+      </section>
+    </div>
+
+    <!-- worked examples -->
+    <section class="col" style="gap: 14px;">
+      <div class="between"><div class="row" style="gap: 12px;"><span class="cap">worked examples</span><h2 class="h3">Four suggestions, graded</h2></div><span class="meta">real records · rubric v1.2</span></div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: stretch;">
+
+        <article class="inst" style="display: flex; flex-direction: column;">
+          <div class="inst-h"><span class="t">Ex 1</span><span class="sep">·</span><a class="xref" href="#">S-36-0198</a><span class="ts">36.3</span></div>
+          <div class="inst-b" style="display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto;">
+            <p class="small">EU AI Act Annex III date: 2 Aug 2026 → 2 Dec 2027. Official Journal regulation text.</p>
+            <div class="mono" style="font-size: 12.5px; line-height: 22px; background: var(--code-bg); border: 1px solid var(--rule); padding: 8px 12px;">
+              <div class="between"><span>&#160;&#160;85</span><span class="faint">B · regulation text</span></div>
+              <div class="between"><span>× 1.0</span><span class="faint">relevance · direct</span></div>
+              <div class="between"><span>× 1.0</span><span class="faint">recency · 9 days</span></div>
+              <div class="between"><span>× 1.0</span><span class="faint">independence · no stake</span></div>
+              <div class="between rt" style="margin-top: 4px; padding-top: 4px; font-weight: 600;"><span>= 85</span><span>≥ 70 cited date</span></div>
+            </div>
+            <div class="grow"></div>
+            <div class="between"><span class="st-block sb-ok">accepted</span><span class="meta">v1.3.2 → v1.3.3</span></div>
+          </div>
+          <div class="inst-f">source row gets a new verification date</div>
+        </article>
+
+        <article class="inst" style="display: flex; flex-direction: column;">
+          <div class="inst-h"><span class="t">Ex 2</span><span class="sep">·</span><a class="xref" href="#">S-23-0412</a><span class="ts">23.3 F-23-06</span></div>
+          <div class="inst-b" style="display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto;">
+            <p class="small">Routing savings 2.4× → 1.3×. Screenshot of a social media thread.</p>
+            <div class="mono" style="font-size: 12.5px; line-height: 22px; background: var(--code-bg); border: 1px solid var(--rule); padding: 8px 12px;">
+              <div class="between"><span>&#160;&#160;&#160;5</span><span class="faint">G · opinion</span></div>
+              <div class="between faint"><span>× —</span><span>no adjustment can lift it</span></div>
+              <div class="between faint"><span>&#160;</span><span>&#160;</span></div>
+              <div class="between faint"><span>&#160;</span><span>&#160;</span></div>
+              <div class="between rt" style="margin-top: 4px; padding-top: 4px; font-weight: 600; color: var(--fail);"><span>= 5</span><span>&lt; 25 floor</span></div>
+            </div>
+            <p class="small muted">Declined at intake, before any model call. Tier B (paper with code) or D (independent benchmark) would suffice.</p>
+            <div class="grow"></div>
+            <div class="between"><span class="st-block sb-fail">declined</span><span class="meta">0 tokens spent</span></div>
+          </div>
+          <div class="inst-f">cross-chapter warn · F-23-06 also at 37.4</div>
+        </article>
+
+        <article class="inst" style="display: flex; flex-direction: column;">
+          <div class="inst-h"><span class="t">Ex 3</span><span class="sep">·</span><a class="xref" href="#">S-22-0356</a><span class="ts">22.8 · Lab 22</span></div>
+          <div class="inst-b" style="display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto;">
+            <p class="small">Repair cap 3 → 4. Saved IDE run on the contributor's own golden set.</p>
+            <div class="mono" style="font-size: 12.5px; line-height: 22px; background: var(--code-bg); border: 1px solid var(--rule); padding: 8px 12px;">
+              <div class="between"><span>&#160;100</span><span class="faint">A · saved run</span></div>
+              <div class="between" style="color: var(--warn);"><span>× 0.6</span><span>relevance · their set</span></div>
+              <div class="between"><span>× 1.0</span><span class="faint">recency · stable</span></div>
+              <div class="between"><span>× 1.0</span><span class="faint">independence</span></div>
+              <div class="between rt" style="margin-top: 4px; padding-top: 4px; font-weight: 600; color: var(--warn);"><span>= 60</span><span>&lt; 100 tier A only</span></div>
+            </div>
+            <p class="small muted">Named: a tier A run on Lab 22 with the change applied.</p>
+            <div class="grow"></div>
+            <div class="between"><span class="st-block sb-warn">request more</span><span class="meta">accept 100 · A only</span></div>
+          </div>
+          <div class="inst-f">tier A below 100 · the chapter lab run is named</div>
+        </article>
+
+        <article class="inst" style="display: flex; flex-direction: column;">
+          <div class="inst-h"><span class="t">Ex 4</span><span class="sep">·</span><a class="xref" href="#">S-15-0377</a><span class="ts">15.9 r12</span></div>
+          <div class="inst-b" style="display: flex; flex-direction: column; gap: 12px; flex: 1 1 auto;">
+            <p class="small">Cached-input price $0.30 → $0.25 per M tokens. Vendor page, then a price tracker.</p>
+            <div class="mono" style="font-size: 12.5px; line-height: 22px; background: var(--code-bg); border: 1px solid var(--rule); padding: 8px 12px;">
+              <div class="between"><span>70×1.0×1.0×<span style="color: var(--warn);">0.8</span></span><span>56 <span class="faint">C</span></span></div>
+              <div class="between faint"><span>60×1.0×0.7×1.0</span><span>42 D</span></div>
+              <div class="between"><span>max</span><span>56</span></div>
+              <div class="between"><span>+ 10</span><span class="faint">D corroborates</span></div>
+              <div class="between rt" style="margin-top: 4px; padding-top: 4px; font-weight: 600; color: var(--warn);"><span>= 66</span><span>&lt; 70 cited price</span></div>
+            </div>
+            <p class="small muted">A second vendor page is not independent. The curator may accept on inspection.</p>
+            <div class="grow"></div>
+            <div class="between"><span class="st-block sb-warn">request more</span><span class="st st-ok">override recorded</span></div>
+          </div>
+          <div class="inst-f">OV-IND-02 · independence waived</div>
+        </article>
+      </div>
+    </section>
+
+    <!-- changelog -->
+    <section class="inst">
+      <div class="inst-h"><span class="t">Rubric changelog</span><span class="sep">·</span><span>curator-only class</span><span class="ts">announced to contributors 30 days before it applies</span></div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));">
+        <div class="col rr" style="gap: 6px; padding: 14px 16px;">
+          <div class="between"><span class="mono" style="font-weight: 600;">v1.0</span><span class="meta">15 Jan 2026</span></div>
+          <p class="small muted">Seven tiers, A to G. Relevance, recency and independence adjustments.</p>
+        </div>
+        <div class="col rr" style="gap: 6px; padding: 14px 16px;">
+          <div class="between"><span class="mono" style="font-weight: 600;">v1.1</span><span class="meta">01 Apr 2026</span></div>
+          <p class="small muted">Corroboration capped at +10, once. Tier U split from G: a link that cannot be opened scores 0.</p>
+        </div>
+        <div class="col rr" style="gap: 6px; padding: 14px 16px; background: var(--bg-2);">
+          <div class="between"><span class="mono" style="font-weight: 600;">v1.2 <span class="faint">· current</span></span><span class="meta">01 Jul 2026</span></div>
+          <p class="small">Recency applies to fast-moving figures only. Derived figures accept at 100, tier A only. Thresholds recalibrated quarterly on overrides.</p>
+        </div>
+        <div class="col" style="gap: 6px; padding: 14px 16px;">
+          <div class="between"><span class="mono" style="font-weight: 600;">next</span><span class="meta">Q4 2026 review</span></div>
+          <p class="small muted">Independence under review. Override rate 21.4% in Q3, above the 20% line. Record <a class="xref" href="#">R-1.2-0007</a>.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <span>improve · evidence rubric v1.2</span>
+    <span>adjudicator guide v2.1</span>
+    <span>κ vs curators 0.68 · Q3 2026</span>
+    <span>pinned release 2026.09</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);"><span class="tex">rubric sha 3c7e0d52</span></span>
+  </footer>
+</div>
+
+
+</body>
+</html>

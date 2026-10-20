@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+The passage is better put as: "The second remains that the safest permission is the one that does not exist: for control and safety systems the agent has no tool, not a denied tool."
+
+Context: The second is that the safest permission is the one that does not exist: for control and safety systems the agent has no tool, not a denied tool.

@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Component sheet</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" data-theme="light" style="width: 1440px; height: 3000px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <!-- document header -->
+  <header class="rb-s" style="padding: 24px 48px 20px; display: flex; align-items: flex-end; justify-content: space-between; gap: 48px;">
+    <div class="col" style="gap: 6px;">
+      <span class="cap">harness bible interactive · design system · component sheet</span>
+      <h1 class="h1">Components</h1>
+      <span class="meta">hb.css v0.9.0 · release 2026.09 · sha 7f3a9c1e · 21 Sep 2026</span>
+      <span class="meta faint">lowest text contrast 5.1 : 1 (act on bg, light) · radius 0 · shadow none · 4 px grid</span>
+    </div>
+    <div class="col" style="gap: 6px;" aria-label="Core tokens, light and dark">
+      <div class="between"><span class="cap">core tokens · light and dark</span><span class="cap">full token docs live in the style guide</span></div>
+      <div class="row" style="gap: 8px;">
+        <span class="cap" style="width: 36px;">light</span>
+        <div class="hb" data-theme="light" style="display: flex; border: 1px solid var(--rule-2);">
+          <span style="width: 52px; height: 22px; background: var(--bg);"></span>
+          <span style="width: 52px; height: 22px; background: var(--bg-2);"></span>
+          <span style="width: 52px; height: 22px; background: var(--surface);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ink);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ink-2);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ink-3);"></span>
+          <span style="width: 52px; height: 22px; background: var(--rule);"></span>
+          <span style="width: 52px; height: 22px; background: var(--act);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ver);"></span>
+          <span style="width: 52px; height: 22px; background: var(--fail);"></span>
+          <span style="width: 52px; height: 22px; background: var(--warn);"></span>
+        </div>
+      </div>
+      <div class="row" style="gap: 8px;">
+        <span class="cap" style="width: 36px;">dark</span>
+        <div class="hb" data-theme="dark" style="display: flex; border: 1px solid var(--rule-2);">
+          <span style="width: 52px; height: 22px; background: var(--bg);"></span>
+          <span style="width: 52px; height: 22px; background: var(--bg-2);"></span>
+          <span style="width: 52px; height: 22px; background: var(--surface);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ink);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ink-2);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ink-3);"></span>
+          <span style="width: 52px; height: 22px; background: var(--rule);"></span>
+          <span style="width: 52px; height: 22px; background: var(--act);"></span>
+          <span style="width: 52px; height: 22px; background: var(--ver);"></span>
+          <span style="width: 52px; height: 22px; background: var(--fail);"></span>
+          <span style="width: 52px; height: 22px; background: var(--warn);"></span>
+        </div>
+      </div>
+      <div class="row" style="gap: 8px;">
+        <span style="width: 36px;"></span>
+        <div class="tex" style="display: flex; padding-left: 1px; opacity: 1;">
+          <span style="width: 52px;">bg</span><span style="width: 52px;">bg-2</span><span style="width: 52px;">surface</span><span style="width: 52px;">ink</span><span style="width: 52px;">ink-2</span><span style="width: 52px;">ink-3</span><span style="width: 52px;">rule</span><span style="width: 52px;">act</span><span style="width: 52px;">ver</span><span style="width: 52px;">fail</span><span style="width: 52px;">warn</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main style="padding: 24px 48px 28px; display: flex; flex-direction: column; gap: 24px;">
+
+    <!-- ROW A · tiers · status · evidence · buttons -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: stretch;">
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Source tiers</span><span class="sep">·</span><span>7 chips</span><span class="ts">.chip .t-*</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: 124px minmax(0, 1fr) auto; column-gap: 8px; row-gap: 6px; align-items: center;">
+            <span><span class="chip t-pri"><i>pri</i> primary</span></span><span class="small faint">solid</span><code class="meta faint">.t-pri</code>
+            <span><span class="chip t-ven"><i>ven</i> vendor</span></span><span class="small faint">single rule</span><code class="meta faint">.t-ven</code>
+            <span><span class="chip t-anl"><i>anl</i> analyst</span></span><span class="small faint">double rule</span><code class="meta faint">.t-anl</code>
+            <span><span class="chip t-pra"><i>pra</i> practitioner</span></span><span class="small faint">dashed</span><code class="meta faint">.t-pra</code>
+            <span><span class="chip t-ill"><i>ill</i> illustrative</span></span><span class="small faint">dotted, ochre</span><code class="meta faint">.t-ill</code>
+            <span><span class="chip t-der"><i>ƒ</i> derived</span></span><span class="small faint">ver tint</span><code class="meta faint">.t-der</code>
+            <span><span class="chip t-opn"><i>opn</i> open</span></span><span class="small faint">unresolved</span><code class="meta faint">.t-opn</code>
+          </div>
+          <div class="rt col" style="gap: 6px; padding-top: 12px;">
+            <div class="between"><span class="cap">inline, in a sentence</span><code class="meta faint">.fig-ill · .fig-der</code></div>
+            <p class="small" style="line-height: 22px;">A task meets a worker failure with probability <span class="fig-der">4.3%</span> <span class="derive">ƒ L38</span> at an assumed <span class="fig-ill">0.4% per step</span> <span class="chip t-ill"><i>ill</i> illustrative</span>. Retries start at 1 s <span class="chip t-ven"><i>ven</i> 21.9 r4</span>. See <a class="xref" href="#">26.3</a>.</p>
+          </div>
+          <div class="rt" style="padding-top: 12px; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; row-gap: 8px; align-items: center;">
+            <span><span class="derive">ƒ L38</span> <span class="small faint">derive.py line</span></span><code class="meta faint">.derive</code>
+            <span class="small"><a class="xref" href="#">26.3</a> <a class="xref" href="#">ch12</a> <a class="xref" href="#">Lab 21</a></span><code class="meta faint">.xref</code>
+            <span><span class="cite">ch21 · 21.3</span></span><code class="meta faint">.cite</code>
+            <span><span class="nocover">the book does not cover this</span></span><code class="meta faint">.nocover</code>
+          </div>
+        </div>
+        <div class="inst-f"><span>every number links</span><span class="tex" style="margin-left: auto;">tiers v1.0</span></div>
+      </section>
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Status marks</span><span class="sep">·</span><span>verify · lab</span><span class="ts">.st .st-block</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; row-gap: 8px; align-items: center;">
+            <code class="meta faint">.st.st-*</code><code class="meta faint" style="text-align: right;">.st-block.sb-*</code>
+            <span class="st st-ok">verified</span><span style="text-align: right;"><span class="st-block sb-ok">verified</span></span>
+            <span class="st st-ok">redteam passed</span><span style="text-align: right;"><span class="st-block sb-ok">redteam passed</span></span>
+            <span class="st st-warn">stale &gt; 90 d</span><span style="text-align: right;"><span class="st-block sb-warn">stale &gt; 90 d</span></span>
+            <span class="st st-mute">unverified</span><span style="text-align: right;"><span class="st-block sb-mute">unverified</span></span>
+            <span class="st st-ok">reproduced</span><span style="text-align: right;"><span class="st-block sb-ok">reproduced</span></span>
+            <span class="st st-fail">not reproduced</span><span style="text-align: right;"><span class="st-block sb-fail">not reproduced</span></span>
+            <span class="st st-run">running 64%</span><span style="text-align: right;"><span class="st-block sb-act">running 64%</span></span>
+            <span class="st st-fail">killed</span><span style="text-align: right;"><span class="st-block sb-fail">killed</span></span>
+            <span class="st st-mute">no lab</span><span style="text-align: right;"><span class="st-block sb-mute">no lab</span></span>
+          </div>
+          <dl class="kv rt" style="padding-top: 12px; margin: 0;">
+            <dt>-ok</dt><dd>ver · solid square</dd>
+            <dt>-warn</dt><dd>ochre · solid square</dd>
+            <dt>-fail</dt><dd>red · solid or filled block</dd>
+            <dt>-mute</dt><dd>grey · hollow or dashed</dd>
+            <dt>-run · -act</dt><dd>warm · half-filled</dd>
+          </dl>
+        </div>
+        <div class="inst-f"><span>colour plus shape plus word</span><span class="tex" style="margin-left: auto;">never colour alone</span></div>
+      </section>
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Evidence tiers</span><span class="sep">·</span><span>A–G, U</span><span class="ts">.ev .ev-*</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: 24px minmax(0, 1fr) 32px 40px; column-gap: 10px; row-gap: 8px; align-items: center;">
+            <span class="ev ev-a">A</span><span class="small">Reproducible</span><span class="score small" style="text-align: right;">100</span><code class="meta faint">.ev-a</code>
+            <span class="ev ev-b">B</span><span class="small">Primary published</span><span class="score small" style="text-align: right;">85</span><code class="meta faint">.ev-b</code>
+            <span class="ev ev-c">C</span><span class="small">Primary vendor</span><span class="score small" style="text-align: right;">70</span><code class="meta faint">.ev-c</code>
+            <span class="ev ev-d">D</span><span class="small">Independent analyst</span><span class="score small" style="text-align: right;">60</span><code class="meta faint">.ev-d</code>
+            <span class="ev ev-e">E</span><span class="small">Practitioner</span><span class="score small" style="text-align: right;">40</span><code class="meta faint">.ev-e</code>
+            <span class="ev ev-f">F</span><span class="small">Reported</span><span class="score small" style="text-align: right;">25</span><code class="meta faint">.ev-f</code>
+            <span class="ev ev-g">G</span><span class="small">Opinion</span><span class="score small" style="text-align: right;">5</span><code class="meta faint">.ev-g</code>
+            <span class="ev ev-u">U</span><span class="small">Unverifiable</span><span class="score small" style="text-align: right;">0</span><code class="meta faint">.ev-u</code>
+          </div>
+          <div class="rt col" style="gap: 12px; padding-top: 12px;">
+            <div class="between"><span class="cap">large · .ev-lg · S-15-0377</span><span class="cap">adjusted</span></div>
+            <div class="row" style="gap: 12px;">
+              <span class="ev ev-c ev-lg">C</span>
+              <div class="col grow" style="gap: 2px;"><span class="small">Vendor pricing page</span><span class="meta">70 × 1.0 × 1.0 × 0.8</span></div>
+              <span class="midnum">56</span>
+            </div>
+            <div class="row" style="gap: 12px;">
+              <span class="ev ev-d ev-lg">D</span>
+              <div class="col grow" style="gap: 2px;"><span class="small">Price tracker, 5 months</span><span class="meta">60 × 1.0 × 0.7 × 1.0</span></div>
+              <span class="midnum faint">42</span>
+            </div>
+            <div class="between rt-s" style="padding-top: 10px;">
+              <div class="col" style="gap: 2px;"><span class="flabel">live score</span><span class="meta">strongest 56 + corroboration 10</span></div>
+              <span class="score h3">66 <span class="faint small">/ 70</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="inst-f"><span>strongest item, never the sum</span><span class="tex" style="margin-left: auto;">published 01 Jul 2026</span></div>
+      </section>
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Buttons</span><span class="sep">·</span><span>7 variants</span><span class="ts">.btn</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="between"><button type="button" class="btn btn-p">Run</button><code class="meta faint">.btn-p</code></div>
+          <div class="between"><button type="button" class="btn">Save run</button><code class="meta faint">.btn</code></div>
+          <div class="between"><button type="button" class="btn btn-q">Reset lab</button><code class="meta faint">.btn-q</code></div>
+          <div class="between"><button type="button" class="btn btn-d">Kill run</button><code class="meta faint">.btn-d</code></div>
+          <div class="between"><button type="button" class="btn btn-sm">Copy</button><code class="meta faint">.btn-sm</code></div>
+          <div class="between"><button type="button" class="btn btn-p btn-lg">Submit for grading</button><code class="meta faint">.btn-lg</code></div>
+          <div class="between"><button type="button" class="btn" disabled="disabled">Save run</button><code class="meta faint">[disabled]</code></div>
+          <div class="between"><button type="button" class="btn">Ask about 21.3 <span class="kbd">a</span></button><code class="meta faint">.kbd</code></div>
+          <div class="between"><button type="button" class="iconbtn" aria-label="Close peek panel">×</button><code class="meta faint">.iconbtn</code></div>
+        </div>
+        <div class="inst-f"><span>warm accent for actions only</span><span class="tex" style="margin-left: auto;">focus ring 2 px ver</span></div>
+      </section>
+    </div>
+
+    <!-- ROW B · inputs · instrument anatomy -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: stretch;">
+
+      <section class="inst" style="grid-column: span 2; display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Inputs</span><span class="sep">·</span><span>suggestion form fields</span><span class="ts">.field · .input · .textarea · .seg</span></div>
+        <div class="inst-b grow" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px;">
+          <div class="col" style="gap: 16px;">
+            <div class="field">
+              <div class="between"><label class="flabel" for="cs-val">proposed value</label><code class="meta faint">.input</code></div>
+              <input class="input" id="cs-val" value="$0.25 per million tokens">
+            </div>
+            <div class="field">
+              <div class="between"><label class="flabel" for="cs-anc">anchor</label><code class="meta faint">.input.mono</code></div>
+              <input class="input mono" id="cs-anc" value="15.9 · source row r12">
+            </div>
+            <div class="field">
+              <div class="between"><label class="flabel" for="cs-link">evidence link</label><code class="meta faint">.input.err · .help.err</code></div>
+              <input class="input mono err" id="cs-link" value="https://tracker.invalid/prices/cached-input" aria-invalid="true" aria-describedby="cs-link-e">
+              <p class="help err" id="cs-link-e">The link returned 404. It will be graded U, not weak. Upload the document or give a DOI.</p>
+            </div>
+            <div class="field">
+              <div class="between"><label class="flabel" for="cs-cls">change class</label><code class="meta faint">.select</code></div>
+              <select class="select" id="cs-cls"><option>Cited figure, date, price, deadline · accept ≥ 70</option></select>
+            </div>
+          </div>
+          <div class="col" style="gap: 16px;">
+            <div class="field">
+              <div class="between"><label class="flabel" for="cs-rat">rationale</label><code class="meta faint">.textarea · .counter</code></div>
+              <textarea class="textarea" id="cs-rat" aria-describedby="cs-rat-c">The provider cut the tier-2 cached-input price on 09 Sep 2026. The pricing page and the changelog both state $0.25 per million tokens. Row r12 still shows $0.30.</textarea>
+              <div class="between"><span class="help">Plain text. Say what changed and where.</span><span class="counter" id="cs-rat-c">28 / 200 words</span></div>
+            </div>
+            <div class="field">
+              <div class="between"><span class="flabel" id="cs-rel">relevance</span><code class="meta faint">.seg</code></div>
+              <div class="seg" role="group" aria-labelledby="cs-rel" style="align-self: flex-start;">
+                <button type="button" aria-pressed="true">Direct</button><button type="button" aria-pressed="false">Partial</button><button type="button" aria-pressed="false">Tangential</button>
+              </div>
+            </div>
+            <div class="between">
+              <label class="check"><input type="checkbox" checked="checked"> Notify me when the decision is recorded</label>
+              <code class="meta faint">.check</code>
+            </div>
+            <div class="between">
+              <div class="row" style="gap: 12px;">
+                <span class="flabel">edition language</span>
+                <div class="langtoggle" role="group" aria-label="Edition language">
+                  <button type="button" aria-pressed="true">EN</button><button type="button" aria-pressed="false">PT</button>
+                </div>
+              </div>
+              <code class="meta faint">.langtoggle</code>
+            </div>
+          </div>
+        </div>
+        <div class="inst-f"><span>labels above fields · errors below · never placeholder-only</span><span class="tex" style="margin-left: auto;">S-15-0377 draft</span></div>
+      </section>
+
+      <section class="inst" style="grid-column: span 2; display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Instrument panel</span><span class="sep">·</span><span>anatomy</span><span class="ts">.inst</span></div>
+        <div class="inst-b grow" style="display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 28px; align-items: start;">
+          <section class="inst" aria-label="Specimen instrument panel">
+            <div class="inst-h">
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--ink); color: var(--bg); font-size: 10px; font-weight: 600;">1</span><span class="t">Lab 21</span><span class="sep">·</span>
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--ink); color: var(--bg); font-size: 10px; font-weight: 600;">2</span><span>v1.5.0</span>
+              <span class="ts row" style="gap: 6px;"><span style="display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--ink); color: var(--bg); font-size: 10px; font-weight: 600;">3</span>12 Sep 09:41</span>
+            </div>
+            <div class="inst-b" style="display: flex; gap: 10px; align-items: flex-start;">
+              <span style="display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; flex: none; background: var(--ink); color: var(--bg); font-family: var(--mono); font-size: 10px; font-weight: 600;">4</span>
+              <div class="col grow" style="gap: 12px;">
+                <div class="between"><span class="flabel">verdict</span><span class="st-block sb-ok">reproduced</span></div>
+                <dl class="kv" style="margin: 0;">
+                  <dt>figures</dt><dd>14 / 14 match</dd>
+                  <dt>runtime</dt><dd>2 m 51 s</dd>
+                  <dt>sandbox</dt><dd>egress denied</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="inst-f"><span style="display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--ink); color: var(--bg); font-size: 10px; font-weight: 600;">5</span><a class="xref" href="#">run history · 12</a><span class="tex" style="margin-left: auto;">#c41e·07b2</span></div>
+          </section>
+          <ol class="col" style="gap: 12px;">
+            <li class="col" style="gap: 2px;"><div class="between"><span class="small" style="font-weight: 600;">1 · Label</span><code class="meta faint">.inst-h .t</code></div><span class="small muted">Uppercase mono. Names the instrument, never a slogan.</span></li>
+            <li class="col" style="gap: 2px;"><div class="between"><span class="small" style="font-weight: 600;">2 · Version</span><code class="meta faint">.inst-h span</code></div><span class="small muted">The content version the panel reads. Semver, after a mid-dot.</span></li>
+            <li class="col" style="gap: 2px;"><div class="between"><span class="small" style="font-weight: 600;">3 · Timestamp</span><code class="meta faint">.inst-h .ts</code></div><span class="small muted">Right-aligned. Last verification, run or fetch.</span></li>
+            <li class="col" style="gap: 2px;"><div class="between"><span class="small" style="font-weight: 600;">4 · Body</span><code class="meta faint">.inst-b · .kv</code></div><span class="small muted">16 px padding. Verdict first, then key–value readings.</span></li>
+            <li class="col" style="gap: 2px;"><div class="between"><span class="small" style="font-weight: 600;">5 · Footer</span><code class="meta faint">.inst-f</code></div><span class="small muted">History links. Hash fragments as texture, never as content.</span></li>
+          </ol>
+        </div>
+        <div class="inst-f"><span>1 px rule-strong border · no fill · no shadow</span><span class="tex" style="margin-left: auto;">inst v0.9</span></div>
+      </section>
+    </div>
+
+    <!-- ROW C · table · diff · peek -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: stretch;">
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Table</span><span class="sep">·</span><span>figures in 21.3</span><span class="ts">.tbl</span></div>
+        <table class="tbl" style="font-size: 12.5px;">
+          <thead><tr><th>figure</th><th class="n">value</th><th>tier</th></tr></thead>
+          <tbody>
+            <tr><td>steps per task</td><td class="n">11</td><td><span class="meta">scenario</span></td></tr>
+            <tr><td>worker loss / step</td><td class="n">0.4%</td><td><span class="chip t-ill"><i>ill</i></span></td></tr>
+            <tr class="sel"><td>interrupted / day</td><td class="n">86</td><td><span class="chip t-der"><i>ƒ</i> der</span></td></tr>
+            <tr><td>duplicate writes / day</td><td class="n">117</td><td><span class="chip t-der"><i>ƒ</i> der</span></td></tr>
+            <tr><td>retry initial interval</td><td class="n">1 s</td><td><span class="chip t-ven"><i>ven</i></span></td></tr>
+          </tbody>
+          <tfoot><tr><td>5 of 7 shown</td><td class="n">2 ƒ</td><td>1 ill</td></tr></tfoot>
+        </table>
+        <div class="inst-f" style="margin-top: auto;"><code>th rule 1.5 px · tr.sel · tfoot</code></div>
+      </section>
+
+      <section class="inst" style="grid-column: span 2; display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Diff · Lab 23</span><span class="sep">·</span><span>ch23 v1.4.1</span><span class="ts">ci · 15 Sep 2026 06:00</span></div>
+        <table class="tbl" style="font-size: 12.5px;">
+          <thead><tr><th>figure</th><th class="n">chapter</th><th class="n">this run</th><th class="n">Δ</th><th>result</th><th>class</th></tr></thead>
+          <tbody>
+            <tr><td>quality retention</td><td class="n">95%</td><td class="n">95%</td><td class="n"><span class="d-match">0 pt</span></td><td><span class="st st-ok">match</span></td><td><code class="meta faint">.d-match</code></td></tr>
+            <tr class="row-div"><td>cost reduction at 95% retention · F-23-06</td><td class="n">2.4×</td><td class="n">1.7×</td><td class="n"><span class="d-div">−0.7×</span></td><td><span class="st st-fail">diverge</span></td><td><code class="meta faint">tr.row-div</code></td></tr>
+            <tr><td>queries routed</td><td class="n">2,000</td><td class="n">2,000</td><td class="n"><span class="d-match">0</span></td><td><span class="st st-ok">match</span></td><td><code class="meta faint">.d-match</code></td></tr>
+            <tr class="row-new"><td>fallback latency p95 · not in chapter</td><td class="n">—</td><td class="n">1.9 s</td><td class="n"><span class="d-new">new</span></td><td><span class="st st-run">new</span></td><td><code class="meta faint">tr.row-new</code></td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="4">3 compared · 1 diverges · tolerance ± 0.1×</td><td colspan="2"><span class="st st-fail">not reproduced</span></td></tr></tfoot>
+        </table>
+        <div class="inst-f" style="margin-top: auto;"><span>pinned model version changed upstream</span><span class="tex" style="margin-left: auto;">run 23-ci-0915</span></div>
+      </section>
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Peek panel</span><span class="sep">·</span><span>xref target</span><span class="ts">.peek</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="peek" role="dialog" aria-label="Peek: section 26.3" style="display: flex; flex-direction: column;">
+            <div class="inst-h"><span class="t">Peek · 26.3</span><span class="sep">·</span><span>v1.4.2</span><span class="ts"><span class="kbd">esc</span></span></div>
+            <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+              <span class="cap">sensors and verification · mechanism</span>
+              <p class="small" style="line-height: 20px;">An idempotency sensor compares each write activity's key against the workflow's history and blocks a second write with the same key.</p>
+              <span class="st st-ok">verified 04 Sep 2026</span>
+            </div>
+            <div class="inst-f" style="justify-content: space-between;"><a class="xref" href="#">open in place</a><a class="xref" href="#">side by side</a></div>
+          </div>
+          <p class="small muted">Opens from any <code class="meta">.xref</code>. The reader keeps their place. Focus returns to the link on close.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ROW D · timeline + loaders · code -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: stretch;">
+
+      <div class="col" style="grid-column: span 2; gap: 24px;">
+        <section class="inst">
+          <div class="inst-h"><span class="t">Timeline · S-23-0412</span><span class="sep">·</span><span>hash-chained</span><span class="ts">.tl .tl-i .hash</span></div>
+          <div class="inst-b">
+            <ol class="tl">
+              <li class="tl-i">
+                <span class="tl-t">16 Sep 14:08:12</span>
+                <span class="tl-m"><i class="o"></i></span>
+                <div class="tl-b col" style="gap: 2px;"><span class="small">Submitted. Anchor 23.3 F-23-06, 2.4× → 1.3×.</span><span class="hash">prev a07c52e19f3b · hash 5d1e8b04c6a2</span></div>
+              </li>
+              <li class="tl-i">
+                <span class="tl-t">16 Sep 14:08:13</span>
+                <span class="tl-m"><i></i></span>
+                <div class="tl-b col" style="gap: 2px;"><span class="small row" style="gap: 6px;"><span class="ev ev-g">G</span> Evidence 1 graded: screenshot of a social media thread. Score 5.</span><span class="hash">prev 5d1e8b04c6a2 · hash e93f27a1d05b</span></div>
+              </li>
+              <li class="tl-i">
+                <span class="tl-t">16 Sep 14:08:13</span>
+                <span class="tl-m"><i class="f"></i></span>
+                <div class="tl-b col" style="gap: 2px; padding-bottom: 0;"><span class="small"><span class="st st-fail">declined at intake</span> 5 &lt; floor 25. No model call made. Tier B or D would suffice.</span><span class="hash">prev e93f27a1d05b · hash 2c68f0b9e417</span></div>
+              </li>
+            </ol>
+          </div>
+          <div class="inst-f"><code>i.o open · i ink · i.v verified · i.f fail</code><span class="tex" style="margin-left: auto;">chain intact · 3 of 3</span></div>
+        </section>
+
+        <section class="inst" style="flex: 1 1 auto;">
+          <div class="inst-h"><span class="t">Loaders and status strings</span><span class="ts">.loader .blocks .tex</span></div>
+          <div class="inst-b" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 24px; row-gap: 14px;">
+            <div class="col" style="gap: 4px;"><span class="cap">ide · sandbox start</span><span class="loader">sandbox <span class="blocks">▮▮▮▮▮▯▯▯</span> 62% · 3.2 s</span></div>
+            <div class="col" style="gap: 4px;"><span class="cap">improve · evidence grading</span><span class="loader">grading <span class="blocks">▮▮▮▮▯▯</span> 64%</span></div>
+            <div class="col" style="gap: 4px;"><span class="cap">improve · adjudication</span><span class="loader">adjudicating · queued 00:41</span></div>
+            <div class="col" style="gap: 4px;"><span class="cap">reader · chrome</span><span class="loader">release 2026.09 · sha 7f3a9c1e</span></div>
+            <div class="col" style="gap: 4px;"><span class="cap">labs · ci suite</span><span class="loader">labs <span class="blocks">████████░</span> 34 / 35 reproduced</span></div>
+            <div class="col" style="gap: 4px;"><span class="cap">chrome texture only</span><span class="tex">b64 Zm9yZ2UtMjEtdjEuNS4w · #c41e·07b2</span></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="inst" style="grid-column: span 2; display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Code and output</span><span class="sep">·</span><span>lab 21 · edited</span><span class="ts">.code .ln .term</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="code">
+            <div class="code-h"><span>lab-21/derive.py</span><span class="faint">· lines 36–44 · edited</span><span class="grow"></span>
+              <button type="button" class="btn btn-sm btn-q">Reset</button>
+              <button type="button" class="btn btn-sm btn-p">Run</button>
+            </div>
+            <div class="code-b"><span class="ln hl-a" data-n="36">p_step = 0.006  <span class="c"># edited · chapter states 0.004</span></span><span class="ln" data-n="37">steps, writes, qpd = 11, 3, 2_000</span><span class="ln hl" data-n="38">p_task = 1 - (1 - p_step) ** steps          <span class="c"># 0.0641</span></span><span class="ln" data-n="39"></span><span class="ln" data-n="40"><span class="k">def</span> <span class="fn">interrupted</span>():</span><span class="ln hl-f" data-n="41">    <span class="k">return</span> round(qpd * p_task)                <span class="c"># 128 · chapter 86</span></span><span class="ln" data-n="42"></span><span class="ln" data-n="43"><span class="k">def</span> <span class="fn">duplicate_writes</span>(durable=<span class="k">False</span>):</span><span class="ln" data-n="44">    <span class="k">if</span> durable: <span class="k">return</span> 0</span></div>
+          </div>
+          <div class="term" role="log" aria-label="Run output">$ python derive.py &amp;&amp; python run.py
+figure              chapter   this run   result
+p_task              0.0431    0.0641     diverge
+interrupted / day   86        128        diverge
+duplicate writes    117       175        diverge
+NOT REPRODUCED · 3 of 3 diverge · cause: edited line 36 · 2 m 51 s</div>
+          <div class="row" style="gap: 16px; flex-wrap: wrap;">
+            <span class="row small muted" style="gap: 6px;"><span style="width: 12px; height: 12px; background: var(--ver-bg); box-shadow: inset 2px 0 0 var(--ver);"></span><code class="meta">.ln.hl</code> linked from text</span>
+            <span class="row small muted" style="gap: 6px;"><span style="width: 12px; height: 12px; background: var(--act-bg); box-shadow: inset 2px 0 0 var(--act);"></span><code class="meta">.ln.hl-a</code> edited</span>
+            <span class="row small muted" style="gap: 6px;"><span style="width: 12px; height: 12px; background: var(--fail-bg); box-shadow: inset 2px 0 0 var(--fail);"></span><code class="meta">.ln.hl-f</code> diverges</span>
+          </div>
+        </div>
+        <div class="inst-f"><span>edited runs never overwrite the pinned lab</span><span class="tex" style="margin-left: auto;">python 3.12 · sandbox sb-4e21</span></div>
+      </section>
+    </div>
+
+    <!-- ROW E · meters · tree · EN/PT -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: stretch;">
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Meters</span><span class="sep">·</span><span>with threshold</span><span class="ts">.meter .mark</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 18px;">
+          <div class="col" style="gap: 6px;">
+            <div class="between"><span class="small">Model budget</span><span class="meta">1.84 M / 2.50 M · 73.6%</span></div>
+            <div class="meter" role="meter" aria-label="Model budget" aria-valuenow="73.6" aria-valuemin="0" aria-valuemax="100"><i style="width: 73.6%;"></i></div>
+            <div class="between"><code class="meta faint">.meter</code><span class="meta faint">hard cap at gateway</span></div>
+          </div>
+          <div class="col" style="gap: 6px;">
+            <div class="between"><span class="small">ch15 price rows · age</span><span class="meta">97 d</span></div>
+            <div class="meter warn" role="meter" aria-label="Verification age, chapter 15 price rows" aria-valuenow="97" aria-valuemin="0" aria-valuemax="120"><i style="width: 80.8%;"></i><span class="mark" style="left: 75%;"></span></div>
+            <div class="between"><code class="meta faint">.meter.warn</code><span class="meta faint">mark · 90 d limit</span></div>
+          </div>
+          <div class="col" style="gap: 6px;">
+            <div class="between"><span class="small">Override rate · independence</span><span class="meta">21.4%</span></div>
+            <div class="meter fail" role="meter" aria-label="Override rate, independence" aria-valuenow="21.4" aria-valuemin="0" aria-valuemax="30"><i style="width: 71.3%;"></i><span class="mark" style="left: 66.7%;"></span></div>
+            <div class="between"><code class="meta faint">.meter.fail</code><span class="meta faint">mark · 20% review</span></div>
+          </div>
+          <div class="col" style="gap: 6px;">
+            <div class="between"><span class="small">Judge κ vs human labels</span><span class="meta">0.68</span></div>
+            <div class="meter ver" role="meter" aria-label="Judge kappa against human labels" aria-valuenow="0.68" aria-valuemin="0" aria-valuemax="1"><i style="width: 68%;"></i><span class="mark" style="left: 70%;"></span></div>
+            <div class="between"><code class="meta faint">.meter.ver</code><span class="meta faint">mark · 0.7 gate</span></div>
+          </div>
+        </div>
+        <div class="inst-f"><span>value in text beside every bar</span></div>
+      </section>
+
+      <section class="inst" style="display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Taxonomy tree</span><span class="sep">·</span><span>✢ markers</span><span class="ts">.tree .glyph</span></div>
+        <div class="inst-b grow">
+          <ul class="tree" aria-label="Book structure">
+            <li><span class="glyph">✢</span> release 2026.09 · 41 ch</li>
+            <li><span class="faint">├─</span> <span class="glyph">✢</span> part 0 · why now · 00</li>
+            <li><span class="faint">├─</span> <span class="glyph">✢</span> part i · foundations · 01–15</li>
+            <li><span class="faint">├─</span> <span class="glyph">✢</span> part ii · harness · 16–33</li>
+            <li><span class="faint">│  ├─</span> 21 control plane</li>
+            <li><span class="faint">│  │  ├─</span> 21.1–21.9 · 9 layers</li>
+            <li><span class="faint">│  │  └─</span> lab 21 · <span style="color: var(--ver);">reproduced</span></li>
+            <li><span class="faint">│  └─</span> 33 failure catalogue · <span class="faint">no lab</span></li>
+            <li><span class="faint">├─</span> <span class="glyph">✢</span> part iii · industrial · 34–40</li>
+            <li><span class="faint">└─</span> <span class="glyph">✢</span> part iv · labs · A–E</li>
+          </ul>
+        </div>
+        <div class="inst-f"><span>diagrams are trees, not pictures</span></div>
+      </section>
+
+      <section class="inst" style="grid-column: span 2; display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">EN / PT label lengths</span><span class="sep">·</span><span>string budget +30%</span><span class="ts">wrap, never truncate</span></div>
+        <table class="tbl">
+          <thead><tr><th>string</th><th>en</th><th>pt-br</th><th class="n">chars</th></tr></thead>
+          <tbody>
+            <tr><td><code class="meta faint">act.attach</code></td><td><button type="button" class="btn btn-p">Attach as evidence</button></td><td><button type="button" class="btn btn-p" lang="pt-BR">Anexar como evidência</button></td><td class="n">18 → 21 · +17%</td></tr>
+            <tr><td><code class="meta faint">act.save_run</code></td><td><button type="button" class="btn">Save run</button></td><td><button type="button" class="btn" lang="pt-BR">Salvar execução</button></td><td class="n">8 → 15 · <span class="d-new">+88%</span></td></tr>
+            <tr><td><code class="meta faint">dec.request</code></td><td><span class="st-block sb-warn">Request more</span></td><td><span class="st-block sb-warn" lang="pt-BR">Solicitar mais evidências</span></td><td class="n">12 → 25 · <span class="d-new">+108%</span></td></tr>
+            <tr><td><code class="meta faint">lab.not_repro</code></td><td><span class="st-block sb-fail">Not reproduced</span></td><td><span class="st-block sb-fail" lang="pt-BR">Não reproduzido</span></td><td class="n">14 → 15 · +7%</td></tr>
+            <tr><td><code class="meta faint">tier.ill</code></td><td><span class="chip t-ill"><i>ill</i> illustrative</span></td><td><span class="chip t-ill" lang="pt-BR"><i>ilu</i> ilustrativo</span></td><td class="n">12 → 11 · −8%</td></tr>
+          </tbody>
+        </table>
+        <div class="inst-f" style="margin-top: auto;"><span>2 of 5 exceed +30% · labels size to content · columns sized for pt</span></div>
+      </section>
+    </div>
+
+    <!-- ROW F · empty · error -->
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; align-items: stretch;">
+
+      <section class="inst" style="grid-column: span 2; display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Empty states</span><span class="sep">·</span><span>each names a next action</span><span class="ts">.empty</span></div>
+        <div class="inst-b grow" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="empty" style="padding: 16px 20px; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px;">
+            <div class="col" style="gap: 4px;"><span class="cap">labs · lab 21 · saved runs</span><span class="h4">No run yet for Lab 21 v1.5.0.</span><span class="small muted">Runs you save appear here with their verdict and diff.</span></div>
+            <button type="button" class="btn btn-p">Run Lab 21</button>
+          </div>
+          <div class="empty" style="padding: 16px 20px; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px;">
+            <div class="col" style="gap: 4px;"><span class="cap">improve · anchor 21.3</span><span class="h4">No suggestions on 21.3.</span><span class="small muted">Anchor a change to a section, a figure or a source row.</span></div>
+            <button type="button" class="btn">Suggest a change</button>
+          </div>
+          <div class="empty" style="padding: 16px 20px; flex-direction: row; align-items: center; justify-content: space-between; gap: 16px;">
+            <div class="col" style="gap: 4px;"><span class="cap">search · “repair budget” · part iii · tier primary</span><span class="h4">No results with these filters.</span><span class="small muted">Remove the part filter or the tier filter, then search again.</span></div>
+            <button type="button" class="btn">Clear filters</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="inst" style="grid-column: span 2; display: flex; flex-direction: column;">
+        <div class="inst-h"><span class="t">Error states</span><span class="sep">·</span><span>what failed · what to do</span><span class="ts">.error</span></div>
+        <div class="inst-b grow" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px;">
+          <div class="error col" style="gap: 8px;" role="alert">
+            <div class="between"><span class="st st-fail">egress denied</span><span class="meta faint">ide · 14:31:07</span></div>
+            <p class="small">run.py tried to open 203.0.113.24:443. Lab 21 declares no network access; only the package registry is allowed.</p>
+            <div class="row" style="margin-top: auto;"><button type="button" class="btn btn-sm">Show the call</button></div>
+          </div>
+          <div class="error col" style="gap: 8px;" role="alert">
+            <div class="between"><span class="st st-fail">budget cap reached</span><span class="meta faint">gateway</span></div>
+            <p class="small">The gateway refused the model call. The organisation is at its 2.50 M token cap. It resets 01 Oct; an admin can raise it.</p>
+            <div class="row" style="margin-top: auto;"><button type="button" class="btn btn-sm">Run without the model step</button></div>
+          </div>
+          <div class="error col" style="gap: 8px;" role="alert">
+            <div class="between"><span class="st st-fail">link could not be opened</span><span class="ev ev-u">U</span></div>
+            <p class="small">Evidence 2 returned 403. It is graded U, score 0, not weak. The other items still count.</p>
+            <div class="row" style="margin-top: auto;"><button type="button" class="btn btn-sm">Replace evidence</button></div>
+          </div>
+          <div class="error col" style="gap: 8px;" role="alert">
+            <div class="between"><span class="st st-fail">anchor not found</span><span class="meta faint">intake sensor</span></div>
+            <p class="small">F-23-07 does not exist at ch23 v1.4.1. Nothing was graded. Choose an anchor at the current version.</p>
+            <div class="row" style="margin-top: auto;"><button type="button" class="btn btn-sm">Choose an anchor</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="statusbar" style="margin-top: auto;">
+    <span>component sheet · 17 groups</span>
+    <span>hb.css v0.9.0</span>
+    <span>theme light</span>
+    <span>EN · PT strings checked</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);">release 2026.09 · sha 7f3a9c1e</span>
+  </footer>
+</div>
+
+
+</body>
+</html>

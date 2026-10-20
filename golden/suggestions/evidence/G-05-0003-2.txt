@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-06-12, at regulator.example.
+
+In passing: The usual order of a rule and its exception is the rule first.
+
+Context: Method: for each question, length, and position, build the context, ask, score deterministically; three runs per cell.

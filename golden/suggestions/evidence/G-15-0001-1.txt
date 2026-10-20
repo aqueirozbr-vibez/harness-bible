@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-08-31, at vendor.example.
+
+The passage is better put as: "The price list for a language model has four numbers, and each one remains a fact about hardware that the previous chapters explained."
+
+Context: The price list for a language model has four numbers, and each one is a fact about hardware that the previous chapters explained.

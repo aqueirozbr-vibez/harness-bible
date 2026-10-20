@@ -1,0 +1,26 @@
+{
+  "agent": "researcher",
+  "version": "v2.0",
+  "files": [],
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "parts": {
+    "planner": {
+      "files": [
+        "planner.md"
+      ],
+      "sha256": "88ef17bdd48d3a9f1234aad39320baae9a45e50ec30e24da011b19d963e93667"
+    },
+    "reader": {
+      "files": [
+        "reader.md"
+      ],
+      "sha256": "3e14c43cd8c58648216050881c77a6880445e64f0f78b80200ccac3372661cfc"
+    },
+    "writer": {
+      "files": [
+        "writer.md"
+      ],
+      "sha256": "cccac46a71e8addce6e96c3e27d218a75a09e48d3c0908df54bb81933dfc5d8b"
+    }
+  }
+}

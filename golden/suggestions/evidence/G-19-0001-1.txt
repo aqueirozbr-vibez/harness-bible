@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-03-24, at vendor.example.
+
+In passing: The lab's run derives 0.04 for 18 against $.
+
+Context: 18 against $ · 0.03

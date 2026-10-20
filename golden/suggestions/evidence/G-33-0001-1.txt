@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2024-08-01, at vendor.example.
+
+The passage is better put as: "In practice, nIST's GenAI Profile lists twelve risk categories for governance."
+
+Context: NIST's GenAI Profile lists twelve risk categories for governance.

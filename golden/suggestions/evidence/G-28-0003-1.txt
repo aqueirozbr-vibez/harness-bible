@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-06-12, at regulator.example.
+
+In passing: The passage is better put as: "In practice, show the tool registry and confirm nothing in it reaches a control network."
+
+Context: Show the tool registry and confirm nothing in it reaches a control network.

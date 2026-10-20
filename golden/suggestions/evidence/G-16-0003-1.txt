@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, undated, at regulator.example.
+
+Guides/sensors × computational/inferential; steering loop The source: Böckeler, martinfowler.com, Apr 2026.
+
+Context: Guides/sensors × computational/inferential; steering loop — Böckeler, martinfowler.com, Apr 2026

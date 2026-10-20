@@ -1,0 +1,5 @@
+A thread on a public forum, dated 2026-10-07, at forum.example.
+
+A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+Context: Six integers per model reproduce the vendor's parameter count to within a tenth of a percent, and the remainder is the norms (derive.py, derived).

@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-08-31, at vendor.example.
+
+while its forward pass costs about is 75, the earlier 74 having been revised.
+
+Context: while its forward pass costs about · 74

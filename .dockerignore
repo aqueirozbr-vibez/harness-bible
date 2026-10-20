@@ -1,0 +1,14 @@
+# The build context of the first-party images (infra/<service>/Dockerfile). A secret, an installed dependency
+# and a build output never enter an image: they are mounted, installed or generated inside it.
+.env*
+node_modules
+.next
+out
+build
+coverage
+.git
+lib/db/generated
+pipeline/reports
+*.tsbuildinfo
+infra/keycloak/vault
+infra/keycloak/.rendered

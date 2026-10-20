@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+A reader of this section should also know that the practice described here is checked against the source on a fixed schedule.
+
+Context: What to record: grader model and version; rubric version; calibration set version and labelers; κ per criterion; gate configuration and baseline version; date.

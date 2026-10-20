@@ -1,0 +1,5 @@
+A thread on a public forum, dated 2026-10-07, at forum.example.
+
+Self-Refine: ~20 points absolute average improvement The source: Madaan et al., "Self-Refine," 2023, arXiv 2303.17651.
+
+Context: Self-Refine: ~20 points absolute average improvement — Madaan et al., "Self-Refine," 2023, arXiv 2303.17651

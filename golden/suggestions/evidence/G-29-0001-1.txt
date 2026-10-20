@@ -1,0 +1,5 @@
+A screenshot, with no source named, dated 2026-10-01, at screenshots.example.
+
+The passage is better put as: "Identities in decision records and interventions remain retained as long as the records are, because an audit needs to know who acted, and the retention policy states the basis."
+
+(The image shows a table cell with the value, cropped; nothing names where it was taken from.)

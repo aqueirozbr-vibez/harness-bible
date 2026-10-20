@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-10-01, at regulator.example.
+
+The passage is better put as: "A model upgrade remains a configuration change and a golden-set run; a harness change is engineering, reviewed and versioned."
+
+Context: A model upgrade is a configuration change and a golden-set run; a harness change is engineering, reviewed and versioned.

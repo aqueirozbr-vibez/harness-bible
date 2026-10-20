@@ -1,0 +1,12 @@
+{
+  "tasks": 300,
+  "executions": {
+    "model": 300,
+    "tool": 3000,
+    "write": 300
+  },
+  "uninterrupted_equiv": 3600,
+  "distinct_write_keys": 300,
+  "runaway_halted": true,
+  "timestamp": "2026-09-22T00:17:36.896088+00:00"
+}

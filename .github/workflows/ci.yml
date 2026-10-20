@@ -1,0 +1,155 @@
+# CI gates (feature-specs/09 § 8.8; architecture § 10). Every push and pull request.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: hb
+          POSTGRES_PASSWORD: hb
+          POSTGRES_DB: harness_bible
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U hb" --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://hb:hb@localhost:5432/harness_bible
+      OPA_URL: http://127.0.0.1:8181
+      APP_URL: http://localhost:3000
+      AUTH_DEV_PROVIDER: "1"
+      BOOK_DIR: ../bible
+      # The stub gateway stands in for LiteLLM (feature-specs/11 § 4, § 8); no provider key exists in this job.
+      GATEWAY_URL: http://localhost:4001
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      # The book is its own public repository (Andre, 2026-10-14): cloned beside the app, where BOOK_DIR points.
+      - name: The book, beside the app
+        run: git clone --depth 1 https://github.com/aqueirozbr-vibez/harness-bible-book.git ../bible
+      - name: Secrets in the repository (zero findings)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # What a model reads: the prompt templates, the assemblers and the data given to a model or its tests
+      # (feature-specs/21 section 6.1; invariant 9). gitleaks above covers the repository; this covers the one
+      # place where a secret would not only be committed but sent. It prints file, line and kind, never the match.
+      - name: Secrets in prompt templates and model-visible data (zero findings)
+        run: npm run secrets:scan
+      # No high or critical advisory in the production tree, ever; in the development tree only one that no released
+      # version fixes, named in lib/security/audit.ts with its reason and a review day (feature-specs/09 § 8.8).
+      - name: Vulnerable dependencies (no high or critical; development exceptions named and dated)
+        run: npm run audit:check
+      - name: Policy bundle loads and every deny case passes
+        uses: open-policy-agent/setup-opa@v2
+        with:
+          version: latest
+      - run: opa check policies && opa test policies -v
+      - name: Types and lint
+        run: npx tsc --noEmit && npx eslint .
+      - name: Database schema
+        run: npx prisma migrate deploy && npx prisma generate
+      - name: OPA sidecar for the contract tests
+        run: (opa run --server --addr 127.0.0.1:8181 policies > /tmp/opa.log 2>&1 &) && sleep 2
+      - name: Stub gateway on 4001 (feature-specs/11 § 4, § 8; the master key and the key secret are generated for this job and never stored)
+        run: |
+          key="sk-$(openssl rand -hex 16)"
+          echo "LITELLM_MASTER_KEY=$key" >> "$GITHUB_ENV"
+          echo "GATEWAY_KEY_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+          # The store's signing secret (feature-specs/32 § 5; unit 49b), generated for this job as the two above are; the store itself is the default .store directory.
+          echo "OBJECT_STORE_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+          (LITELLM_MASTER_KEY="$key" npm run gateway:stub > /tmp/gateway-stub.log 2>&1 &)
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:4001/health/liveliness > /dev/null; then break; fi; sleep 1;
+          done
+          curl -fsS http://localhost:4001/health/liveliness || (cat /tmp/gateway-stub.log; exit 1)
+      # The workflow suites (tests/workflows/) run on Temporal's time-skipping test server, a program the SDK downloads
+      # (feature-specs/28 § 6). The cache keeps it between runs, restored here because `npm ci` above empties
+      # node_modules; the step after it fetches the server on a miss and starts it once, so a server that cannot
+      # start fails here, by name, and not in the middle of `npm test`.
+      - name: Temporal's test server, cached by its release
+        uses: actions/cache@v4
+        with:
+          path: node_modules/.cache/temporal-test-server
+          key: temporal-test-server-${{ runner.os }}-v1.40.0
+      - name: The test server starts
+        run: npm run workflows:test-server
+      - name: Unit, integration and contract tests
+        run: npm test
+      - name: Ledger at 100 % branch coverage (feature-specs/14 § 9.1)
+        run: npm run test:ledger
+      - name: Rubric at 100 % branch coverage, the four worked examples to the number (feature-specs/30 § 7, § 10.1)
+        run: npm run test:rubric
+      - name: The ledger has one writer (feature-specs/14 § 9.5)
+        run: |
+          ! grep -rn "ledgerRecord\.\(create\|update\|upsert\|delete\)" --include="*.ts" --exclude="*.test.ts" --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=generated . | grep -v "lib/ledger/append.ts"
+      # The improvement tables are outside the tenant filter, so lib/db/improve.ts is where every condition on them
+      # is written, and that holds only while no other module queries them. tests/improve-door.test.ts makes the
+      # same search, and also looks for them in SQL.
+      - name: The improvement rows have one door (feature-specs/29 § 2, § 10.9)
+        run: |
+          ! grep -rnE "\.(suggestion|anchor|evidenceItem|suggestionSensorVerdict|adjudication|criterionVerdict|curatorAction|calibrationEvent|rubricReview|curationSeed|rubricVersion|threshold|curatorRoster|suggestionCounter|merge|auditExport)\.(find|create|update|upsert|delete|count|aggregate|groupBy)" --include="*.ts" --include="*.tsx" --exclude="*.test.ts" --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=generated --exclude-dir=tests . | grep -v "lib/db/improve.ts"
+      - name: OpenAPI document is generated from the schemas
+        run: npm run api:openapi && git diff --exit-code -- openapi.json
+      - name: The workers image builds and the container answers /health (feature-specs/11 § 7.1, § 12.3)
+        run: |
+          docker build -f infra/workers/Dockerfile -t hb-workers:ci .
+          token="hb-$(openssl rand -hex 16)"
+          docker run -d --name hb-workers --network host -e DATABASE_URL -e GATEWAY_URL -e GATEWAY_KEY_SECRET -e LITELLM_MASTER_KEY -e WORKERS_URL="http://127.0.0.1:4002" -e WORKERS_TOKEN="$token" hb-workers:ci
+          for i in $(seq 1 30); do
+            if curl -fsS -H "Authorization: Bearer $token" http://127.0.0.1:4002/health > /tmp/workers-health.json; then break; fi; sleep 2;
+          done
+          cat /tmp/workers-health.json || (docker logs hb-workers; exit 1)
+          grep -q '"ok":true' /tmp/workers-health.json || (docker logs hb-workers; exit 1)
+          grep -q '"gateway":"up"' /tmp/workers-health.json || (docker logs hb-workers; exit 1)
+          # Without the bearer the surface refuses (§ 12.3).
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4002/health)" = "401"
+          docker rm -f hb-workers
+      - name: Production build
+        run: npm run build
+
+  keycloak-realm:
+    runs-on: ubuntu-latest
+    env:
+      APP_URL: http://localhost:3000
+      KEYCLOAK_CLIENT_SECRET: ci-hb-web-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Render the realm (the ${env.*} placeholders) and import it into a fresh Keycloak
+        run: |
+          node infra/keycloak/start.mjs --render-only
+          mkdir -p vault
+          for k in google-client-secret github-client-secret; do echo "ci-placeholder" > "vault/harness-bible_$k"; done
+          docker run -d --name kc -p 8081:8081 \
+            -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin -e KC_HTTP_PORT=8081 \
+            -v "$PWD/infra/keycloak/.rendered/realm-harness-bible.json:/opt/keycloak/data/import/realm-harness-bible.json:ro" \
+            -v "$PWD/vault:/opt/keycloak/vault:ro" \
+            quay.io/keycloak/keycloak:26.4 start-dev --import-realm --vault file --vault-dir /opt/keycloak/vault
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:8081/realms/harness-bible/.well-known/openid-configuration > wk.json; then break; fi; sleep 3;
+          done
+          grep -q '"issuer":"http://localhost:8081/realms/harness-bible"' wk.json
+          docker logs kc | grep -i "import finished successfully" || (docker logs kc; exit 1)
+          docker logs kc | grep -qi " error" && (docker logs kc; exit 1) || true
+      - name: The stand-in realm takes the place of Google and GitHub (the local walk's setup)
+        run: |
+          node infra/keycloak/fake-idp.mjs
+          curl -fsS http://localhost:8081/realms/fake-idp/.well-known/openid-configuration | grep -q '"issuer":"http://localhost:8081/realms/fake-idp"'

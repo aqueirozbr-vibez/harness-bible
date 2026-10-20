@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-06-12, at regulator.example.
+
+In passing: The lab's run derives 1025 for at.
+
+Context: at · 1,024

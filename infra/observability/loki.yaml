@@ -1,0 +1,35 @@
+# Loki, one process, local disk (feature-specs/21 § 5.2): the image's own development configuration, kept here so
+# that one line of it can differ. It takes the product's lines from the collector over OTLP (/otlp/v1/logs) and
+# answers Grafana on 3100. A line's parsed fields arrive as structured metadata, which schema v13 stores, so a
+# query filters on them directly: {service_name="hb-lines"} | kind="job".
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+# The line that differs. By default Loki sends anonymous but uniquely identifiable usage statistics to its vendor;
+# nothing of this stack leaves the machine (architecture § 1: self-hosted, in region).
+analytics:
+  reporting_enabled: false

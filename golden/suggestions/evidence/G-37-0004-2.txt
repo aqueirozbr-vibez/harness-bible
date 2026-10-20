@@ -1,0 +1,5 @@
+A screenshot, with no source named, dated 2026-10-01, at screenshots.example.
+
+Cache read ~90% off; Anthropic write surcharge 1.25× / 2×; batch ~50% The source: OpenAI, Anthropic, Google pricing documentation.
+
+(The image shows a table cell with the value, cropped; nothing names where it was taken from.)

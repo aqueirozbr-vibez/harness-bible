@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-10-07, at press.example.
+
+The passage is better put as: "In practice, image text treated as untrusted for policy?"
+
+Context: Image text treated as untrusted for policy?

@@ -1,0 +1,8 @@
+300 tasks, crash at random step, resumed twice each: activity executions 3600 vs uninterrupted 3600
+writes executed 300 (expected 300); distinct idempotency keys 300
+runaway plan halted by call budget: True
+p_no_failure_f0.02     chapter 0.769  derived 0.769  OK
+task_success_f0.05_r1  chapter 0.968  derived 0.968  OK
+redo_fraction          chapter 0.455  derived 0.455  OK
+backoff_total          chapter 61.0  derived 61.0  OK
+Lab 21: REPRODUCED

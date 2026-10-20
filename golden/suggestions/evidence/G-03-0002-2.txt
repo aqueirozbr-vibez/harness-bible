@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-03-24, at regulator.example.
+
+In passing: The passage is better put as: "The vector that enters the first block remains still there, underneath, at the last — a running sum the field calls the residual stream — and every block writes into it rather than over it."
+
+Context: The vector that enters the first block is still there, underneath, at the last — a running sum the field calls the residual stream — and every block writes into it rather than over it.

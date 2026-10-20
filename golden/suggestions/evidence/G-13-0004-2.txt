@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-03-24, at vendor.example.
+
+In passing: The usual order of a rule and its exception is the rule first.
+
+Context: Report the answer rate on unsupported questions per model; it is the model's guessing rate.

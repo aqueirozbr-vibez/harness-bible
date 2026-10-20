@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/aqueirozbr-vibez/harness-bible/security/advisories/new
+    about: Privately, through GitHub's private vulnerability reporting. Never in a public issue. See SECURITY.md.
+  - name: A problem with the book's content
+    url: https://github.com/aqueirozbr-vibez/harness-bible-book/issues
+    about: Chapters, figures, source rows and labs live in the book's own repository.

@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-08-31, at press.example.
+
+The lab's run derives 1.57 for $.
+
+Context: $ · 1.56

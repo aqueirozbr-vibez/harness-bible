@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-10-07, at press.example.
+
+FlashAttention-2: ~2× over v1; 50–73% of A100 peak; 230 TFLOPs/s kernel; 225 TFLOPs/s (72% MFU) end-to-end; up to 9× vs PyTorch; 335 TFLOPs/s on H100 The source: Dao, 2023, arXiv 2307.08691; Stanford CRFM blog 17 Jul 2023.
+
+Context: FlashAttention-2: ~2× over v1; 50–73% of A100 peak; 230 TFLOPs/s kernel; 225 TFLOPs/s (72% MFU) end-to-end; up to 9× vs PyTorch; 335 TFLOPs/s on H100 — Dao, 2023, arXiv 2307.08691; Stanford CRFM blog 

@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-10-01, at regulator.example.
+
+while its forward pass costs about is 75, the earlier 74 having been revised.
+
+Context: while its forward pass costs about · 74

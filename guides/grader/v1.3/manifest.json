@@ -1,0 +1,8 @@
+{
+  "agent": "grader",
+  "version": "v1.3",
+  "files": [
+    "guide.md"
+  ],
+  "sha256": "971f727c9835b05a048959d0c506c7e6d4086f57ce922e2a6ff582aaf9313df6"
+}

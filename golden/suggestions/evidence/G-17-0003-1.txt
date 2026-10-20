@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-10-07, at press.example.
+
+The usual order of a rule and its exception is the rule first.
+
+Context: Sensor strength is the parameter that decides intake policy.

@@ -1,0 +1,3355 @@
+{
+  "chrome": {
+    "brand": "Harness Bible",
+    "brandSub": "interativo",
+    "brandLabel": "Harness Bible, início",
+    "navLabel": "Principal",
+    "nav": {
+      "book": "Livro",
+      "assistant": "Assistente",
+      "research": "Pesquisa",
+      "labs": "Labs",
+      "improve": "Melhorar"
+    },
+    "search": {
+      "cap": "pesquisar",
+      "placeholder": "capítulos, labs, registros",
+      "label": "Pesquisar no livro"
+    },
+    "release": "release {id} · sha {sha}",
+    "lang": {
+      "label": "Idioma da edição"
+    },
+    "account": "Conta",
+    "signIn": "Entrar"
+  },
+  "auth": {
+    "metaTitle": "Entrar · The Harness Bible",
+    "cap": "entrar · release {id}",
+    "title": "Entrar na Harness Bible",
+    "blurb": "Progresso, favoritos e notas ficam na conta e acompanham você entre dispositivos e edições.",
+    "panel": {
+      "label": "Entrar",
+      "meta": "sso",
+      "stamp": "sem senhas",
+      "google": "Continuar com Google",
+      "github": "Continuar com GitHub",
+      "dev": "Continuar como leitor de desenvolvimento",
+      "retention": "Ao continuar você aceita a política de retenção desta conta: conversas com o assistente por 30 dias como texto, depois só metadados, até você apagá-las; identidade mantida para proveniência, com consentimento.",
+      "retentionLink": "política de retenção"
+    },
+    "return": {
+      "section": "Você voltará para {id} · {title}",
+      "book": "Você voltará para o livro"
+    },
+    "empty": {
+      "none": "Nenhum provedor de login está configurado.",
+      "hint": "Defina KEYCLOAK_ISSUER e KEYCLOAK_CLIENT_SECRET, ou AUTH_DEV_PROVIDER=1 em desenvolvimento."
+    },
+    "error": {
+      "title": "O login não foi concluído",
+      "state": "O login demorou demais ou o navegador perdeu o ponto. Tente novamente.",
+      "denied": "Você cancelou no provedor. Nada foi alterado.",
+      "email": "O provedor não confirmou seu e-mail. Verifique lá e tente novamente.",
+      "notInvited": "Este e-mail não está na lista do piloto. Peça um convite ao administrador da sua organização.",
+      "deleted": "Esta conta está com exclusão pendente. Escreva para o suporte para cancelar o pedido.",
+      "provider": "O provedor não respondeu. Tente novamente em um minuto."
+    },
+    "notice": {
+      "deletionTitle": "Exclusão solicitada",
+      "deletion": "Suas sessões foram encerradas. A conta é excluída após 30 dias; escreva para o suporte para cancelar antes disso."
+    },
+    "out": {
+      "metaTitle": "Sair · The Harness Bible",
+      "label": "Sair",
+      "question": "Sair da Harness Bible neste dispositivo?",
+      "confirm": "Sair",
+      "everywhere": "Sair de todos os dispositivos",
+      "sessions": "{n, plural, one {# sessão} other {# sessões}}",
+      "cancel": "Cancelar",
+      "already": "Você saiu.",
+      "signIn": "Entrar",
+      "statusbarOut": "sair"
+    },
+    "statusbar": {
+      "in": "entrar"
+    }
+  },
+  "account": {
+    "metaTitle": "Conta · The Harness Bible",
+    "cap": {
+      "individual": "conta · individual",
+      "org": "conta · {name}"
+    },
+    "facts": {
+      "account": "conta",
+      "signIn": "login",
+      "signedInAs": "conectado como",
+      "since": "membro desde"
+    },
+    "role": {
+      "READER": "leitor",
+      "BUILDER": "construtor",
+      "CONTRIBUTOR": "contribuidor",
+      "CURATOR": "curador",
+      "ORG_ADMIN": "admin"
+    },
+    "provider": {
+      "google": "Google",
+      "github": "GitHub"
+    },
+    "profile": {
+      "label": "Perfil",
+      "since": "membro desde {date}",
+      "displayName": "nome de exibição",
+      "email": "e-mail",
+      "emailFrom": "de {provider}",
+      "role": "papel",
+      "roleNote": "definido pelo administrador da organização",
+      "save": "Salvar perfil",
+      "nameError": "de 1 a 60 caracteres"
+    },
+    "prefs": {
+      "label": "Preferências",
+      "meta": "por conta · por dispositivo",
+      "language": "idioma da edição",
+      "theme": "tema",
+      "shortcuts": "atalhos",
+      "scopeAccount": "conta",
+      "scopeDevice": "dispositivo",
+      "light": "Claro",
+      "system": "Sistema",
+      "dark": "Escuro",
+      "on": "Ligados",
+      "off": "Desligados"
+    },
+    "sessions": {
+      "label": "Sessões",
+      "open": "{n} abertas",
+      "device": "dispositivo",
+      "signedIn": "entrou",
+      "lastSeen": "visto por último",
+      "expires": "expira",
+      "current": "esta sessão",
+      "signOut": "Sair",
+      "everywhere": "Sair de todos os dispositivos",
+      "older": "{k} sessões mais antigas não exibidas"
+    },
+    "device": {
+      "edgeWindows": "Edge no Windows",
+      "chromeWindows": "Chrome no Windows",
+      "firefoxWindows": "Firefox no Windows",
+      "safariMac": "Safari no macOS",
+      "chromeMac": "Chrome no macOS",
+      "safariIphone": "Safari no iPhone",
+      "safariIpad": "Safari no iPad",
+      "chromeAndroid": "Chrome no Android",
+      "unknown": "Navegador desconhecido"
+    },
+    "identities": {
+      "label": "Logins vinculados",
+      "none": "Nenhum provedor vinculado ainda: esta sessão veio do provedor de desenvolvimento.",
+      "linked": "vinculado em {date}",
+      "lastUsed": "usado por último em {date}",
+      "unlink": "Desvincular",
+      "link": "Vincular {provider}"
+    },
+    "budget": {
+      "title": "Orçamento de modelo",
+      "gateway": "gateway",
+      "chapter": "cap. {n}",
+      "resets": "renova em {date}",
+      "used": "usado neste mês · {month}",
+      "of": "{used} de {cap} tokens",
+      "tokens": "tokens",
+      "meterLabel": "Orçamento de modelo usado: {used} de um teto de {cap} tokens",
+      "left": "restam {left}",
+      "cap": "teto {cap}",
+      "noCap": "sem teto definido",
+      "projection": "A {perDay} tokens por dia o teto é atingido em {date}. No teto, as chamadas são recusadas no gateway; sem excedente.",
+      "noProjection": "Neste ritmo o teto não é atingido neste mês.",
+      "atCap": "O teto foi atingido; as chamadas são recusadas no gateway até {reset}.",
+      "nothing": "nada usado ainda neste mês",
+      "breakdown": "detalhamento · este mês",
+      "consumer": "consumidor",
+      "share": "do teto",
+      "assistant": "Assistente",
+      "answers": "{n, plural, =0 {nenhuma resposta ainda} one {# resposta} other {# respostas}}",
+      "research": "Pesquisa",
+      "researchNote": "planejador, leitor e redator das suas pesquisas",
+      "grading": "Avaliação",
+      "adjudication": "Adjudicação",
+      "suggestions": "{n, plural, =0 {nenhuma sugestão ainda} one {# sugestão} other {# sugestões}}",
+      "retrieval": "Recuperação",
+      "retrievalNote": "embeddings e re-rank",
+      "labs": "Labs",
+      "labsNote": "a partir da Fase 3",
+      "total": "total",
+      "unit": "Os tokens são contados ao preço de entrada do modelo de fronteira, como o teto: a saída pesa mais, a recuperação auto-hospedada nada.",
+      "footer": "aplicado no gateway, não por disciplina",
+      "status": "orçamento {pct}% · teto no gateway",
+      "see": "ver seu orçamento"
+    },
+    "audit": {
+      "label": "Exportação de auditoria",
+      "chapter": "cap. {n}",
+      "ts": "jsonl · cadeia de hashes",
+      "scope": "escopo",
+      "perAccount": "Por conta",
+      "perChapter": "Por capítulo",
+      "chapterField": "capítulo",
+      "from": "de",
+      "to": "até",
+      "records": "registros",
+      "kind": {
+        "adjudications": "adjudicações e retiradas",
+        "overrides": "decisões de curador",
+        "merges": "merges",
+        "answers": "registros do assistente e de pesquisa, e exclusões"
+      },
+      "estimate": {
+        "incomplete": "escolha um período e ao menos um tipo de registro",
+        "counting": "contando os registros no período…",
+        "failed": "os registros no período não puderam ser contados",
+        "records": "{n, plural, =0 {nenhum registro no período} one {{formatted} registro no período} other {{formatted} registros no período}}"
+      },
+      "button": "Exportar pacote de auditoria",
+      "sending": "Pedindo…",
+      "preparing": "preparando · {n, plural, one {# registro} other {# registros}}",
+      "refused": {
+        "limit": "Quatro pacotes de auditoria por dia: o próximo pode ser pedido às {time}.",
+        "nothing": "Nada no período: não há o que exportar.",
+        "network": "O pedido não chegou ao servidor, ou a resposta se perdeu. Tente de novo: o mesmo pedido é feito uma só vez.",
+        "failed": "A exportação não pôde ser iniciada ({code})."
+      },
+      "last": {
+        "label": "última exportação",
+        "none": "nenhuma ainda",
+        "value": "{date} · {n, plural, one {# registro} other {# registros}}",
+        "head": "hash do topo",
+        "verified": "cadeia verificada",
+        "file": "arquivo",
+        "download": "Baixar o pacote",
+        "until": "válido até {time}"
+      },
+      "footer": "um pacote se verifica só com a chave pública: cada hash, cada vínculo, o topo e a assinatura"
+    },
+    "roster": {
+      "label": "Quadro de curadores",
+      "editorial": "editorial Harness Bible",
+      "visibility": "curadores e administradores da organização · só leitura",
+      "since": "desde {date}",
+      "th": {
+        "part": "parte",
+        "chapters": "capítulos",
+        "curators": "curadores",
+        "queue": "fila",
+        "median": "tempo mediano de decisão"
+      },
+      "part": "Parte {roman} · {title}",
+      "partTitle": {
+        "P0": "Por que agora",
+        "P1": "Fundamentos",
+        "P2": "Engenharia de harness",
+        "P3": "Aplicação industrial",
+        "P4": "Apêndices"
+      },
+      "span": "{first}–{last}",
+      "nobody": "ainda sem curador",
+      "noDecision": "nenhuma decisão neste trimestre",
+      "days": "{d} d",
+      "footer": "os curadores sempre decidem as alterações de segurança, de fronteira OT, de parâmetros de cenário e de estrutura",
+      "rubric": "a rubrica"
+    },
+    "retention": {
+      "label": "Retenção",
+      "meta": "LGPD",
+      "policy": "política v1.0",
+      "conversations": "conversas com o assistente",
+      "conversationsValue": "texto por 30 dias, ou até você apagar",
+      "thereafter": "depois",
+      "thereafterValue": "só metadados",
+      "identity": "identidade do contribuidor",
+      "identityValue": "para proveniência, com consentimento",
+      "runs": "execuções de lab salvas",
+      "runsValue": "até que um membro as exclua",
+      "note": "A exclusão é feita a pedido. Cada pedido é um registro na cadeia de auditoria.",
+      "research": "conversas de pesquisa",
+      "researchValue": "texto por 30 dias, ou até você apagar",
+      "request": "Solicitar exclusão",
+      "stats": "{n, plural, one {# conversa} other {# conversas}} · texto mais antigo mantido até {date}",
+      "statsPurged": "{n, plural, one {# conversa} other {# conversas}} · nenhum texto mantido",
+      "none": "nenhuma conversa ainda"
+    },
+    "delete": {
+      "title": "Excluir esta conta?",
+      "body": "As sessões são encerradas agora; a conta e suas marcas são excluídas após 30 dias. Digite delete para confirmar.",
+      "field": "digite delete",
+      "word": "delete",
+      "cancel": "Cancelar",
+      "confirm": "Solicitar exclusão",
+      "mismatch": "Digite delete exatamente."
+    },
+    "notice": {
+      "title": "Feito",
+      "saved": "Salvo.",
+      "revoked": "Sessão encerrada.",
+      "linked": "{provider} vinculado.",
+      "unlinked": "{provider} desvinculado.",
+      "role": "Seu papel agora é {role}. Uma troca de papel encerra as outras sessões desta conta."
+    },
+    "error": {
+      "title": "A alteração não foi feita",
+      "linkedElsewhere": "Essa conta {provider} está vinculada a outro usuário.",
+      "lastIdentity": "Mantenha ao menos um login vinculado.",
+      "session": "Entre novamente para alterar a conta.",
+      "failed": "A alteração não foi salva. Tente novamente.",
+      "name": "O nome de exibição deve ter de 1 a 60 caracteres.",
+      "confirm": "Digite delete exatamente para solicitar a exclusão.",
+      "pageTitle": "A conta não carregou",
+      "body": "Rastreio {traceId}. Tente novamente ou recarregue a página.",
+      "retry": "Tentar novamente"
+    },
+    "statusbar": "conta · {email}",
+    "book": {
+      "open": "Gestão do livro",
+      "metaTitle": "Gestão do livro · The Harness Bible",
+      "back": "← conta",
+      "title": "Gestão do livro",
+      "who": "curadores e administradores da organização",
+      "statusbar": "gestão do livro · {name}",
+      "error": "A gestão do livro não carregou"
+    },
+    "devRole": {
+      "READER": "Lê o livro, pergunta ao assistente e guarda marcações e trilhas de leitura.",
+      "BUILDER": "Os direitos de um leitor. Os labs do construtor chegam com o IDE, que ainda não existe.",
+      "CONTRIBUTOR": "Sugere alterações com evidência, pelo Sugerir uma alteração de uma seção e por Melhorar. Identidade verificada.",
+      "CURATOR": "Os direitos de um contribuidor, e lê as sugestões enviadas nas partes {parts}. Identidade verificada. A fila de curadoria ainda não existe.",
+      "CURATOR_NONE": "Os direitos de um contribuidor, mas fora da escala de todas as partes, então nenhuma sugestão alheia é legível. Escolha curador de novo para incluir esta conta.",
+      "ORG_ADMIN": "Os direitos de um leitor. A administração da organização ainda não existe.",
+      "unverified": "Identidade não verificada, então sugerir uma alteração é recusado. Escolha {role} de novo para verificá-la."
+    }
+  },
+  "home": {
+    "metaTitle": "The Harness Bible · release {id}",
+    "cap": "o livro · release {id} · fixada",
+    "title": "The Harness Bible",
+    "blurb": "{chapters} capítulos em quatro partes. Cada capítulo tem nove camadas, uma versão e um registro de verificação. {labs} capítulos têm um lab que o CI reproduz todas as noites.",
+    "continue": {
+      "label": "Continuar a leitura",
+      "chapter": "cap. {n} {version}",
+      "lastRead": "última leitura {when}",
+      "cap": "continuar a leitura",
+      "layer": "{chapter} · camada {n} de 9",
+      "path": "trilha {name}",
+      "pathName": {
+        "executive": "Executivo",
+        "builder": "Construtor",
+        "foundations": "Fundamentos"
+      },
+      "meterLabel": "progresso na trilha {name}",
+      "of": "{done} de {total}",
+      "resume": "Retomar em {section}",
+      "emptyCap": "trilhas de leitura",
+      "empty": "Nenhuma leitura ainda.",
+      "choose": "Escolher uma trilha"
+    },
+    "status": {
+      "label": "Estado do livro",
+      "release": "release {id}",
+      "sha": "sha {sha}",
+      "nightly": "verificação noturna {when}",
+      "verify": "capítulos passam no verify",
+      "labs": "labs reproduzem",
+      "diverges": "Lab {n} diverge desde {when}",
+      "stale": "capítulos desatualizados > 90 d",
+      "staleItem": "cap. {n} {days} d",
+      "releasePinned": "release · fixada",
+      "redteam": "{count, plural, one {# achado de redteam aberto} other {# achados de redteam abertos}} · cap. {n}",
+      "loaderVerify": "verify",
+      "loaderLab": "lab ci",
+      "loaderValue": "{pct}% · {a}/{b}"
+    },
+    "legend": {
+      "label": "legenda",
+      "verify": "VERIFY aprovado",
+      "redteam": "REDTEAM aprovado",
+      "redteamOpen": "achado de REDTEAM aberto",
+      "staleMark": "desatualizado n d",
+      "stale": "figura volátil verificada há mais de 90 d",
+      "reproducedMark": "reproduzido",
+      "reproduced": "lab coincide com o capítulo no CI",
+      "notReproducedMark": "não reproduzido",
+      "notReproduced": "lab diverge do capítulo",
+      "noLabMark": "sem lab",
+      "noLab": "capítulo traz um instrumento",
+      "versionMark": "v1.5.0 · 9 d",
+      "version": "versão · dias desde o verify"
+    },
+    "part": {
+      "cap": "parte {roman} · {title}",
+      "title": {
+        "P0": "por que agora",
+        "P1": "fundamentos de modelos de linguagem",
+        "P2": "engenharia de harness",
+        "P3": "aplicação industrial"
+      },
+      "header": "{count, plural, one {# capítulo} other {# capítulos}} · {labs, plural, one {# lab} other {# labs}}",
+      "headerProse": "{count, plural, one {# capítulo} other {# capítulos}} · prosa",
+      "curators": "curadores {names}"
+    },
+    "tile": {
+      "stale": "desatualizado {days} d",
+      "open": "{n} aberto",
+      "reading": "lendo {section}",
+      "versionDays": "{version} · {days} d",
+      "version": "{version}",
+      "verifyPassed": "VERIFY aprovado",
+      "verifyNot": "VERIFY não aprovado",
+      "redteamPassed": "REDTEAM aprovado",
+      "redteamNot": "REDTEAM não aprovado",
+      "redteamOpen": "REDTEAM: {n, plural, one {# achado aberto} other {# achados abertos}}",
+      "reproduced": "reproduzido",
+      "notReproduced": "não reproduzido",
+      "since": "Lab {n} · desde {when}",
+      "noLabProse": "sem lab · prosa",
+      "noLabInstrument": "sem lab · instrumento"
+    },
+    "glance": {
+      "label": "parte {roman} · em resumo",
+      "counts": "{v}/{n} verify · {r}/{l} labs reproduzem",
+      "stale": "{count} desatualizado · cap. {n} {what} {days} d"
+    },
+    "appendix": {
+      "label": "parte iv · labs e apêndices",
+      "labs": "{labs} labs · cada um com README, arquivo de ambiente, dados e um script que imprime o número reproduzido",
+      "list": "apêndices A glossário · B registro de fontes · C tabelas de dados · D logs de replicação · E toolkit"
+    },
+    "statusbar": {
+      "home": "início do livro · {n} capítulos",
+      "lang": "{lang} · origem {src}",
+      "release": "release fixada {id}",
+      "counts": "verify {a}/{b} · labs {c}/{d}",
+      "loaded": "carregado em {s} s"
+    },
+    "loading": "carregando a release",
+    "pathsLink": "Trilhas de leitura",
+    "error": {
+      "title": "O início não carregou",
+      "body": "Rastreio {traceId}. Tente novamente ou recarregue a página.",
+      "retry": "Tentar novamente"
+    }
+  },
+  "paths": {
+    "metaTitle": "Trilhas de leitura · The Harness Bible",
+    "metaTitleOne": "Trilha {name} · The Harness Bible",
+    "cap": "trilhas de leitura · release {id}",
+    "title": "Três caminhos pelo livro",
+    "blurb": "Cada trilha é uma sequência curada de capítulos em ordem fixa. O progresso fica na conta e acompanha você entre dispositivos e edições.",
+    "marks": {
+      "label": "Suas marcas",
+      "meta": "conta",
+      "synced": "sincronizado {when}",
+      "bookmarks": "favoritos",
+      "notes": "notas",
+      "latest": "última nota · {id}",
+      "none": "Nenhuma nota ainda."
+    },
+    "signIn": {
+      "title": "Entre para guardar o progresso",
+      "body": "As trilhas funcionam sem conta; progresso e marcas precisam de uma.",
+      "account": "Entrar"
+    },
+    "path": {
+      "label": "Trilha · {name}",
+      "aria": "trilha {name}",
+      "stops": "{n} paradas",
+      "chapters": "{n} capítulos",
+      "who": "para quem",
+      "use": "uso principal",
+      "must": "precisa ter",
+      "progress": "seu progresso",
+      "of": "{done} de {total}",
+      "left": "faltam {time}",
+      "timeHours": "{h} h {m} min",
+      "timeMin": "{m} min",
+      "meter": "progresso na trilha {name}",
+      "sequence": "sequência {name}",
+      "footer": "tempo de leitura a 230 palavras/min · labs à parte",
+      "start": "Começar trilha",
+      "resume": "Retomar em {id}",
+      "again": "Ler de novo",
+      "reset": "Redefinir",
+      "at": "· em {id}",
+      "updated": "trilha atualizada para {version}; as paradas lidas continuam valendo"
+    },
+    "state": {
+      "unread": "não lido",
+      "in_progress": "em andamento",
+      "read": "lido"
+    },
+    "stop": {
+      "stale": "desatualizado {days} d",
+      "lab": "lab {n}"
+    },
+    "reset": {
+      "label": "Redefinir trilha",
+      "title": "Redefinir a trilha {name}?",
+      "body": "O progresso desta trilha é apagado. Favoritos e notas são mantidos.",
+      "cancel": "Cancelar",
+      "confirm": "Redefinir"
+    },
+    "status": {
+      "count": "trilhas de leitura · {n}",
+      "active": "{path} {done} de {total} · retomar {id}"
+    },
+    "loading": "carregando as trilhas de leitura",
+    "error": {
+      "title": "A ação falhou",
+      "session": "Entre para começar uma trilha.",
+      "start": "A trilha não começou. Tente novamente.",
+      "reset": "A trilha não foi redefinida. Tente novamente.",
+      "pageTitle": "As trilhas não carregaram",
+      "body": "Rastreio {traceId}. Tente novamente ou recarregue a página.",
+      "retry": "Tentar novamente"
+    },
+    "groups": {
+      "whyNow": "por que agora",
+      "chooseAndPay": "escolher e pagar",
+      "comply": "cumprir",
+      "planAndProve": "planejar e provar",
+      "decisionAids": "apoios à decisão · camada 8",
+      "framingAndGuides": "enquadramento e guias",
+      "contextAndKnowledge": "contexto e conhecimento",
+      "execution": "execução",
+      "verificationAndControl": "verificação e controle",
+      "textAsNumbers": "texto como números",
+      "architecture": "arquitetura",
+      "training": "treinamento",
+      "serving": "serving",
+      "measuringAndFailing": "medir e falhar",
+      "cost": "custo"
+    },
+    "stops": {
+      "decisionAids": "Apoios à decisão dos capítulos 21, 23, 28 e 31"
+    },
+    "audience": {
+      "executive": {
+        "who": "CTO, CDO ou VP de operações de uma empresa industrial.",
+        "use": "Parte III, apoios à decisão e os capítulos de economia; um briefing do assistente.",
+        "must": "Navegação rápida até os apoios à decisão; resumos exportáveis com citações."
+      },
+      "builder": {
+        "who": "Engenheiro de harness ou de plataforma.",
+        "use": "Parte II com os labs abertos; executa, edita, reexecuta; copia implementações de referência.",
+        "must": "IDE no navegador com o ambiente completo do lab; diff contra os números do capítulo."
+      },
+      "foundations": {
+        "who": "Construtores e executivos que precisam do modelo por baixo do harness.",
+        "use": "Parte I em ordem; os números resolvidos de cada capítulo antes do seu lab.",
+        "must": "Figuras derivadas ligadas ao derive.py; labs que rodam num laptop."
+      }
+    }
+  },
+  "rubric": {
+    "metaTitle": "Rubrica de evidência · The Harness Bible",
+    "openedFrom": "aberta a partir do cap. {chapter} · fontes de {section}",
+    "applies": "aplica-se a todos os {n} capítulos",
+    "graderDesign": "projeto do avaliador no",
+    "recalibration": "recalibração no",
+    "roster": "o quadro de curadores",
+    "chapterRef": "cap. {n}",
+    "title": "Rubrica de evidência",
+    "download": "Baixar rubrica {version} · JSON",
+    "stamp": "Rubrica de evidência {version} · publicada em {date} · alterações só por curadores e anunciadas",
+    "blurb": "O adjudicador classifica cada item de evidência por nível e depois o ajusta por relevância, recência e independência. A pontuação da sugestão é dada pelo item mais forte. Um curador decide o que a rubrica não consegue.",
+    "tiers": {
+      "label": "Níveis de evidência",
+      "range": "A–G, U",
+      "ts": "pontuação-base antes do ajuste",
+      "th": {
+        "tier": "nível",
+        "name": "nome",
+        "examples": "exemplos",
+        "base": "base"
+      },
+      "badge": "Nível de evidência {tier}, {name}",
+      "name": {
+        "A": "Reproduzível",
+        "B": "Primária publicada",
+        "C": "Primária do fornecedor",
+        "D": "Analista independente",
+        "E": "Praticante",
+        "F": "Relatada",
+        "G": "Opinião",
+        "U": "Inverificável"
+      },
+      "example": {
+        "A": "Uma execução de laboratório salva na IDE que reproduz a alteração alegada. Um diff de script de derivação. Um notebook executável com dados.",
+        "B": "Artigo revisado por pares. Preprint com código. Texto de norma ou regulamento. Especificação oficial. Demonstração auditada.",
+        "C": "Documentação oficial, página de preços, changelog, nota de versão ou model card do fornecedor em questão.",
+        "D": "Benchmark independente (do tipo Artificial Analysis, Epoch, RouterArena). Revisão sistemática. Orientação de regulador.",
+        "E": "Publicação técnica de engenheiro identificado, com método e números. Palestra em conferência com slides. Repositório de código aberto com medições.",
+        "F": "Notícia. Resumo secundário. Livro didático sem citação primária.",
+        "G": "Publicação em rede social. Comentário em fórum. Blog sem fontes. Afirmação pessoal.",
+        "U": "Link que não abre. Documento não fornecido. Alegação sem artefato. Classificada como inverificável, não como fraca."
+      }
+    },
+    "rule": {
+      "cap": "regra de pontuação · enunciada uma vez",
+      "statement": "O item mais forte decide. Dez itens fracos nunca equivalem a um forte.",
+      "formula": "pontuação = máx( base × relevância × recência × independência )",
+      "formulaBonus": "+ {bonus} uma vez, se um segundo item independente for de nível {tier} ou superior",
+      "note": "Nunca uma soma. Nunca uma média. A corroboração acrescenta no máximo {bonus}."
+    },
+    "chips": {
+      "label": "Nível da fonte ↔ nível de evidência",
+      "ts": "os sete selos do livro",
+      "th": {
+        "chip": "selo do livro",
+        "evidence": "evidência",
+        "note": "nota"
+      },
+      "note": {
+        "DERIVED": "diff de derive.py ou execução de laboratório",
+        "PRIMARY": "texto primário publicado",
+        "VENDOR": "página do próprio fornecedor",
+        "ANALYST": "independente do fornecedor",
+        "PRACTITIONER": "método e números apresentados",
+        "ILLUSTRATIVE": "uma suposição, não evidência; substituída apenas por A",
+        "OPEN": "não resolvida; não sustenta uma alteração"
+      },
+      "none": "sem selo",
+      "noneNote": "o livro nunca cita estes"
+    },
+    "adjustments": {
+      "label": "Fatores de ajuste",
+      "kind": "multiplicativos",
+      "ts": "aplicados por item",
+      "th": {
+        "factor": "fator",
+        "rule": "regra",
+        "multiplier": "multiplicador"
+      },
+      "relevance": {
+        "name": "Relevância",
+        "rule": "A evidência trata da afirmação ancorada de forma direta / parcial / tangencial. Classificada com a fonte aberta."
+      },
+      "recency": {
+        "name": "Recência",
+        "rule": "Só para números de mudança rápida: preços, prazos, versões de modelos, benchmarks. {windows} / mais antiga. Fatos estáveis não são ajustados.",
+        "withinDays": "≤ {n} dias",
+        "withinYear": "≤ 1 ano"
+      },
+      "independence": {
+        "name": "Independência",
+        "rule": "Sem interesse / o fornecedor em questão / o próprio empregador do contribuidor."
+      },
+      "corroboration": {
+        "name": "Corroboração",
+        "rule": "Um segundo item independente de nível {tier} ou superior. Acrescentada uma vez, depois de escolhido o item mais forte.",
+        "value": "+{bonus}, uma vez"
+      },
+      "footer": "o adjudicador não vê a identidade do contribuidor além de verificado / não verificado"
+    },
+    "thresholds": {
+      "label": "Limiares por classe de alteração",
+      "ts": "recalibrados trimestralmente com base nas anulações",
+      "th": {
+        "class": "classe de alteração",
+        "accept": "aceita ≥",
+        "floor": "piso",
+        "scale": "0 ─ 100"
+      },
+      "class": {
+        "WORDING": "Redação, esclarecimento, erro de digitação",
+        "CITED_FIGURE": "Número citado, data, preço, prazo",
+        "DERIVED_FIGURE": "Número derivado",
+        "NEW_CLAIM": "Nova afirmação ou linha de fonte",
+        "CURATOR_ALWAYS": "Segurança, fronteira de OT, parâmetro de cenário, estrutura, rubrica, novo nível de fonte"
+      },
+      "derivedNote": "· exige alteração no script de derivação",
+      "onlyTier": "só {tier}",
+      "curatorAlways": "sempre curador",
+      "noScore": "nenhuma pontuação decide",
+      "bar": "Recusa abaixo de {floor}, pede mais de {floor} a {accept}, aceita a partir de {accept}",
+      "legend": {
+        "decline": "recusa",
+        "requestMore": "pedir mais",
+        "accept": "aceita",
+        "sensor": "um sensor reprovado recusa em qualquer pontuação"
+      }
+    },
+    "examples": {
+      "cap": "exemplos resolvidos",
+      "title": "Quatro sugestões, classificadas",
+      "meta": "registros reais · rubrica {version}",
+      "ex": "Ex. {n}",
+      "product": "{base} × {relevance} × {recency} × {independence}",
+      "max": "máx",
+      "bonus": "+ {bonus}",
+      "corroborates": "{tier} corrobora",
+      "result": "= {score}",
+      "noLift": "nenhum ajuste consegue elevá-la",
+      "status": {
+        "ACCEPT": "aceita",
+        "DECLINE": "recusada",
+        "REQUEST_MORE": "pedir mais",
+        "CURATOR_REVIEW": "revisão do curador"
+      },
+      "factor": {
+        "relevance": "relevância · {note}",
+        "recency": "recência · {note}",
+        "independence": "independência · {note}"
+      },
+      "relevance": {
+        "direct": "direta",
+        "partial": "parcial",
+        "tangential": "tangencial"
+      },
+      "recency": {
+        "days": "{n} dias",
+        "stable": "estável",
+        "undated": "sem data"
+      },
+      "stake": {
+        "none": "sem interesse",
+        "vendor": "o fornecedor em questão",
+        "employer": "o próprio empregador"
+      },
+      "ex1": {
+        "text": "Data do Anexo III do AI Act da UE: 2 ago 2026 → 2 dez 2027. Texto do regulamento no Jornal Oficial.",
+        "tierNote": "B · texto de regulamento",
+        "threshold": "≥ {accept} data citada",
+        "outcomeMeta": "v1.3.2 → v1.3.3",
+        "footer": "a linha de fonte recebe nova data de verificação"
+      },
+      "ex2": {
+        "text": "Economia com roteamento 2,4× → 1,3×. Captura de tela de uma conversa em rede social.",
+        "tierNote": "G · opinião",
+        "threshold": "< {floor} piso",
+        "note": "Recusada na entrada, antes de qualquer chamada a modelo. Um nível B (artigo com código) ou D (benchmark independente) bastaria.",
+        "outcomeMeta": "0 tokens gastos",
+        "footer": "aviso entre capítulos · F-23-06 também em 37.4"
+      },
+      "ex3": {
+        "text": "Limite de reparos 3 → 4. Execução salva na IDE sobre o conjunto dourado do próprio contribuidor.",
+        "tierNote": "A · execução salva",
+        "relevanceNote": "conjunto próprio",
+        "threshold": "< {accept} só nível {tier}",
+        "note": "Nomeada: uma execução de nível A no Lab 22 com a alteração aplicada.",
+        "outcomeMeta": "aceita {accept} · só {tier}",
+        "footer": "nível A abaixo de 100 · a execução do laboratório do capítulo é nomeada"
+      },
+      "ex4": {
+        "text": "Preço de entrada em cache US$ 0,30 → US$ 0,25 por M tokens. Página do fornecedor, depois um rastreador de preços.",
+        "threshold": "< {accept} preço citado",
+        "note": "Uma segunda página do fornecedor não é independente. O curador pode aceitar após inspeção.",
+        "override": "anulação registrada",
+        "footer": "OV-IND-02 · independência dispensada"
+      }
+    },
+    "changelog": {
+      "label": "Histórico da rubrica",
+      "kind": "classe só de curadores",
+      "ts": "anunciada aos contribuidores 30 dias antes de entrar em vigor",
+      "current": "· atual",
+      "text": {
+        "v1_0": "Sete níveis, de A a G. Ajustes de relevância, recência e independência.",
+        "v1_1": "Corroboração limitada a +10, uma vez. Nível U separado do G: um link que não abre pontua 0.",
+        "v1_2": "A recência aplica-se só a números de mudança rápida. Números derivados aceitos com 100, só nível A. Limiares recalibrados trimestralmente com base nas anulações."
+      }
+    },
+    "statusbar": {
+      "page": "melhorar · rubrica de evidência {version}",
+      "release": "edição fixada {id}",
+      "sha": "sha da rubrica {sha}"
+    }
+  },
+  "improve": {
+    "suggest": {
+      "metaTitle": "Sugerir uma alteração · The Harness Bible",
+      "anchorLabel": "Âncora",
+      "step": "passo 1 de 4 · âncora",
+      "title": "Ao que a alteração está ancorada",
+      "intro": "Uma sugestão sem âncora é recusada na entrada. Escolha uma seção, uma figura ou uma linha de fonte.",
+      "kindLabel": "Tipo de âncora",
+      "kind": {
+        "SECTION": "Seção",
+        "FIGURE": "Figura",
+        "SOURCE_ROW": "Linha de fonte"
+      },
+      "noFigures": "{id} não tem figuras.",
+      "noRows": "O capítulo {n} não tem linhas de fonte.",
+      "sectionLabel": "{id} {title}",
+      "figures": {
+        "count": "{count, plural, one {# figura} other {# figuras}}"
+      },
+      "rows": {
+        "count": "{count, plural, one {# linha} other {# linhas}}",
+        "row": "linha",
+        "entry": "entrada",
+        "tier": "nível",
+        "checked": "verificado",
+        "age": "{days} d"
+      },
+      "selected": "selecionada · {id}",
+      "anchorHash": "âncora{hash}",
+      "anchoredLabel": "Texto ancorado",
+      "anchoredText": "texto ancorado em {version}",
+      "anchoredSection": "seção ancorada em {version}",
+      "sectionNext": "O trecho, a afirmação, a linha ou a nova estrutura são escolhidos no próximo passo.",
+      "chip": "{tier} · {id}",
+      "fastMoving": "volátil",
+      "fastMovingStale": "volátil · desatualizado",
+      "readBy": {
+        "lead": "Lida por",
+        "and": "e por",
+        "end": "."
+      },
+      "strip": {
+        "back": "← voltar para {id}",
+        "openedFrom": "aberta a partir do",
+        "figure": "figura {item}",
+        "row": "linha {item}",
+        "stale": "desatualizado · {days} dias",
+        "chapterNumber": "cap. {n}",
+        "part": "parte {roman}",
+        "suggestion": "sugestão",
+        "draft": "rascunho · não enviado",
+        "revision": "revisão · não enviada"
+      },
+      "notFound": {
+        "title": "âncora não encontrada",
+        "body": "{id} não existe no cap. {n} {version}. Escolha uma âncora na versão atual.",
+        "empty": "Esta página precisa de uma âncora: uma seção, uma figura ou uma linha de fonte do capítulo {n}.",
+        "choose": "Escolher uma âncora"
+      },
+      "role": {
+        "title": "Contribuidores sugerem alterações",
+        "body": "Um contribuidor ancora uma alteração no livro e traz as evidências para ela. O papel é dado pela sua organização ou pela equipe editorial; o papel desta conta é {role}."
+      },
+      "unverified": {
+        "title": "Verifique sua identidade para sugerir uma alteração",
+        "body": "Uma sugestão exige uma identidade verificada, e a identidade é verificada pelo provedor de login."
+      },
+      "throttled": {
+        "title": "Sugestões pausadas até {date}",
+        "body": "{declines} sugestões desta conta foram recusadas por evidência não verificável em {days} dias. Seus rascunhos continuam legíveis; um novo pode ser começado a partir de {date}."
+      },
+      "phone": {
+        "title": "Sugerir uma alteração precisa de uma tela mais larga",
+        "body": "Abra esta página em um tablet ou desktop para sugerir uma alteração. Leitura, favoritos e notas funcionam aqui."
+      },
+      "statusbar": {
+        "chapter": "cap. {n}",
+        "anchor": "cap. {n} · {id}",
+        "rubric": "rubrica {version} · publicada em {date}"
+      },
+      "create": {
+        "changeLabel": "o que se propõe",
+        "change": {
+          "EDIT_TEXT": "editar um trecho",
+          "ADD_CLAIM": "acrescentar uma afirmação",
+          "ADD_ROW": "acrescentar uma linha de fonte",
+          "RESTRUCTURE": "reestruturar"
+        },
+        "button": "Criar rascunho",
+        "failed": "o rascunho não foi criado",
+        "trace": "Rastreio {traceId}.",
+        "unknown": "O servidor não deu motivo.",
+        "network": "A solicitação não chegou ao servidor. Nada foi criado; tente novamente."
+      },
+      "edit": {
+        "metaTitle": "Sugerir {id} · The Harness Bible",
+        "title": "Rascunho da sugestão {id}",
+        "anchorFixed": "A âncora fica fixa com o rascunho: outra âncora é outra sugestão.",
+        "statusbar": "cap. {n} · {anchor} · {id} rascunho",
+        "proposed": "Alteração proposta",
+        "kindCap": {
+          "SET_VALUE": "número",
+          "EDIT_TEXT": "trecho",
+          "EDIT_ROW": "linha de fonte",
+          "ADD_CLAIM": "nova afirmação",
+          "ADD_ROW": "nova linha de fonte",
+          "RESTRUCTURE": "estrutura"
+        },
+        "grader": "avaliador · modelo pequeno",
+        "revisionTitle": "Revisão da sugestão {id}",
+        "fixed": "Numa revisão, a âncora e a alteração ficam como foram enviadas: acrescente evidência ou mude a justificativa e envie de novo. Uma alteração diferente é uma nova sugestão.",
+        "revisionStatusbar": "cap. {n} · {anchor} · {id} revisão"
+      },
+      "class": {
+        "label": "Classe da alteração",
+        "detected": "autodetectada",
+        "rubric": "rubrica {version}",
+        "accept": "aceita a partir de",
+        "floor": "recusa abaixo de (piso)",
+        "recency": "fator de recência",
+        "recencyApplies": "aplica-se · volátil",
+        "recencyNone": "não se aplica · estável",
+        "curator": "sempre curador",
+        "curatorNo": "não",
+        "curatorYes": "sim · {reason}",
+        "reason": {
+          "SAFETY_OT": "segurança e fronteira de OT",
+          "SCENARIO_PARAMETER": "parâmetro de cenário",
+          "STRUCTURE": "estrutura",
+          "NEW_SOURCE_TIER": "novo nível de fonte",
+          "RUBRIC": "rubrica"
+        },
+        "footer": "detectada pelo tipo de âncora e pelo tipo de valor",
+        "moved": {
+          "SAFETY_OT": "A classe passou a sempre curador: o texto proposto trata de equipamento em operação.",
+          "NEW_SOURCE_TIER": "A classe passou a sempre curador: a linha proposta cita um nível de fonte que o livro não tem.",
+          "other": "A classe passou a {class}: o que se propõe deixou de ser do curador.",
+          "curator": "A classe passou a sempre curador: {reason}.",
+          "plain": "A classe passou a {class}."
+        }
+      },
+      "value": {
+        "before": "antes · atual",
+        "after": "depois · proposto",
+        "unit": "unidade",
+        "afterInvalid": "um decimal como 0.25",
+        "change": "{pct}%"
+      },
+      "save": {
+        "saved": "salvo às {time}",
+        "dirty": "alterações não salvas",
+        "saving": "salvando",
+        "invalid": "não salvo · {message}",
+        "failed": "não salvo · {message}",
+        "unknown": "o servidor não deu motivo",
+        "network": "a solicitação não chegou ao servidor",
+        "trace": "rastreio {traceId}"
+      },
+      "source": {
+        "label": "texto de origem da seção em {version}",
+        "use": "Usar o texto selecionado",
+        "help": "Selecione um trecho no texto de origem, como o arquivo do livro o tem, e use-o: um trecho copiado da página pode diferir do arquivo.",
+        "nothing": "Nada está selecionado no texto de origem."
+      },
+      "check": {
+        "once": "encontrado uma vez em {id}",
+        "none": "não encontrado no texto de origem de {id}: a entrada recusa um trecho que não encontra",
+        "many": "encontrado {count} vezes em {id}: acrescente palavras em volta para que seja encontrado uma vez",
+        "figure": "contém a figura {figure}: um número se altera ancorando a sua figura",
+        "digits": "altera um número: um número se altera ancorando a sua figura",
+        "same": "a substituição é o trecho sem alteração"
+      },
+      "text": {
+        "before": "trecho · atual",
+        "after": "substituição · proposta"
+      },
+      "claim": {
+        "text": "afirmação · proposta",
+        "place": "onde entra",
+        "end": "no fim da seção",
+        "after": "depois de um trecho da seção",
+        "passage": "o trecho que ela segue"
+      },
+      "fastMovingField": "volátil: um preço, um prazo, uma versão de modelo ou um benchmark",
+      "row": {
+        "current": "{field} · atual",
+        "proposed": "{field} · a propor",
+        "field": {
+          "claim": "afirmação",
+          "citation": "citação",
+          "url": "link",
+          "doi": "DOI",
+          "verifiedOn": "verificado"
+        },
+        "help": "Deixe vazio um campo a propor para manter o da linha. Uma linha tem um só link: um DOI escrito aqui passa a ser o dela."
+      },
+      "newRow": {
+        "claim": "afirmação",
+        "citation": "citação",
+        "url": "link · opcional",
+        "doi": "DOI · opcional",
+        "tier": "nível",
+        "another": "um nível que o livro não tem",
+        "newTier": "o nome do novo nível",
+        "choose": "escolha um nível"
+      },
+      "restructure": {
+        "description": "o que muda na estrutura"
+      },
+      "problem": {
+        "required": "falta {field}",
+        "field": {
+          "before": "o trecho",
+          "after": "a substituição",
+          "text": "a afirmação",
+          "placeAfter": "o trecho que ela segue",
+          "claim": "a afirmação",
+          "citation": "a citação",
+          "newTier": "o nome do novo nível",
+          "description": "a descrição"
+        },
+        "unchanged": "altere ao menos um campo da linha",
+        "invalid": {
+          "url": "um link como https://example.com/page",
+          "doi": "um DOI como 10.1000/182",
+          "verifiedOn": "uma data",
+          "newTier": "o nome de um nível, com no máximo 40 caracteres",
+          "other": "o esquema do servidor não aceita este campo"
+        },
+        "chooseTier": "escolha um nível",
+        "tooLong": "a proposta passa de 64 KB, o máximo que um salvamento aceita: encurte-a"
+      },
+      "evidence": {
+        "title": "Itens de evidência",
+        "cap": "avaliados ao entrar · base × relevância × recência × independência",
+        "kind": {
+          "LINK": "link",
+          "DOI": "DOI",
+          "UPLOAD": "arquivo",
+          "LAB_RUN": "execução de lab"
+        },
+        "tierPending": "Nível pendente",
+        "stake": {
+          "none": "independente",
+          "vendor": "fornecedor interessado",
+          "employer": "empregador do contribuidor"
+        },
+        "older": "mais de 1 ano",
+        "status": {
+          "opened": "aberto · {status}",
+          "uploaded": "enviado",
+          "days": "{n, plural, =0 {idade: 0 dias} one {idade: # dia} other {idade: # dias}}",
+          "months": "{n, plural, one {idade: # mês} other {idade: # meses}}",
+          "years": "{n, plural, one {idade: # ano} other {idade: # anos}}",
+          "undated": "sem data"
+        },
+        "grading": "avaliando",
+        "stage": "{n} de 3",
+        "doing": {
+          "1": "abrindo",
+          "2": "lendo o texto",
+          "3": "classificando o nível"
+        },
+        "remove": "Remover",
+        "removeLabel": "Remover o item de evidência {n}",
+        "cancel": "Cancelar",
+        "cancelLabel": "Cancelar a avaliação do item de evidência {n}",
+        "corroboration": "Corroboração: o item {item} é um segundo item independente de nível {tier} ou acima.",
+        "corroborationValue": "+{bonus} · uma vez",
+        "empty": {
+          "cap": "evidência · {id}",
+          "title": "Ainda sem evidência.",
+          "body": "Acrescente um link, um DOI ou um arquivo. Cada item é avaliado ao entrar."
+        },
+        "add": {
+          "cap": "acrescentar evidência",
+          "link": "+ Link",
+          "doi": "+ DOI",
+          "upload": "+ Arquivo",
+          "labRun": "+ Execução salva do lab",
+          "labRunNote": "chega com o IDE",
+          "help": "Um link que não abre recebe U, não fraco. Um arquivo é avaliado pelo conteúdo.",
+          "linkLabel": "link para a evidência",
+          "doiLabel": "DOI",
+          "fileLabel": "arquivo a enviar",
+          "chooseFile": "escolher arquivo",
+          "noFile": "nenhum arquivo escolhido",
+          "submit": "Acrescentar",
+          "cancel": "Cancelar",
+          "linkInvalid": "um link https, como https://example.com/page",
+          "fileInvalid": "um PDF, uma imagem PNG ou JPEG, ou um arquivo de texto ou Markdown",
+          "fileTooLarge": "um arquivo deste tipo pode ter no máximo {max}",
+          "uploading": "enviando",
+          "step": {
+            "1": "preparando",
+            "2": "enviando o arquivo",
+            "3": "acrescentando o item"
+          },
+          "failed": "a evidência não foi acrescentada",
+          "network": "Nenhuma resposta voltou, então o item pode ter entrado. Acrescentá-lo de novo é seguro: o mesmo item não entra duas vezes."
+        },
+        "unreachable": {
+          "title": "o link não pôde ser aberto",
+          "status": "A evidência {n} respondeu {status}. Ela recebe U, pontuação 0, não fraca. Os outros itens continuam contando.",
+          "cause": "A evidência {n} não pôde ser aberta: {why}. Ela recebe U, pontuação 0, não fraca. Os outros itens continuam contando.",
+          "why": {
+            "dns": "o endereço não foi encontrado",
+            "connect": "o servidor não respondeu",
+            "reset": "o servidor fechou a conexão",
+            "tls": "o certificado não pôde ser verificado",
+            "timeout": "não respondeu a tempo",
+            "size": "é maior do que o buscador aceita",
+            "redirects": "redirecionou vezes demais",
+            "redirect_target": "redirecionou para onde um link não vai",
+            "encoding": "o texto não pôde ser lido",
+            "doi_form": "o DOI não está numa forma que o resolvedor aceita",
+            "guard": "o endereço não é um que o buscador abre"
+          },
+          "replace": "Substituir a evidência"
+        },
+        "unsupported": "U · {type}: um link deste tipo não é lido. Um arquivo do documento seria.",
+        "notSupplied": "U · nada chegou para ler.",
+        "budget": {
+          "title": "limite de orçamento atingido",
+          "body": "O gateway recusou a chamada de avaliação: esta conta está no limite de orçamento. Ele renova em {date}. Nada avalia este item de novo sozinho: remova-o e acrescente-o de novo depois disso.",
+          "source": "gateway"
+        },
+        "removeFailed": "a evidência não foi removida",
+        "uploadTitle": "arquivo enviado",
+        "ruled": {
+          "title": "a evidência não pôde ser avaliada",
+          "body": "A evidência {n} não pôde ser avaliada: {why}. Ela recebe U, pontuação 0, não fraca. Os outros itens continuam contando.",
+          "why": {
+            "media_mismatch": "os bytes não são do tipo com que foi enviada",
+            "pdf_too_large": "o PDF é maior do que o avaliador pode receber",
+            "image_too_large": "a imagem é maior do que o avaliador pode receber",
+            "image_unreadable": "o cabeçalho da imagem não pôde ser lido",
+            "image_dimensions": "a imagem é mais larga ou mais alta do que o avaliador aceita",
+            "request_too_large": "com o prompt, passa do que o avaliador pode receber",
+            "source_changed": "o arquivo foi enviado de novo depois de aberto",
+            "no_text": "nenhum texto pôde ser lido nela",
+            "text_missing": "o texto lido nela não está mais guardado",
+            "grader": "o avaliador não conseguiu lhe dar um nível"
+          }
+        },
+        "replaceLabel": "Substituir o item de evidência {n}",
+        "removeNetwork": "O pedido não chegou ao servidor. Nada foi removido; tente de novo.",
+        "undatedOlder": "sem data, logo mais de 1 ano",
+        "noType": "sem tipo declarado",
+        "announce": {
+          "graded": "Evidência {n}: nível {tier}, pontuação {score}."
+        },
+        "read": {
+          "failed": "a lista não está sendo lida de novo",
+          "stale": "Esta página é mais antiga que a resposta do servidor. Recarregue-a para ver a evidência como está."
+        }
+      },
+      "rationale": {
+        "title": "Justificativa",
+        "cap": "texto simples · lido pelo adjudicador",
+        "label": "por que o texto ancorado está errado e o que a evidência mostra",
+        "help": "No máximo 200 palavras. A evidência sustenta a afirmação; a justificativa a explica.",
+        "counter": "{n} / {max} palavras",
+        "over": "Mais de {max} palavras: o envio espera até ficar mais curta.",
+        "tooLong": "a justificativa é longa demais para salvar; encurte-a"
+      },
+      "score": {
+        "label": "Pontuação ao vivo",
+        "title": "Pontuação",
+        "rubric": "rubrica {version}",
+        "live": "ao vivo",
+        "liveAt": "ao vivo · {time}",
+        "accept": "aceita ≥ {n}",
+        "floor": "piso {n}",
+        "scaleAccept": "aceita {n}",
+        "curator": "nenhuma pontuação decide esta classe",
+        "meter": "Pontuação {score} de 100, limiar de aceitação {accept}, piso {floor}",
+        "how": "como é calculada",
+        "rule": "pontuação = pontuação ajustada do item mais forte + corroboração, nunca uma soma.",
+        "strongest": "item mais forte · {n} · {tier}",
+        "corroboration": "corroboração · {n} · {tier}",
+        "alone": "item {n} sozinho",
+        "notAdded": "{score} · não somado",
+        "item": "item {n}",
+        "total": "pontuação",
+        "sum": "{strongest} + {bonus} = {score}",
+        "none": "Nenhum item avaliado ainda: a pontuação começa com o primeiro."
+      },
+      "prediction": {
+        "title": "Resultado previsto",
+        "when": "se enviada agora",
+        "badge": {
+          "ACCEPT": "aceitar",
+          "REQUEST_MORE": "pedir mais · faltam {n}",
+          "REQUEST_MORE_BY_RULE": "pedir mais · nível {tier}",
+          "DECLINE": "recusar · abaixo do piso",
+          "CURATOR": "sempre curador · nenhuma pontuação decide"
+        },
+        "say": {
+          "ACCEPT": "No limiar de aceitação {accept} ou acima. O adjudicador verificaria os critérios e aceitaria.",
+          "REQUEST_MORE": "Entre o piso {floor} e a aceitação {accept}. O adjudicador nomearia o nível que basta.",
+          "REQUEST_MORE_BY_RULE": "Esta classe aceita só evidência de nível {tier}: uma regra a pede, sem adjudicador.",
+          "DECLINE": "Abaixo do piso {floor}: recusada na entrada por regra, sem adjudicador.",
+          "CURATOR": "Um curador decide esta classe. A pontuação aparece e não decide nada.",
+          "none": "Nada foi avaliado ainda, então nada pode ser previsto."
+        },
+        "suffice": {
+          "title": "bastaria",
+          "ALONE": "um item de nível {tier}",
+          "CORROBORATED": "um item independente de nível {tier}",
+          "CORROBORATING": "um item independente de nível {tier}",
+          "WITH_A_SECOND": "dois itens independentes de nível {tier}",
+          "within": " de até {days} dias",
+          "withinShort": " ≤ {days} d",
+          "or": ", ou ",
+          "metaAlone": "{name}: {score}",
+          "metaStrongest": "{name} como mais forte: {adjusted} + {bonus} = {score}",
+          "metaCorroborating": "{name} corroborando: {strongest} + {bonus} = {score}",
+          "metaTwo": "dois {name}: {adjusted} + {bonus} = {score}"
+        },
+        "grading": "{count, plural, one {a previsão muda quando o item {items} terminar a avaliação} other {a previsão muda quando os itens {items} terminarem a avaliação}}"
+      },
+      "identity": {
+        "title": "Identidade",
+        "verified": "verificada",
+        "unverified": "não verificada",
+        "help": "O adjudicador vê só verificada ou não verificada. Seu nome e seu empregador não chegam a ele."
+      },
+      "submit": {
+        "button": "Enviar para avaliação",
+        "save": "Salvar rascunho",
+        "saved": "rascunho salvo {time}",
+        "count": "{n} de {max} enviadas em 24 h",
+        "consent": "Manter meu nome com esta alteração, para sua proveniência.",
+        "waitConsent": "O envio espera o consentimento acima.",
+        "waitWords": "O envio espera uma justificativa de no máximo {max} palavras.",
+        "throttled": "{declines} sugestões desta conta foram recusadas por evidência não verificável em {days} dias. Este rascunho ainda pode ser escrito; pode ser enviado a partir de {date}.",
+        "failed": "nada foi enviado",
+        "network": "O pedido não chegou ao servidor. Nada foi enviado; tente de novo.",
+        "unsaved": "Um campo tem algo que não pôde ser salvo, então nada foi enviado. Corrija-o, ou espere que salve, e envie.",
+        "sensorSource": "sensor de entrada",
+        "consentSource": "consentimento",
+        "sensor": {
+          "SCHEMA": "proposta incompleta",
+          "ANCHOR_EXISTS": "âncora não encontrada",
+          "EVIDENCE_PARSES": "evidência incompleta",
+          "RATIONALE_LENGTH": "tamanho da justificativa",
+          "CONSENT_REQUIRED": "falta o consentimento"
+        },
+        "chooseAnchor": "Escolher uma âncora",
+        "revise": "Enviar a revisão",
+        "saveRevision": "Salvar"
+      },
+      "anchorChanged": {
+        "title": "a âncora mudou nesta versão",
+        "body": "O rascunho foi escrito sobre o texto que registrou; a versão agora diz outra coisa. Um texto diferente é outra sugestão.",
+        "gone": "A versão não tem mais esta âncora. Uma âncora diferente é outra sugestão.",
+        "was": "como o rascunho registrou",
+        "now": "como a versão tem agora"
+      },
+      "deleteDraft": {
+        "trigger": "Apagar rascunho",
+        "title": "Apagar o rascunho {id}?",
+        "body": "O rascunho, as suas evidências e os arquivos que você enviou para ele são apagados. Nada dele foi registrado, e o número não é usado de novo.",
+        "cancel": "Cancelar",
+        "confirm": "Apagar",
+        "failed": "O rascunho não foi apagado",
+        "network": "A solicitação não chegou ao servidor. Nada foi apagado; tente novamente."
+      }
+    },
+    "home": {
+      "metaTitle": "Melhorar · The Harness Bible",
+      "cap": "melhorar",
+      "title": "Melhorar o livro",
+      "what": "Um contribuidor verificado propõe uma alteração a uma seção, a uma figura ou a uma linha de fonte, com evidência. A evidência é avaliada, e a pontuação da rubrica publicada decide o caminho: por regra, pelo adjudicador ou por um curador. Cada passo fica registrado, para que cada decisão possa ser conferida.",
+      "rubric": "Ler a rubrica",
+      "new": "Nova sugestão",
+      "signIn": {
+        "title": "Entre para sugerir uma alteração",
+        "body": "Uma sugestão é escrita por um contribuidor verificado.",
+        "link": "Entrar"
+      },
+      "queue": {
+        "title": "Fila do curador",
+        "count": "{n, plural, =0 {Nenhuma sugestão espera na fila das suas partes.} one {# sugestão espera na fila das suas partes.} other {# sugestões esperam na fila das suas partes.}}",
+        "link": "Abrir a fila",
+        "researchLog": "Registro de pesquisa"
+      },
+      "own": {
+        "title": "Suas sugestões",
+        "empty": "Nenhuma sugestão ainda.",
+        "id": "id",
+        "anchor": "âncora",
+        "class": "classe",
+        "state": "estado",
+        "score": "pontuação / aceita",
+        "age": "desde",
+        "waits": "espera por você",
+        "against": "{score} / {accept}",
+        "since": "{n, plural, =0 {hoje} one {# dia} other {# dias}}",
+        "start": "Use Nova sugestão, ou Sugerir uma alteração numa seção do livro."
+      },
+      "state": {
+        "DRAFT": "rascunho",
+        "SUBMITTED": "enviada",
+        "INTAKE_DECLINED": "recusada na entrada",
+        "GRADED": "avaliada",
+        "SENSED": "verificada",
+        "DECIDED": "decidida",
+        "CURATOR_QUEUE": "com um curador",
+        "MERGING": "em fusão",
+        "MERGED": "incorporada",
+        "CLOSED": "encerrada"
+      },
+      "outcome": {
+        "ACCEPT": "aceita",
+        "REQUEST_MORE": "mais evidência pedida",
+        "DECLINE": "recusada",
+        "CURATOR_REVIEW": "com um curador"
+      },
+      "statusbar": "melhorar · versão {release}",
+      "proposals": {
+        "title": "Propostas a partir das suas perguntas",
+        "id": "proposta",
+        "anchor": "âncora",
+        "where": "onde está",
+        "name": "seu nome",
+        "withName": "com o seu nome"
+      },
+      "fromResearch": {
+        "title": "De uma pesquisa",
+        "research": "pesquisa",
+        "anchor": "âncora",
+        "kind": "mudança",
+        "action": "ação",
+        "kept": "as descobertas ficam com a sua pesquisa por 30 dias"
+      },
+      "withdrawn": "retirada",
+      "withdrawing": "retirada enviada · sendo registrada",
+      "notice": {
+        "title": "Feito",
+        "deleted": "Rascunho {id} apagado."
+      }
+    },
+    "new": {
+      "metaTitle": "Nova sugestão · Melhorar",
+      "title": "Nova sugestão",
+      "chapters": "Escolha um capítulo",
+      "sections": "Escolha uma seção do capítulo {n}",
+      "back": "← capítulos",
+      "statusbar": "nova sugestão · capítulo {n}",
+      "statusbarNone": "nova sugestão"
+    },
+    "outcome": {
+      "metaTitle": "{id} · The Harness Bible",
+      "cap": "adjudicação · {id}",
+      "submitted": "enviada {at}",
+      "decided": "decidida {at}",
+      "title": {
+        "SECTION": "{id} <book>{title}</book>",
+        "FIGURE": "Figura {id} · <book>{label}</book>",
+        "SOURCE_ROW": "Linha {id} · <book>{claim}</book>"
+      },
+      "decision": {
+        "title": "Decisão",
+        "rubric": "rubrica {version}",
+        "badge": {
+          "progress": "Em andamento",
+          "budget": "Esperando orçamento",
+          "declined": "Recusada",
+          "requestMore": "Pedir mais",
+          "requestMoreByRule": "Pedir mais",
+          "curator": "Com um curador",
+          "accepted": "Aceita",
+          "checkFailed": "Verificação falhou",
+          "MERGING": "Em fusão",
+          "MERGED": "Incorporada",
+          "closed": "Encerrada",
+          "recommended": "Recomendada",
+          "notProposed": "Não proposta",
+          "withdrawing": "Em retirada",
+          "withdrawn": "Retirada"
+        },
+        "thresholds": "piso {floor} · aceita {accept}",
+        "curatorAlways": "sempre curador",
+        "line": {
+          "progress": {
+            "SUBMITTED": "enviada · avaliando a evidência",
+            "GRADED": "avaliada · os sensores rodam",
+            "SENSED": "verificada · a decisão vem a seguir"
+          },
+          "budget": "esperando orçamento · renova em {date}",
+          "declined": {
+            "intake": "pontuação {score} · piso {floor} · recusada na entrada antes de qualquer chamada de modelo",
+            "sensor": "pontuação {score} · recusada pelo sensor {sensor}",
+            "adjudicator": "pontuação {score} · piso {floor} · aceita {accept} · recusada pelo adjudicador"
+          },
+          "requestMore": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · falta a evidência abaixo",
+          "requestMoreByRule": "pontuação {score} · aceita {accept} · só nível {tier}",
+          "curator": "pontuação {score} · com um curador · parte {parts}{due, select, none {} other { · prazo {due}}}",
+          "accepted": {
+            "DECIDED": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · aceita",
+            "MERGING": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · em fusão",
+            "MERGED": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · incorporada"
+          },
+          "checkFailed": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · aceita · a verificação do capítulo falhou",
+          "closed": "pontuação {score} · encerrada por um curador{code, select, none {} other { · {code}}}",
+          "recommended": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · recomendada · com um curador · parte {parts}{due, select, none {} other { · prazo {due}}}",
+          "notProposed": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · abaixo da aceitação · encerrada",
+          "checkFailedClosed": "pontuação {score}{accept, select, none {} other { · aceita {accept}}} · aceita · a verificação do capítulo falhou · encerrada",
+          "withdrawing": "pontuação {score} · retirada enviada · sendo registrada",
+          "withdrawn": "pontuação {score} · retirada por quem a enviou"
+        },
+        "say": {
+          "progress": "A sugestão está sendo processada. Esta página a acompanha até que algo seja decidido.",
+          "budget": "A avaliação parou no limite de orçamento. Ela continua em {date}.",
+          "declined": {
+            "intake": "A pontuação está abaixo do piso, então a sugestão foi recusada por regra e nenhum modelo a leu.",
+            "sensor": "Um sensor determinístico falhou; a nota dele está abaixo. Nada foi decidido pela evidência.",
+            "adjudicator": "O adjudicador a recusou pelos critérios abaixo."
+          },
+          "requestMore": "Entre o piso e a aceitação. O adjudicador nomeou a evidência que bastaria.",
+          "requestMoreByRule": "Esta classe é aceita só com evidência de nível {tier}. Uma regra a pede, sem adjudicador.",
+          "curator": "Um curador decide esta alteração. A decisão até aqui está abaixo.",
+          "accepted": "Na aceitação ou acima, com todos os critérios cumpridos.",
+          "checkFailed": "Aceita, e depois a verificação do capítulo falhou na branch dela, então volta como pedido de mais evidência. O que a verificação encontrou está em Merge, abaixo.",
+          "closed": "Um curador encerrou esta sugestão. A nota do curador não aparece; o hash dela está no registro.",
+          "recommended": "Na aceitação ou acima, com todos os critérios cumpridos: o adjudicador a recomenda. Uma proposta do pesquisador só é incorporada com o aceite de um curador.",
+          "notProposed": "Abaixo da aceitação. A sugestão de uma pessoa receberia um pedido de mais evidência; uma proposta do pesquisador é encerrada, e nada é proposto.",
+          "checkFailedClosed": "Um curador a aceitou, e depois a verificação do capítulo falhou na branch dela. Uma proposta do pesquisador não volta como pedido de mais evidência: é encerrada, e nada foi incorporado. O que a verificação encontrou está em Merge, abaixo.",
+          "withdrawing": "A retirada está sendo registrada. Esta página a acompanha até que a sugestão seja encerrada.",
+          "withdrawn": "Quem a enviou retirou esta sugestão. Ela não segue adiante; o registro fica, com a retirada nele."
+        },
+        "footer": {
+          "none": "ainda não decidida",
+          "rule": "regra de entrada · 0 tokens",
+          "router": "roteador · 0 tokens",
+          "adjudicator": "adjudicador · {model} · {tokens} tokens"
+        },
+        "record": "rec#{hash}"
+      },
+      "anchor": {
+        "title": "Âncora · {where}",
+        "exists": "a âncora existe",
+        "changed": "a âncora mudou",
+        "before": "antes · atual",
+        "after": "depois · proposto",
+        "evidence": "Evidência como avaliada",
+        "noEvidence": "Nenhuma evidência."
+      },
+      "reasons": {
+        "title": "Razões",
+        "cap": "uma linha por critério da rubrica",
+        "by": "rubrica {version}",
+        "none": "Nenhum critério foi decidido ainda.",
+        "criterion": "critério",
+        "verdict": "veredito",
+        "reason": "razão",
+        "name": {
+          "tier": "nível",
+          "relevance": "relevância",
+          "recency": "recência",
+          "independence": "independência",
+          "corroboration": "corroboração",
+          "threshold": "limiar"
+        }
+      },
+      "sensors": {
+        "title": "Sensores",
+        "cap": "determinísticos",
+        "none": "Os sensores ainda não rodaram.",
+        "sensor": "sensor",
+        "verdict": "veredito",
+        "note": "nota",
+        "name": {
+          "SCHEMA": "esquema",
+          "ANCHOR_EXISTS": "a âncora existe",
+          "EVIDENCE_PARSES": "a evidência é lida",
+          "RATIONALE_LENGTH": "tamanho da justificativa",
+          "DERIVE_CONSISTENCY": "consistência das derivadas",
+          "CROSS_CHAPTER": "entre capítulos",
+          "LINT": "lint"
+        },
+        "result": {
+          "PASS": "passa",
+          "FAIL": "falha",
+          "WARN": "alerta",
+          "NA": "n/a"
+        }
+      },
+      "suffice": {
+        "title": "O que bastaria",
+        "accept": "aceita ≥ {n}",
+        "named": "Um item de nível {tier}.",
+        "how": {
+          "ALONE": "Chega à aceitação sozinho, com {adjusted}.",
+          "CORROBORATED": "{adjusted} como o mais forte, com {bonus} de corroboração dos itens presentes.",
+          "CORROBORATING": "Soma {bonus} de corroboração ao item mais forte.",
+          "WITH_A_SECOND": "{adjusted} com um segundo do mesmo nível somando {bonus}."
+        }
+      },
+      "actions": {
+        "record": "Ver o registro completo",
+        "back": "Voltar para {id}",
+        "override": "um curador pode anular com uma razão codificada",
+        "revise": "Revisar com nova evidência"
+      },
+      "statusbar": "cap. {n} · {id}",
+      "aside": "Sua outra sugestão aberta e a regra de limitação",
+      "request": {
+        "cap": "pedido",
+        "what": "Uma execução de nível {tier} no Lab {n} com a alteração aplicada.",
+        "noLab": "O botão que abre o lab com esta alteração chega com o IDE, que ainda não existe. Até lá, um curador inspeciona este pedido."
+      },
+      "other": {
+        "cap": "também sua · aberta",
+        "chapter": "cap. {n}",
+        "decided": "decidida {at}",
+        "submitted": "enviada {at}",
+        "score": "Pontuação",
+        "rubric": "rubrica {version}",
+        "accept": "aceita {accept}",
+        "acceptTier": "aceita {accept} · só nível {tier}",
+        "under": "< {accept}",
+        "reached": "≥ {accept}",
+        "meter": "Pontuação {score} de 100, limiar de aceitação {accept}"
+      },
+      "throttle": {
+        "cap": "regra de limitação",
+        "rule": "{max} recusas por evidência inverificável em um mês limitam as sugestões; você tem {n}.",
+        "notCounted": "{id} recebeu nível {tier}, não U. Não conta.",
+        "counts": "{id} recebeu nível U. Conta por {days} dias a partir da decisão."
+      },
+      "saw": {
+        "cap": "o que o adjudicador viu",
+        "body": "A sugestão, a evidência avaliada, os veredictos dos sensores e o texto ancorado. De você, apenas: identidade verificada.",
+        "versions": "guia {guide} · rubrica {rubric}"
+      },
+      "withdraw": {
+        "trigger": "Retirar",
+        "title": "Retirar a sugestão {id}?",
+        "body": "Ela é encerrada agora, não segue adiante e não é reaberta. O registro fica, com a sua retirada nele.",
+        "cancel": "Cancelar",
+        "confirm": "Retirar",
+        "moved": "Ela não pode mais ser retirada aqui; a página agora mostra onde ela está.",
+        "failed": "A sugestão não foi retirada",
+        "network": "A solicitação não chegou ao servidor. Nada foi retirado; tente novamente."
+      }
+    },
+    "record": {
+      "metaTitle": "Registro de {id} · The Harness Bible",
+      "cap": "registro da sugestão · {id}",
+      "contributor": "contribuidor {who}",
+      "noContributor": "reversão de um curador · sem contribuidor",
+      "verified": "identidade verificada",
+      "unverified": "identidade não verificada",
+      "actions": {
+        "outcome": "Ver a decisão"
+      },
+      "statusbar": {
+        "where": "cap. {n} · {anchor} · {id}",
+        "head": "cabeça {head}"
+      },
+      "change": {
+        "title": "Alteração",
+        "before": "antes",
+        "after": "depois",
+        "class": "Classe: {name}."
+      },
+      "decision": {
+        "title": "Decisão",
+        "rubric": "rubrica {version}",
+        "reached": "≥ {accept}",
+        "under": "< {accept}",
+        "floor": "piso {floor}",
+        "sensorsPass": "todos os sensores passam",
+        "sensorFailed": "o sensor {sensor} falhou"
+      },
+      "evidence": {
+        "title": "Evidência",
+        "count": "{n, plural, one {# item} other {# itens}}",
+        "none": "Nenhuma evidência."
+      },
+      "timeline": {
+        "cap": "encadeado por hash · sha-256, 12 primeiros hex",
+        "count": "{n, plural, one {# registro} other {# registros}}",
+        "empty": "Nenhum registro ainda.",
+        "footer": "cada registro faz o hash do seu conteúdo e do hash anterior",
+        "hash": "ant {prev} · hash {hash}",
+        "head": "cabeça",
+        "title": {
+          "record": "Registro",
+          "SUBMITTED": "Enviada",
+          "RESUBMITTED": "Reenviada · tentativa {n}",
+          "GRADED": "Avaliada",
+          "SENSORS": "Sensores",
+          "DECIDED": {
+            "ACCEPT": "Decidida · aceita",
+            "REQUEST_MORE": "Decidida · pedir mais",
+            "DECLINE": "Decidida · recusada",
+            "CURATOR_REVIEW": "Decidida · para um curador"
+          },
+          "CURATOR": {
+            "ACCEPT": "Curador · aprovou",
+            "KEEP_REQUEST_MORE": "Curador · manteve o pedido",
+            "DECLINE": "Curador · recusou",
+            "MERGE": "Curador · incorporou",
+            "REVERT": "Curador · reverteu"
+          },
+          "MERGED": "Incorporada",
+          "ENDORSED": "Endossada",
+          "WITHDRAWN": "Endosso retirado",
+          "EXPORT": "Exportada",
+          "UNREADABLE": "Registro {seq}",
+          "RETRACTED": "Retirada por quem a enviou"
+        },
+        "body": {
+          "SUBMITTED": "Âncora {anchor} · {class}. {items, plural, =0 {Nenhum item de evidência} one {Um item de evidência} other {# itens de evidência}}. Justificativa de {words, plural, one {# palavra} other {# palavras}}.",
+          "GRADED_ITEM": "Item {n}: nível {tier}, {base} × {relevance} × {recency} × {independence} = {adjusted}.",
+          "GRADED_ITEM_BARE": "Item {n}: nível {tier}, {adjusted}.",
+          "GRADED_SCORE": "Pontuação {score}.",
+          "SENSORS": "{verdicts}.",
+          "DECIDED": {
+            "ACCEPT": "{score} ≥ {accept}: aceita. {criteria, plural, one {Uma razão} other {# razões}}, uma por critério.",
+            "REQUEST_MORE": "{score} < {accept}: mais evidência pedida.",
+            "CURATOR_REVIEW": "Pontuação {score}: enviada a um curador.",
+            "sensor": "Recusada: o sensor {sensor} falhou.",
+            "declinedByAdjudicator": "Pontuação {score}: recusada pelo adjudicador.",
+            "declinedByRule": "{score} < piso {floor}: recusada por regra, antes de qualquer chamada de modelo."
+          },
+          "CURATOR": {
+            "ACCEPT": "{code, select, none {Aprovada sem anulação.} other {Aprovada com a anulação {code}{criterion, select, none {} other { · {criterion}}}.}}",
+            "KEEP_REQUEST_MORE": "Manteve o pedido de mais evidência.",
+            "DECLINE": "{code, select, none {Recusada.} other {Recusada com {code}.}}",
+            "MERGE": "Incorporada.",
+            "REVERT": "Revertida.",
+            "noted": "A nota do curador está no registro como hash."
+          },
+          "MERGED": "{bump}. {from} → {to}. Lint do capítulo {lint}. Lab {lab}.",
+          "REVERTS": "Reverte {id}.",
+          "ENDORSED": "Um leitor pôs o seu nome nela.",
+          "WITHDRAWN": "O leitor retirou o seu nome.",
+          "EXPORT": "Exportada em JSONL, {records, plural, one {# registro} other {# registros}}, com o rodapé assinado.",
+          "UNREADABLE": "O conteúdo deste registro não se lê como o seu tipo.",
+          "RETRACTED": "Ela foi encerrada {where, select, intake {depois da recusa na entrada} more {enquanto se pedia mais evidência} other {na fila de um curador}} e não segue adiante."
+        },
+        "bump": {
+          "patch": "Correção",
+          "minor": "Menor",
+          "major": "Maior"
+        },
+        "actor": {
+          "verified": "{who} · verificado",
+          "curator": "{who} · parte {part}",
+          "grader": "avaliador · {model} · rubrica {rubric}",
+          "sensors": "determinístico · {n, plural, one {# sensor} other {# sensores}}",
+          "adjudicator": "adjudicador guia {guide} · rubrica {rubric}",
+          "rules": "regras de entrada · rubrica {rubric}",
+          "router": "roteador · rubrica {rubric}",
+          "merged": "cap. {n} {from} → {to}"
+        }
+      },
+      "rail": {
+        "label": "O que a incorporação acrescenta, e a cadeia",
+        "notMerged": "não incorporada",
+        "version": {
+          "title": "Versão",
+          "chapter": "cap. {n}",
+          "pending": "A versão que a incorporação produz, com o seu branch e commit, aparece aqui depois da incorporação.",
+          "rule": "Patch para redação e números, minor para seções novas, major para estrutura.",
+          "release": "release",
+          "mergedBy": "incorporada por",
+          "notYet": "ainda não",
+          "revertedBy": "revertida por"
+        },
+        "gate": {
+          "title": "Portão do lab",
+          "cap": "condição de incorporação",
+          "pending": "Não incorporada: o lab e o lint do capítulo rodam na incorporação, e os resultados aparecem aqui.",
+          "unchecked": "O merge ainda não verificou a sua branch: o lab e o lint do capítulo, e a suíte do livro, aparecem aqui depois que verificar.",
+          "lab": "lab do cap. {n}",
+          "suite": "suíte do livro"
+        },
+        "row": {
+          "title": "Linha de fonte · {id}",
+          "cap": "verificação",
+          "pending": "Não incorporada: a data de verificação da linha muda com a incorporação.",
+          "before": "verificada antes",
+          "after": "verificada agora",
+          "age": "idade hoje",
+          "days": "{n, plural, =0 {hoje} one {# dia} other {# dias}}"
+        },
+        "credit": {
+          "title": "Crédito",
+          "pending": "Não incorporada: {who} recebe crédito no histórico do capítulo depois da incorporação. Nenhuma edição é atribuída a um agente.",
+          "merged": "{who} recebe crédito por esta alteração no histórico do capítulo. Nenhuma edição é atribuída a um agente.",
+          "nobody": "Ninguém recebe crédito por uma reversão no histórico do capítulo. Nenhuma edição é atribuída a um agente.",
+          "research": "Ninguém é nomeado por esta proposta da pesquisa até que o leitor que perguntou coloque seu nome nela; o pesquisador não recebe crédito em lugar nenhum. Nenhuma edição é atribuída a um agente."
+        },
+        "chain": {
+          "title": "Integridade da cadeia",
+          "checked": "verificada {at}",
+          "verified": "cadeia verificada · {n, plural, one {# registro} other {# registros}} · cabeça {head}",
+          "empty": "nenhum registro ainda",
+          "broken": "cadeia quebrada no registro {seq} · {field}",
+          "links": "recálculo 100% · {n} / {n} elos conferem",
+          "stopped": "A verificação para na primeira quebra: os registros depois dela não são garantidos."
+        },
+        "export": {
+          "button": "Exportar o registro",
+          "meta": "JSONL com a cadeia de hashes · {n} linhas"
+        }
+      },
+      "researchOrigin": "origem · pesquisa · sem contribuidor",
+      "endorsedBy": "endossada por {name}"
+    },
+    "history": {
+      "metaTitle": "Histórico do capítulo {n} · The Harness Bible",
+      "chapterCap": "capítulo {n} · {part}",
+      "cap": "histórico de melhorias",
+      "verified": "{version} · verificado em {date}",
+      "labMark": "lab {id} {verdict}",
+      "lede": "Cada versão deste capítulo desde a release, com a alteração, a evidência e as pessoas que a fizeram. Cada linha leva a um registro de decisão encadeado por hash.",
+      "stats": {
+        "versions": "versões",
+        "contributed": "alterações contribuídas",
+        "inText": "no texto atual",
+        "overrides": "anulações do curador",
+        "reverted": "revertidas",
+        "inPrecision": "na precisão",
+        "none": "nenhuma",
+        "rule": "regra de versão",
+        "patch": "redação, números",
+        "minor": "seções novas",
+        "major": "estrutura"
+      },
+      "ledger": {
+        "title": "Livro de versões",
+        "chapter": "cap. {n}",
+        "order": "mais recente primeiro",
+        "head": "cabeça {head}",
+        "noHead": "nenhum registro ainda",
+        "columns": {
+          "version": "versão",
+          "date": "data",
+          "class": "classe",
+          "anchor": "âncora",
+          "summary": "resumo",
+          "evidence": "evidência",
+          "people": "contribuidor · curador",
+          "record": "registro"
+        },
+        "foot": "pontuações na versão da rubrica vigente na data · os registros exportam como JSONL",
+        "export": "Exportar registros do capítulo",
+        "exportSignedOut": "entre para exportar os registros"
+      },
+      "class": {
+        "EDIT_TEXT": "redação",
+        "SET_VALUE": "número citado",
+        "EDIT_ROW": "linha de fonte",
+        "ADD_CLAIM": "afirmação nova",
+        "ADD_ROW": "linha de fonte nova",
+        "RESTRUCTURE": "seção nova",
+        "revert": "reversão",
+        "curator": "curador",
+        "research": "pesquisa",
+        "release": "release",
+        "fromResearch": "da pesquisa"
+      },
+      "inspection": "aceita por inspeção",
+      "overrideMark": "anulação do curador · {code}",
+      "revertedMark": "revertida em {version} · contada na precisão",
+      "revertedMarkNoVersion": "revertida · contada na precisão",
+      "revertOf": "Reverteu {id}.",
+      "editorial": {
+        "summary": "Capítulo publicado com {layers, plural, one {# camada} other {# camadas}}. VERIFY {verify}. Lab {lab}.",
+        "summaryNoLab": "Capítulo publicado com {layers, plural, one {# camada} other {# camadas}}. VERIFY {verify}. Sem lab.",
+        "who": "editorial",
+        "release": "release {id}"
+      },
+      "rail": {
+        "label": "Crédito, as camadas e a cadeia",
+        "credit": {
+          "title": "Crédito dos contribuidores",
+          "order": "ordem alfabética",
+          "none": "Nenhuma alteração incorporada ainda: ninguém recebe crédito.",
+          "accepted": "{n, plural, one {# aceita} other {# aceitas}}",
+          "reverted": "{n, plural, one {# revertida} other {# revertidas}}",
+          "agent": "Nenhuma edição é atribuída ao agente.",
+          "note": "As contagens são alterações aceitas ainda no texto. Esta lista não é um ranking."
+        },
+        "layers": {
+          "title": "O que mudou, por camada",
+          "since": "desde {version}",
+          "kind": {
+            "wording": "{n, plural, one {# redação} other {# redações}}",
+            "figure": "{n, plural, one {# número} other {# números}}",
+            "claim": "{n, plural, one {# afirmação} other {# afirmações}}",
+            "rows": "{n, plural, one {# linha de fonte} other {# linhas de fonte}}",
+            "section": "{n, plural, one {# seção} other {# seções}}"
+          },
+          "reverted": "{n, plural, one {# revertida} other {# revertidas}}",
+          "override": "{n, plural, one {anulação} other {# anulações}}",
+          "foot": "as camadas em cinza não mudaram desde a release",
+          "footNone": "nenhuma camada mudou desde a release"
+        },
+        "chain": {
+          "title": "verificação da cadeia",
+          "ok": "{n, plural, one {# registro} other {# registros}} · todo prev-hash confere",
+          "empty": "nenhum registro ainda",
+          "broken": "cadeia quebrada no registro {seq} · {field}",
+          "head": "cabeça {head}"
+        }
+      },
+      "statusbar": {
+        "where": "cap. {n} · histórico de melhorias",
+        "release": "release fixada {id}"
+      },
+      "verifiedPerson": "verificado"
+    },
+    "revert": {
+      "title": "Reverter",
+      "sampleTitle": "O veredito do mês",
+      "lede": "Reverter faz uma alteração na outra direção: a mesma verificação, uma versão nova e uma release nova, com registro próprio. Diga por quê.",
+      "sampleLede": "Esta alteração incorporada entrou na amostra do mês. Diga que ela permanece, ou reverta-a, dizendo por quê. Uma reversão conta na precisão da adjudicação.",
+      "note": "nota",
+      "counter": "{n} de {max}",
+      "noteRequired": "Uma reversão diz por quê: escreva uma nota.",
+      "noteOver": "A nota passa de {max} caracteres.",
+      "stands": "Permanece",
+      "revert": "Reverter",
+      "cancel": "Cancelar",
+      "confirm": "Pressione Reverter de novo para desfazer esta alteração em uma release nova.",
+      "status": {
+        "stands": "Registrado: a alteração permanece.",
+        "started": "A reversão começou: o merge dela verifica e publica uma release.",
+        "conflict": "Não pode ser revertida agora: não incorporada, já revertida, ou já julgada.",
+        "unavailable": "O motor de workflows não está disponível. Tente de novo em instantes.",
+        "failed": "Não enviado. Tente de novo."
+      }
+    },
+    "queue": {
+      "metaTitle": "Fila de curadoria · The Harness Bible",
+      "cap": "fila de curadoria · {who} · parte {parts}",
+      "title": "Roteadas por classe de alteração",
+      "open": "{n, plural, =0 {# abertas} one {# aberta} other {# abertas}}",
+      "marks": {
+        "overdue": "{n, plural, =0 {# atrasadas} one {# atrasada} other {# atrasadas}}",
+        "dueSoon": "{n, plural, =0 {# vencem < 24 h} one {# vence < 24 h} other {# vencem < 24 h}}",
+        "inSla": "{n} no prazo"
+      },
+      "noParts": "Nenhuma parte do livro está atribuída a você na escala.",
+      "empty": "Nada espera pelas suas partes.",
+      "col": {
+        "id": "id",
+        "anchor": "âncora · classe",
+        "tier": "nível",
+        "score": "pontuação",
+        "age": "idade",
+        "sla": "prazo"
+      },
+      "group": {
+        "safety": "Segurança / limite de OT",
+        "scenario": "Parâmetro de cenário",
+        "structure": "Estrutura",
+        "newTier": "Novo nível de fonte",
+        "inspection": "Pedir mais · para inspeção",
+        "ready": "Pronta para merge",
+        "merging": "Em merge · esperando uma mão",
+        "sampled": "Amostra · nível B aceito",
+        "decided": "Decididas hoje",
+        "researcher": "Propostas do pesquisador"
+      },
+      "groupCount": "{n}",
+      "sampledCount": "{n} · amostra mensal",
+      "seedsRevealed": "{n} · sementes reveladas",
+      "mergeState": {
+        "READY": "pronta para merge",
+        "CHECKING": "verificando",
+        "MANUAL": "precisa de um commit",
+        "NOT_RUN": "lab não executado",
+        "UNAVAILABLE": "sem repositório",
+        "FAILED": "verificação falhou",
+        "ERROR": "uma etapa falhou",
+        "NONE": "sem merge ainda",
+        "MERGING": "merge em andamento",
+        "MERGED": "merge feito",
+        "MOVED": "a main mudou"
+      },
+      "merge": {
+        "title": "Merge",
+        "version": "versão",
+        "branch": "branch",
+        "commit": "commit",
+        "lint": "lint do capítulo",
+        "lab": "lab do capítulo",
+        "suite": "suíte do livro",
+        "none": "nenhum",
+        "noCommit": "ainda não",
+        "reproduce": "{n} / {total} reproduzem",
+        "lintResult": {
+          "PASS": "passa",
+          "FAIL": "falha",
+          "NOT_RUN": "não executado",
+          "NONE": "nenhum"
+        },
+        "labResult": {
+          "PASS": "reproduz",
+          "FAIL": "não reproduz",
+          "NOT_RUN": "não executado",
+          "NONE": "nenhum"
+        },
+        "said": {
+          "READY": "A verificação do capítulo passou na branch: está pronta para o merge do curador.",
+          "CHECKING": "A branch foi criada, e sua verificação está em execução.",
+          "MANUAL": "Esta alteração é feita à mão: um curador faz o commit dela na branch, no repositório do livro, e então pressiona Verificar de novo.",
+          "NOT_RUN": "O lab do capítulo não pôde ser executado aqui, e esta alteração poderia mover um número derivado, então ela espera.",
+          "UNAVAILABLE": "O repositório do livro não está configurado nesta máquina, então nada pode ser mesclado ainda.",
+          "FAILED": "A verificação do capítulo falhou; a sugestão volta ao seu contribuidor como pedido de mais evidência, e a branch é mantida.",
+          "ERROR": "Uma etapa do merge falhou. Ele espera: um curador tenta outra vez com Verificar de novo depois que o que falhou for corrigido.",
+          "NONE": "Nenhum merge começou para esta sugestão aceita. Um curador inicia um com Verificar de novo.",
+          "MERGING": "Um curador fez o merge: a main avança até a branch, a release {release} é marcada e publicada, e o registro é escrito.",
+          "MERGED": "Merge feito na main e publicado na release {release}.",
+          "MOVED": "A âncora já não lê na main o que a sugestão registrou: a sugestão volta a ser de um curador, com o texto da main ao lado do seu.",
+          "FAILED_REVERT": "A verificação do capítulo falhou; a reversão espera o commit de um curador na branch e Verificar de novo."
+        },
+        "movedNow": "Na main a âncora agora lê: {text}",
+        "movedGone": "Na main a âncora desapareceu.",
+        "hand": "Por que à mão",
+        "missing": {
+          "COMMIT": "A branch ainda não tem commit além da main.",
+          "DESCENT": "A branch não descende da main: faça o rebase dela sobre a main.",
+          "CHAPTER": "A branch não altera o capítulo ancorado.",
+          "DERIVE": "Um número derivado muda com o seu script: a branch precisa alterar também o script de derivação do lab."
+        },
+        "failure": {
+          "does-not-parse": "O livro não compila na branch",
+          "chapter-missing": "A branch perdeu o capítulo",
+          "unlinked-derived": "Um número derivado não corresponde mais ao seu vínculo de derivação",
+          "unchanged": "A alteração deixa o capítulo como está: nada a mesclar"
+        },
+        "labReason": "Por quê",
+        "step": {
+          "prepare": "Preparando a branch",
+          "check": "Verificando a branch",
+          "merge": "Fazendo o merge na main"
+        },
+        "unrelated": "{n, plural, one {O lab {labs} não reproduz} other {Os labs {labs} não reproduzem}} nesta árvore de qualquer forma: a falha não é desta alteração e não a bloqueia.",
+        "figures": "Números derivados que o lab não imprime mais como a branch os declara",
+        "figure": "{id} · {value} · {key}",
+        "keys": "Resultados que mudaram",
+        "key": "{key}: a branch declara {stated}, a execução imprimiu {printed}",
+        "absent": "nada",
+        "diff": "A branch comparada à main",
+        "truncated": "os primeiros {n} caracteres",
+        "output": "O que o lab imprimiu, o final",
+        "release": "release",
+        "mergeButton": "Fazer merge",
+        "cancel": "Cancelar",
+        "confirm": "Pressione Fazer merge de novo para fazer o merge na main e publicar uma release.",
+        "merging": "Merge enviado: a main avança até a branch e a release é publicada.",
+        "recording": "Merge enviado, e sendo registrado.",
+        "mergeRefused": "Não está mais pronta para o merge.",
+        "mergeFailed": "O merge não foi enviado. Tente de novo.",
+        "recheck": "Verificar de novo",
+        "asked": "Pedido: o merge prepara e verifica de novo.",
+        "started": "Um merge começou: ele prepara e verifica.",
+        "refused": "Não há mais merge a verificar.",
+        "failed": "Verificar de novo não foi enviado. Tente de novo."
+      },
+      "span": {
+        "h": "{n} h",
+        "d": "{n} d",
+        "past": {
+          "h": "−{n} h",
+          "d": "−{n} d"
+        }
+      },
+      "reason": {
+        "SAFETY_OT": "segurança",
+        "SCENARIO_PARAMETER": "cenário",
+        "STRUCTURE": "estrutura",
+        "NEW_SOURCE_TIER": "novo nível",
+        "RUBRIC": "rubrica"
+      },
+      "class": {
+        "WORDING": "redação",
+        "CITED_FIGURE": "número citado",
+        "DERIVED_FIGURE": "número derivado",
+        "NEW_CLAIM": "nova afirmação",
+        "CURATOR_ALWAYS": "sempre curador"
+      },
+      "shared": "compartilhada",
+      "action": {
+        "ACCEPT": "aceita",
+        "KEEP_REQUEST_MORE": "manteve o pedido",
+        "DECLINE": "recusada",
+        "MERGE": "incorporada",
+        "REVERT": "revertida"
+      },
+      "statusbar": "melhorar · fila de curadoria · parte {parts}",
+      "change": {
+        "title": "Alteração",
+        "thresholds": "aceita {accept} · piso {floor}",
+        "current": "atual · {where}",
+        "proposed": "proposta"
+      },
+      "evidence": {
+        "title": "Evidência",
+        "rubric": "rubrica {version}",
+        "cap": "item mais forte + corroboração",
+        "none": "Nenhuma evidência.",
+        "item": "item",
+        "tier": "nível",
+        "base": "base",
+        "rel": "rel",
+        "rec": "rec",
+        "ind": "ind",
+        "score": "pontuação",
+        "sum": "{strongest} do mais forte",
+        "sumCorroborated": "{strongest} do mais forte + {bonus} de corroboração (item {n}, nível {tier})",
+        "band": "Pontuação {score} diante de um piso de {floor} e uma aceitação de {accept}",
+        "floor": "piso {floor}",
+        "accept": "aceita {accept}",
+        "table": "Itens de evidência, tabela"
+      },
+      "adjudication": {
+        "title": "Adjudicação",
+        "byAdjudicator": "guia do adjudicador {guide}",
+        "byRouter": "roteador",
+        "byRules": "regras de entrada",
+        "sensors": "Sensores",
+        "criteria": "Critérios",
+        "sufficient": "Evidência suficiente indicada: um item de nível {tier}."
+      },
+      "detail": {
+        "none": "Nada selecionado: a fila está vazia.",
+        "chapter": "cap. {n}",
+        "submitted": "enviada {at}",
+        "byName": "{name}",
+        "byNameVerified": "{name} · verificado",
+        "verifiedContributor": "contribuidor verificado",
+        "contributor": "contribuidor",
+        "partBy": "parte {part} ({curators})",
+        "partNone": "parte {part}, que nenhum curador cobre",
+        "andOthers": "{first} e mais {n}",
+        "routed": "Roteada para {parts}.",
+        "shared": "Ela alcança mais de uma parte, então um curador de qualquer uma pode decidir; o primeiro a decidir decide.",
+        "stale": "A âncora está desatualizada: verificada pela última vez há {days} dias.",
+        "sample": {
+          "stands": "permanece",
+          "reverted": "revertida",
+          "by": "{who} · {at}",
+          "someone": "um curador"
+        },
+        "open": "Abrir a página dela",
+        "record": "Ver o registro completo",
+        "parts": "parte {parts}",
+        "origin": "origem · pesquisa",
+        "endorsedBy": "endossada por {name}",
+        "notEndorsed": "sem endosso"
+      },
+      "decision": {
+        "title": "Decisão de curadoria",
+        "actionsLabel": "A decisão do curador",
+        "action": {
+          "ACCEPT": "Aceitar após inspeção",
+          "KEEP_REQUEST_MORE": "Manter o pedido de mais",
+          "DECLINE": "Recusar",
+          "ACCEPT_RESEARCH": "Aceitar"
+        },
+        "criterionOverridden": "critério anulado · {criterion}",
+        "criterionDisputed": "critério contestado · {criterion}",
+        "code": "razão codificada",
+        "codeChoose": "Escolha uma razão codificada",
+        "codes": {
+          "OV-IND-01": "OV-IND-01 · Independência dispensada: divulgação exigida por regulador",
+          "OV-IND-02": "OV-IND-02 · Independência dispensada: única fonte autorizada",
+          "OV-REC-01": "OV-REC-01 · Atualidade: fato estável classificado como de mudança rápida",
+          "OV-REL-01": "OV-REL-01 · Relevância avaliada abaixo do devido"
+        },
+        "codesFrom": "Os códigos vêm do guia do adjudicador v2.1.",
+        "criterion": "critério contestado",
+        "criterionChoose": "Escolha o critério",
+        "noCodes": "O guia não dá códigos para recusar um aceite: o critério e a nota dizem o porquê.",
+        "note": "nota",
+        "noteCount": "{n} de {max}",
+        "noteRequired": "obrigatória",
+        "noteOver": "A nota passa de {max} caracteres.",
+        "calibration": {
+          "override": "Anulações são dados de calibração do adjudicador. Esta conta para a taxa de anulação de {criterion}.",
+          "overrideUnnamed": "Anulações são dados de calibração do adjudicador. Esta conta para a taxa de anulação do critério que ela indica.",
+          "counted": "Não é anulação: ainda assim é dado de calibração do adjudicador, uma das decisões sobre as quais as taxas de anulação são calculadas.",
+          "rules": "Quem decidiu o que vale foram as regras de entrada, não o adjudicador: a decisão fica registrada com a nota e não é dado de calibração.",
+          "none": "Não há adjudicação a anular: a decisão fica registrada com a nota e não é dado de calibração."
+        },
+        "submit": {
+          "overrideACCEPT": "Registrar anulação e aceitar",
+          "overrideDECLINE": "Registrar anulação e recusar",
+          "ACCEPT": "Registrar e aceitar",
+          "KEEP_REQUEST_MORE": "Registrar e manter o pedido",
+          "DECLINE": "Registrar e recusar"
+        },
+        "cancel": "Cancelar",
+        "done": {
+          "ACCEPT": "aceita após inspeção",
+          "KEEP_REQUEST_MORE": "pedido mantido",
+          "DECLINE": "recusada",
+          "ACCEPT_RESEARCH": "aceita"
+        },
+        "status": {
+          "recording": "registrando",
+          "recorded": "registrada",
+          "conflict": "Ela não pode mais ser decidida aqui, provavelmente porque outro curador decidiu nesse meio-tempo. Nada foi registrado; o detalhe agora mostra onde ela está.",
+          "unavailable": "Os workflows estão indisponíveis, então nada foi registrado. Tente de novo em instantes.",
+          "failed": "A decisão não foi registrada. Tente de novo."
+        }
+      },
+      "decided": {
+        "title": "Decisão de curadoria",
+        "someone": "um curador cuja conta não existe mais",
+        "recording": "registrando",
+        "override": "anulação registrada",
+        "recorded": "decisão registrada",
+        "hashes": "ant {prev} → {hash}"
+      },
+      "seed": {
+        "title": "Semente revelada",
+        "chip": "semente · resposta conhecida",
+        "yours": "sua decisão",
+        "answer": "resposta conhecida",
+        "knownAnswer": "{action} · resposta conhecida {answer}",
+        "match": "confere",
+        "diverged": "divergiu · para calibração",
+        "legend": "Um item de calibração com uma resposta definida por um segundo curador. Ele parece qualquer outro item até você decidir. A etiqueta aparece depois da sua decisão e mostra se conferiu."
+      },
+      "rail": {
+        "label": "Calibração",
+        "quarter": "T{n} {year}",
+        "minimum": "Uma medida é dada a partir de {min} decisões no trimestre; abaixo disso, suas contagens e um traço.",
+        "override": {
+          "title": "Taxa de anulação",
+          "cap": "por critério",
+          "target": "meta {pct} %",
+          "review": "revisão {pct} %",
+          "scale": "escala 0–{pct} %",
+          "counts": "{n} de {of}",
+          "rate": "{pct} %",
+          "triggered": "revisão da rubrica acionada",
+          "footer": "parcela das decisões revisadas por curadores que foram anuladas nesse critério"
+        },
+        "kappa": {
+          "title": "κ do adjudicador",
+          "cap": "vs curadores",
+          "status": {
+            "none": "sem leitura",
+            "retire": "abaixo do piso",
+            "below": "abaixo do portão",
+            "gate": "no portão"
+          },
+          "retire": "aposentar {value}",
+          "gate": "portão {value}",
+          "counts": "{agreed} de {pairs} concordam sobre aceitar",
+          "say": {
+            "none": "Com menos de {min} itens decididos pelos dois, o κ ainda não diz nada.",
+            "retire": "Abaixo do piso de aposentadoria de {retire}.",
+            "below": "Acima do piso de aposentadoria. Abaixo do portão de {gate}.",
+            "gate": "No portão de {gate} ou acima dele."
+          }
+        },
+        "precision": {
+          "title": "Precisão da adjudicação",
+          "rate": "{pct} %",
+          "status": {
+            "none": "sem leitura",
+            "within": "dentro da meta",
+            "over": "acima da meta"
+          },
+          "reverted": "aceitas, depois revertidas",
+          "counts": "{n} de {of}",
+          "target": "meta",
+          "targetValue": "< {pct} %",
+          "rubric": "rubrica pública {version}"
+        },
+        "researchLog": "Registro de pesquisa"
+      },
+      "research": "pesquisa"
+    },
+    "proposal": {
+      "header": "proposta para o livro",
+      "notAnswer": "não faz parte da resposta",
+      "sources": "em que se apoia",
+      "score": "Melhorar · pontuação {score} · aceita a partir de {acceptAt}",
+      "scoreOnly": "Melhorar · pontuação {score}",
+      "curatorAlways": "sempre um curador · nenhuma pontuação decide · {reason}",
+      "note": "nota do pesquisador",
+      "noteUnread": "escrita pelo pesquisador a partir das páginas que leu; o adjudicador não a leu",
+      "where": {
+        "queue": "com um curador · parte {part} · decisão até {date}",
+        "merging": "sendo incorporada",
+        "merged": "aceita · em {version}",
+        "declined": "recusada por um curador",
+        "notMerged": "não incorporada · a verificação do capítulo falhou"
+      },
+      "withName": "com o seu nome",
+      "endorse": "Adicionar meu nome",
+      "unendorse": "Remover meu nome",
+      "consentMore": "Curadores e o histórico do capítulo verão seu nome ao lado desta proposta; sua pergunta continua sendo sua.",
+      "consentHelp": "marque a caixa para adicionar seu nome",
+      "failed": "não foi possível adicionar seu nome · tente de novo mais tarde",
+      "rate": "alterações demais em um minuto · tente de novo em instantes",
+      "record": "Ver registro",
+      "failedRemove": "não foi possível remover seu nome · tente de novo mais tarde",
+      "settled": "esta proposta não aceita mais nomes",
+      "settledWithName": "esta proposta não aceita mais nomes · com o seu nome",
+      "notReport": "não faz parte do relatório"
+    },
+    "researchLog": {
+      "metaTitle": "Registro de pesquisa · Harness Bible",
+      "cap": "melhorar",
+      "title": "Registro de pesquisa",
+      "what": "O que o pesquisador executou, encontrou e propôs, mês a mês por doze meses, e as propostas que o Melhorar refutou ou que um curador recusou. Nada aqui diz quem perguntou.",
+      "queue": "Fila do curador",
+      "empty": "nenhuma pesquisa ainda",
+      "statusbar": "registro de pesquisa · versão {release}",
+      "months": {
+        "title": "Por mês",
+        "month": "mês",
+        "runs": "pesquisas",
+        "nothing": "nada a pesquisar",
+        "failed": "planejador falhou",
+        "invalid": "inválidas",
+        "duplicate": "duplicadas",
+        "refuted": "refutadas",
+        "proposed": "propostas",
+        "searches": "buscas",
+        "pageReads": "páginas lidas",
+        "table": "Pesquisas por mês, tabela",
+        "refused": "recusadas",
+        "valid": "válidas",
+        "sent": "enviadas"
+      },
+      "refuted": {
+        "title": "Refutadas e recusadas",
+        "none": "Nada refutado ou recusado nestes doze meses.",
+        "date": "encerrada",
+        "id": "proposta",
+        "anchor": "âncora",
+        "class": "classe",
+        "tier": "nível",
+        "score": "pontuação · piso · aceite",
+        "by": "encerrada por",
+        "scoreLine": "{score} · {floor} · {accept}",
+        "table": "Propostas refutadas e recusadas, tabela"
+      },
+      "refutedBy": {
+        "floor": "piso",
+        "sensor": "{sensor}",
+        "rule": "regra · mais evidências",
+        "adjudicatorRequest": "adjudicador · mais evidências",
+        "adjudicatorDecline": "adjudicador · recusa",
+        "curator": "curador",
+        "check": "verificação"
+      }
+    }
+  },
+  "reader": {
+    "metaTitle": "{section} {title} · Capítulo {n} · The Harness Bible",
+    "rail": {
+      "label": "Painel de instrumentos do capítulo"
+    },
+    "outline": {
+      "label": "Sumário do livro",
+      "range": "Capítulos {from}–{to}",
+      "path": "trilha de leitura",
+      "keys": "teclas",
+      "condensedLabel": "Sumário do livro, condensado",
+      "expand": "Expandir o sumário",
+      "chapter": "Capítulo {n}, {title}",
+      "currentChapter": "Capítulo {n}, {title}, seção {id}"
+    },
+    "keys": {
+      "section": "seção seguinte / anterior",
+      "chapter": "capítulo anterior / seguinte",
+      "lab": "abrir lab",
+      "ask": "perguntar ao assistente",
+      "research": "abrir a pesquisa",
+      "bookmark": "marcar esta seção",
+      "note": "escrever uma nota",
+      "search": "pesquisar no livro",
+      "escape": "fechar o painel lateral ou a espiada",
+      "help": "mostrar este mapa",
+      "mapLabel": "Mapa de teclas",
+      "mapTitle": "Teclas",
+      "close": "Fechar mapa de teclas",
+      "offNote": "atalhos de uma tecla ficam desligados enquanto o foco está em um campo"
+    },
+    "header": {
+      "cap": "capítulo {n} · parte {roman}",
+      "source": "idioma de origem: {src} · edição {edition} em paridade",
+      "sourcePending": "idioma de origem: {src} · edição {edition} pendente",
+      "original": "ver original em {src}"
+    },
+    "section": {
+      "layer": "camada {n} de 9"
+    },
+    "layer": {
+      "1": "Intuição",
+      "2": "Mecanismo",
+      "3": "Números resolvidos",
+      "4": "Medição",
+      "5": "Falha",
+      "6": "Fronteira",
+      "7": "Aplicação industrial",
+      "8": "Auxílios de decisão",
+      "9": "Fontes"
+    },
+    "code": {
+      "copy": "Copiar",
+      "copyLabel": "Copiar código",
+      "copied": "copiado",
+      "open": "Abrir no Labs",
+      "region": "Código"
+    },
+    "inst": {
+      "label": "Capítulo {n}",
+      "verified": "verificado {date}",
+      "verify": "verify",
+      "redteam": "redteam",
+      "lab": "lab {n}",
+      "passed": "aprovado",
+      "failed": "reprovado",
+      "unverified": "não verificado",
+      "redteamOpen": "aprovado · {n} em aberto",
+      "noLab": "sem lab",
+      "verdict": {
+        "REPRODUCED": "reproduzido",
+        "NOT_REPRODUCED": "não reproduzido",
+        "KILLED": "interrompido",
+        "ERROR": "erro"
+      },
+      "lastRun": "última execução do lab",
+      "lastRunValue": "{by} · {when}",
+      "derived": "figuras derivadas",
+      "derivedValue": "{linked} / {total} vinculadas",
+      "cited": "figuras citadas",
+      "citedValue": "{total} · {fast} voláteis",
+      "oldest": "verificação mais antiga",
+      "oldestValue": "{days} dias",
+      "words": "palavras",
+      "history": "histórico de melhorias · {n}",
+      "condensedLabel": "Instrumento do capítulo {n}, condensado"
+    },
+    "figures": {
+      "label": "Figuras em {id}",
+      "figure": "figura",
+      "value": "valor",
+      "tier": "nível",
+      "scenario": "cenário",
+      "stale": "desatualizado {days} d"
+    },
+    "tier": {
+      "derLabel": "der",
+      "abbr": {
+        "PRIMARY": "pri",
+        "VENDOR": "ven",
+        "ANALYST": "anl",
+        "PRACTITIONER": "pra",
+        "ILLUSTRATIVE": "ilu",
+        "DERIVED": "ƒ",
+        "OPEN": "abe"
+      }
+    },
+    "sources": {
+      "claim": "afirmação ou figura",
+      "source": "fonte",
+      "link": "link",
+      "doi": "doi",
+      "linkLabel": "Abrir a fonte da linha r{ordinal} em uma nova aba: {citation}",
+      "tier": "nível",
+      "verified": "verificado",
+      "stale": "desatualizado"
+    },
+    "marks": {
+      "bookmark": "Marcar esta seção",
+      "bookmarked": "Marcada · remover",
+      "bookmarkLabel": "Marcar a seção {id}",
+      "flag": "marcada",
+      "noteLabel": "nota · {id}",
+      "counter": "{n} / {max}",
+      "editorLabel": "Nota na seção {id}",
+      "status": {
+        "none": "ainda sem nota",
+        "saved": "salva {when}",
+        "dirty": "alterações não salvas",
+        "saving": "salvando",
+        "deleted": "nota apagada",
+        "error": "não salva · {message}",
+        "tooLong": "no máximo {max} caracteres"
+      },
+      "save": "Salvar nota",
+      "delete": "Apagar nota",
+      "confirm": {
+        "title": "Apagar a nota em {id}?",
+        "body": "O texto é apagado. A marcação, se houver, é mantida.",
+        "cancel": "Cancelar",
+        "confirm": "Apagar"
+      },
+      "error": {
+        "unknownSection": "{id} não está na release {release}",
+        "noSession": "entre para manter as marcas",
+        "failed": "a marca não foi salva"
+      }
+    },
+    "actions": {
+      "cap": "a partir desta seção",
+      "run": "Executar Lab {n}",
+      "runtime": "~ {min} min",
+      "ask": "Perguntar sobre {id}",
+      "suggest": "Sugerir uma alteração",
+      "anchor": "âncora {id}"
+    },
+    "render": {
+      "cap": "verificação de renderização",
+      "ok": "hash do conteúdo confere com a release {id}",
+      "bad": "hash do conteúdo difere da release {id}"
+    },
+    "peek": {
+      "label": "Espiar: {id}",
+      "title": "Espiar · {id}",
+      "verified": "verificado {date}",
+      "open": "abrir aqui",
+      "side": "abrir lado a lado",
+      "sideSoon": "chega com o painel do assistente",
+      "missing": "Não está nesta release."
+    },
+    "mobile": {
+      "toc": "Sumário",
+      "tocSub": "{id} de {n}.9",
+      "ask": "Perguntar sobre {id}",
+      "askSub": "respostas citam a edição {edition}",
+      "strip": "Cap. {n}",
+      "stripLabel": "Instrumento do capítulo {n}",
+      "barLabel": "Ações do capítulo",
+      "close": "Fechar sumário"
+    },
+    "notice": {
+      "unverifiedTitle": "Não verificado",
+      "unverified": "Este capítulo mudou depois da última verificação. As figuras podem não coincidir com os labs.",
+      "staleTitle": "Desatualizado > 90 d",
+      "stale": "{k, plural, one {# figura} other {# figuras}} nesta seção {k, plural, one {foi verificada} other {foram verificadas}} há mais de 90 dias. Continuam visíveis; trate-as como datadas."
+    },
+    "statusbar": {
+      "section": "cap. {n} · {id} {title}"
+    }
+  },
+  "search": {
+    "metaTitle": "Resultados para {q} · The Harness Bible",
+    "metaTitleEmpty": "Pesquisa · The Harness Bible",
+    "cap": "pesquisa · capítulos, labs, registros · release {id}",
+    "capPending": "pesquisa · capítulos, labs, registros · release {id} · edição PT pendente",
+    "title": "Resultados para",
+    "titleEmpty": "Pesquisar no livro",
+    "summary": "{count, plural, one {# resultado} other {# resultados}} · {ms} ms",
+    "also": "também encontrou {terms}",
+    "sort": {
+      "label": "Ordenar resultados",
+      "relevance": "Relevância",
+      "book": "Ordem do livro",
+      "verified": "Verificados recentemente"
+    },
+    "note": {
+      "none": "Nenhum filtro aplicado. Mostrando todas as correspondências. Escolha uma camada ou um nível de fonte à esquerda para reduzir a lista.",
+      "some": "{k, plural, one {# filtro} other {# filtros}} definidos · {count, plural, one {# correspondência} other {# correspondências}}",
+      "clear": "Limpar tudo"
+    },
+    "filters": {
+      "title": "Filtros",
+      "label": "Filtros",
+      "help": "Nenhum filtro definido. Cada grupo reduz os resultados; os grupos se combinam com E.",
+      "helpSet": "{k, plural, one {# filtro} other {# filtros}} definidos",
+      "apply": "Aplicar",
+      "clear": "Limpar tudo"
+    },
+    "group": {
+      "part": "parte",
+      "layer": "camada",
+      "tier": "nível da fonte",
+      "age": "idade da verificação",
+      "type": "tipo"
+    },
+    "part": {
+      "P0": "Parte 0 · por que agora",
+      "P1": "Parte I · fundamentos",
+      "P2": "Parte II · engenharia de harness",
+      "P3": "Parte III · aplicação industrial"
+    },
+    "labsNoLayer": "Labs não têm camada · {n, plural, one {# resultado} other {# resultados}}",
+    "age": {
+      "d30": "≤ 30 d",
+      "d90": "≤ 90 d",
+      "stale": "> 90 d · figura desatualizada"
+    },
+    "type": {
+      "section": "Seção de capítulo",
+      "lab": "Lab",
+      "row": "Linha de registro"
+    },
+    "kind": {
+      "section": "seção de capítulo",
+      "lab": "lab · readme",
+      "row": "linha de registro"
+    },
+    "tier": {
+      "PRIMARY": "primária",
+      "VENDOR": "fornecedor",
+      "ANALYST": "analista",
+      "PRACTITIONER": "praticante",
+      "ILLUSTRATIVE": "ilustrativo",
+      "DERIVED": "derivado",
+      "OPEN": "aberto",
+      "SCENARIO": "cenário"
+    },
+    "hit": {
+      "layer": "camada {n} · {name}",
+      "noLayer": "lab · sem camada",
+      "sources": "camada 9 · fontes",
+      "context": "cap. {n} · {title}",
+      "labContext": "Lab {n} · README",
+      "rowContext": "cap. {n} · Fontes · linha r{k}",
+      "verified": "verificado {d} d",
+      "unverified": "não verificado",
+      "ci": "ci {when}",
+      "rowChecked": "linha verificada",
+      "stale": "desatualizado · {row} {d} d",
+      "reproduced": "reproduzido",
+      "notReproduced": "não reproduzido",
+      "deriveTitle": "derive.py linha {line}"
+    },
+    "list": {
+      "label": "Resultados da pesquisa",
+      "showing": "mostrando {shown} de {count}",
+      "more": "Mostrar mais {n}"
+    },
+    "index": {
+      "label": "Índice",
+      "built": "construído {when}",
+      "chapters": "capítulos",
+      "chaptersValue": "{n} · {sections} seções",
+      "labs": "labs",
+      "labsValue": "{n} readmes",
+      "rows": "linhas de registro",
+      "edition": "edição",
+      "editionEn": "EN",
+      "editionParity": "EN · PT em paridade",
+      "hash": "hash do índice"
+    },
+    "query": {
+      "label": "Consulta",
+      "ms": "{ms} ms",
+      "under": "abaixo da meta de 500 ms",
+      "over": "acima da meta de 500 ms",
+      "parse": "análise",
+      "lexical": "léxico",
+      "vector": "vetor",
+      "vectorUnavailable": "— · indisponível",
+      "vectorIndexing": "— · indexando",
+      "assemble": "montagem",
+      "terms": "termos",
+      "results": "{count, plural, one {# resultado} other {# resultados}}"
+    },
+    "actions": {
+      "cap": "a partir desta pesquisa",
+      "ask": "Perguntar sobre {q}",
+      "lab": "Abrir Lab {n}",
+      "labTime": "~ {min} min",
+      "save": "Salvar pesquisa",
+      "saveMeta": "conta",
+      "saveSoon": "não nesta release"
+    },
+    "marks": {
+      "cap": "marcas",
+      "stale": "desatualizado",
+      "staleText": "uma figura citada na seção tem mais de 90 d",
+      "term": "termo",
+      "termText": "texto encontrado"
+    },
+    "empty": {
+      "cap": "pesquisa",
+      "prompt": "Digite um termo: um conceito, um número de capítulo, um lab, uma fonte.",
+      "none": "Nada encontrado para \"{q}\" na release {id}.",
+      "hint": "Tente uma palavra mais curta; o índice reduz palavras em inglês à raiz, então \"idempotent\" também encontra \"idempotency\".",
+      "stop": "Essas palavras não são indexadas.",
+      "filtered": "Nada encontrado com estes filtros."
+    },
+    "statusbar": {
+      "search": "pesquisa · {q}",
+      "results": "{count, plural, one {# resultado} other {# resultados}} · {ms} ms",
+      "plain": "pesquisa"
+    },
+    "loading": "pesquisando",
+    "error": {
+      "title": "A pesquisa não rodou",
+      "body": "Rastreio {traceId}. Tente novamente ou recarregue a página.",
+      "retry": "Tentar novamente"
+    }
+  },
+  "marks": {
+    "metaTitle": "Favoritos e notas · The Harness Bible",
+    "cap": "suas marcas · conta",
+    "capSynced": "suas marcas · conta · sincronizado {when}",
+    "title": "Favoritos e notas",
+    "blurb": "As marcas pertencem à sua conta e acompanham você entre dispositivos e edições.",
+    "bookmarks": {
+      "label": "Favoritos",
+      "order": "ordem do livro",
+      "list": "Favoritos",
+      "remove": "Remover",
+      "shown": "{n} de {n} exibidos"
+    },
+    "notes": {
+      "label": "Notas",
+      "order": "mais recentes primeiro",
+      "list": "Notas",
+      "open": "Abrir",
+      "delete": "Apagar",
+      "shown": "{n} de {n} exibidas"
+    },
+    "row": {
+      "context": "cap. {n} · {title}",
+      "layer": "camada {n} · {name}",
+      "gone": "não está na release {id}"
+    },
+    "empty": {
+      "bookmarks": "Nenhum favorito ainda.",
+      "bookmarksHint": "Pressione b em qualquer seção ou use Marcar esta seção na barra lateral.",
+      "notes": "Nenhuma nota ainda.",
+      "notesHint": "O campo de nota fica abaixo das ações de cada seção."
+    },
+    "notice": {
+      "title": "Feito",
+      "removed": "Favorito em {id} removido.",
+      "deleted": "Nota em {id} apagada."
+    },
+    "error": {
+      "title": "A marca não foi alterada",
+      "remove": "O favorito não foi removido. Tente novamente.",
+      "delete": "A nota não foi apagada. Tente novamente.",
+      "session": "Entre para alterar marcas.",
+      "pageTitle": "As marcas não carregaram",
+      "body": "Rastreio {traceId}. Tente novamente ou recarregue a página.",
+      "retry": "Tentar novamente"
+    },
+    "statusbar": {
+      "counts": "suas marcas · {b, plural, one {# favorito} other {# favoritos}} · {n, plural, one {# nota} other {# notas}}",
+      "plain": "suas marcas"
+    }
+  },
+  "api": {
+    "errors": {
+      "INVALID_INPUT": "A requisição está malformada; o detalhe indica o campo.",
+      "IDEMPOTENCY_KEY_REQUIRED": "Envie um cabeçalho Idempotency-Key com um UUID.",
+      "NO_SESSION": "Entre para usar este endpoint.",
+      "BUDGET_EXCEEDED": "O orçamento de modelo desta organização foi atingido.",
+      "ROLE_REQUIRED": "Isto exige um papel superior.",
+      "FORBIDDEN": "Você não pode fazer isso com esse recurso.",
+      "BAD_ORIGIN": "Envie esta requisição a partir do próprio site.",
+      "METHOD_NOT_ALLOWED": "Isto é um download: peça-o com GET.",
+      "NOT_FOUND": "Não encontrado na release fixada.",
+      "UNKNOWN_SECTION": "Essa seção não está na release fixada.",
+      "CONFLICT": "A requisição conflita com o estado atual.",
+      "IN_PROGRESS": "A mesma requisição ainda está em execução; aguarde.",
+      "NOT_DERIVED": "Essa figura não é derivada; não tem linha de derivação.",
+      "PAYLOAD_TOO_LARGE": "O corpo passa de 64 KB.",
+      "UNSUPPORTED_MEDIA": "Envie application/json.",
+      "UNPROCESSABLE": "A requisição é válida mas não pode ser aplicada; o detalhe explica.",
+      "NOTE_TOO_LONG": "Uma nota tem no máximo 2000 caracteres.",
+      "IDEMPOTENCY_MISMATCH": "Este Idempotency-Key foi usado com outro corpo.",
+      "RATE_LIMITED": "Requisições demais; aguarde os segundos de Retry-After.",
+      "AUTH_NOT_CONFIGURED": "O login não está configurado nesta instalação.",
+      "CONTEXT_INVALID": "Esse capítulo, seção ou laboratório não está na release fixada.",
+      "RELEASE_CHANGED": "Esta conversa está fixada em uma release anterior; abra uma nova.",
+      "TURN_IN_PROGRESS": "O turno anterior ainda está em execução; aguarde.",
+      "TEXT_TOO_LONG": "Uma pergunta tem no máximo 800 caracteres.",
+      "FLAG_DUPLICATE": "Esta mensagem já foi sinalizada.",
+      "ASSISTANT_UNAVAILABLE": "O assistente está indisponível; a resposta não foi escrita.",
+      "NOTHING_TO_EXPORT": "Esta conversa não tem registro no ledger para exportar.",
+      "AID_UNKNOWN": "Esse auxílio de decisão não é deste capítulo.",
+      "AID_INPUTS": "Uma entrada está fora do intervalo; o detalhe indica o campo.",
+      "AID_RUN_FAILED": "O script não terminou com estas entradas. Nada foi explicado.",
+      "INTERNAL": "A requisição não foi concluída. Informe o id de rastreio ao suporte.",
+      "ANCHOR_REQUIRED": "Uma sugestão aponta para uma seção, um número ou uma linha de fonte; esta não aponta para nada.",
+      "ANCHOR_UNKNOWN": "Essa âncora não está na edição fixada.",
+      "CHANGE_KIND_INVALID": "Esse tipo de alteração não se faz nesse tipo de âncora.",
+      "SUGGESTION_THROTTLED": "As sugestões desta conta estão pausadas até a data indicada no detalhe.",
+      "CONSENT_REQUIRED": "Enviar mantém a sua identidade junto à sugestão, para proveniência; confirme isso para enviar.",
+      "INTAKE_SCHEMA": "A proposta não diz exatamente o que mudaria; o detalhe nomeia o campo.",
+      "INTAKE_ANCHOR_EXISTS": "A âncora não está na edição fixada como o rascunho a registrou; o detalhe diz o que ela contém agora.",
+      "INTAKE_EVIDENCE_PARSES": "A evidência não está completa; o detalhe nomeia o item e o que lhe falta.",
+      "INTAKE_RATIONALE_LENGTH": "A justificativa não tem entre 1 e 200 palavras; o detalhe traz a contagem.",
+      "STORAGE_UNAVAILABLE": "O armazenamento de arquivos não está configurado nesta instalação. Nada foi guardado.",
+      "SIGNED_URL_INVALID": "Este link de envio não é válido ou expirou. Peça um novo.",
+      "UPLOAD_TYPE_MISMATCH": "O arquivo não é do tipo para o qual este link foi feito; o detalhe indica o tipo.",
+      "UPLOAD_TOO_LARGE": "O arquivo passa do limite de tamanho; o detalhe traz o limite em bytes. Nada foi guardado.",
+      "EVIDENCE_KIND_NOT_YET": "Execuções de laboratório salvas chegam com o IDE.",
+      "EVIDENCE_LIMIT": "Uma sugestão tem no máximo dez itens de evidência. Remova um para adicionar outro.",
+      "UPLOAD_KEY_INVALID": "Esta chave de envio não é desta sugestão.",
+      "UPLOAD_NOT_FOUND": "Nenhum arquivo chegou com esta chave de envio. Envie-o primeiro, depois adicione.",
+      "DOI_INVALID": "Isto não é um DOI. Um DOI tem a forma 10.1000/182.",
+      "WORKFLOWS_UNAVAILABLE": "O motor de fluxos não respondeu, então nada foi feito. Tente de novo em instantes.",
+      "OVERRIDE_CODE_REQUIRED": "Aceitar contra o adjudicador exige uma razão codificada do guia do adjudicador.",
+      "OVERRIDE_CODE_INVALID": "Esse código não é do guia do adjudicador, ou não é desse critério.",
+      "OVERRIDE_CODE_NOT_TAKEN": "Esta decisão não leva código de anulação.",
+      "OVERRIDE_CRITERION_REQUIRED": "Recusar contra o adjudicador exige o critério contestado.",
+      "OVERRIDE_CRITERION_NOT_TAKEN": "Esta decisão não leva critério: só uma anulação indica um.",
+      "OVERRIDE_NOTE_REQUIRED": "Esta decisão exige uma nota de até 400 caracteres.",
+      "NOT_FOR_RESEARCH": "Uma proposta da pesquisa é aceita ou recusada: ninguém responderia a um pedido de mais evidência.",
+      "RESEARCH_IN_PROGRESS": "Uma pesquisa está em andamento nesta conversa. Espere que termine.",
+      "ACCOUNT_DELETION_REQUESTED": "Esta conta está sendo excluída. Nada novo pode ser iniciado.",
+      "RESEARCH_OFF_ORGANISATION": "A pesquisa está desligada para a sua organização. Fale com o administrador.",
+      "RESEARCH_DAILY_LIMIT": "30 pesquisas foram iniciadas nas últimas 24 horas. Tente mais tarde.",
+      "RESEARCH_UNAVAILABLE": "A pesquisa não está disponível aqui agora. Tente mais tarde.",
+      "SEED_INVALID": "Essa resposta não pode iniciar uma pesquisa. Comece do zero.",
+      "FINDING_USED": "Esta descoberta já foi usada.",
+      "FINDING_PURGED": "O texto desta descoberta foi removido após 30 dias.",
+      "PROPOSAL_DUPLICATE": "A mesma mudança já está proposta no Melhorar.",
+      "RESEARCH_SENDS_LIMIT": "30 descobertas foram enviadas este mês. A próxima pode ser enviada quando o mês reiniciar."
+    }
+  },
+  "notFound": {
+    "cap": "release fixada",
+    "title": "Esta página não está na release fixada.",
+    "body": "A seção, o capítulo ou o lab pedido não faz parte da release à qual o livro está fixado.",
+    "home": "Voltar ao livro"
+  },
+  "aids": {
+    "ch37WhichConfiguration": {
+      "title": "Qual configuração?",
+      "inputs": {
+        "qpd": "consultas por dia",
+        "tout": "tokens de saída por consulta",
+        "tcache": "tokens de entrada em cache por consulta",
+        "esc": "parcela escalada para raciocínio (%)",
+        "route": "parcela roteada ao modelo pequeno (%)"
+      },
+      "steps": {
+        "inputs": "suas entradas",
+        "costPerTask": "custo por tarefa, A contra C",
+        "reviewLoad": "a parcela escalada muda a classificação",
+        "choose": "escolher e medir de novo"
+      },
+      "bars": {
+        "a": "A",
+        "c": "C",
+        "esc0": "escalada 0%",
+        "esc10": "escalada 10%",
+        "esc30": "escalada 30%"
+      }
+    },
+    "ch21TaskSurvival": {
+      "title": "A tarefa sobrevive ao seu worker?",
+      "inputs": {
+        "steps": "passos por tarefa",
+        "calls": "chamadas de modelo e ferramenta por tarefa",
+        "tokensPerStep": "tokens por passo"
+      },
+      "steps": {
+        "inputs": "suas entradas",
+        "noFailure": "probabilidade de nenhuma falha transitória",
+        "retries": "sucesso com novas tentativas",
+        "redo": "trabalho refeito sem checkpoints"
+      },
+      "bars": {
+        "f1": "1% por chamada",
+        "f2": "2% por chamada",
+        "f5": "5% por chamada",
+        "r1f2": "1 nova tentativa a 2%",
+        "r3f2": "3 novas tentativas a 2%",
+        "r1f5": "1 nova tentativa a 5%",
+        "r3f5": "3 novas tentativas a 5%"
+      }
+    }
+  },
+  "assistant": {
+    "noCover": "o livro não cobre isso",
+    "refusal": {
+      "R-SCOPE": "O livro não cobre isso.",
+      "R-SCOPE-OT": "O livro não dá orientação sobre operar sistemas de controle.",
+      "R-RECOMPUTE": "Este assistente não calcula números.",
+      "R-UNVERIFIED": "Este capítulo ainda não foi verificado.",
+      "cause": {
+        "R-SCOPE": "escopo · fora do escopo",
+        "R-SCOPE-OT": "escopo · operação de sistema de controle",
+        "R-RECOMPUTE": "escopo · pedido de recálculo",
+        "R-UNVERIFIED": "escopo · capítulo não verificado",
+        "R-PERSONAL": "escopo · o seu próprio sistema"
+      },
+      "beforeRetrieval": "recusado antes da recuperação",
+      "covers": "o que o livro cobre",
+      "label": "Recusa",
+      "refused": "recusado",
+      "causeLine": "causa · {cause}",
+      "before": "{code} · recusado antes da busca",
+      "after": "{code} · recusado depois da resposta",
+      "flag": "Sinalizar esta recusa",
+      "R-PERSONAL": "A pesquisa não busca na web sobre os sistemas de uma pessoa ou organização. Pergunte sobre o que o livro cobre."
+    },
+    "verdict": {
+      "derive": "derive",
+      "scope": "escopo",
+      "citation": "sensor de citação",
+      "mode": "modo",
+      "edition": "edição",
+      "grader": "avaliador",
+      "latency": "latência",
+      "inCorpus": "no corpus",
+      "replaced": "{n} afirmações fora do escopo, substituídas",
+      "figuresFound": "{found} / {total} números encontrados no local citado",
+      "resolve": "{n} / {total} citações resolvem em {edition} {version}",
+      "grounded": "fundamentação {score} · contexto isolado",
+      "notGraded": "não avaliado",
+      "firstToken": "primeiro token {first} s · completo {total} s",
+      "citesEdition": "cita a edição {edition}"
+    },
+    "budget": "Orçamento de modelo desta organização atingido; renova em {date}.",
+    "dock": {
+      "title": "Assistente",
+      "grounded": "baseado na release {id}",
+      "guide": "guia {version}",
+      "openFull": "Abrir o assistente em página inteira",
+      "close": "Fechar o assistente",
+      "modeCap": "modo",
+      "modeLabel": "Modo do assistente",
+      "notChat": "não é chat · responde só com o livro",
+      "mode": {
+        "explain": "Explicar",
+        "compare": "Comparar",
+        "walk": "Percorrer um auxílio de decisão",
+        "lab": "Explicar uma execução de lab",
+        "brief": "Resumo executivo"
+      },
+      "contextBook": "contexto · o livro · {verified} de {total} capítulos verificados",
+      "emptyCap": "assistente",
+      "empty": "Pergunte sobre qualquer parte do livro e a resposta a cita.",
+      "scope": "escopo: livro · labs · registros · mapa do cookbook",
+      "conversationLabel": "Conversa",
+      "currentTurn": "Turno atual",
+      "earlierTurn": "Turno anterior",
+      "you": "você · {time}",
+      "assistantTurn": "assistente · {mode} · {time}",
+      "cites": "{lang} · cita a edição {edition} {version}",
+      "step": {
+        "running": "executando",
+        "retrieving": "recuperando",
+        "drafting": "redigindo",
+        "checking": "verificando",
+        "grading": "avaliando",
+        "repairing": "corrigindo"
+      },
+      "formLabel": "Perguntar ao assistente",
+      "ask": "perguntar sobre o livro",
+      "counter": "{n} / {max}",
+      "draftAbout": "Sobre {id}: ",
+      "placeholder": "Pergunte sobre o livro, seus labs ou seus registros.",
+      "language": "idioma",
+      "citesHelp": "as respostas citam a edição {edition}",
+      "submit": "Perguntar",
+      "pinned": "esta conversa está fixada na release {id}; comece outra",
+      "newConversation": "Nova conversa",
+      "error": {
+        "title": "A ação falhou",
+        "retry": "Tentar novamente"
+      },
+      "copy": "Copiar com citações",
+      "copied": "copiado",
+      "openLab": "Abrir o Lab {n}",
+      "startResearch": "Iniciar uma pesquisa",
+      "counts": "{c} citações · {f} figuras",
+      "labCitation": "Lab {n} · README",
+      "verdicts": "veredictos dos sensores",
+      "pass": "{n} de {m} ok",
+      "groundedShort": "fundamentação {score}",
+      "mark": {
+        "pass": "ok",
+        "warn": "aviso",
+        "fail": "falha",
+        "info": "info"
+      },
+      "log": "registro {trace} · registrado por ch29",
+      "hash": "hash {h} · anterior {p}",
+      "hashOnly": "hash {h}",
+      "cited": "citado",
+      "citedLine": "{n, plural, one {Uma passagem} other {# passagens}} em {section} são citadas na resposta aberta. Estão destacadas abaixo.",
+      "statusDocked": "assistente acoplado · {mode}",
+      "answering": "respondendo",
+      "firstToken": "primeiro token {s} s",
+      "firstTokenNone": "primeiro token —",
+      "phoneTitle": "O assistente precisa de uma tela mais larga",
+      "phoneBody": "Abra esta página em um tablet ou desktop para perguntar ao assistente. Leitura, favoritos e notas funcionam aqui."
+    },
+    "flag": {
+      "answer": "Sinalizar esta resposta",
+      "title": {
+        "answer": "Sinalizar esta resposta?",
+        "refusal": "Sinalizar esta recusa?"
+      },
+      "body": "A sinalização entra no conjunto de calibração do avaliador com os veredictos desta resposta. Nenhum texto é enviado. Ela sai do conjunto se você apagar a conversa.",
+      "reason": "motivo",
+      "reasons": {
+        "wrong_citation": "citação errada",
+        "missing_citation": "citação ausente",
+        "wrong_number": "número errado",
+        "should_refuse": "deveria ter recusado",
+        "should_not_refuse": "não deveria ter recusado",
+        "other": "outro"
+      },
+      "confirm": "Sinalizar",
+      "cancel": "Cancelar",
+      "flagged": "sinalizado · {reason}"
+    },
+    "log": {
+      "label": "Registro da conversa",
+      "title": "Registro",
+      "turns": "{n, plural, one {# turno} other {# turnos}}",
+      "turn": "t{n} · {time}",
+      "citations": "{mode} · {n, plural, one {# citação} other {# citações}}",
+      "replaced": "{n, plural, one {# afirmação substituída} other {# afirmações substituídas}}",
+      "flagged": "· sinalizado",
+      "failed": "indisponível",
+      "answering": "respondendo",
+      "pass": "ok",
+      "refused": "recusado",
+      "key": "legenda",
+      "keyPass": "ok · todos os sensores",
+      "keyRefused": "recusado · escopo",
+      "keyRunning": "em andamento",
+      "earlier": "conversas anteriores",
+      "earlierLine": "{date} · {turns, plural, one {# turno} other {# turnos}} · {pass} ok",
+      "earlierRefused": " · {n} recusadas",
+      "none": "sem conversas anteriores",
+      "noCitations": "sem citações",
+      "export": "exportar JSONL",
+      "toggle": "Registro · {n, plural, one {# turno} other {# turnos}}",
+      "close": "Fechar o registro",
+      "rowLabel": "Turno {n}, {mark}",
+      "claims": "{mode} · {n, plural, one {# afirmação} other {# afirmações}}"
+    },
+    "page": {
+      "metaTitle": "Assistente · The Harness Bible",
+      "title": "Assistente",
+      "listLabel": "Suas conversas",
+      "conversationsTitle": "conversas",
+      "conversations": "{n, plural, one {# conversa} other {# conversas}}",
+      "empty": "Nenhuma conversa ainda. Faça sua primeira pergunta.",
+      "more": "Mostrar mais 20",
+      "statusList": "assistente · {n, plural, one {# conversa} other {# conversas}}",
+      "viewLabel": "Regiões da página do assistente",
+      "viewDock": "Assistente",
+      "viewConversations": "Conversas",
+      "viewStats": "Estatísticas"
+    },
+    "stats": {
+      "label": "Estatísticas do assistente",
+      "title": "estatísticas do assistente",
+      "yours": "seus turnos",
+      "windowLabel": "Janela das estatísticas",
+      "month": "este mês",
+      "all": "desde o início",
+      "citationRate": "taxa de citação",
+      "refusalRate": "taxa de recusa",
+      "firstToken": "primeiro token p95",
+      "grounded": "fundamentação p50",
+      "groundedBasis": "p10 {p10} · n = {n}",
+      "flagRate": "taxa de sinalização",
+      "cacheShare": "parcela lida do cache",
+      "ofAnswers": "{n} / {d} respostas",
+      "ofTurns": "{n} / {d} turnos",
+      "samples": "n = {n}",
+      "floor": "piso {value}",
+      "ceiling": "teto {value}",
+      "limit": "limite {value}",
+      "belowFloor": "abaixo do piso",
+      "aboveCeiling": "acima do teto",
+      "overLimit": "acima do limite",
+      "payerYou": "sua conta",
+      "payerOrg": "sua organização",
+      "byCause": "recusas por causa",
+      "thCause": "causa",
+      "thTurns": "turnos",
+      "thShare": "parcela",
+      "edition": "cita outra edição",
+      "purged": "texto removido",
+      "purgedValue": "{n, plural, one {# conversa} other {# conversas}}",
+      "keptUntil": "texto mantido até",
+      "foot": "release {id} · contado dos seus turnos",
+      "empty": "Nenhum turno nesta janela ainda.",
+      "meterLabel": "{name}: {value}; {mark}"
+    },
+    "walk": {
+      "withheld": "Os valores do script estão acima; a explicação foi retida.",
+      "matched": "saída do derive conferida · {n} de {m}",
+      "none": "Esta release ainda não tem auxílio de decisão.",
+      "pick": "auxílio de decisão",
+      "formLabel": "Executar um auxílio de decisão",
+      "range": "entre {min} e {max}",
+      "integer": "só números inteiros",
+      "number": "digite um número",
+      "run": "Executar com estas entradas",
+      "you": "você · {time} · modo alterado para percorrer um auxílio de decisão",
+      "userLine": "Percorrer {section} com nossas entradas",
+      "title": "Percurso · {section}",
+      "turnLabel": "Turno {n}, percorrendo o auxílio de decisão {section}",
+      "step": "passo {n} de {m}",
+      "stepsLabel": "passos",
+      "done": "feito",
+      "now": "agora",
+      "inputs": "Suas entradas",
+      "editInputs": "Editar entradas",
+      "runLine": "{lab}/derive.py",
+      "exit": "exit {code} · {s} s",
+      "stepCap": "passo {n} · {title}",
+      "sameAsBook": "Suas entradas são iguais ao cenário do livro, então o resultado é igual ao número do livro.",
+      "prices": "Os preços vêm de linhas de fonte verificadas em {date}",
+      "missing": "o script não escreveu este valor",
+      "back": "Voltar",
+      "flagStep": "Sinalizar este passo",
+      "flagStepTitle": "Sinalizar o passo {n} · {title}?",
+      "next": "Próximo: {title}",
+      "finish": "Concluir",
+      "walked": "percorrido · {n} passos · {headline}",
+      "reopen": "Abrir o percurso de novo",
+      "failed": "O script não terminou com estas entradas. Nada foi explicado.",
+      "band": "O assistente está percorrendo este auxílio com suas entradas. Passo {n} de {m}.",
+      "walking": "percorrendo",
+      "modeShort": "percurso",
+      "logStep": "passo {n}/{m}",
+      "logRun": "{mode} · execução do derive {k}",
+      "statusWalk": "assistente acoplado · percurso · passo {n} de {m}",
+      "runMs": "execução do derive {s} s",
+      "derive": "ƒ {chapter} derive L{line}.",
+      "deriveTitle": "derive.py linha {line}",
+      "barLabel": "{label}: {value}"
+    },
+    "compare": {
+      "first": "comparar · capítulo",
+      "with": "comparar com · capítulo",
+      "choose": "escolha um capítulo",
+      "swap": "trocar",
+      "unverified": "não verificado",
+      "help": "escolha o capítulo para comparar",
+      "label": "comparar o capítulo {a} com o {b} sobre…",
+      "placeholder": "Onde os capítulos 37 e 15 concordam sobre cache?",
+      "open": "o livro deixa isto em aberto · {point}",
+      "openTitle": "em aberto",
+      "context": "contexto · ch{a} {va} ↔ ch{b} {vb}",
+      "side": "ch{n} · {title}",
+      "sideBare": "ch{n}",
+      "noSide": "o outro lado"
+    },
+    "lab": {
+      "label": "perguntar sobre o Lab {n}",
+      "noLabs": "Esta release ainda não tem lab.",
+      "choose": "escolha um lab",
+      "placeholder": "O que o Lab 21 reproduz e quais números ele confere?",
+      "context": "contexto · Lab {n} · ch{n} {v} · última execução {verdict} · {date}",
+      "contextNoRun": "contexto · Lab {n} · ch{n} {v} · última execução ainda nenhuma",
+      "kvLab": "lab",
+      "kvRun": "última execução",
+      "kvRuntime": "duração esperada",
+      "kvModel": "chamadas a modelo",
+      "ci": "CI",
+      "none": "nenhuma",
+      "declared": "declaradas",
+      "notYet": "ainda nenhuma",
+      "notDeclared": "não declarada",
+      "figures": "números que o Lab {n} confere",
+      "thFigure": "número",
+      "thChapter": "capítulo",
+      "thRun": "última execução",
+      "match": "= confere",
+      "diverge": "≠ diverge",
+      "deriveTitle": "derive.py linha {line}",
+      "phase3": "os labs abrem na Fase 3"
+    },
+    "brief": {
+      "label": "pedir um resumo sobre…",
+      "placeholder": "Devemos rotear a revisão primeiro para um modelo pequeno?",
+      "cap": "resumo executivo · {decision}",
+      "recommends": "recomenda",
+      "conditional": "condicional",
+      "leavesOpen": "deixa em aberto",
+      "from": "da Parte III · {n, plural, one {# capítulo} other {# capítulos}} citados",
+      "contextOutside": "contexto · Parte III · ch34–40"
+    },
+    "mode": {
+      "name": "modo",
+      "short": {
+        "explain": "explicar",
+        "compare": "comparar",
+        "walk": "percurso",
+        "lab": "lab",
+        "brief": "resumo"
+      }
+    },
+    "purged": "texto removido após 30 dias · citações e veredictos mantidos",
+    "purgedShort": "texto removido",
+    "research": {
+      "label": "pesquisa",
+      "word": {
+        "queued": "na fila",
+        "reading": "buscando na web",
+        "checking": "verificando com o Melhorar",
+        "proposals": "{n, plural, one {# proposta} other {# propostas}} para o livro",
+        "nothing": "nada a propor",
+        "waiting": "aguardando orçamento",
+        "budget": "pulada",
+        "deduped": "pulada",
+        "sameQuestion": "pulada",
+        "dailyLimit": "pulada",
+        "noCitation": "não feita",
+        "off": "desligada",
+        "offOrganisation": "desligada para a sua organização",
+        "notRun": "não feita",
+        "failed": "falhou"
+      },
+      "detail": {
+        "waiting": "reinicia em {date}",
+        "budget": "o orçamento do mês acabou · reinicia em {date}",
+        "deduped": "estas seções foram pesquisadas {days, plural, =0 {hoje} one {há # dia} other {há # dias}}",
+        "sameQuestion": "esta pergunta foi pesquisada {days, plural, =0 {hoje} one {há # dia} other {há # dias}}",
+        "dailyLimit": "{n} pesquisas hoje",
+        "noCitation": "nada citado"
+      }
+    },
+    "delete": {
+      "trigger": "Apagar conversa",
+      "streaming": "disponível quando a resposta terminar",
+      "title": "Apagar a conversa sobre {chapters}?",
+      "titleNone": "Apagar esta conversa?",
+      "body": "As perguntas, as respostas, as citações e as sinalizações são apagadas agora. A pesquisa automática ainda em andamento sobre ela para no próximo passo, a menos que já tenha enviado uma descoberta ao Melhorar. Uma pesquisa que você iniciou a partir de uma das respostas é uma conversa própria na página de pesquisa e não é apagada com ela. A cadeia de auditoria mantém um registro por resposta, em hashes e sem palavras, e registra esta exclusão.",
+      "bodyProposal": "Uma proposta que vem dela continua em Melhorar, onde você pode remover seu nome até que seja incorporada.",
+      "export": "Exportar o JSONL antes",
+      "cancel": "Cancelar",
+      "confirm": "Apagar",
+      "done": "Feito · Conversa apagada.",
+      "failed": "A conversa não foi apagada",
+      "settling": "A última resposta ainda está sendo salva · tente de novo em instantes",
+      "network": "A solicitação não chegou ao servidor. Nada foi apagado; tente novamente."
+    }
+  },
+  "research": {
+    "page": {
+      "metaTitle": "Pesquisa · The Harness Bible",
+      "title": "Pesquisa",
+      "viewLabel": "Regiões da página de pesquisa",
+      "viewResearch": "Pesquisa",
+      "viewConversations": "Conversas",
+      "viewStats": "Estatísticas",
+      "statusList": "pesquisa · {n, plural, one {# conversa} other {# conversas}}",
+      "statusToday": "{n} de {max} hoje"
+    },
+    "dock": {
+      "title": "Pesquisa",
+      "reads": "lê a web",
+      "release": "release {id}",
+      "guide": "guia researcher {version}",
+      "frame": "não faz parte do livro · da web · verificada por código, não pelo Melhorar",
+      "log": "Registro da pesquisa",
+      "empty": "Pergunte o que o livro deveria saber de fora dele.",
+      "fromAnswer": "A partir de uma resposta: em qualquer resposta do Assistente, use Iniciar uma pesquisa.",
+      "openAssistant": "Abrir o Assistente",
+      "openFull": "Abrir a página de pesquisa",
+      "close": "Fechar a pesquisa",
+      "phoneTitle": "A pesquisa precisa de uma tela maior aqui",
+      "phoneBody": "Abra a página de pesquisa, que funciona no celular."
+    },
+    "composer": {
+      "formLabel": "Iniciar uma pesquisa",
+      "ask": "Pergunta de pesquisa",
+      "counter": "{n} / {max}",
+      "language": "idioma",
+      "placeholder": "ex.: o que mudou nos preços de cache de prompt desde que a 21.3 foi verificada",
+      "submit": "Iniciar",
+      "citesHelp": "busca na web · gasta o seu orçamento de modelo",
+      "scope": "só sobre o livro · recusa o que não for, como o Assistente",
+      "inProgress": "uma pesquisa está em andamento nesta conversa",
+      "dailyLimit": "{max} pesquisas hoje · a próxima às {time}",
+      "budget": "o seu orçamento acabou · reinicia em {date}"
+    },
+    "seed": {
+      "cap": "do Assistente · resposta de {date} · cita {sections}",
+      "capNone": "do Assistente · resposta de {date}",
+      "open": "Abrir a resposta",
+      "body": "Esta pesquisa lê a resposta e as seções que ela citou. Nada é gasto até você apertar Iniciar.",
+      "scratch": "Começar do zero",
+      "invalidTitle": "Resposta não utilizável",
+      "invalid": "Essa resposta não pode iniciar uma pesquisa: foi recusada, apagada, ou suas palavras foram removidas após 30 dias.",
+      "deleted": "de uma resposta que foi apagada"
+    },
+    "run": {
+      "label": "pesquisa {n}",
+      "you": "você · {time}",
+      "cap": "pesquisa · {time} · {duration}",
+      "capStarted": "pesquisa · {time}",
+      "purged": "as palavras foram removidas após 30 dias"
+    },
+    "line": {
+      "label": "pesquisa",
+      "word": {
+        "queued": "na fila",
+        "planning": "planejando",
+        "reading": "lendo",
+        "checking": "verificando",
+        "writing": "escrevendo",
+        "done": "concluída",
+        "refused": "recusada",
+        "notStarted": "não iniciada",
+        "stopped": "interrompida",
+        "failed": "falhou",
+        "notRun": "não feita"
+      },
+      "detail": {
+        "planning": "lendo o livro",
+        "reading": "a web",
+        "checking": "as descobertas",
+        "writing": "o relatório",
+        "done": "{f, plural, =0 {nenhuma descoberta} one {# descoberta} other {# descobertas}} · {p, plural, one {# página} other {# páginas}}",
+        "donePurged": "{f, plural, =0 {nenhuma descoberta} one {# descoberta} other {# descobertas}} · {o, plural, one {# página aberta} other {# páginas abertas}}",
+        "notStarted": "o seu orçamento acabou · reinicia em {date}",
+        "stopped": "o seu orçamento acabou durante a pesquisa · reinicia em {date}",
+        "abandoned": "sem resposta do motor",
+        "purged": "o texto foi removido"
+      },
+      "followLost": "ainda em andamento · recarregue para acompanhar"
+    },
+    "steps": {
+      "label": "passos",
+      "folded": "passos · {n}",
+      "caption": "passos · {s, plural, one {# busca} other {# buscas}} · {p, plural, one {# página} other {# páginas}}",
+      "planning": "planejando",
+      "sections": "seções {ids}",
+      "searchPending": "busca “{query}”",
+      "search": "busca “{query}” · {n, plural, one {# resultado} other {# resultados}}",
+      "pagePending": "abrindo {host}",
+      "page": "leu {host} · {title}",
+      "pageUntitled": "leu {host}",
+      "unreachable": "{host} · não abriu",
+      "checking": "verificando as descobertas",
+      "writing": "escrevendo"
+    },
+    "report": {
+      "cap": "relatório · da web, não do livro · não verificado pelo Melhorar"
+    },
+    "pages": {
+      "cap": "páginas lidas · {n} · {opened} abertas",
+      "opened": "aberta",
+      "inSearch": "na busca {n}",
+      "newTab": "abre em uma nova aba"
+    },
+    "findings": {
+      "cap": "descoberta {i} de {n} · uma mudança proposta ao livro",
+      "checks": "passou nas verificações do código; o Melhorar e um curador decidem",
+      "sources": "fontes",
+      "note": "nota do pesquisador",
+      "noteFrom": "escrita pelo pesquisador a partir das páginas que leu",
+      "drafted": "rascunho criado · {id}",
+      "sent": "enviada · em verificação pelo Melhorar",
+      "proposed": "enviada · proposta",
+      "refuted": "enviada · não proposta",
+      "duplicate": "já proposta como {id}",
+      "duplicateHidden": "já proposta no Melhorar",
+      "purged": "O texto desta descoberta foi removido após 30 dias.",
+      "draft": "Criar rascunho no Melhorar",
+      "draftHelp": "avalia as fontes com o seu orçamento de modelo",
+      "send": "Enviar ao Melhorar",
+      "sendTitle": "Enviar esta descoberta ao Melhorar?",
+      "sendBody": "Ela vira uma proposta do pesquisador: o Melhorar abre as fontes, avalia-as, e um curador decide. A sua pergunta não é enviada. Se for proposta, você pode adicionar o seu nome. Um envio é um registro e não é desfeito.",
+      "sendConfirm": "Enviar",
+      "sendCancel": "Cancelar",
+      "openDraft": "Abrir rascunho",
+      "sending": "enviando ao Melhorar",
+      "followLost": "recarregue para acompanhar",
+      "anchorGone": "O livro mudou em {anchor} desde esta pesquisa. Inicie uma nova pesquisa para olhar de novo.",
+      "unconfigured": "não pôde ser enviada aqui · as propostas de pesquisa não estão configuradas",
+      "noRubric": "não pôde ser enviada · o Melhorar não tem rubrica em vigor · tente de novo mais tarde",
+      "unreadable": "não pôde ser enviada · inicie uma nova pesquisa para olhar de novo",
+      "unavailable": "o Melhorar não pôde recebê-la agora · tente de novo mais tarde",
+      "sendsLimit": "{max} descobertas enviadas este mês · a próxima em {date}"
+    },
+    "actions": {
+      "cost": "US$ {cost} · {s, plural, one {# busca} other {# buscas}} · {p, plural, one {# página aberta} other {# páginas abertas}}",
+      "copy": "Copiar relatório",
+      "copied": "copiado"
+    },
+    "refusal": {
+      "foot": "{code} · recusada antes de qualquer busca"
+    },
+    "list": {
+      "label": "Suas pesquisas",
+      "title": "pesquisas",
+      "count": "{n, plural, one {# pesquisa} other {# pesquisas}}",
+      "new": "Nova pesquisa",
+      "empty": "Nenhuma pesquisa ainda. Faça sua primeira pergunta.",
+      "more": "Mostrar mais 20",
+      "noSections": "sem seções",
+      "lineRuns": "{runs, plural, =0 {# execuções} one {# execução} other {# execuções}}",
+      "lineFindings": "{f, plural, =0 {nenhuma descoberta} one {# descoberta} other {# descobertas}}",
+      "lineUsed": "{u, plural, one {# usada} other {# usadas}}",
+      "seeded": "de uma resposta",
+      "purged": "texto removido",
+      "runs": "Execuções da pesquisa aberta",
+      "run": "p{n} · {time} · {word}",
+      "runDone": "p{n} · {time} · {word} · {p, plural, one {# página} other {# páginas}} · {f, plural, =0 {nenhuma descoberta} one {# descoberta} other {# descobertas}}",
+      "close": "Fechar as pesquisas",
+      "export": "exportar JSONL"
+    },
+    "stats": {
+      "title": "estatísticas de pesquisa",
+      "runs": "execuções",
+      "cost": "custo",
+      "sources": "fontes lidas",
+      "findings": "descobertas",
+      "flagged": "relatórios sinalizados",
+      "ends": "{done} concluídas · {refused} recusadas · {stopped} interrompidas · {failed} falharam",
+      "usd": "US$ {cost}",
+      "perRun": "US$ {cost} por execução",
+      "searches": "{n, plural, one {# busca} other {# buscas}}",
+      "pagesOpened": "{n, plural, one {# página aberta} other {# páginas abertas}}",
+      "pagesSeen": "{n, plural, one {# página vista} other {# páginas vistas}}",
+      "pagesSeenNone": "— páginas vistas",
+      "findingsLine": "{passed} passaram nas verificações · {used} viraram melhorias · {accepted} aceitas",
+      "keptUntil": "o texto das pesquisas fica guardado até {date}",
+      "empty": "Nenhuma execução de pesquisa nesta janela ainda."
+    },
+    "errors": {
+      "notStarted": "A pesquisa não começou",
+      "retry": "Tentar novamente",
+      "network": "A solicitação não chegou ao servidor. Nada foi iniciado; tente novamente."
+    },
+    "notice": {
+      "unavailableTitle": "Pesquisa indisponível",
+      "unavailable": "A pesquisa não está disponível aqui: o motor de workflows não está rodando.",
+      "offOrganisationTitle": "Pesquisa desligada",
+      "offOrganisation": "A pesquisa está desligada para a sua organização."
+    },
+    "flag": {
+      "report": "Sinalizar este relatório",
+      "refusal": "Sinalizar esta recusa",
+      "title": {
+        "report": "Sinalizar este relatório?",
+        "refusal": "Sinalizar esta recusa?"
+      },
+      "body": "A sinalização é um rótulo para o operador, que lê os relatórios sinalizados por motivo. Nenhum texto é enviado. Ela é apagada com a pesquisa.",
+      "reason": "motivo",
+      "reasons": {
+        "wrong_citation": "uma fonte não diz isto",
+        "missing_citation": "uma afirmação não tem fonte",
+        "wrong_number": "número errado",
+        "should_refuse": "deveria ter recusado",
+        "should_not_refuse": "não deveria ter recusado",
+        "other": "outro"
+      },
+      "confirm": "Sinalizar",
+      "cancel": "Cancelar",
+      "flagged": "sinalizado · {reason}"
+    },
+    "delete": {
+      "trigger": "Apagar pesquisa",
+      "title": "Apagar a pesquisa sobre {chapters}?",
+      "titleNone": "Apagar esta pesquisa?",
+      "body": "As perguntas, os relatórios, as páginas e as descobertas são apagados agora. Uma pesquisa ainda em andamento para no próximo passo; o que já gastou continua gasto. Um rascunho que você criou a partir de uma descoberta continua seu no Melhorar, e uma descoberta que o Melhorar já recebeu continua lá, onde você pode remover seu nome até que seja incorporada. A cadeia de auditoria mantém um registro por execução, em hashes e sem palavras, e registra esta exclusão.",
+      "export": "Exportar o JSONL antes",
+      "cancel": "Cancelar",
+      "confirm": "Apagar",
+      "network": "A solicitação não chegou ao servidor. Nada foi apagado; tente novamente.",
+      "done": "Feito · Pesquisa apagada.",
+      "failed": "A pesquisa não foi apagada"
+    },
+    "edit": {
+      "cap": "da sua pesquisa",
+      "note": "escrita pelo pesquisador a partir das páginas que leu; não é a sua justificativa — o adjudicador lê só o que você escreve",
+      "notAdded": "{n, plural, one {# fonte da descoberta não está} other {# fontes da descoberta não estão}} entre as suas evidências: adicione-as como links",
+      "prefilled": "preenchida pelo pesquisador a partir das páginas que leu · leia antes de enviar",
+      "open": "Abrir a pesquisa"
+    }
+  }
+}

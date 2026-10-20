@@ -1,0 +1,5 @@
+# Harness Bible · nightly maintenance (feature-specs/21 § 3.1). Install with: crontab infra/schedules/crontab
+# The checkout is at /srv/hb; the logs go to /var/log/hb/. Each run prints one {"kind":"job",...} line.
+CRON_TZ=America/Sao_Paulo
+10 3 * * * cd /srv/hb && npm run assistant:purge >> /var/log/hb/purge.log 2>&1
+20 3 * * * cd /srv/hb && npm run auth:sweep >> /var/log/hb/sweep.log 2>&1

@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-08-31, at vendor.example.
+
+Indirect injection; adaptive attacks The source: Greshake et al. 2023; Nasr et al. 2025 (ch28).
+
+Context: Indirect injection; adaptive attacks — Greshake et al. 2023; Nasr et al. 2025 (ch28)

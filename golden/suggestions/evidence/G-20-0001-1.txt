@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2024-08-01, at vendor.example.
+
+p-101 unit is 4, the earlier 3 having been revised.
+
+Context: p-101 unit · 3

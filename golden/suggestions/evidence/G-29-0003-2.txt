@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2024-08-01, at regulator.example.
+
+The passage is better put as: "What to record about the records: schema version, collector configuration (what remains dropped where), retention policy per record class, anchor location, backend and version."
+
+Context: What to record about the records: schema version, collector configuration (what is dropped where), retention policy per record class, anchor location, backend and version.

@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Improve · Curator queue</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" data-theme="light" style="width: 1440px; height: 1360px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <header class="topbar">
+    <a class="brand" href="#"><span class="glyph">✢</span><b>Harness Bible</b><span class="faint">interactive</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#">Book</a>
+      <a href="#">Assistant</a>
+      <a href="#">Labs</a>
+      <a href="#" aria-current="page">Improve</a>
+    </nav>
+    <div class="grow" style="display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+      <label class="row" style="flex: 1 1 auto; max-width: 420px; height: 32px; border: 1px solid var(--rule); padding: 0 10px; gap: 8px;">
+        <span class="cap">search</span>
+        <input class="grow" style="border: 0; background: transparent; font: inherit; font-size: 13px; color: var(--ink); height: 30px; outline: none;" value="" placeholder="suggestion id, anchor, contributor" aria-label="Search the queue">
+        <span class="kbd">/</span>
+      </label>
+      <span class="tex">release 2026.09 · sha 7f3a9c1e</span>
+    </div>
+    <div class="row" style="padding: 0 16px; gap: 12px; border-left: 1px solid var(--rule);">
+      <div class="langtoggle" role="group" aria-label="Edition language">
+        <button aria-pressed="true">EN</button><button aria-pressed="false">PT</button>
+      </div>
+      <a href="#" class="small muted">Account</a>
+    </div>
+  </header>
+
+  <div style="flex: 1 1 auto; display: grid; grid-template-columns: 480px minmax(0, 1fr) 360px; min-height: 0;">
+
+    <!-- ── queue ───────────────────────────────────── -->
+    <aside class="rr" style="padding: 20px 20px 20px 24px; display: flex; flex-direction: column; gap: 14px; overflow: hidden;" aria-label="Curator queue">
+      <div class="col" style="gap: 4px;">
+        <span class="cap">curator queue · m. tavares · part iii 34–40 + shared items</span>
+        <div class="between"><h1 class="h3">Routed by change class</h1><span class="meta">11 open</span></div>
+        <div class="row" style="gap: 14px;">
+          <span class="st st-fail">1 overdue</span>
+          <span class="st st-warn">2 due &lt; 24 h</span>
+          <span class="st st-mute">8 in sla</span>
+        </div>
+      </div>
+
+      <table class="tbl" style="font-size: 12.5px;">
+        <thead><tr><th>id</th><th>anchor · class</th><th>tier</th><th class="n">score</th><th class="n">age</th><th class="n">sla</th></tr></thead>
+        <tbody>
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label">Safety / OT-boundary</span><span class="meta">2 · curator always</span></div></td></tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-35-0141</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">35.7</span><br><span class="faint small">safety · broker write path</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-b">B</span></td>
+            <td class="n" style="padding: 8px 6px;">85</td>
+            <td class="n" style="padding: 8px 6px;">6 h</td>
+            <td class="n" style="padding: 8px 6px; color: var(--warn);">18 h</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-35-0149</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">35.4</span><br><span class="faint small">ot-boundary · conduit</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-e">E</span></td>
+            <td class="n" style="padding: 8px 6px;">40</td>
+            <td class="n" style="padding: 8px 6px;">20 h</td>
+            <td class="n" style="padding: 8px 6px; color: var(--warn);">4 h</td>
+          </tr>
+
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label">Scenario parameter</span><span class="meta">1 · shared 37 + all</span></div></td></tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-37-0233</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">37.3</span><br><span class="faint small">scenario · 2,000 q/day</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-e">E</span></td>
+            <td class="n" style="padding: 8px 6px;">40</td>
+            <td class="n" style="padding: 8px 6px;">2 d</td>
+            <td class="n" style="padding: 8px 6px;">3 d</td>
+          </tr>
+
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label">Structure</span><span class="meta">1 · major bump</span></div></td></tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-39-0088</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">39.8</span><br><span class="faint small">structure · split aid</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-e">E</span></td>
+            <td class="n" style="padding: 8px 6px;">40</td>
+            <td class="n" style="padding: 8px 6px;">5 d</td>
+            <td class="n" style="padding: 8px 6px; color: var(--fail);">−2 h</td>
+          </tr>
+
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label">Rubric change</span><span class="meta">1 · shared · all curators</span></div></td></tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">R-1.2-0007</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">rubric</span><br><span class="faint small">independence review</span></td>
+            <td style="padding: 8px 6px;"><span class="faint mono">—</span></td>
+            <td class="n" style="padding: 8px 6px;"><span class="faint">—</span></td>
+            <td class="n" style="padding: 8px 6px;">3 d</td>
+            <td class="n" style="padding: 8px 6px;">Q4</td>
+          </tr>
+
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label">New source tier</span><span class="meta">1</span></div></td></tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-36-0204</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">36.9</span><br><span class="faint small">tier · consultation draft</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-d">D</span></td>
+            <td class="n" style="padding: 8px 6px;">60</td>
+            <td class="n" style="padding: 8px 6px;">4 d</td>
+            <td class="n" style="padding: 8px 6px;">2 d</td>
+          </tr>
+
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label">Request more · for inspection</span><span class="meta">3</span></div></td></tr>
+          <tr class="sel">
+            <td style="padding: 8px 6px; box-shadow: inset 3px 0 0 var(--ink);"><a href="#" class="mono" style="font-size: 12px; font-weight: 600;" aria-current="true">S-15-0377</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">15.9 r12</span><br><span class="small muted">price · shared 37.2</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-c">C</span></td>
+            <td class="n" style="padding: 8px 6px; color: var(--warn);">66</td>
+            <td class="n" style="padding: 8px 6px;">5 d</td>
+            <td class="n" style="padding: 8px 6px;">2 d</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-37-0229</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">37.9 r3</span><br><span class="faint small">price · batch discount</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-d">D</span></td>
+            <td class="n" style="padding: 8px 6px; color: var(--warn);">60</td>
+            <td class="n" style="padding: 8px 6px;">2 d</td>
+            <td class="n" style="padding: 8px 6px;">5 d</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-40-0061</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">40.5</span><br><span class="faint small">new claim · kill gate</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-b">B</span></td>
+            <td class="n" style="padding: 8px 6px; color: var(--warn);">51</td>
+            <td class="n" style="padding: 8px 6px;">1 d</td>
+            <td class="n" style="padding: 8px 6px;">6 d</td>
+          </tr>
+
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label">Sampled · accepted tier B</span><span class="meta">2 · monthly sample</span></div></td></tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-36-0198</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">36.3</span><br><span class="faint small">date · merged v1.3.3</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-b">B</span></td>
+            <td class="n" style="padding: 8px 6px;">85</td>
+            <td class="n" style="padding: 8px 6px;">18 d</td>
+            <td class="n" style="padding: 8px 6px;">30 Sep</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 6px;"><a href="#" class="mono" style="font-size: 12px;">S-34-0117</a></td>
+            <td style="padding: 8px 6px;"><span class="mono" style="font-size: 12px;">34.2</span><br><span class="faint small">new claim · merged v1.2.4</span></td>
+            <td style="padding: 8px 6px;"><span class="ev ev-b">B</span></td>
+            <td class="n" style="padding: 8px 6px;">85</td>
+            <td class="n" style="padding: 8px 6px;">11 d</td>
+            <td class="n" style="padding: 8px 6px;">30 Sep</td>
+          </tr>
+
+          <tr><td colspan="6" style="padding: 12px 6px 6px; border-bottom: 1px solid var(--rule-2);"><div class="between"><span class="label faint">Decided today</span><span class="meta">3 · seeds revealed</span></div></td></tr>
+          <tr>
+            <td style="padding: 8px 6px;"><span class="mono faint" style="font-size: 12px;">S-37-0226</span><br><span class="mono" style="display: inline-block; margin-top: 4px; padding: 1px 5px; border: 1px dotted var(--ink-2); font-size: 10.5px; color: var(--ink-2);">seed · known answer</span></td>
+            <td style="padding: 8px 6px;" colspan="3"><span class="small">declined · known answer decline</span><br><span class="st st-ok" style="margin-top: 4px;">match</span></td>
+            <td class="n faint" style="padding: 8px 6px;">09:12</td>
+            <td class="n" style="padding: 8px 6px;"><span class="faint">—</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 6px;"><span class="mono faint" style="font-size: 12px;">S-36-0201</span><br><span class="mono" style="display: inline-block; margin-top: 4px; padding: 1px 5px; border: 1px dotted var(--ink-2); font-size: 10.5px; color: var(--ink-2);">seed · known answer</span></td>
+            <td style="padding: 8px 6px;" colspan="3"><span class="small">accepted · known answer request more</span><br><span class="st st-warn" style="margin-top: 4px;">diverged · to calibration</span></td>
+            <td class="n faint" style="padding: 8px 6px;">09:40</td>
+            <td class="n" style="padding: 8px 6px;"><span class="faint">—</span></td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 6px;"><span class="mono faint" style="font-size: 12px;">S-38-0052</span></td>
+            <td style="padding: 8px 6px;" colspan="3"><span class="small">accepted · adjudicator agreed</span></td>
+            <td class="n faint" style="padding: 8px 6px;">10:05</td>
+            <td class="n" style="padding: 8px 6px;"><span class="faint">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="rt" style="padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+        <span class="cap">legend</span>
+        <div class="row small muted" style="align-items: flex-start; gap: 10px;">
+          <span class="mono" style="flex: none; padding: 1px 5px; border: 1px dotted var(--ink-2); font-size: 10.5px; color: var(--ink-2);">seed · known answer</span>
+          <span>A calibration item with an answer set by a second curator. It looks like any other item until you decide. The chip appears after your decision and shows whether it matched.</span>
+        </div>
+        <div class="row small muted" style="gap: 10px;"><span class="meta" style="min-width: 40px;">sla</span><span>Time left to decide. Red when past due.</span></div>
+      </div>
+    </aside>
+
+    <!-- ── detail: S-15-0377 ───────────────────────── -->
+    <main style="padding: 24px 32px 24px 32px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;" aria-label="Suggestion S-15-0377">
+      <div class="col" style="gap: 8px;">
+        <div class="row" style="gap: 10px;">
+          <span class="cap">ch15 economics of models · 15.9 sources · v1.4.0</span>
+          <span class="cap">·</span>
+          <span class="cap">shared with ch37 · 37.2 · v1.3.2</span>
+        </div>
+        <div class="between">
+          <div class="row" style="gap: 12px;"><span class="midnum" style="font-size: 28px; line-height: 34px;">S-15-0377</span><span class="st-block sb-warn">request more</span></div>
+          <span class="meta">submitted 16 Sep 2026 08:31 · verified contributor</span>
+        </div>
+        <p class="muted small">Routed to Part I (H. Okafor) and Part III (M. Tavares). The price row is shared, so either curator may decide. The row is stale: last verified 97 days ago.</p>
+      </div>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Change</span><span class="sep">·</span><span>source row r12</span><span class="sep">·</span><span>cited price · accept 70 · floor 25</span><span class="ts">patch on merge</span></div>
+        <div class="inst-b" style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center;">
+          <div class="col" style="gap: 4px;"><span class="cap">current · 15.9 r12</span><span class="small">cached-input price, provider tier 2</span><span class="mono d-div" style="font-size: 18px; text-decoration: line-through;">$0.30 / M tokens</span></div>
+          <span class="mono faint">──▶</span>
+          <div class="col" style="gap: 4px;"><span class="cap">proposed</span><span class="small">cached-input price, provider tier 2</span><span class="mono d-new" style="font-size: 18px;">$0.25 / M tokens</span></div>
+        </div>
+      </section>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Evidence</span><span class="sep">·</span><span>rubric v1.2</span><span class="ts">strongest item + corroboration</span></div>
+        <table class="tbl" style="font-size: 12.5px;">
+          <thead><tr><th>#</th><th>item</th><th>tier</th><th class="n">base</th><th class="n">rel</th><th class="n">rec</th><th class="n">ind</th><th class="n">score</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="mono">1</td>
+              <td>Vendor pricing page<br><span class="faint small">direct · 12 days · vendor concerned</span></td>
+              <td><span class="ev ev-c">C</span></td>
+              <td class="n">70</td><td class="n">1.0</td><td class="n">1.0</td><td class="n" style="color: var(--warn);">0.8</td><td class="n" style="font-weight: 600;">56</td>
+            </tr>
+            <tr>
+              <td class="mono">2</td>
+              <td>Independent price tracker<br><span class="faint small">direct · 5 months · no stake</span></td>
+              <td><span class="ev ev-d">D</span></td>
+              <td class="n">60</td><td class="n">1.0</td><td class="n" style="color: var(--warn);">0.7</td><td class="n">1.0</td><td class="n">42</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr><td colspan="7">56 strongest + 10 corroboration (item 2, tier D, independent)</td><td class="n" style="font-size: 14px; font-weight: 600; color: var(--warn);">66</td></tr>
+          </tfoot>
+        </table>
+        <div style="padding: 12px 16px 14px;">
+          <div style="position: relative; height: 12px; border: 1px solid var(--ink-2);">
+            <i style="position: absolute; left: 0; top: 0; bottom: 0; width: 25%; background: var(--fail-bg);"></i>
+            <i style="position: absolute; left: 25%; top: 0; bottom: 0; width: 45%; background: var(--warn-bg);"></i>
+            <i style="position: absolute; left: 70%; top: 0; bottom: 0; width: 30%; background: var(--ver-bg);"></i>
+            <span style="position: absolute; left: 25%; top: -4px; bottom: -4px; width: 1px; background: var(--ink-2);"></span>
+            <span style="position: absolute; left: 70%; top: -4px; bottom: -4px; width: 1px; background: var(--ink);"></span>
+            <span style="position: absolute; left: calc(66% - 1px); top: -5px; bottom: -5px; width: 3px; background: var(--warn);"></span>
+          </div>
+          <div style="position: relative; height: 16px; margin-top: 6px;" class="meta">
+            <span style="position: absolute; left: 0;">0</span>
+            <span style="position: absolute; left: 25%; transform: translateX(-50%);">floor 25</span>
+            <span style="position: absolute; left: 66%; transform: translateX(-100%); padding-right: 6px; color: var(--warn);">66</span>
+            <span style="position: absolute; left: 70%; transform: translateX(-10%);">accept 70</span>
+            <span style="position: absolute; right: 0;">100</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Adjudication</span><span class="sep">·</span><span>adjudicator guide v2.1</span><span class="ts">16 Sep 08:33</span></div>
+        <div class="inst-b" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <ul class="col" style="gap: 5px;">
+            <li class="between small"><span class="mono faint">anchor exists</span><span class="st st-ok">pass</span></li>
+            <li class="between small"><span class="mono faint">derive consistency</span><span class="st st-mute">n/a · cited</span></li>
+            <li class="between small"><span class="mono faint">cross-chapter</span><span class="st st-warn">warn · 37.2</span></li>
+            <li class="between small"><span class="mono faint">lint</span><span class="st st-ok">pass</span></li>
+          </ul>
+          <ul class="col small" style="gap: 5px;">
+            <li><span class="mono faint">tier</span> C is the strongest item.</li>
+            <li><span class="mono faint">relevance</span> Both items quote r12 directly.</li>
+            <li><span class="mono faint">recency</span> Item 2 is 5 months old.</li>
+            <li><span class="mono faint">independence</span> Item 1 is the vendor concerned.</li>
+            <li><span class="mono faint">corroboration</span> +10 applied once.</li>
+          </ul>
+        </div>
+        <div class="inst-f" style="color: var(--ink-2);">Named sufficient evidence: an independent tier D item ≤ 90 days old, or a tier B filing.</div>
+      </section>
+
+      <section class="inst" style="border-color: var(--act);">
+        <div class="inst-h" style="border-bottom-color: var(--act);"><span class="t">Curator override</span><span class="sep">·</span><span>M. Tavares · Part III</span><span class="ts">21 Sep 2026 10:48</span></div>
+        <div class="inst-b" style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="between">
+            <div class="seg" role="group" aria-label="Curator decision">
+              <button aria-pressed="true">Accept on inspection</button>
+              <button aria-pressed="false">Keep request more</button>
+              <button aria-pressed="false">Decline</button>
+            </div>
+            <span class="meta">criterion overridden · independence</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="field">
+              <label for="ov-code">coded reason</label>
+              <select id="ov-code" class="select mono" style="font-size: 13px;">
+                <option value="OV-IND-02" selected="selected">OV-IND-02 · Independence waived: sole authoritative source</option>
+                <option value="OV-IND-01">OV-IND-01 · Independence waived: regulator-mandated disclosure</option>
+                <option value="OV-REC-01">OV-REC-01 · Recency: stable fact misclassified as fast-moving</option>
+                <option value="OV-REL-01">OV-REL-01 · Relevance graded too low</option>
+              </select>
+              <span class="help">Codes come from the adjudicator guide v2.1.</span>
+            </div>
+            <div class="field">
+              <label for="ov-note">note · 137 of 400</label>
+              <textarea id="ov-note" class="textarea" style="min-height: 76px; font-size: 13px; line-height: 19px;">Vendor page is the sole authoritative source for its own price. Verified by curator on 18 Sep 2026 against the signed-in billing console.</textarea>
+            </div>
+          </div>
+          <p class="small muted">Overrides are calibration data for the adjudicator (<a class="xref" href="#">ch27</a>). This one counts toward the independence override rate.</p>
+          <div class="row" style="gap: 10px;">
+            <button class="btn btn-p">Record override and accept</button>
+            <button class="btn btn-q">Cancel</button>
+            <span class="grow"></span>
+            <span class="meta">merge needs Lab 15 and Lab 37 to reproduce</span>
+          </div>
+        </div>
+        <div class="inst-f" style="flex-wrap: wrap; gap: 10px; padding: 8px 12px; color: var(--ink-2);" role="status">
+          <span class="st st-ok">override recorded</span>
+          <span>OV-IND-02 · independence · accepted on inspection</span>
+          <span class="hash">prev 3be0a19c77d2 → 9f14c02ad6e1</span>
+          <span class="st st-run">branch open · labs queued</span>
+        </div>
+      </section>
+    </main>
+
+    <!-- ── calibration instruments ─────────────────── -->
+    <aside class="rl" style="padding: 24px 24px 24px 20px; display: flex; flex-direction: column; gap: 18px; overflow: hidden;" aria-label="Calibration instruments">
+      <section class="inst">
+        <div class="inst-h"><span class="t">Override rate</span><span class="sep">·</span><span>per criterion</span><span class="ts">Q3 2026</span></div>
+        <div class="inst-b" style="display: flex; flex-direction: column; gap: 14px;">
+          <div class="row meta" style="gap: 14px;">
+            <span class="row" style="gap: 6px;"><span style="width: 2px; height: 12px; background: var(--ver);"></span>target 10%</span>
+            <span class="row" style="gap: 6px;"><span style="width: 2px; height: 12px; background: var(--fail);"></span>review 20%</span>
+            <span class="faint">scale 0–25%</span>
+          </div>
+
+          <div class="col" style="gap: 5px;">
+            <div class="between small"><span>tier</span><span class="score">4.1%</span></div>
+            <div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 16.4%; background: var(--ink);"></i><span style="position: absolute; left: 40%; top: -4px; bottom: -4px; width: 2px; background: var(--ver);"></span><span style="position: absolute; left: 80%; top: -4px; bottom: -4px; width: 2px; background: var(--fail);"></span></div>
+          </div>
+          <div class="col" style="gap: 5px;">
+            <div class="between small"><span>relevance</span><span class="score">7.8%</span></div>
+            <div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 31.2%; background: var(--ink);"></i><span style="position: absolute; left: 40%; top: -4px; bottom: -4px; width: 2px; background: var(--ver);"></span><span style="position: absolute; left: 80%; top: -4px; bottom: -4px; width: 2px; background: var(--fail);"></span></div>
+          </div>
+          <div class="col" style="gap: 5px;">
+            <div class="between small"><span>recency</span><span class="score">3.2%</span></div>
+            <div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 12.8%; background: var(--ink);"></i><span style="position: absolute; left: 40%; top: -4px; bottom: -4px; width: 2px; background: var(--ver);"></span><span style="position: absolute; left: 80%; top: -4px; bottom: -4px; width: 2px; background: var(--fail);"></span></div>
+          </div>
+          <div class="col" style="gap: 5px; padding: 8px; margin: 0 -8px; background: var(--warn-bg); box-shadow: inset 3px 0 0 var(--warn);">
+            <div class="between small"><span style="font-weight: 600;">independence</span><span class="score" style="font-weight: 600; color: var(--warn);">21.4%</span></div>
+            <div style="position: relative; height: 10px; border: 1px solid var(--ink-2); background: var(--bg);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 85.6%; background: var(--warn);"></i><span style="position: absolute; left: 40%; top: -4px; bottom: -4px; width: 2px; background: var(--ver);"></span><span style="position: absolute; left: 80%; top: -4px; bottom: -4px; width: 2px; background: var(--fail);"></span></div>
+            <div class="between" style="margin-top: 4px;"><span class="st-block sb-warn">rubric review triggered</span><a class="xref" href="#">R-1.2-0007</a></div>
+          </div>
+          <div class="col" style="gap: 5px;">
+            <div class="between small"><span>corroboration</span><span class="score">5.5%</span></div>
+            <div style="position: relative; height: 10px; border: 1px solid var(--ink-2);"><i style="position: absolute; left: 0; top: 0; bottom: 0; width: 22%; background: var(--ink);"></i><span style="position: absolute; left: 40%; top: -4px; bottom: -4px; width: 2px; background: var(--ver);"></span><span style="position: absolute; left: 80%; top: -4px; bottom: -4px; width: 2px; background: var(--fail);"></span></div>
+          </div>
+        </div>
+        <div class="inst-f">share of curator-reviewed decisions overridden on that criterion</div>
+      </section>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Adjudicator κ</span><span class="sep">·</span><span>vs curators</span><span class="ts">Q3 2026</span></div>
+        <div class="inst-b" style="display: flex; flex-direction: column; gap: 12px;">
+          <div class="between" style="align-items: flex-end;"><span class="midnum">0.68</span><span class="st st-warn">below gate</span></div>
+          <div style="position: relative; height: 10px; border: 1px solid var(--ink-2);">
+            <i style="position: absolute; left: 0; top: 0; bottom: 0; width: 33.3%; background: var(--fail-bg);"></i>
+            <i style="position: absolute; left: 33.3%; top: 0; bottom: 0; width: 60%; background: var(--ink);"></i>
+            <span style="position: absolute; left: 33.3%; top: -4px; bottom: -4px; width: 2px; background: var(--fail);"></span>
+            <span style="position: absolute; left: 66.7%; top: -4px; bottom: -4px; width: 2px; background: var(--ver);"></span>
+          </div>
+          <div style="position: relative; height: 16px;" class="meta">
+            <span style="position: absolute; left: 0;">0.5</span>
+            <span style="position: absolute; left: 33.3%; transform: translateX(-50%);">retire 0.6</span>
+            <span style="position: absolute; left: 66.7%; transform: translateX(-50%);">gate 0.7</span>
+            <span style="position: absolute; right: 0;">0.8</span>
+          </div>
+          <p class="small muted">Above the retirement floor. Below the gate. Same value as the ch12 judge against human labels.</p>
+        </div>
+      </section>
+
+      <section class="inst">
+        <div class="inst-h"><span class="t">Adjudication precision</span><span class="ts">Q3 2026</span></div>
+        <div class="inst-b" style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="between" style="align-items: flex-end;"><span class="midnum">1.8%</span><span class="st st-ok">within target</span></div>
+          <dl class="kv" style="margin: 0;">
+            <dt>accepted, later reverted</dt><dd>2 of 111</dd>
+            <dt>target</dt><dd>&lt; 3%</dd>
+            <dt>tier b sample this month</dt><dd>2 of 2 open</dd>
+          </dl>
+        </div>
+        <div class="inst-f" style="justify-content: space-between;"><a class="xref" href="#">public rubric v1.2</a><span class="tex">#a9d2·51c0</span></div>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="statusbar">
+    <span>improve · curator queue · part iii + shared</span>
+    <span>adjudicator guide v2.1 · rubric v1.2</span>
+    <span>ledger head 9f14c02ad6e1</span>
+    <span>pinned release 2026.09</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);">synced 10:48:12</span>
+  </footer>
+</div>
+
+
+</body>
+</html>

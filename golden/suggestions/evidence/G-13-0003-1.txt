@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2026-10-01, at regulator.example.
+
+The usual order of a rule and its exception is the rule first.
+
+Context: With retrieval, the procedure's torque table is in the context and the citation sensor requires it; the answer is cited and checked.

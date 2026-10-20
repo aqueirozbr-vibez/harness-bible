@@ -1,0 +1,5 @@
+The vendor's own documentation page, undated, at vendor.example.
+
+The lab's run derives 1025 for at.
+
+Context: at · 1,024

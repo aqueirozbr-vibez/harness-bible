@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Leitor móvel · Capítulo 21 (PT)</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" lang="pt-BR" data-theme="light" style="width: 390px; height: 844px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <header class="topbar" style="flex: none;">
+    <a class="brand" href="#" style="padding: 0 16px; border-right: 0;" aria-label="Harness Bible, início"><span class="glyph">✢</span><b>Harness Bible</b></a>
+    <span class="grow"></span>
+    <div class="row" style="padding: 0 12px 0 8px; gap: 8px;">
+      <div class="langtoggle" role="group" aria-label="Idioma da edição">
+        <button aria-pressed="false" style="height: 44px; min-width: 44px;" lang="en">EN</button><button aria-pressed="true" style="height: 44px; min-width: 44px;">PT</button>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column;">
+    <!-- source-language marker -->
+    <div class="band rb" style="padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;">
+      <span class="cap">idioma de origem: EN · edição PT em paridade</span>
+      <a class="xref" href="#" lang="en">ver original em EN</a>
+    </div>
+
+    <!-- chapter instrument, compressed to one strip -->
+    <section class="rb-s" style="padding: 10px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;" aria-label="Instrumento do capítulo 21">
+      <span class="label" style="color: var(--ink);">Cap. 21</span>
+      <span class="meta">v1.5.0</span>
+      <span class="meta">verificado 12 set 2026</span>
+      <span class="row" style="gap: 6px;"><span class="meta">Lab 21</span><span class="st-block sb-ok">reproduzido</span></span>
+    </section>
+
+    <div style="padding: 20px 16px 0; display: flex; flex-direction: column; gap: 10px;">
+      <span class="cap">capítulo 21 · parte ii · engenharia de harness</span>
+      <h1 class="h2">Plano de controle e execução durável</h1>
+      <p class="muted" style="font-size: 15px; line-height: 23px;">Uma tarefa que sobrevive ao seu worker precisa retomar de onde parou, e não pode repetir o que já fez na planta.</p>
+    </div>
+
+    <section style="margin: 20px 16px 0; padding-top: 14px; display: flex; flex-direction: column; gap: 14px;" class="rt-s">
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px;">
+        <div class="row" style="gap: 10px; align-items: baseline;"><span class="meta">21.3</span><h2 class="h3">Números resolvidos</h2></div>
+        <span class="cap">camada 3 de 9</span>
+      </div>
+      <div class="prose" style="font-size: 16px; line-height: 27px;">
+        <p>O agente do cenário abre uma ordem de manutenção para a bomba P-101 em 11 passos, três dos quais gravam em sistemas externos. Com 2.000 consultas por dia e uma perda de worker assumida de <span class="fig-ill">0,4% por passo</span> <span class="chip t-ill"><i>ill</i> ilustrativo</span>, uma tarefa sofre ao menos uma falha de worker com probabilidade de <span class="fig-der">4,3%</span> <span class="derive" title="derive.py linha 38">ƒ L38</span>.</p>
+        <p>Isso equivale a <span class="fig-der">86 tarefas interrompidas por dia</span> <span class="derive">ƒ L41</span>. Um loop que reinicia do passo 1 repete, em média, cinco passos, e três em cada onze deles são gravações: <span class="fig-der">117 efeitos colaterais duplicados por dia</span> <span class="derive">ƒ L47</span>. Um workflow durável com chaves de idempotência em cada atividade de gravação não repete nenhum, o que o <a class="xref" href="#">Lab 21</a> reproduz ao derrubar o worker no passo 7.</p>
+        <p>Retentativas não eliminam a necessidade de chaves. A política de retentativa padrão do Temporal começa com intervalo de 1 s e coeficiente de backoff de 2,0 <span class="chip t-ven"><i>ven</i> fornecedor · 21.9 r4</span>; uma gravação repetida sem chave é uma segunda gravação.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- bottom action bar -->
+  <nav class="rt-s" style="flex: none; display: grid; grid-template-columns: 1fr 1fr; background: var(--bg);" aria-label="Ações do capítulo">
+    <button class="rr" style="min-height: 60px; padding: 8px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center;" aria-haspopup="dialog">
+      <span class="ui" style="font-weight: 500;">Sumário</span>
+      <span class="cap">21.3 de 21.9</span>
+    </button>
+    <button style="min-height: 60px; padding: 8px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center; background: var(--act); color: var(--on-act);" aria-haspopup="dialog">
+      <span class="ui" style="font-weight: 500;">Perguntar sobre 21.3</span>
+      <span class="mono" style="font-size: 11px; line-height: 14px;">respostas citam a edição PT</span>
+    </button>
+  </nav>
+</div>
+
+
+</body>
+</html>

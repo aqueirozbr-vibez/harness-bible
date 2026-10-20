@@ -1,0 +1,5 @@
+The vendor's own documentation page, dated 2026-08-31, at vendor.example.
+
+with reserved capacity near $ is 1.85, the earlier 1.84 having been revised.
+
+Context: with reserved capacity near $ · 1.84

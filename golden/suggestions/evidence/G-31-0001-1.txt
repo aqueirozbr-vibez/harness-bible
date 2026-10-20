@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-10-07, at press.example.
+
+The passage is better put as: "The queue is never the constraint; attention is."
+
+Context: The queue is not the constraint; attention is.

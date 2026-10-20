@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, dated 2024-08-01, at regulator.example.
+
+The passage is better put as: "In practice, a vendor whose agent "keeps context in memory during the task" fails the first test and, at the first deploy, the plant's patience."
+
+Context: A vendor whose agent "keeps context in memory during the task" fails the first test and, at the first deploy, the plant's patience.

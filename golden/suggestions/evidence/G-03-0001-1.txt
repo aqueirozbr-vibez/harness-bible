@@ -1,0 +1,5 @@
+An official notice of the regulator, in its journal, undated, at regulator.example.
+
+The passage is better put as: "Open: no published per-layer reconciliation exists for the closed frontier models, whose configurations remain not disclosed, and the chapter does not estimate them."
+
+Context: Open: no published per-layer reconciliation exists for the closed frontier models, whose configurations are not disclosed, and the chapter does not estimate them.

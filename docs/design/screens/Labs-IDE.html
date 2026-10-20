@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Labs · Lab 21 IDE</title>
+<link rel="stylesheet" href="./hb.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#F1F1EC}
+a{color:inherit}a:hover{color:inherit}
+</style>
+</head>
+<body>
+
+
+<div class="hb" data-theme="light" style="width: 1440px; height: 1200px; display: flex; flex-direction: column; overflow: hidden;">
+
+  <header class="topbar">
+    <a class="brand" href="#"><span class="glyph">✢</span><b>Harness Bible</b><span class="faint">interactive</span></a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#">Book</a>
+      <a href="#">Assistant</a>
+      <a href="#" aria-current="page">Labs</a>
+      <a href="#">Improve</a>
+    </nav>
+    <div class="grow" style="display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+      <label class="row" style="flex: 1 1 auto; max-width: 420px; height: 32px; border: 1px solid var(--rule); padding: 0 10px; gap: 8px;">
+        <span class="cap">search</span>
+        <input class="grow" style="border: 0; background: transparent; font: inherit; font-size: 13px; color: var(--ink); height: 30px; outline: none;" value="" placeholder="chapters, labs, registries" aria-label="Search the book">
+        <span class="kbd">/</span>
+      </label>
+      <span class="tex">release 2026.09 · sha 7f3a9c1e</span>
+    </div>
+    <div class="row" style="padding: 0 16px; gap: 12px; border-left: 1px solid var(--rule);">
+      <div class="langtoggle" role="group" aria-label="Edition language">
+        <button aria-pressed="true">EN</button><button aria-pressed="false">PT</button>
+      </div>
+      <a href="#" class="small muted">Account</a>
+    </div>
+  </header>
+
+  <!-- lab header: chapter context + actions -->
+  <div class="rb" style="height: 60px; flex: none; display: flex; align-items: center; gap: 16px; padding: 0 16px 0 20px;">
+    <div class="col" style="gap: 2px;">
+      <div class="row" style="gap: 8px;">
+        <span class="cap">opened from</span>
+        <a class="xref" href="#">ch21 · 21.3 worked numbers</a>
+        <span class="cap">· chapter v1.5.0 · verified 12 Sep 2026</span>
+      </div>
+      <div class="row" style="gap: 10px;">
+        <h1 class="h4">Lab 21 · Kill the worker at step 7</h1>
+        <span class="meta">run 3</span>
+        <span class="st st-fail">not reproduced</span>
+      </div>
+    </div>
+    <div class="grow"></div>
+    <div class="row" style="gap: 8px;">
+      <button class="btn btn-p">Run <span class="kbd" style="border-color: var(--on-act); color: var(--on-act);">ctrl ↵</span></button>
+      <button class="btn">Reset to v1.5.0</button>
+      <button class="btn">Save run</button>
+      <button class="btn" aria-label="Attach run 3 as evidence to a suggestion">Attach as evidence</button>
+      <button class="btn btn-q">Share link</button>
+    </div>
+  </div>
+
+  <div style="flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 240px 180px 500px minmax(0, 1fr);">
+
+    <!-- chapter text side panel (open, narrow) -->
+    <aside class="rr" style="display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--surface);" aria-label="Chapter text">
+      <div class="inst-h" style="border-bottom-color: var(--rule);">
+        <span class="t">Chapter 21</span><span class="sep">·</span><span>v1.5.0</span>
+        <button class="iconbtn" style="margin-left: auto; width: 28px; height: 24px; font-family: var(--mono); font-size: 12px;" aria-label="Collapse chapter panel" aria-expanded="true">⇤</button>
+      </div>
+      <div style="padding: 16px 16px 12px; display: flex; flex-direction: column; gap: 12px;">
+        <div class="col" style="gap: 4px;">
+          <span class="cap">control plane and durable execution</span>
+          <div class="row" style="gap: 8px;"><span class="meta">21.3</span><h2 class="h4">Worked numbers</h2></div>
+        </div>
+        <p class="small" style="line-height: 20px;">The scenario agent raises a work order for pump P-101 in 11 steps. Three write to external systems. At 2,000 queries a day and a worker loss of <span class="fig-ill">0.4% per step</span> <span class="chip t-ill"><i>ill</i> illustrative</span>, a task meets a failure with probability <span class="fig-der">4.3%</span> <span class="derive">ƒ L38</span>.</p>
+        <p class="small" style="line-height: 20px;">That is <span class="fig-der">86 interrupted tasks a day</span> <span class="derive">ƒ L41</span>. A loop that restarts from step 1 makes <span class="fig-der">117 duplicate side effects a day</span> <span class="derive">ƒ L47</span>.</p>
+        <p class="small" style="line-height: 20px;">A durable workflow with an idempotency key on every write activity repeats none. <a class="xref" href="#">Lab 21</a> reproduces this by killing the worker at step 7.</p>
+        <p class="small" style="line-height: 20px;">A retried write without a key is a second write. Section <a class="xref" href="#">26.3</a> gives the sensor that catches it.</p>
+      </div>
+      <div class="rt" style="margin: 0 16px; padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+        <span class="cap">figures this lab checks</span>
+        <dl class="kv" style="margin: 0;">
+          <dt>p_task</dt><dd>0.0431</dd>
+          <dt>interrupted / day</dt><dd>86</dd>
+          <dt>dup / day, restart</dt><dd>117</dd>
+          <dt>killed at step</dt><dd>7</dd>
+          <dt>resumed at step</dt><dd>7</dd>
+          <dt>dup after resume</dt><dd>0</dd>
+        </dl>
+      </div>
+      <div class="rt" style="margin: 14px 16px 0; padding-top: 12px; display: flex; flex-direction: column; gap: 6px;">
+        <span class="cap">keys</span>
+        <div class="row small muted"><span class="kbd">[</span> collapse panel</div>
+        <div class="row small muted"><span class="kbd">j</span><span class="kbd">k</span> next / previous section</div>
+      </div>
+      <div class="grow"></div>
+      <div class="inst-f" style="justify-content: space-between;"><a class="xref" href="#">open in reader</a><span class="tex">#c41e·07b2</span></div>
+    </aside>
+
+    <!-- file tree -->
+    <nav class="rr" style="display: flex; flex-direction: column; min-height: 0; overflow: hidden;" aria-label="Lab files">
+      <div class="inst-h" style="border-bottom-color: var(--rule);"><span class="t">Files</span><span class="ts">7</span></div>
+      <ul class="tree" style="padding: 8px 0;">
+        <li style="padding: 0 12px;"><span class="faint">▾</span> lab-21/</li>
+        <li><a href="#" style="display: block; padding: 0 12px 0 28px;">README.md</a></li>
+        <li><a href="#" style="display: block; padding: 0 12px 0 28px;">derive.py</a></li>
+        <li><a href="#" style="display: block; padding: 0 12px 0 28px;">run.py</a></li>
+        <li><a href="#" style="display: block; padding: 0 12px 0 28px;">workflow.py</a></li>
+        <li><a href="#" aria-current="page" style="display: flex; justify-content: space-between; padding: 0 12px 0 28px; background: var(--sel); box-shadow: inset 2px 0 0 var(--ink); font-weight: 600;"><span>activities.py</span><span style="color: var(--act);" title="modified" aria-label="modified">M</span></a></li>
+        <li><a href="#" style="display: block; padding: 0 12px 0 28px;">env.lock</a></li>
+        <li><a href="#" style="display: block; padding: 0 12px 0 28px;"><span class="faint">▸</span> data/</a></li>
+      </ul>
+      <div class="rt" style="margin: 4px 12px 0; padding-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+        <span class="cap">from readme</span>
+        <div class="col" style="gap: 2px;"><span class="flabel">expected runtime</span><span class="meta">~ 3 min</span></div>
+        <div class="col" style="gap: 2px;"><span class="flabel">run order</span><span class="meta">derive.py → run.py</span></div>
+        <div class="col" style="gap: 2px;"><span class="flabel">model calls</span><span class="meta">none declared</span></div>
+        <div class="col" style="gap: 2px;"><span class="flabel">egress allow-list</span><span class="meta">pypi.org<br>files.pythonhosted.org</span></div>
+        <div class="col" style="gap: 2px;"><span class="flabel">reference impl.</span><span class="meta">workflow.py · editable</span></div>
+      </div>
+      <div class="rt" style="margin: 14px 12px 0; padding-top: 12px; display: flex; flex-direction: column; gap: 6px;">
+        <span class="cap">edits vs v1.5.0</span>
+        <div class="between"><span class="meta">activities.py</span><span class="meta" style="color: var(--act);">1 line</span></div>
+        <span class="help">Saved to your account, outside the sandbox.</span>
+      </div>
+    </nav>
+
+    <!-- editor + run history -->
+    <section class="rr" style="display: flex; flex-direction: column; gap: 16px; padding: 16px; min-height: 0; overflow: hidden;" aria-label="Editor">
+      <div class="code" style="background: var(--code-bg);">
+        <div class="code-h"><span>lab-21/activities.py</span><span class="faint">· python 3.12 · 27 lines</span><span class="grow"></span><span class="meta" style="color: var(--act); padding-right: 8px;">modified</span></div>
+        <div class="code-b"><span class="ln" data-n="1"><span class="s">"""Lab 21 · write activities, P-101 work order."""</span></span><span class="ln" data-n="2"><span class="k">from</span> temporalio <span class="k">import</span> activity</span><span class="ln" data-n="3"><span class="k">from</span> lab21.clients <span class="k">import</span> cmms, planner, stores</span><span class="ln" data-n="4"><span class="k">from</span> lab21.keys <span class="k">import</span> idem_key</span><span class="ln" data-n="5"></span><span class="ln" data-n="6"><span class="c"># 3 of 11 steps write to external systems (21.3).</span></span><span class="ln" data-n="7"><span class="c"># Each write carries a key: workflow id + step.</span></span><span class="ln" data-n="8"><span class="c"># A replayed write with a known key is a no-op.</span></span><span class="ln" data-n="9"></span><span class="ln" data-n="10">@activity.defn</span><span class="ln" data-n="11"><span class="k">async def</span> <span class="fn">create_work_order</span>(wf, asset):</span><span class="ln" data-n="12">    key = idem_key(wf, step=4)</span><span class="ln" data-n="13">    <span class="k">return await</span> cmms.create_wo(asset, key=key)</span><span class="ln" data-n="14"></span><span class="ln" data-n="15">@activity.defn</span><span class="ln" data-n="16"><span class="k">async def</span> <span class="fn">notify_planner</span>(wf, wo_id):</span><span class="ln" data-n="17">    msg = <span class="s">f"WO {wo_id} raised for P-101"</span></span><span class="ln" data-n="18">    key = idem_key(wf, step=7)</span><span class="ln hl-a" data-n="19">    <span class="k">await</span> planner.notify(wo_id, msg)</span><span class="ln" data-n="20"></span><span class="ln" data-n="21">@activity.defn</span><span class="ln" data-n="22"><span class="k">async def</span> <span class="fn">reserve_parts</span>(wf, wo_id, parts):</span><span class="ln" data-n="23">    key = idem_key(wf, step=10)</span><span class="ln" data-n="24">    <span class="k">return await</span> stores.reserve(wo_id, parts, key=key)</span><span class="ln" data-n="25"></span><span class="ln" data-n="26"><span class="c"># Temporal default retry: 1 s, backoff 2.0 (21.9 r4)</span></span><span class="ln" data-n="27">RETRY = dict(initial=1, backoff=2.0, attempts=5)</span></div>
+        <div class="rt" style="padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 11.5px;">
+          <div class="row" style="gap: 8px;"><span class="st st-run">1 edit vs v1.5.0</span><span class="faint">· L19</span></div>
+          <span class="faint">was: <span style="text-decoration: line-through;">await planner.notify(wo_id, msg, key=key)</span></span>
+        </div>
+      </div>
+
+      <section class="inst" aria-label="Run history">
+        <div class="inst-h"><span class="t">Run history</span><span class="sep">·</span><span>lab 21</span><span class="ts">3 runs · saved to account</span></div>
+        <ol class="col">
+          <li class="rb" style="padding: 12px 14px; display: grid; grid-template-columns: 52px 1fr auto; gap: 10px; align-items: center; background: var(--sel);">
+            <span class="meta">run 3</span>
+            <span class="col" style="gap: 2px;"><span class="small">activities.py edited · 1 line</span><span class="meta faint">21 Sep 2026 14:02 · 2 m 48 s</span></span>
+            <span class="st-block sb-fail">not reproduced</span>
+          </li>
+          <li class="rb" style="padding: 12px 14px; display: grid; grid-template-columns: 52px 1fr auto; gap: 10px; align-items: start;">
+            <span class="meta" style="padding-top: 4px;">run 2</span>
+            <div class="error" style="padding: 10px 12px; display: flex; flex-direction: column; gap: 4px;">
+              <span class="small" style="font-weight: 500;">Killed at the 10-minute wall-clock cap. The lab README states ~3 min.</span>
+              <span class="meta faint">20 Sep 2026 16:31 · ran 10:00 · RETRY attempts=None</span>
+            </div>
+            <span class="st-block sb-fail">killed</span>
+          </li>
+          <li style="padding: 12px 14px; display: grid; grid-template-columns: 52px 1fr auto; gap: 10px; align-items: center;">
+            <span class="meta">run 1</span>
+            <span class="col" style="gap: 2px;"><span class="small">pinned files · v1.5.0</span><span class="meta faint">18 Sep 2026 11:07 · 2 m 51 s</span></span>
+            <span class="st-block sb-ok">reproduced</span>
+          </li>
+        </ol>
+      </section>
+    </section>
+
+    <!-- output pane: the hero -->
+    <section style="display: flex; flex-direction: column; min-height: 0; overflow: hidden;" aria-label="Output">
+      <div class="inst-h"><span class="t">Output</span><span class="sep">·</span><span>run 3</span><span class="sep">·</span><span>lab suite runner v2.3</span><span class="ts">finished 14:05:25</span></div>
+
+      <div class="rb" style="padding: 18px 20px 16px; display: flex; flex-direction: column; gap: 8px;">
+        <span class="cap">verdict</span>
+        <div role="status" style="font-family: var(--mono); font-size: 46px; line-height: 50px; letter-spacing: -.02em; color: var(--fail); font-weight: 500;">NOT REPRODUCED</div>
+        <p class="ui"><span class="num">5 of 6 figures match</span> · <span class="d-div">1 diverges</span> · <span class="d-new">1 new</span></p>
+        <p class="meta faint">run 3 · 21 Sep 2026 14:02:37 · 2 m 48 s · derive.py then run.py · pinned files v1.5.0 + 1 edit</p>
+      </div>
+
+      <div style="padding: 12px 20px 0;">
+        <table class="tbl" style="font-size: 12.5px;">
+          <caption class="cap" style="text-align: left; padding-bottom: 6px;">figures · chapter vs run</caption>
+          <thead><tr><th>figure</th><th class="n">chapter</th><th class="n">run</th><th class="n">Δ</th><th>status</th></tr></thead>
+          <tbody>
+            <tr><td>p_task <span class="derive">ƒ L38</span></td><td class="n">0.0431</td><td class="n">0.0431</td><td class="n">0</td><td><span class="st st-ok">match</span></td></tr>
+            <tr><td>interrupted tasks per day <span class="derive">ƒ L41</span></td><td class="n">86</td><td class="n">86</td><td class="n">0</td><td><span class="st st-ok">match</span></td></tr>
+            <tr><td>duplicate side effects/day, restart loop <span class="derive">ƒ L47</span></td><td class="n">117</td><td class="n">117</td><td class="n">0</td><td><span class="st st-ok">match</span></td></tr>
+            <tr><td>worker killed at step</td><td class="n">7</td><td class="n">7</td><td class="n">0</td><td><span class="st st-ok">match</span></td></tr>
+            <tr><td>resumed at step</td><td class="n">7</td><td class="n">7</td><td class="n">0</td><td><span class="st st-ok">match</span></td></tr>
+            <tr class="row-div"><td class="d-div" style="font-weight: 500;">duplicate writes after resume (durable)</td><td class="n">0</td><td class="n d-div" style="font-weight: 600;">1</td><td class="n d-div">+1</td><td><span class="st st-fail">diverge</span></td></tr>
+            <tr class="row-new"><td>resume latency p50 <span class="faint small">· not in chapter</span></td><td class="n faint">—</td><td class="n d-new">1.8 s</td><td class="n faint">—</td><td><span class="st st-run">new</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="padding: 14px 20px 0; display: flex; flex-direction: column; gap: 6px;">
+        <div class="between"><span class="cap">log tail · run.py</span><span class="meta faint">last 11 of 214 lines</span></div>
+        <div class="term">$ python derive.py &amp;&amp; python run.py --kill-at 7
+14:02:41 derive   p_task 0.0431 · 86/day · 117/day restart
+14:03:40 wf-0003  step 6/11 complete
+14:03:41 wf-0003  step 7/11 notify_planner started
+14:03:41 planner  POST /notify WO-88213 202 key=none
+14:03:41 chaos    SIGKILL worker-a at step 7
+14:03:43 worker-b replay history · steps 1–6 skipped
+14:03:43 worker-b resume step 7 · notify_planner try 2
+14:03:43 planner  POST /notify WO-88213 202 key=none <span style="background: var(--fail); color: var(--bg); padding: 0 4px;">DUP</span>
+14:03:43 worker-b resume latency 1.8 s
+14:05:25 run.py   dup writes after resume 1 · expected 0</div>
+      </div>
+
+      <div class="error" style="margin: 14px 20px 0; display: flex; flex-direction: column; gap: 6px;">
+        <span class="label" style="color: var(--fail);">diagnosis</span>
+        <p class="small" style="line-height: 19px;"><a class="xref" href="#">activities.py L19</a> calls <span class="mono">planner.notify</span> without its idempotency key. The replayed attempt at step 7 wrote a second notification. Restore <span class="mono">key=key</span>, or see <a class="xref" href="#">26.3</a> for the sensor that blocks it.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- sandbox status bar: two rows -->
+  <footer class="statusbar" aria-label="Sandbox status">
+    <span><span class="blocks" style="color: var(--ver);">▮▮▮▮▮▮▮▮▮▮</span> sandbox ready 3.2 s</span>
+    <span>session 00:14:22 of 30:00 <span class="meter" style="display: block; width: 56px;"><i style="width: 48%;"></i></span></span>
+    <span>cpu 2 vCPU cap · 71% <span class="meter" style="display: block; width: 56px;"><i style="width: 71%;"></i></span></span>
+    <span>mem 1.2 of 4.0 GiB <span class="meter" style="display: block; width: 56px;"><i style="width: 30%;"></i></span></span>
+    <span>egress default-deny · <span style="color: var(--fail);">3 requests denied by allow-list</span></span>
+    <span>allow-list pypi.org, files.pythonhosted.org</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);">ch21 · v1.5.0 · lab 21 · run 3</span>
+  </footer>
+  <footer class="statusbar" style="border-top: 1px solid var(--rule);" aria-label="Budget and sandbox identity">
+    <span>model calls · Lab 21 declares none</span>
+    <span>account budget 1.84 M / 2.50 M tokens
+      <span class="meter" style="display: block; width: 96px;"><i style="width: 73.6%;"></i><span class="mark" style="right: 0;" aria-hidden="true"></span></span>
+      hard cap at gateway</span>
+    <span>user code has no provider access</span>
+    <span class="tex">microVM fc-7c2e9a41 · img sha256:4be0·91cd</span>
+    <span>destroyed on close</span>
+    <span style="margin-left: auto; border-left: 1px solid var(--rule);" class="tex">ZmMtN2MyZS1sYWIyMS1ydW4z</span>
+  </footer>
+</div>
+
+
+</body>
+</html>

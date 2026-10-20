@@ -1,0 +1,5 @@
+A report in the trade press, dated 2026-10-07, at press.example.
+
+Zones and conduits; SIL and deterministic safety logic The source: IEC 62443; IEC 61508 / 61511.
+
+Context: Zones and conduits; SIL and deterministic safety logic — IEC 62443; IEC 61508 / 61511

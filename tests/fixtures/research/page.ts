@@ -266,7 +266,9 @@ export async function clearResearchPage(asker: SessionUser): Promise<void> {
     const runs = await prisma.researchRun.findMany({ where: { traceId: PAGE_TRACE, conversationId: { not: null } }, select: { conversationId: true } });
     await prisma.researchConversation.deleteMany({ where: { id: { in: [...new Set(runs.flatMap((run) => (run.conversationId === null ? [] : [run.conversationId])))] } } });
     await prisma.researchRun.deleteMany({ where: { traceId: PAGE_TRACE, conversationId: null, messageId: null } });
-    const asked = await prisma.message.findMany({ where: { role: "USER", text: SEED_QUESTION, traceId: PAGE_TRACE }, select: { conversationId: true } });
+    /* by the seed's trace in the asker's scope, not by its words: the stream suite's purge case, which an unfiltered run
+       (CI's) runs beside this one, nulls every message's text */
+    const asked = await prisma.message.findMany({ where: { role: "USER", traceId: PAGE_TRACE }, select: { conversationId: true } });
     const conversations = [...new Set(asked.map((message) => message.conversationId))];
     const ids = (await prisma.message.findMany({ where: { conversationId: { in: conversations } }, select: { id: true } })).map((message) => message.id);
     await prisma.flag.deleteMany({ where: { messageId: { in: ids } } });

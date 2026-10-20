@@ -141,7 +141,8 @@ describe.skipIf(!ready)("the /api/v1 contract", () => {
     expect(signedOut.status).toBe(401);
   });
 
-  it("deletes a conversation for its owner alone, at 30 a minute, with its ERASED record; holds one whose last answer may still write (feature-specs/45 § 3.2)", async () => {
+  /* it takes LEDGER_LOCK for its ERASED record, which another suite may hold for its whole run (ledger.test waits up to 300 s for it too) */
+  it("deletes a conversation for its owner alone, at 30 a minute, with its ERASED record; holds one whose last answer may still write (feature-specs/45 § 3.2)", { timeout: 300_000 }, async () => {
     const opened = await conversationCreate(req("/api/v1/assistant/conversations", { method: "POST", token: tokenA, ...json({ locale: "en" }) }));
     const conversation = (await opened.json()) as { id: string };
     const path = `/api/v1/assistant/conversations/${conversation.id}`;
@@ -256,8 +257,9 @@ describe.skipIf(!ready)("the /api/v1 contract", () => {
   });
 
   /* The start answers 503 RESEARCH_UNAVAILABLE before any rule while no engine is configured (architecture: "Unset =
-     nothing that needs a workflow runs"), so the refusal is reached only where one is, as tests/integration/evidence.test.ts's engine half is. */
-  it.skipIf(env.TEMPORAL_ADDRESS === undefined || env.TEMPORAL_NAMESPACE === undefined)("starts a run a rule refuses with no workflow, replays the same key's start, follows and flags it, and deletes the research with its ERASED record", async () => {
+     nothing that needs a workflow runs"), so the refusal is reached only where one is, as tests/integration/evidence.test.ts's engine half is.
+     Its ERASED record waits for LEDGER_LOCK, as the delete case's does. */
+  it.skipIf(env.TEMPORAL_ADDRESS === undefined || env.TEMPORAL_NAMESPACE === undefined)("starts a run a rule refuses with no workflow, replays the same key's start, follows and flags it, and deletes the research with its ERASED record", { timeout: 300_000 }, async () => {
     const opened = await researchCreate(req("/api/v1/research/conversations", { method: "POST", token: tokenA, ...json({ locale: "en" }) }));
     const research = ResearchConversationSchema.parse(await opened.json());
     const runsPath = `/api/v1/research/conversations/${research.id}/runs`;

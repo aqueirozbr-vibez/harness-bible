@@ -219,7 +219,8 @@ describe.skipIf(!ready)("the Research page's statistics and a research's export,
     expect(await researchStats(OTHER, { kind: "all" }, new Date())).toEqual({ runs: 0, ends: { done: 0, refused: 0, stopped: 0, failed: 0 }, cost: { total: null, perRun: null }, sources: { searches: 0, opened: 0, seen: null }, findings: { passed: 0, used: 0, accepted: 0 }, flagged: 0 });
   });
 
-  it("exports a research's RESEARCH records signed, the file verifying, with one EXPORT record of scope research; none is NOTHING_TO_EXPORT, another's NOT_FOUND", async () => {
+  /* it takes LEDGER_LOCK for its EXPORT record, which another suite may hold for its whole run (ledger.test waits up to 300 s for it too) */
+  it("exports a research's RESEARCH records signed, the file verifying, with one EXPORT record of scope research; none is NOTHING_TO_EXPORT, another's NOT_FOUND", { timeout: 300_000 }, async () => {
     const { privateKey, publicKey } = generateKeyPairSync("ed25519");
     const endpoints = researchEndpoints({
       ...defaultResearchEndpointDeps,

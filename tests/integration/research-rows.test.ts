@@ -149,9 +149,10 @@ describe.skipIf(!ready)("the research rows against the database (40 § 3, § 4, 
   });
 
   it("purges the brief and the uncovered sentences with the message's text, stamps the run, and ends one still waiting as SKIPPED · TEXT_PURGED; hashes and anchors stay", async () => {
-    const messages = await withTenant(tenantOf(ONE), () => getPrisma().message.findMany({ where: { role: "ASSISTANT" }, select: { id: true } }));
-    const answerId = messages[0]?.id ?? "";
-    const before = await readResearchRun((await withTenant(tenantOf(ONE), () => getPrisma().researchRun.findFirstOrThrow({ where: { messageId: answerId }, select: { id: true } }))).id, ONE.id);
+    /* the answer this suite's run names: on a database used twice, an earlier run's answers may still be the reader's */
+    const own = await withTenant(tenantOf(ONE), () => getPrisma().researchRun.findFirstOrThrow({ where: { messageId: { not: null } }, orderBy: { createdAt: "desc" }, select: { id: true, messageId: true } }));
+    const answerId = own.messageId ?? "";
+    const before = await readResearchRun(own.id, ONE.id);
     expect(before?.state).toBe("PLANNING");
     const later = new Date(Date.now() + 31 * 86_400_000);
     const counts = await purgeAssistantText({ now: later, abandonedAfterMs: 3_600_000, reader: ONE.id });

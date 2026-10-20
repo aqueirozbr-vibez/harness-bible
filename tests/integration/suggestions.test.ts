@@ -178,7 +178,9 @@ describe.skipIf(!ready)("POST /api/v1/suggestions, against the database and the 
     const [a, b] = [(await first.json()) as { id: string }, (await again.json()) as { id: string }];
     expect(b.id).toBe(a.id);
     const next = (await (await post(tokens.contributor ?? "", body)).json()) as { id: string };
-    expect(Number(next.id.slice(5))).toBe(Number(a.id.slice(5)) + 1);
+    /* a later serial of the chapter's, not necessarily the very next: other suites draft in chapter 21 while this one runs */
+    expect(next.id).not.toBe(a.id);
+    expect(Number(next.id.slice(5))).toBeGreaterThan(Number(a.id.slice(5)));
   });
 
   it("refuses what 31 § 3 names, in the API's error form, and writes nothing for it", async () => {

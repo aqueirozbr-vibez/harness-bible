@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { aliasesFromConfig, startStub, type RunningStub } from "@/infra/gateway/stub/server";
-import { budgetView } from "@/lib/budget/view";
+import { budgetView, type BudgetConsumer } from "@/lib/budget/view";
 import { appendBudgetRow, budgetFacts, gradingUsageOf, monthBreakdown, monthOf, monthSpend, tokenCapOf, type BudgetRowInput, type MonthBreakdown } from "@/lib/db/budget";
 import { getPrisma } from "@/lib/db/client";
 import type { BudgetKind } from "@/lib/db/generated/enums";
@@ -242,10 +242,12 @@ describe.skipIf(!hasDatabase)("the gateway rows against the database", () => {
     const earlier = budgetView({ month, kinds: before.kinds, answers: before.answers, suggestions: before.suggestions, capTokens: 1_000_000 }, at);
     expect(view.cap).toBe(1_000_000);
     expect(view.used - earlier.used).toBe(420_000);
-    expect((view.rows[0]?.tokens ?? 0) - (earlier.rows[0]?.tokens ?? 0)).toBe(300_000);
-    expect((view.rows[1]?.tokens ?? 0) - (earlier.rows[1]?.tokens ?? 0)).toBe(60_000);
-    expect((view.rows[2]?.tokens ?? 0) - (earlier.rows[2]?.tokens ?? 0)).toBe(60_000);
-    expect(view.rows[3]?.tokens).toBe(earlier.rows[3]?.tokens);
+    /* by consumer, not by place: the meter's rows grew a research row in unit 68 (48 § 28) */
+    const gained = (consumer: BudgetConsumer) => (view.rows.find((r) => r.consumer === consumer)?.tokens ?? 0) - (earlier.rows.find((r) => r.consumer === consumer)?.tokens ?? 0);
+    expect(gained("assistant")).toBe(300_000);
+    expect(gained("grading")).toBe(60_000);
+    expect(gained("adjudication")).toBe(60_000);
+    expect([gained("research"), gained("retrieval"), gained("labs")]).toEqual([0, 0, 0]);
     expect(view.suggestions).toEqual(after.suggestions);
     expect(view.answers).toBe(after.answers);
     expect(view.resetsAt).toBe("2031-04-01T00:00:00.000Z");

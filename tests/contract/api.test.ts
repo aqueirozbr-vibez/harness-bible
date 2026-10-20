@@ -255,7 +255,9 @@ describe.skipIf(!ready)("the /api/v1 contract", () => {
     expect(ErrorBodySchema.parse(await foreignSeed.json())).toMatchObject({ code: "SEED_INVALID" });
   });
 
-  it("starts a run a rule refuses with no workflow, replays the same key's start, follows and flags it, and deletes the research with its ERASED record", async () => {
+  /* The start answers 503 RESEARCH_UNAVAILABLE before any rule while no engine is configured (architecture: "Unset =
+     nothing that needs a workflow runs"), so the refusal is reached only where one is, as tests/integration/evidence.test.ts's engine half is. */
+  it.skipIf(env.TEMPORAL_ADDRESS === undefined || env.TEMPORAL_NAMESPACE === undefined)("starts a run a rule refuses with no workflow, replays the same key's start, follows and flags it, and deletes the research with its ERASED record", async () => {
     const opened = await researchCreate(req("/api/v1/research/conversations", { method: "POST", token: tokenA, ...json({ locale: "en" }) }));
     const research = ResearchConversationSchema.parse(await opened.json());
     const runsPath = `/api/v1/research/conversations/${research.id}/runs`;

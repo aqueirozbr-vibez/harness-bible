@@ -79,6 +79,21 @@ jobs:
             if curl -fsS http://localhost:4001/health/liveliness > /dev/null; then break; fi; sleep 1;
           done
           curl -fsS http://localhost:4001/health/liveliness || (cat /tmp/gateway-stub.log; exit 1)
+      # The database suites read a release, as a development database holds one (docs/getting-started.md § 5): the
+      # book from ../bible, the development reader, the rubric the Improve flow scores with, and the release's vectors
+      # from the stub gateway above, under a key minted for the development reader. The two caps are this step's alone,
+      # so that an individual key can be minted here; the suites run with them unset, as a development machine does.
+      - name: The release the database suites read
+        env:
+          RELEASE_ID: "2026.09"
+          INDIVIDUAL_TOKEN_CAP: "1000000000"
+          INDIVIDUAL_TOKENS_PER_MINUTE: "1000000000"
+        run: |
+          npm run ingest
+          npm run db:seed
+          npm run rubric:publish -- v1.2
+          npm run gateway:key -- --user 00000000-0000-4000-8000-000000000001
+          npm run embed:release -- --user 00000000-0000-4000-8000-000000000001 --batch 64 --max-chars 16000
       # The workflow suites (tests/workflows/) run on Temporal's time-skipping test server, a program the SDK downloads
       # (feature-specs/28 § 6). The cache keeps it between runs, restored here because `npm ci` above empties
       # node_modules; the step after it fetches the server on a miss and starts it once, so a server that cannot

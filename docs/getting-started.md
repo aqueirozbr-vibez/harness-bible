@@ -240,6 +240,8 @@ npm run audit:check                        # no high or critical advisory; devel
 opa check policies && opa test policies -v # every deny case
 npx prisma migrate deploy && npx prisma generate # first: the type check reads the generated client
 npx tsc --noEmit && npx eslint .
+npm run ingest && npm run db:seed && npm run rubric:publish -- v1.2  # the release the database suites read (§ 5),
+# then a stub key for the development reader and the release's vectors (CI's step "The release the database suites read")
 npm run workflows:test-server              # Temporal's time-skipping test server
 npm test                                   # Vitest: unit, contract, integration, workflow suites
 npm run test:ledger                        # the hash chain at 100 % branch coverage

@@ -48,12 +48,25 @@ const DEFAULT_IMAGE = "python:3.12-slim";
 const SKIP = new Set(["results", "__pycache__"]);
 
 /**
+ * The host's user, where the host has one (not Windows): the scratch folder is that user's, mode 0700 from mkdtemp,
+ * and the container's root, with every capability dropped, cannot read past that mode, so the container runs as the
+ * folder's owner. Docker Desktop's file sharing has no such modes, which is why only a Linux host showed it (the
+ * first CI run on a runner, 2026-10-20: "can't open file '/lab/derive.py': Permission denied").
+ */
+function hostUser(): string | null {
+  const uid = process.getuid?.();
+  const gid = process.getgid?.();
+  return uid === undefined || gid === undefined ? null : `${String(uid)}:${String(gid)}`;
+}
+
+/**
  * The container the `docker` runner starts: no network, a read-only root, the scratch
  * folder as the only writable mount (results/derived.json lands there), a tmpfs /tmp,
- * the lab tier's cpu and memory caps, no user shell. Firecracker replaces it in Phase 3.
+ * the lab tier's cpu and memory caps, no user shell, and on a host with users the
+ * scratch folder's owner as its user rather than root. Firecracker replaces it in Phase 3.
  */
-export function dockerArgs(dir: string, script: string, image = DEFAULT_IMAGE): ReadonlyArray<string> {
-  return ["run", "--rm", "--network", "none", "--read-only", "--tmpfs", "/tmp", "--cpus", CONTAINER.cpus, "--memory", CONTAINER.memory, "--pids-limit", CONTAINER.pids, "--cap-drop", "ALL", "--security-opt", "no-new-privileges", "-v", `${dir}:/lab`, "-w", "/lab", image, "python", script];
+export function dockerArgs(dir: string, script: string, image = DEFAULT_IMAGE, user: string | null = hostUser()): ReadonlyArray<string> {
+  return ["run", "--rm", "--network", "none", "--read-only", "--tmpfs", "/tmp", "--cpus", CONTAINER.cpus, "--memory", CONTAINER.memory, "--pids-limit", CONTAINER.pids, "--cap-drop", "ALL", "--security-opt", "no-new-privileges", ...(user === null ? [] : ["--user", user]), "-v", `${dir}:/lab`, "-w", "/lab", image, "python", script];
 }
 
 function copyLab(from: string, to: string): void {

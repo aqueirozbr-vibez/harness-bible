@@ -298,7 +298,7 @@ The check is now whole: the chapter's own lab runs beside the dry run, by spec 1
 
 - **The lab half** (§ 4.4 part 2), in `checkMerge`, where the dry run passed and the chapter's lab has a derive script:
   - **Which lab**: a lab without `derive.py` prints no derived figure and has nothing to reproduce. That lab, or a chapter with none, is `NONE`. Chapter 28's is one, and the PRD's first example is on chapter 28.
-  - **The run**: the branch's lab folder is run by `runDerive` (`lib/aids/run.ts`), as a decision aid runs, by `AID_RUNNER`. That is the lab tier's container (no network, read-only root, 2 cpus, 4 GiB, ten minutes), or a local python.
+  - **The run**: the branch's lab folder is run by `runDerive` (`lib/aids/run.ts`), as a decision aid runs, by `AID_RUNNER`. That is the lab tier's container (no network, read-only root, 2 cpus, 4 GiB, ten minutes, and since 2026-10-20 the host user rather than root on a host with users, since the scratch folder is that user's alone), or a local python.
   - **What it printed** is held to what the branch states (`reproductionOf`, `pipeline/check.ts`, pure). The chapter is built again with the run's results in place of the branch's own, by the figure pass's own matching. A derived figure linked before and not now, or to another key, fails the check, named, with the results that moved. Numbers are equal within a part in a billion, and the run's `timestamp` apart.
   - **A run that does not start** — no runner, no image — is the machine's: `NOT_RUN`, with why.
   - **A run that does not end with results** is run again on `main`. Failing there too, the lab cannot be run here: `NOT_RUN`. There alone, the change broke it: `FAIL`.

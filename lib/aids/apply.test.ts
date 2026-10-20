@@ -94,6 +94,13 @@ describe("aids", () => {
     expect(dockerArgs("/x", "derive.py", "custom:1")).toContain("custom:1");
   });
 
+  it("dockerArgs runs as the scratch folder's owner where the host has users, and names no user where it has none", () => {
+    const linux = dockerArgs("/tmp/hb-aid-1", "derive.py", undefined, "1001:118");
+    expect(linux[linux.indexOf("--user") + 1]).toBe("1001:118");
+    expect(linux.indexOf("--user")).toBeLessThan(linux.indexOf("python:3.12-slim"));
+    expect(dockerArgs("C:/scratch/hb-aid-1", "derive.py", undefined, null)).not.toContain("--user");
+  });
+
   describe.skipIf(!hasDocker)("runAid with docker", () => {
     it("runs the patched chapter 21 script in the lab tier's container", async () => {
       const run = await runAid(ch21, { steps: 22, calls: 26, tokens_per_step: 7500 }, { labDir: CH21_LAB_DIR, runner: "docker", docker });

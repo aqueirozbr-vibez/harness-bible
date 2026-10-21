@@ -8,6 +8,7 @@ import { TASK_QUEUES } from "@/lib/schemas/workflows";
 import { activities } from "./activities";
 import type { EngineConfig } from "./env";
 import { PROBE_REFRESH_MS } from "./health";
+import { activitySpans } from "./telemetry/activities";
 
 /*
  * The workers as a worker of the workflow engine (feature-specs/28 § 4): the connection, the two task queues, the
@@ -52,7 +53,8 @@ export async function startEngine(config: EngineConfig, taskQueues: ReadonlyArra
   try {
     /* The process's own logger, so the bundler reports where the workers do and a suite that holds the SDK's lines holds this one. */
     const bundle = await bundleWorkflows(Runtime.instance().logger);
-    const workers = await Promise.all(taskQueues.map((taskQueue) => Worker.create({ connection, namespace: config.namespace, taskQueue, workflowBundle: bundle, activities })));
+    /* each activity's execution as a span of its subject's trace (feature-specs/49 § 7.1); the workflow suites build their own workers without it */
+    const workers = await Promise.all(taskQueues.map((taskQueue) => Worker.create({ connection, namespace: config.namespace, taskQueue, workflowBundle: bundle, activities, interceptors: { activity: [activitySpans()] } })));
     const runs = workers.map((worker) => worker.run());
     const shutdown = (): void => {
       for (const worker of workers) {

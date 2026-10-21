@@ -25,6 +25,7 @@ const MODEL_CALL: GatewaySpan = {
   "gen_ai.system": "anthropic",
   "gen_ai.request.model": "claude-opus-5",
   "hb.alias": "hb-frontier",
+  "hb.agent": "assistant.draft",
   "hb.guide.version": "v1.12",
   "hb.guide.sha256": "a".repeat(64),
   "hb.prompt.sha256": "b".repeat(64),
@@ -39,6 +40,7 @@ const MODEL_CALL: GatewaySpan = {
   "hb.principal": "org:00000000-0000-4000-8000-00000000de01",
   "hb.outcome": "ok",
   trace_id: TRACE,
+  span_id: "c".repeat(16),
   "x-litellm-call-id": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
   latency_ms: 3100,
   first_token_ms: 900,
@@ -65,8 +67,8 @@ function emitTurn(): void {
   withSpanScope({ traceId: TRACE, spanId: WORKERS_SPAN, request: true }, () => {
     logRetrieve({ traceId: TRACE, mode: "explain", candidates: 22, embedMs: 40, sqlMs: 35, rerankMs: 120, ms: 200, overBudget: false, vectorReady: true });
     logGatewaySpan(MODEL_CALL);
-    logGatewaySpan({ ...MODEL_CALL, "hb.purpose": "grading", latency_ms: 800, first_token_ms: null });
-    logGatewaySpan({ ...MODEL_CALL, "hb.purpose": "embed", "hb.alias": "hb-embed", "gen_ai.request.model": "hb-embed", "hb.guide.version": null, "hb.guide.sha256": null, latency_ms: 40, first_token_ms: null });
+    logGatewaySpan({ ...MODEL_CALL, "hb.purpose": "grading", span_id: "e".repeat(16), latency_ms: 800, first_token_ms: null });
+    logGatewaySpan({ ...MODEL_CALL, "hb.purpose": "embed", span_id: "f".repeat(16), "hb.alias": "hb-embed", "gen_ai.request.model": "hb-embed", "hb.guide.version": null, "hb.guide.sha256": null, latency_ms: 40, first_token_ms: null });
     logAidRun({ traceId: TRACE, aidId: "21.8-task-survival", runner: "docker", exitCode: 0, timedOut: false, ms: 640 });
     logAnswer(answerLineOf({ traceId: TRACE, messageId: "m-1", mode: "explain", locale: "pt", secretsRedacted: 1, ms: 4200 }, RESULT));
   });
@@ -117,6 +119,8 @@ describe("the tracer", () => {
     for (const span of named("http.request")) expect(span.attributes).not.toHaveProperty("hb.parent");
 
     const draft = named("gen_ai.chat").find((span) => span.attributes["hb.purpose"] === "assistant");
+    /* exported under the id its call's traceparent sent, the gateway's generation's parent (49 § 5.3) */
+    expect(draft?.spanId).toBe(MODEL_CALL.span_id);
     expect(draft).toMatchObject({
       kind: 3,
       ms: 3100,

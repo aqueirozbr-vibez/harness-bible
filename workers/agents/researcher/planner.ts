@@ -116,6 +116,7 @@ export function plannerRequestOf(input: PlanInput) {
   const call: GatewayCall = {
     purpose: "research",
     alias: "hb-small",
+    agent: "researcher.plan",
     guide: { agent: "researcher", version: input.prompt.guide.version, sha256: input.prompt.guide.sha256 },
     principal: input.call.principal,
     traceId: input.call.traceId,

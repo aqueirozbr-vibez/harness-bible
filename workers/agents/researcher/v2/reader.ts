@@ -125,6 +125,7 @@ export function readerRequestOf(input: Pick<ReadInput, "prompt" | "call">) {
   const call: GatewayCall & { readonly serverTools: ServerTools } = {
     purpose: "research",
     alias: "hb-frontier",
+    agent: "researcher.read",
     guide: { agent: "researcher", version: input.prompt.guide.version, sha256: input.prompt.guide.sha256 },
     principal: input.call.principal,
     traceId: input.call.traceId,

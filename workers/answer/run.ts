@@ -15,6 +15,7 @@ import { searchRelease } from "@/lib/search/hybrid";
 import { withoutRedactionMarks } from "@/lib/security/redact";
 import { namedChaptersOf, referencesOf } from "@/lib/sensors/references";
 import { logRetrieve } from "@/lib/telemetry/lines";
+import { inSpan } from "@/lib/telemetry/spans";
 import type { PromptFigure, PromptSection } from "@/workers/agents/assistant/assemble";
 import { labPromptSections, loadLab } from "@/workers/answer/lab";
 import { embedQuery } from "@/workers/embed";
@@ -65,7 +66,7 @@ export async function figuresOf(releaseId: string, anchors: ReadonlyArray<string
  * README and last run follow the retrieved sections as pseudo-sections (spec 19 § 4), and the lab's facts go back to
  * the turn so the final event carries the run the model read.
  */
-export async function retrieveForAnswer(request: AnswerRequest, gateway: GatewayDeps): Promise<{ readonly sections: ReadonlyArray<PromptSection>; readonly overBudget: boolean; readonly lab: LabFacts | null }> {
+async function retrieveAndRead(request: AnswerRequest, gateway: GatewayDeps): Promise<{ readonly sections: ReadonlyArray<PromptSection>; readonly overBudget: boolean; readonly lab: LabFacts | null }> {
   const deps: RetrieveDeps = {
     embed: (call, text) => embedQuery(call, text, gateway),
     rerank: (call, input) => rerank(call, input, gateway),
@@ -106,6 +107,14 @@ export async function retrieveForAnswer(request: AnswerRequest, gateway: Gateway
     overBudget: retrieved.overBudget,
     lab: loaded?.facts ?? null,
   };
+}
+
+/**
+ * Retrieval for a turn as a scope of its own (feature-specs/49 § 6.3): the query's embedding and the re-rank nest under
+ * `assistant.retrieve`, which is the retrieve line the work prints at its end.
+ */
+export function retrieveForAnswer(request: AnswerRequest, gateway: GatewayDeps): Promise<{ readonly sections: ReadonlyArray<PromptSection>; readonly overBudget: boolean; readonly lab: LabFacts | null }> {
+  return inSpan({ name: "assistant.retrieve", traceId: request.traceId }, () => retrieveAndRead(request, gateway));
 }
 
 /** The four causes the classifier may name; anything else means proceed (spec 13 § 4.1, D2). */
@@ -192,6 +201,8 @@ export interface RunDeps {
   /** The release's unverified chapters, for the classifier's line; the database by default, a test passes its own. */
   readonly unverified?: (releaseId: string) => Promise<ReadonlyArray<UnverifiedChapter>>;
   readonly now?: () => number;
+  /** Each sensor's run, for the turn's line (feature-specs/49 § 8). */
+  readonly onSensor?: AnswerDeps["onSensor"];
 }
 
 export interface RunResult {
@@ -209,6 +220,7 @@ export async function runAnswer(request: AnswerRequest, sinks: AnswerSinks, deps
   let lab: LabFacts | null = null;
 
   const flowDeps: AnswerDeps = {
+    ...(deps.onSensor === undefined ? {} : { onSensor: deps.onSensor }),
     chaptersVerified: deps.chaptersVerified,
     retrieve: async (current) => {
       const retrieved = await retrieveForAnswer(current, deps.gateway);

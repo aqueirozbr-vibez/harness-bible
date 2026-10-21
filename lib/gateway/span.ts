@@ -1,6 +1,6 @@
 import { canonicalize, type JsonValue } from "@/lib/ledger/canonical";
 import { sha256Hex } from "@/lib/ledger/hash";
-import type { Alias, Outcome, Purpose } from "@/lib/schemas/gateway";
+import type { AgentName, Alias, Outcome, Purpose } from "@/lib/schemas/gateway";
 import { genAiSpanOf } from "@/lib/telemetry/lines";
 import { printLine } from "@/lib/telemetry/print";
 import { recordSpan } from "@/lib/telemetry/spans";
@@ -16,6 +16,8 @@ export interface GatewaySpan {
   /** The pinned id the gateway reported, or the alias when the call produced no response. */
   readonly "gen_ai.request.model": string;
   readonly "hb.alias": Alias;
+  /** Who made the call (feature-specs/49 § 6.2): the span's name on the Langfuse road, and its generation's. */
+  readonly "hb.agent": AgentName;
   readonly "hb.guide.version": string | null;
   readonly "hb.guide.sha256": string | null;
   readonly "hb.prompt.sha256": string;
@@ -32,6 +34,8 @@ export interface GatewaySpan {
   readonly "hb.principal": string;
   readonly "hb.outcome": Outcome;
   readonly trace_id: string;
+  /** The span's own id, sent in the call's `traceparent`: the gateway's generation is its child (feature-specs/49 § 5.3). */
+  readonly span_id: string;
   readonly "x-litellm-call-id": string | null;
   readonly latency_ms: number;
   readonly first_token_ms: number | null;

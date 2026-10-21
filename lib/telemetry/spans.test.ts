@@ -5,7 +5,7 @@ import { PURPOSES } from "@/lib/schemas/gateway";
 import { parseSectionId } from "@/lib/schemas/ids";
 
 import { aidRunSpanOf, answerLineOf, answerSpanOf, failedAnswerLine, genAiSpanOf, httpSpanOf, jobSpanOf, researchLineOf, researchSpanOf } from "./lines";
-import { currentSpanId, currentTraceId, recordSpan, setSpanSink, telemetryOn, withSpanScope, type SpanRecord } from "./spans";
+import { currentSpanId, currentTraceId, inSpan, recordSpan, setSpanSink, telemetryOn, withSpanScope, type SpanRecord } from "./spans";
 
 /*
  * The seam and the lines' spans, without a tracer (feature-specs/21 § 5.1): who a span's parent is, that recording
@@ -136,6 +136,7 @@ describe("the lines as spans", () => {
       "gen_ai.system": "anthropic",
       "gen_ai.request.model": "m",
       "hb.alias": "hb-frontier",
+      "hb.agent": "assistant.draft",
       "hb.guide.version": null,
       "hb.guide.sha256": null,
       "hb.prompt.sha256": "b".repeat(64),
@@ -149,6 +150,7 @@ describe("the lines as spans", () => {
       "hb.principal": "user:u-1",
       "hb.outcome": "ok",
       trace_id: TRACE,
+      span_id: "c".repeat(16),
       "x-litellm-call-id": null,
       latency_ms: 5,
       first_token_ms: null,
@@ -157,6 +159,10 @@ describe("the lines as spans", () => {
     /* A provider's refusal is an answer of a kind, not a failed call; a budget refusal is a failed one. */
     expect(genAiSpanOf({ ...base, "hb.purpose": "assistant", "hb.outcome": "provider_refusal" }, 1_000)).not.toHaveProperty("error");
     expect(genAiSpanOf({ ...base, "hb.purpose": "assistant", "hb.outcome": "budget" }, 1_000).error).toBe("budget");
+    /* the span's id is the one the call's traceparent sent, so the gateway's generation hangs from a span that exists (49 § 5.3) */
+    expect(genAiSpanOf({ ...base, "hb.purpose": "assistant" }, 1_000).spanId).toBe(base.span_id);
+    /* and the call's agent, which the collector makes its name on the Langfuse road (49 § 6.2) */
+    expect(genAiSpanOf({ ...base, "hb.purpose": "assistant" }, 1_000).attributes["hb.agent"]).toBe(base["hb.agent"]);
   });
 
   it("makes a request a root unless its caller named itself, and an error only of a 5xx", () => {
@@ -193,5 +199,87 @@ describe("the lines as spans", () => {
     expect(aidRunSpanOf({ traceId: TRACE, aidId: "21.8-task-survival", runner: "python", exitCode: 1, timedOut: false, ms: 80 }, 1_000).error).toBe("AID_RUN_FAILED");
     expect(aidRunSpanOf({ traceId: TRACE, aidId: "21.8-task-survival", runner: "python", exitCode: 0, timedOut: false, ms: 80 }, 1_000)).not.toHaveProperty("error");
     expect(jobSpanOf({ traceId: TRACE, job: "auth:sweep", counts: { keys: 9 }, ms: 4 }, 1_000)).toMatchObject({ name: "job", parentId: null, attributes: { "hb.job": "auth:sweep", "hb.count.keys": 9 } });
+  });
+});
+
+/*
+ * The scope helper (feature-specs/49 § 6.3): a span of its own around a piece of work, whose own span is the line the
+ * work prints at its end, recorded once with the scope's id; the subject's trace attributes on everything inside.
+ */
+describe("inSpan", () => {
+  const REQUEST = "e".repeat(16);
+  const TURN = { name: "assistant.turn", tags: ["turn", "mode:explain"], release: "2026.09" };
+  const line = (name: SpanRecord["name"], attributes: SpanRecord["attributes"] = {}): SpanRecord => ({ name, traceId: TRACE, endedAt: 1_000, ms: 10, attributes });
+  const capture = () => {
+    const seen: Array<SpanRecord & { readonly parentId: string | null }> = [];
+    setSpanSink((record) => seen.push(record));
+    return seen;
+  };
+
+  it("records its own span once, with its id, from the line printed inside, under the span it runs inside", async () => {
+    const seen = capture();
+    await withSpanScope({ traceId: TRACE, spanId: REQUEST, request: true }, () =>
+      inSpan({ name: "assistant.answer", traceId: TRACE, trace: TURN }, async () => {
+        recordSpan(line("gen_ai.chat"));
+        recordSpan(line("assistant.answer", { "hb.outcome": "answer", "hb.message_id": "m-1" }));
+      }),
+    );
+    const answers = seen.filter((span) => span.name === "assistant.answer");
+    const chat = seen.find((span) => span.name === "gen_ai.chat");
+    expect(answers).toHaveLength(1);
+    expect(answers[0]?.spanId).toMatch(/^[0-9a-f]{16}$/);
+    /* the children under the scope; the scope under the request, marked, since the Langfuse road drops the request (§ 5.6) */
+    expect(chat?.parentId).toBe(answers[0]?.spanId);
+    expect(chat?.attributes).not.toHaveProperty("hb.parent");
+    expect(answers[0]).toMatchObject({ parentId: REQUEST, attributes: { "hb.parent": "request" } });
+    /* the subject's trace attributes on every span inside, its outcome on its own span alone (§ 6.4) */
+    for (const span of seen) expect(span.attributes).toMatchObject({ "langfuse.trace.name": "assistant.turn", "langfuse.trace.tags": ["turn", "mode:explain"], "langfuse.release": "2026.09" });
+    expect(answers[0]?.attributes).toMatchObject({ "langfuse.observation.type": "agent", "langfuse.trace.metadata.outcome": "answer", "langfuse.trace.metadata.message_id": "m-1" });
+    expect(chat?.attributes).not.toHaveProperty("langfuse.trace.metadata.outcome");
+  });
+
+  it("records it failed, once, with the error's name, when the work throws before its line", async () => {
+    const seen = capture();
+    await expect(
+      withSpanScope({ traceId: TRACE, spanId: REQUEST, request: true }, () =>
+        inSpan({ name: "assistant.answer", traceId: TRACE, trace: TURN }, async () => {
+          throw new TypeError("a message that could quote what it failed on");
+        }),
+      ),
+    ).rejects.toThrow(TypeError);
+    expect(seen).toHaveLength(1);
+    expect(seen[0]).toMatchObject({ name: "assistant.answer", parentId: REQUEST, error: "TypeError", attributes: { "langfuse.trace.name": "assistant.turn" } });
+    expect(JSON.stringify(seen[0])).not.toContain("could quote");
+  });
+
+  it("records it once when the work prints its line and then throws", async () => {
+    const seen = capture();
+    await expect(
+      inSpan({ name: "assistant.answer", traceId: TRACE }, async () => {
+        recordSpan(line("assistant.answer", { "hb.outcome": "failed" }));
+        throw new Error("after");
+      }),
+    ).rejects.toThrow("after");
+    expect(seen.filter((span) => span.name === "assistant.answer")).toHaveLength(1);
+    expect(seen[0]).not.toHaveProperty("error");
+  });
+
+  it("nests a scope inside a scope, which keeps the outer's trace attributes", async () => {
+    const seen = capture();
+    await inSpan({ name: "assistant.answer", traceId: TRACE, trace: TURN }, async () => {
+      await inSpan({ name: "assistant.retrieve", traceId: TRACE }, async () => {
+        recordSpan(line("gen_ai.embeddings"));
+        recordSpan(line("assistant.retrieve"));
+      });
+      recordSpan(line("assistant.answer"));
+    });
+    const [embedding, retrieval, answer] = ["gen_ai.embeddings", "assistant.retrieve", "assistant.answer"].map((name) => seen.find((span) => span.name === name));
+    expect(embedding?.parentId).toBe(retrieval?.spanId);
+    expect(retrieval?.parentId).toBe(answer?.spanId);
+    /* outside any request, the outermost is a root, and unmarked */
+    expect(answer?.parentId).toBeNull();
+    expect(answer?.attributes).not.toHaveProperty("hb.parent");
+    for (const span of seen) expect(span.attributes["langfuse.trace.name"], span.name).toBe("assistant.turn");
+    expect(retrieval?.attributes["langfuse.observation.type"]).toBe("retriever");
   });
 });

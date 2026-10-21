@@ -23,13 +23,16 @@ describe("gateway schemas (feature-specs/11 § 5.1, § 6)", () => {
   });
 
   it("validates a call: a guide with its hash or none, a 32-hex trace id, a ref or null", () => {
-    const call = { purpose: "assistant", alias: "hb-frontier", guide: { agent: "assistant", version: "v1.8", sha256: "a".repeat(64) }, principal: { userId: "u-1" }, traceId: "b".repeat(32), ref: "msg-1" };
+    const call = { purpose: "assistant", alias: "hb-frontier", agent: "assistant.draft", guide: { agent: "assistant", version: "v1.8", sha256: "a".repeat(64) }, principal: { userId: "u-1" }, traceId: "b".repeat(32), ref: "msg-1" };
     expect(GatewayCallSchema.safeParse(call).success).toBe(true);
     expect(GatewayCallSchema.safeParse({ ...call, guide: null, ref: null }).success).toBe(true);
     expect(GatewayCallSchema.safeParse({ ...call, guide: { agent: "assistant", version: "v1.8", sha256: "short" } }).success).toBe(false);
     expect(GatewayCallSchema.safeParse({ ...call, traceId: "nope" }).success).toBe(false);
     expect(GatewayCallSchema.safeParse({ ...call, alias: "claude-opus-5" }).success).toBe(false);
     expect(GatewayCallSchema.safeParse({ ...call, extra: 1 }).success).toBe(false);
+    /* every call names its agent, one of the enumeration (49 § 6.2) */
+    expect(GatewayCallSchema.safeParse({ ...call, agent: undefined }).success).toBe(false);
+    expect(GatewayCallSchema.safeParse({ ...call, agent: "assistant.drafting" }).success).toBe(false);
     expect(GatewayCallSchema.safeParse({ ...call, row: "evidenceGraderBytes" }).success).toBe(true);
     expect(GatewayCallSchema.safeParse({ ...call, row: "noSuchRow" }).success).toBe(false);
     /* unit 58a: the provider's two web tools and nothing else (feature-specs/41 § 3) */

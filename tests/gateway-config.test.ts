@@ -136,6 +136,18 @@ describe("the gateway's Langfuse variables (49 § 4; unit 79)", () => {
     expect(example).not.toContain("LANGFUSE_");
     expect(example).toContain("infra/observability/.env");
   });
+
+  /* `langfuse_otel` with no key exports where these say, and without them prints every span to stdout (49 § 5.2; unit 80). */
+  it("send the gateway's spans to the collector, by name, in every definition, and nothing in the example overrides them", () => {
+    const environment = service("gateway").replace(/\r\n/g, "\n").match(/\n {4}environment:\n((?: {6}.*\n)*)/)?.[1] ?? "";
+    expect(values(environment, "OTEL_EXPORTER")).toEqual(["otlp_http"]);
+    expect(values(environment, "OTEL_ENDPOINT")).toEqual(["http://otel-collector:4318"]);
+    expect(values(environment, "OTEL_SERVICE_NAME")).toEqual(["hb-gateway"]);
+    /* the endpoint names the compose service that is the collector */
+    expect(service("otel-collector")).toContain("otel/opentelemetry-collector-contrib");
+    /* the image reads other OpenTelemetry names first or beside compose's: no line of the example may set any of them */
+    expect(readFileSync(join(root, "infra", "gateway", ".env.example"), "utf8")).not.toMatch(/^\s*(?:LITELLM_)?OTEL_\w*=/m);
+  });
 });
 
 /*
@@ -181,17 +193,23 @@ describe("the application's folders", () => {
  * send either.
  */
 describe("the gateway's logging (45 D6; unit 64)", () => {
-  it("sends Langfuse spans and costs, and no message body", () => {
+  it("logs one OpenTelemetry span a call for the collector, and no message body (49 § 5.2; unit 80)", () => {
     const settings = litellm.match(/^litellm_settings:\n((?: {2}.*\n|\s*\n)*)/m)?.[1] ?? "";
     expect(values(settings, "turn_off_message_logging")).toEqual(["true"]);
-    expect(values(settings, "success_callback")).toEqual(['["langfuse"]']);
-    expect(values(settings, "failure_callback")).toEqual(['["langfuse"]']);
+    expect(values(settings, "callbacks")).toEqual(['["langfuse_otel"]']);
+    /* the `langfuse` callback, which would send straight to Langfuse with keys of the gateway's own, is gone */
+    expect(values(settings, "success_callback")).toEqual([]);
+    expect(values(settings, "failure_callback")).toEqual([]);
+    expect(litellm).not.toMatch(/allow_client_message_redaction_opt_out/);
     /* and no prompt in the gateway's own spend logs, whose default is off */
     expect(litellm).not.toMatch(/store_prompts_in_spend_logs:\s*true/);
   });
 
-  it("is never turned off by a request: nothing of the application sends the header or the parameter that would", () => {
+  /* since unit 82 (49 § 9.2, lock 1): the header behind the development gate, from one file; the parameter from none */
+  it("is turned off by a request only through lib/gateway/messageText.ts, and never by the parameter", () => {
     const sources = ["lib", "workers", "app", "components", "scripts"].flatMap((dir) => filesUnder(join(root, dir))).filter((file) => /\.tsx?$/.test(file) && !/\.test\.tsx?$/.test(file));
-    expect(sources.filter((file) => /message-redaction|turn_off_message_logging/i.test(readFileSync(file, "utf8")))).toEqual([]);
+    const relative = (file: string) => file.slice(root.length + 1).replace(/\\/g, "/");
+    expect(sources.filter((file) => /message-redaction/i.test(readFileSync(file, "utf8"))).map(relative)).toEqual(["lib/gateway/messageText.ts"]);
+    expect(sources.filter((file) => /turn_off_message_logging/i.test(readFileSync(file, "utf8"))).map(relative)).toEqual([]);
   });
 });

@@ -166,6 +166,7 @@ export function writerRequestOf(input: WriteInput) {
   const call: GatewayCall = {
     purpose: "research",
     alias: "hb-frontier",
+    agent: "researcher.write",
     row: "researchWriter",
     guide: { agent: "researcher", version: input.prompt.guide.version, sha256: input.prompt.guide.sha256 },
     principal: input.call.principal,

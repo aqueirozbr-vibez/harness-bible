@@ -78,6 +78,26 @@ export async function isIndividualUser(userId: string): Promise<boolean> {
 }
 
 /**
+ * The principals that hold a key, for `npm run gateway:key -- --flagged` (feature-specs/49 § 16, unit 82): the
+ * organisations with a key (not a tenant model), the individual users with one, and the users of each organisation
+ * who still hold a key of their own (one minted while they were individuals, unit 82's review), each read inside the
+ * tenant context the guard filters by; each key is then read in its own principal's context, so no query spans the
+ * table.
+ */
+export async function principalsWithKeys(): Promise<ReadonlyArray<Principal>> {
+  const prisma = getPrisma();
+  /* relation filters only, as countGatewayKeys has them: no GatewayKey row is read outside its principal's context */
+  const keyed = await prisma.organisation.findMany({ where: { gatewayKey: { isNot: null } }, select: { id: true }, orderBy: { id: "asc" } });
+  const organisations = await prisma.organisation.findMany({ select: { id: true }, orderBy: { id: "asc" } });
+  const individuals = await withTenant({ userId: null, organisationId: null }, () => prisma.user.findMany({ where: { gatewayKey: { isNot: null } }, select: { id: true }, orderBy: { id: "asc" } }));
+  const members: Array<{ readonly id: string }> = [];
+  for (const organisation of organisations) {
+    members.push(...(await withTenant({ userId: null, organisationId: organisation.id }, () => prisma.user.findMany({ where: { gatewayKey: { isNot: null } }, select: { id: true }, orderBy: { id: "asc" } }))));
+  }
+  return [...keyed.map((row) => ({ organisationId: row.id })), ...[...individuals, ...members].map((row) => ({ userId: row.id }))];
+}
+
+/**
  * The GatewayKey rows the workers can open, for `/health` (feature-specs/11 § 7.2): the organisations with a key
  * (not a tenant model) plus the individual users with one, read inside the individual context the guard filters
  * by `organisationId: null`. No principal context spans the table, and no query bypasses the guard.

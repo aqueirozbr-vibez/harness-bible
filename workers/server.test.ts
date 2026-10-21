@@ -16,6 +16,7 @@ import { BudgetExceededError } from "@/lib/gateway/errors";
 import { encryptKey } from "@/lib/gateway/keys";
 import type { GatewaySpan } from "@/lib/gateway/span";
 import type { Principal } from "@/lib/schemas/gateway";
+import { currentSpanId, setSpanSink, type SpanRecord } from "@/lib/telemetry/spans";
 import { ROUTE_TIMEOUT_MS, workersFetch, WorkersRefusedError, WorkersUnavailableError, type WorkersClientDeps } from "@/lib/workers/client";
 import { gatewayProbe, probeGateway, PROBE_DEADLINE_MS, PROBE_REFRESH_MS } from "@/workers/health";
 import type { KeyDb } from "@/workers/keys";
@@ -67,6 +68,8 @@ interface Surface {
   readonly db: ReturnType<typeof memoryDb>;
   readonly rows: BudgetRowInput[];
   readonly spans: GatewaySpan[];
+  /** The span each model call ran inside when it was logged: its parent, once it is recorded (49 § 6.3). */
+  readonly scopes: Array<string | null>;
   readonly lines: SpanLine[];
   readonly failKeyCount: { value: boolean };
 }
@@ -75,12 +78,13 @@ async function startSurface(gatewayUrl: string | undefined, clock: () => Date = 
   const db = memoryDb();
   const rows: BudgetRowInput[] = [];
   const spans: GatewaySpan[] = [];
+  const scopes: Array<string | null> = [];
   const lines: SpanLine[] = [];
   const failKeyCount = { value: false };
   const options: WorkersOptions = {
     token: TOKEN,
     keys: { gatewayUrl, masterKey: MASTER_KEY, keySecret: SECRET, individual: null, fetch: globalThis.fetch, now: clock, db },
-    gateway: { baseUrl: gatewayUrl, keySecret: SECRET, findKey: db.findKey, append: async (row) => rows.push(row), log: (span) => spans.push(span), fetch: globalThis.fetch, now: clock },
+    gateway: { baseUrl: gatewayUrl, keySecret: SECRET, findKey: db.findKey, append: async (row) => rows.push(row), log: (span) => { spans.push(span); scopes.push(currentSpanId(span.trace_id)); }, fetch: globalThis.fetch, now: clock },
     probe: gatewayProbe({ gatewayUrl, fetch: globalThis.fetch, now: clock }),
     keyCount: async () => {
       if (failKeyCount.value) throw new Error("count failed");
@@ -95,7 +99,7 @@ async function startSurface(gatewayUrl: string | undefined, clock: () => Date = 
     port: 0,
     log: (line) => lines.push(line),
   };
-  return { workers: await startWorkers(options), db, rows, spans, lines, failKeyCount };
+  return { workers: await startWorkers(options), db, rows, spans, scopes, lines, failKeyCount };
 }
 
 async function call(url: string, path: string, body: unknown = undefined, headers: Readonly<Record<string, string>> = { authorization: `Bearer ${TOKEN}` }): Promise<{ readonly status: number; readonly json: Record<string, unknown>; readonly headers: Headers }> {
@@ -181,6 +185,26 @@ describe("the workers' surface against the stub gateway", () => {
     expect(await call(url(), "/embed/query", { principal: ORG, text: "" })).toMatchObject({ status: 400, json: { code: "INVALID_INPUT" } });
     expect(await call(url(), "/embed/query", { principal: ORG, text: "x".repeat(801) })).toMatchObject({ status: 400, json: { code: "INVALID_INPUT" } });
     expect(await call(url(), "/embed/query", { principal: USER, text: "idempotency" })).toMatchObject({ status: 503, json: { code: "GATEWAY_UNAVAILABLE" } });
+  });
+
+  it("runs the search page's query in a search.query scope: its embedding beneath it, the scope under the request and marked, a search line either way (49 § 6.3)", async () => {
+    const seen: Array<SpanRecord & { readonly parentId: string | null }> = [];
+    setSpanSink((record) => seen.push(record));
+    try {
+      expect((await call(url(), "/embed/query", { principal: ORG, text: "idempotency keys" })).status).toBe(200);
+      const scope = seen.find((span) => span.name === "search.query");
+      expect(seen.filter((span) => span.name === "search.query")).toHaveLength(1);
+      expect(scope).toMatchObject({ attributes: { "hb.outcome": "ok", "hb.parent": "request", "langfuse.trace.name": "search.query", "langfuse.trace.tags": ["search"] } });
+      expect(scope?.parentId).toMatch(/^[0-9a-f]{16}$/);
+      /* the query's embedding ran inside the scope, which is its parent once recorded */
+      expect(surface.scopes.at(-1)).toBe(scope?.spanId);
+      /* a failed query is a failed scope, with its code and no message */
+      seen.length = 0;
+      expect((await call(url(), "/embed/query", { principal: USER, text: "idempotency" })).status).toBe(503);
+      expect(seen.filter((span) => span.name === "search.query")).toEqual([expect.objectContaining({ error: "GATEWAY_UNAVAILABLE", attributes: expect.objectContaining({ "hb.outcome": "failed", "hb.code": "GATEWAY_UNAVAILABLE" }) as unknown })]);
+    } finally {
+      setSpanSink(null);
+    }
   });
 
   it("answers the gateway's budget refusal as 402 GATEWAY_BUDGET, with a row of outcome budget", async () => {

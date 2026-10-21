@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { tenantOf, type SessionUser } from "@/lib/auth/session";
 import { appendAssistantMessage, appendUserMessage, createConversation, getConversation, purgeAssistantText } from "@/lib/db/assistant";
 import { getPrisma } from "@/lib/db/client";
-import { createResearchRun, readResearchCitations, readResearchFound, readResearchRun, readResearchTurn, readResearchView, readResearchViews, runsStartedSince, writeBudgetMark, writeResearchCounts, writeResearchFound, writeResearchState } from "@/lib/db/research";
+import { createResearchRun, readResearchCitations, readResearchFound, readResearchRun, readResearchTurn, readResearchView, readResearchViews, researchTraceOf, researchTraceOfFinding, runsStartedSince, writeBudgetMark, writeResearchCounts, writeResearchFound, writeResearchState } from "@/lib/db/research";
 import { withSystem, withTenant } from "@/lib/db/tenant";
 import { env } from "@/lib/env";
 import type { AnswerResult } from "@/lib/schemas/assistant";
@@ -184,5 +184,33 @@ describe.skipIf(!ready)("the research rows against the database (40 § 3, § 4, 
     const run = await withTenant(tenantOf(ONE), () => getPrisma().researchRun.findFirstOrThrow({ where: { messageId: { not: null } }, select: { id: true, messageId: true } }));
     await withTenant(tenantOf(ONE), () => getPrisma().researchRun.update({ where: { id: run.id }, data: { state: "WAITING_BUDGET", skip: null } }));
     expect(await readResearchView(ONE, run.messageId ?? "")).toMatchObject({ state: "WAITING_BUDGET", resetsAt: new Date(at.getTime() + 3_600_000).toISOString() });
+  });
+
+  it("reads a run's trace by its id or its message's, and a finding's by its run, with no reader's context, and nothing for one gone or detached (49 § 7.2; unit 84)", async () => {
+    const prisma = getPrisma();
+    /* the other reader's rows, so the first case's legacy run stays the one the budget case reads */
+    const turnTrace = "a1".repeat(16);
+    const conversation = await createConversation(TWO, { locale: "en" });
+    await appendUserMessage(TWO, conversation.id, { text: "Why do idempotency keys matter?", mode: "explain", traceId: turnTrace });
+    const answer = await appendAssistantMessage(TWO, conversation.id, result(), { ordinal: 2, mode: "EXPLAIN", traceId: turnTrace, promptSha256: "b".repeat(64), overBudget: false, ledger: { seq: 1, hash: "c".repeat(64) } });
+    const legacy = await createResearchRun(TWO, { messageId: answer.id, releaseId: "2026.09", locale: "EN", gap: true, sectionAnchors: ["21.3"], questionSha256: "e".repeat(64), traceId: turnTrace, state: "QUEUED", skip: null, workflowId: `research:${answer.id}` }, new Date());
+    const research = await withTenant(tenantOf(TWO), () => prisma.researchConversation.create({ data: { userId: TWO.id, organisationId: null, locale: "EN" } }));
+    const run = await withTenant(tenantOf(TWO), () => prisma.researchRun.create({ data: { userId: TWO.id, organisationId: null, releaseId: "2026.09", locale: "EN", state: "QUEUED", gap: false, sectionAnchors: [], questionSha256: "e".repeat(64), traceId: "b2".repeat(16), conversationId: research.id, ordinal: 1 } }));
+    const finding = await withTenant(tenantOf(TWO), () => prisma.researchFinding.create({ data: { runId: run.id, userId: TWO.id, ordinal: 1, outcome: "VALID" } }));
+    const detached = await withTenant(tenantOf(TWO), () => prisma.researchFinding.create({ data: { runId: null, userId: TWO.id, ordinal: 1, outcome: "PROPOSED" } }));
+
+    /* outside any tenant context, as the activity interceptor reads: the guard would refuse a model read here */
+    expect(await researchTraceOf(run.id)).toEqual({ runId: run.id, traceId: "b2".repeat(16) });
+    expect(await researchTraceOf(answer.id)).toEqual({ runId: legacy.id, traceId: turnTrace });
+    expect(await researchTraceOf(legacy.id)).toEqual({ runId: legacy.id, traceId: turnTrace });
+    expect(await researchTraceOfFinding(finding.id)).toEqual({ runId: run.id, traceId: "b2".repeat(16) });
+    expect(await researchTraceOfFinding(detached.id)).toBeNull();
+    const gone = "77777777-7777-4777-8777-777777777777";
+    expect(await researchTraceOf(gone)).toBeNull();
+    expect(await researchTraceOfFinding(gone)).toBeNull();
+    /* a run deleted takes its trace with it */
+    await withTenant(tenantOf(TWO), () => prisma.researchConversation.delete({ where: { id: research.id } }));
+    expect(await researchTraceOf(run.id)).toBeNull();
+    expect(await researchTraceOfFinding(finding.id)).toBeNull();
   });
 });

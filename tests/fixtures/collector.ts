@@ -1,7 +1,7 @@
 import type { GatewaySpan } from "@/lib/gateway/span";
 import type { AnswerResult } from "@/lib/schemas/assistant";
 import { parseSectionId } from "@/lib/schemas/ids";
-import { answerLineOf, answerSpanOf, genAiSpanOf, httpSpanOf, jobSpanOf, retrieveSpanOf } from "@/lib/telemetry/lines";
+import { activitySpanOf, answerLineOf, answerSpanOf, genAiSpanOf, httpSpanOf, jobSpanOf, retrieveSpanOf, sensorSpanOf } from "@/lib/telemetry/lines";
 import { recordSpan, setSpanSink, withSpanScope, type SpanName, type SpanRecord } from "@/lib/telemetry/spans";
 
 /*
@@ -28,6 +28,11 @@ export const ANSWER_SPAN = "4d4d4d4d4d4d4d4d";
 export const EMBED_SPAN = "5e5e5e5e5e5e5e5e";
 export const RELEASE_EMBED_SPAN = "6f6f6f6f6f6f6f6f";
 export const JOB_SPAN = "7e7e7e7e7e7e7e7e";
+export const SENSOR_SPAN = "8e8e8e8e8e8e8e8e";
+export const ACTIVITY_SPAN = "9a9a9a9a9a9a9a9a";
+export const OUTCOMES_SPAN = "0b0b0b0b0b0b0b0b";
+/** The turn's trace attributes, as its scope carries them (feature-specs/49 § 6.4; unit 83). */
+export const TURN_TAGS = ["turn", "mode:explain", "locale:en"];
 
 export const QUESTION = "Why does a retried write without an idempotency key become a second write?";
 export const ANSWER = "Because the server cannot tell the retry from a new request, it performs the write twice.";
@@ -39,11 +44,11 @@ export const DOCUMENT = "JVBERi0xLjcKJcfsj6IKNSAwIG9iago8PC9MZW5ndGggNiAwIFIvRml
 
 const ENDED = Date.UTC(2026, 9, 14, 12, 0, 0);
 
-type Value = string | number | boolean;
+type Value = string | number | boolean | ReadonlyArray<string>;
 
 interface OtlpAttribute {
   readonly key: string;
-  readonly value: { readonly stringValue: string } | { readonly intValue: string } | { readonly doubleValue: number } | { readonly boolValue: boolean };
+  readonly value: { readonly stringValue: string } | { readonly intValue: string } | { readonly doubleValue: number } | { readonly boolValue: boolean } | { readonly arrayValue: { readonly values: ReadonlyArray<{ readonly stringValue: string }> } };
 }
 
 /** A null is an absent attribute, as the product's tracer makes it. */
@@ -52,14 +57,16 @@ function attributes(input: Readonly<Record<string, Value | null | undefined>>): 
   for (const [key, value] of Object.entries(input)) {
     if (value === null || value === undefined) continue;
     if (typeof value === "string") out.push({ key, value: { stringValue: value } });
+    else if (typeof value === "object") out.push({ key, value: { arrayValue: { values: value.map((item) => ({ stringValue: item })) } } });
     else if (typeof value === "boolean") out.push({ key, value: { boolValue: value } });
     else out.push({ key, value: Number.isInteger(value) ? { intValue: String(value) } : { doubleValue: value } });
   }
   return out;
 }
 
+/** Epoch nanoseconds as OTLP/JSON writes them: exact for a fractional millisecond too, which a sensor's run often is. */
 function nanos(ms: number): string {
-  return `${String(ms)}000000`;
+  return (BigInt(Math.round(ms * 1000)) * BigInt(1000)).toString();
 }
 
 const SERVER: ReadonlySet<SpanName> = new Set<SpanName>(["http.request"]);
@@ -84,6 +91,7 @@ const MODEL_CALL: GatewaySpan = {
   "gen_ai.system": "anthropic",
   "gen_ai.request.model": "claude-opus-5",
   "hb.alias": "hb-frontier",
+  "hb.agent": "assistant.draft",
   "hb.guide.version": "v1.13",
   "hb.guide.sha256": "a".repeat(64),
   "hb.prompt.sha256": "b".repeat(64),
@@ -98,6 +106,7 @@ const MODEL_CALL: GatewaySpan = {
   "hb.principal": PRINCIPAL,
   "hb.outcome": "ok",
   trace_id: TRACE,
+  span_id: DRAFT_SPAN,
   "x-litellm-call-id": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
   latency_ms: 3100,
   first_token_ms: 900,
@@ -124,13 +133,14 @@ function productSpans(): ReadonlyArray<object> {
   setSpanSink((record) => recorded.push(record));
   try {
     recordSpan(httpSpanOf({ traceId: TRACE, spanId: WEB_REQUEST, method: "POST", path: "/api/v1/assistant/conversations/c-1/messages", status: 200, ms: 4300, subject: `user:${USER}`, policy: "allow" }, ENDED));
-    withSpanScope({ traceId: TRACE, spanId: WORKERS_REQUEST, request: true }, () => {
+    withSpanScope({ traceId: TRACE, spanId: WORKERS_REQUEST, request: true, trace: { name: "assistant.turn", tags: TURN_TAGS, release: "2026.09" } }, () => {
+      /* a sensor that did not pass: a guardrail at level WARNING on the road, never an error (49 § 8) */
+      recordSpan({ ...sensorSpanOf({ traceId: TRACE, sensor: "citation", result: "FAIL", rule: null, code: null, claims: 3, substituted: 1, ms: 0.2 }, ENDED - 250), spanId: SENSOR_SPAN });
       recordSpan({ ...retrieveSpanOf({ traceId: TRACE, mode: "explain", candidates: 22, embedMs: 40, sqlMs: 35, rerankMs: 120, ms: 200, overBudget: false, vectorReady: true }, ENDED - 3900), spanId: RETRIEVE_SPAN });
       /* the embedder's call for the question (`embed.query` from unit 81) */
-      recordSpan({ ...genAiSpanOf({ ...MODEL_CALL, "hb.purpose": "embed", "hb.alias": "hb-embed", "gen_ai.request.model": "hb-embed", "hb.guide.version": null, "hb.guide.sha256": null, latency_ms: 40, first_token_ms: null }, ENDED - 4000), spanId: EMBED_SPAN });
-      /* the classifier's call, named for its agent as unit 81 names it */
-      const classify = genAiSpanOf({ ...MODEL_CALL, "hb.alias": "hb-small", "gen_ai.request.model": "claude-haiku-4-5", latency_ms: 400, first_token_ms: null }, ENDED - 3500);
-      recordSpan({ ...classify, spanId: CLASSIFY_SPAN, attributes: { ...classify.attributes, "hb.agent": "assistant.classify" } });
+      recordSpan({ ...genAiSpanOf({ ...MODEL_CALL, "hb.purpose": "embed", "hb.alias": "hb-embed", "hb.agent": "embed.query", "gen_ai.request.model": "hb-embed", "hb.guide.version": null, "hb.guide.sha256": null, latency_ms: 40, first_token_ms: null }, ENDED - 4000), spanId: EMBED_SPAN });
+      /* the classifier's call, named for its agent (unit 81) */
+      recordSpan({ ...genAiSpanOf({ ...MODEL_CALL, "hb.alias": "hb-small", "hb.agent": "assistant.classify", "gen_ai.request.model": "claude-haiku-4-5", latency_ms: 400, first_token_ms: null }, ENDED - 3500), spanId: CLASSIFY_SPAN });
       recordSpan({ ...genAiSpanOf(MODEL_CALL, ENDED - 300), spanId: DRAFT_SPAN });
       /* the turn's span, carrying keys no builder emits today: what a later builder adds stays on the machine */
       const answer = answerSpanOf(answerLineOf({ traceId: TRACE, messageId: "m-1", mode: "explain", locale: "en", secretsRedacted: 0, ms: 4200 }, RESULT), ENDED);
@@ -141,10 +151,14 @@ function productSpans(): ReadonlyArray<object> {
       });
     });
     recordSpan(httpSpanOf({ traceId: TRACE, spanId: WORKERS_REQUEST, parentId: WEB_REQUEST, method: "POST", path: "/answer", status: 200, ms: 4250, subject: null }, ENDED));
+    /* a legacy research run's activities, filed in its turn's trace as roots (49 § 7.2): its plan, and an ask after its findings' outcomes, which the road drops */
+    const legacy = { traceId: TRACE, workflowType: "ResearchWorkflow", workflowId: "research:5f0c2a1e-0000-4000-8000-0000000000c1", attempt: 1, outcome: "ok", code: null, legacy: true, runId: "5f0c2a1e-0000-4000-8000-0000000000c2", ms: 900 } as const;
+    recordSpan({ ...activitySpanOf({ ...legacy, activity: "planResearch" }, ENDED + 1_000), spanId: ACTIVITY_SPAN });
+    recordSpan({ ...activitySpanOf({ ...legacy, activity: "findingOutcomes", ms: 30 }, ENDED + 60_000), spanId: OUTCOMES_SPAN });
     /* a scheduled job, and the release's embedding job's call (`embed.release`, D3), each a trace of its own */
     recordSpan({ ...jobSpanOf({ traceId: "c".repeat(32), job: "assistant:purge", counts: { messages: 12 }, ms: 180 }, ENDED), spanId: JOB_SPAN });
-    const release = genAiSpanOf({ ...MODEL_CALL, trace_id: "d".repeat(32), "hb.purpose": "embed", "hb.alias": "hb-embed", "gen_ai.request.model": "hb-embed", "hb.guide.version": null, "hb.guide.sha256": null, latency_ms: 5200, first_token_ms: null }, ENDED);
-    recordSpan({ ...release, spanId: RELEASE_EMBED_SPAN, attributes: { ...release.attributes, "hb.agent": "embed.release" } });
+    const release = genAiSpanOf({ ...MODEL_CALL, trace_id: "d".repeat(32), "hb.purpose": "embed", "hb.alias": "hb-embed", "hb.agent": "embed.release", "gen_ai.request.model": "hb-embed", "hb.guide.version": null, "hb.guide.sha256": null, latency_ms: 5200, first_token_ms: null }, ENDED);
+    recordSpan({ ...release, spanId: RELEASE_EMBED_SPAN });
   } finally {
     setSpanSink(null);
   }
@@ -209,6 +223,8 @@ interface Generation {
   readonly parentId: string;
   /** The `langfuse_generation_name` header's value (49 § 6.2), absent where the call names none. */
   readonly agent?: string;
+  /** The `langfuse_version` header's value, the guide's version: only on a call that has a guide (unit 81's review). */
+  readonly version?: string;
   readonly input: string;
   readonly output: string;
   readonly failed?: boolean;
@@ -243,7 +259,8 @@ function gatewaySpan(generation: Generation): object {
     endTimeUnixNano: nanos(ENDED - 200),
     attributes: attributes({
       ...(generation.type === null ? {} : { "langfuse.observation.type": "generation" }),
-      ...(generation.agent === undefined ? {} : { "langfuse.generation.name": generation.agent, "langfuse.version": "v1.13" }),
+      ...(generation.agent === undefined ? {} : { "langfuse.generation.name": generation.agent }),
+      ...(generation.version === undefined ? {} : { "langfuse.version": generation.version }),
       "langfuse.observation.input": generation.input,
       "langfuse.observation.output": generation.output,
       "llm.model_name": "claude-opus-5",
@@ -278,21 +295,24 @@ const OUTPUT = JSON.stringify({ role: "assistant", content: ANSWER });
 function gatewaySpans(): ReadonlyArray<object> {
   return [
     /* a success LiteLLM redacted (the switch off, or a key without the flag; 49 § 9.2) */
-    gatewaySpan({ spanId: "a1a1a1a1a1a1a1a1", parentId: CLASSIFY_SPAN, agent: "assistant.classify", input: REDACTED, output: REDACTED }),
+    gatewaySpan({ spanId: "a1a1a1a1a1a1a1a1", parentId: CLASSIFY_SPAN, agent: "assistant.classify", version: "v1.13", input: REDACTED, output: REDACTED }),
     /* a success with its text: the request's opt-out, honoured for a flagged key (49 § 9.2, lock 2) */
-    gatewaySpan({ spanId: "b2b2b2b2b2b2b2b2", parentId: DRAFT_SPAN, agent: "assistant.draft", input: MESSAGES, output: OUTPUT }),
+    gatewaySpan({ spanId: "b2b2b2b2b2b2b2b2", parentId: DRAFT_SPAN, agent: "assistant.draft", version: "v1.13", input: MESSAGES, output: OUTPUT }),
     /* a streamed call that failed after it started: logged unredacted whatever the switch says (49 § 9.2) */
-    gatewaySpan({ spanId: "c3c3c3c3c3c3c3c3", parentId: "7a7a7a7a7a7a7a7a", agent: "researcher.read", input: MESSAGES, output: "", failed: true }),
+    gatewaySpan({ spanId: "c3c3c3c3c3c3c3c3", parentId: "7a7a7a7a7a7a7a7a", agent: "researcher.read", version: "v2.0", input: MESSAGES, output: "", failed: true }),
     /* the evidence grader's PDF or image row, with its text (49 § 9.3) */
-    gatewaySpan({ spanId: "d4d4d4d4d4d4d4d4", parentId: "8b8b8b8b8b8b8b8b", agent: "evidence.grade.bytes", input: JSON.stringify([{ role: "user", content: [{ type: "document", source: { type: "base64", data: DOCUMENT } }] }]), output: OUTPUT }),
+    gatewaySpan({ spanId: "d4d4d4d4d4d4d4d4", parentId: "8b8b8b8b8b8b8b8b", agent: "evidence.grade.bytes", version: "v1.3", input: JSON.stringify([{ role: "user", content: [{ type: "document", source: { type: "base64", data: DOCUMENT } }] }]), output: OUTPUT }),
     /* the grader's call, whose metadata names the key's alias, the requester and the principal (49 § 5.2) */
-    gatewaySpan({ spanId: "e5e5e5e5e5e5e5e5", parentId: ANSWER_SPAN, agent: "assistant.grade", input: REDACTED, output: REDACTED }),
+    gatewaySpan({ spanId: "e5e5e5e5e5e5e5e5", parentId: ANSWER_SPAN, agent: "assistant.grade", version: "v1.13", input: REDACTED, output: REDACTED }),
     /* the question's embedding, typed `embedding` on the road */
     gatewaySpan({ spanId: "f6f6f6f6f6f6f6f6", parentId: EMBED_SPAN, agent: "embed.query", input: REDACTED, output: "embedding-output" }),
     /* the release's embedding job's call, which stays in Tempo's world (D3) */
     gatewaySpan({ spanId: "0707070707070707", parentId: RELEASE_EMBED_SPAN, agent: "embed.release", input: REDACTED, output: "embedding-output", traceId: "d".repeat(32) }),
     /* a span of the proxy's own, not a generation */
     gatewaySpan({ spanId: "1818181818181818", parentId: DRAFT_SPAN, input: MESSAGES, output: OUTPUT, type: null }),
+    /* a request the gateway refused before any model (a budget, a rate limit), logged from the raw request without
+       its `traceparent`: a root of a trace of its own (proxy/utils.py:2915-2925, :3005-3110; unit 80's review) */
+    gatewaySpan({ spanId: "2929292929292929", parentId: "", input: MESSAGES, output: "", failed: true, traceId: "e".repeat(32) }),
   ];
 }
 

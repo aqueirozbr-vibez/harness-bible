@@ -151,13 +151,16 @@ describe("the collector's road to Langfuse (49 § 5.5)", () => {
       /* the product's three services and the gateway; `$$` is the configuration's escape of `$` */
       'not IsMatch(resource.attributes["service.name"], "^hb-(web|workers|jobs|gateway)$$")',
     ]);
-    /* requests, jobs, the release's embedding job (D3), and every gateway span but the generation */
+    /* requests, jobs, a research's outcome asks, the release's embedding job (D3), and every gateway span but the generation */
     expect(conditions.slice(4)).toEqual([
       'name == "http.request"',
       'name == "job"',
+      'name == "activity.findingOutcome" or name == "activity.findingOutcomes"',
       'attributes["hb.agent"] == "embed.release"',
       'attributes["langfuse.generation.name"] == "embed.release"',
       'resource.attributes["service.name"] == "hb-gateway" and attributes["langfuse.observation.type"] != "generation"',
+      /* a generation the gateway logged with no parent: a request it refused before any model, unlinked to the product's trace */
+      'resource.attributes["service.name"] == "hb-gateway" and parent_span_id == SpanID(0x0000000000000000)',
       /* the span events, every one: an exception's message and stack trace never leave */
       "true",
     ]);
@@ -327,5 +330,30 @@ describe("the generated dashboard and alert rules", () => {
     for (const folder of ["datasources", "dashboards", "alerting"]) {
       expect(grafana).toContain(`./infra/observability/grafana/provisioning/${folder}:/etc/grafana/provisioning/${folder}:ro`);
     }
+  });
+});
+
+/*
+ * The two checks that call a model by hand (feature-specs/49 § 16, unit 80): each exports its spans while a collector
+ * is configured, as the scheduled jobs do, so the gateway's generation has its parent in the same trace, and flushes
+ * them before the process ends.
+ */
+describe("the model checks export their spans (49 § 16; unit 80)", () => {
+  it.each(["gateway-check.ts", "research-check.ts"])("scripts/%s starts telemetry as a job and stops it at the end", (file) => {
+    const script = read("scripts", file);
+    expect(script).toContain('startTelemetry("hb-jobs")');
+    expect(script).toMatch(/\.finally\(async \(\) => \{\n\s+await stopTelemetry\(\);/);
+  });
+});
+
+/* One module names the Langfuse attributes the product sets (feature-specs/49 § 6.3; unit 83). */
+describe("the product's langfuse.* attributes (49 § 6.3)", () => {
+  it("are named in lib/telemetry/langfuse.ts and in no other file of the product", () => {
+    const under = (dir: string): string[] =>
+      readdirSync(join(root, dir), { withFileTypes: true }).flatMap((entry) => (entry.isDirectory() ? (entry.name === "generated" ? [] : under(join(dir, entry.name))) : [join(dir, entry.name)]));
+    /* the product's folders, infra/'s code, and the root's own files (unit 83's review) */
+    const rootFiles = readdirSync(root).filter((name) => /\.(m?ts|tsx)$/.test(name));
+    const sources = [...["lib", "workers", "app", "components", "scripts", "infra"].flatMap(under), ...rootFiles].filter((file) => /\.(m?ts|tsx)$/.test(file) && !/\.test\.tsx?$/.test(file));
+    expect(sources.filter((file) => read(file).includes("langfuse.")).map((file) => file.replace(/\\/g, "/"))).toEqual(["lib/telemetry/langfuse.ts"]);
   });
 });

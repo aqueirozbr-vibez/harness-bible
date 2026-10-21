@@ -31,9 +31,10 @@ const globalForTracer = globalThis as unknown as { hbTracer?: Running | null };
 const KIND_SERVER: ReadonlySet<SpanName> = new Set<SpanName>(["http.request"]);
 const KIND_CLIENT: ReadonlySet<SpanName> = new Set<SpanName>(["gen_ai.chat", "gen_ai.embeddings", "gen_ai.rerank"]);
 
-function attributesOf(input: Readonly<Record<string, SpanAttribute>>): Record<string, string | number | boolean> {
-  const out: Record<string, string | number | boolean> = {};
-  for (const [name, value] of Object.entries(input)) if (value !== null && value !== undefined) out[name] = value;
+function attributesOf(input: Readonly<Record<string, SpanAttribute>>): Record<string, string | number | boolean | string[]> {
+  const out: Record<string, string | number | boolean | string[]> = {};
+  /* a list, a trace's tags, goes as OpenTelemetry's array of strings (feature-specs/49 § 6.4) */
+  for (const [name, value] of Object.entries(input)) if (value !== null && value !== undefined) out[name] = typeof value === "object" ? [...value] : value;
   return out;
 }
 

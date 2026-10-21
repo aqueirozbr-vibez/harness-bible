@@ -75,9 +75,15 @@ describe("rerank against the stub gateway", () => {
   it("scores the documents, keeps the top n by score and records one RERANK row and one span", async () => {
     const key = await mint();
     let sent: Record<string, unknown> | null = null;
+    let traceparent: string | null = null;
+    let generation: string | null = null;
+    let optOut: string | null = null;
     const watching = deps(key, {
       fetch: async (input, init) => {
         sent = JSON.parse(String(init?.body)) as Record<string, unknown>;
+        traceparent = new Headers(init?.headers).get("traceparent");
+        generation = new Headers(init?.headers).get("langfuse_generation_name");
+        optOut = new Headers(init?.headers).get("litellm-disable-message-redaction");
         return globalThis.fetch(input, init);
       },
     });
@@ -105,6 +111,17 @@ describe("rerank against the stub gateway", () => {
     const span = spans.at(-1);
     expect(span).toMatchObject({ "hb.purpose": "rerank", "hb.alias": "hb-rerank", "hb.outcome": "ok", "hb.cost_usd": 0, "hb.price_unknown": false, "hb.principal": "user:u-1", first_token_ms: null });
     expect(span?.["hb.prompt.sha256"]).toMatch(/^[0-9a-f]{64}$/);
+    /* the parent the gateway's generation will name is this span, the one sent (49 § 5.3) */
+    expect(span?.span_id).toMatch(/^[0-9a-f]{16}$/);
+    expect(traceparent).toBe(`00-${span?.trace_id ?? ""}-${span?.span_id ?? ""}-01`);
+    /* no opt-out without the development gate; with it, the header (49 § 9.2, lock 1) */
+    expect(optOut).toBeNull();
+    const opened = deps(key, { messageText: { on: true, why: null }, fetch: async (input, init) => { optOut = new Headers(init?.headers).get("litellm-disable-message-redaction"); return globalThis.fetch(input, init); } });
+    await rerank(call(), { query: QUERY, documents: DOCUMENTS, topN: 2 }, opened);
+    expect(optOut).toBe("true");
+    /* named for its agent, in a header (49 § 6.2) */
+    expect(generation).toBe("rerank");
+    expect(span?.["hb.agent"]).toBe("rerank");
   });
 
   it("refuses an empty batch and a top n that is not a count, before the gateway", async () => {

@@ -19,7 +19,7 @@ export interface ReceivedSpan {
   readonly kind: number;
   /** Milliseconds between the span's start and its end. */
   readonly ms: number;
-  readonly attributes: Readonly<Record<string, string | number | boolean>>;
+  readonly attributes: Readonly<Record<string, string | number | boolean | ReadonlyArray<string>>>;
   /** OTLP's status code: 0 unset, 2 error; and the message, when there is one. */
   readonly status: { readonly code: number; readonly message: string };
 }
@@ -37,6 +37,8 @@ interface OtlpValue {
   readonly intValue?: number | string;
   readonly doubleValue?: number;
   readonly boolValue?: boolean;
+  /* a list, a trace's tags (feature-specs/49 § 6.4) */
+  readonly arrayValue?: { readonly values?: ReadonlyArray<OtlpValue> };
 }
 
 interface OtlpSpan {
@@ -58,7 +60,8 @@ interface OtlpBody {
   }>;
 }
 
-function valueOf(value: OtlpValue): string | number | boolean {
+function valueOf(value: OtlpValue): string | number | boolean | ReadonlyArray<string> {
+  if (value.arrayValue !== undefined) return (value.arrayValue.values ?? []).map((item) => String(valueOf(item)));
   if (value.stringValue !== undefined) return value.stringValue;
   if (value.intValue !== undefined) return Number(value.intValue);
   if (value.doubleValue !== undefined) return value.doubleValue;

@@ -8,7 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { PRODUCT_LANGFUSE_KEYS } from "@/lib/telemetry/langfuse";
 
-import { ANSWER, ANSWER_SPAN, CLASSIFY_SPAN, collectorFixture, DOCUMENT, DRAFT_SPAN, EMAIL, EMBED_SPAN, FOREIGN_HOST, FOREIGN_OWNER, FOREIGN_SERVICE, FOREIGN_SPANS, PRINCIPAL, QUESTION, RETRIEVE_SPAN, TRACE, USER, WORKERS_REQUEST } from "./fixtures/collector";
+import { ACTIVITY_SPAN, ANSWER, ANSWER_SPAN, CLASSIFY_SPAN, collectorFixture, TURN_TAGS, DOCUMENT, DRAFT_SPAN, EMAIL, EMBED_SPAN, FOREIGN_HOST, FOREIGN_OWNER, FOREIGN_SERVICE, FOREIGN_SPANS, PRINCIPAL, QUESTION, RETRIEVE_SPAN, TRACE, USER, WORKERS_REQUEST } from "./fixtures/collector";
 
 /*
  * The collector's road to Langfuse, run (feature-specs/49 § 9.5; unit 79). The pinned collector image runs the
@@ -95,6 +95,7 @@ function valueOf(value: Readonly<Record<string, unknown>>): unknown {
   if ("intValue" in value) return Number(value.intValue);
   if ("doubleValue" in value) return value.doubleValue;
   if ("boolValue" in value) return value.boolValue;
+  if ("arrayValue" in value) return ((value.arrayValue as { values?: ReadonlyArray<{ stringValue?: string }> }).values ?? []).map((item) => item.stringValue);
   return value;
 }
 
@@ -254,6 +255,8 @@ describe.skipIf(!enabled)("the collector's road to Langfuse, run in the pinned i
     }
     expect(tempo.find((span) => span.spanId === DRAFT_SPAN)?.attributes["hb.principal"]).toBe(PRINCIPAL);
     expect(tempo.map((span) => span.name)).toContain("http.request");
+    /* a research's outcome ask, which the Langfuse road drops, stays in Tempo (49 § 28) */
+    expect(tempo.map((span) => span.name)).toContain("activity.findingOutcomes");
   });
 
   describe("the collector's half off", () => {
@@ -266,11 +269,13 @@ describe.skipIf(!enabled)("the collector's road to Langfuse, run in the pinned i
         "hb-gateway embed.query",
         "hb-gateway evidence.grade.bytes",
         "hb-gateway researcher.read",
+        "hb-workers activity.planResearch",
         "hb-workers assistant.answer",
         "hb-workers assistant.classify",
+        "hb-workers assistant.draft",
         "hb-workers assistant.retrieve",
-        "hb-workers gen_ai.chat",
-        "hb-workers gen_ai.embeddings",
+        "hb-workers embed.query",
+        "hb-workers sensor.citation",
       ]);
       expect(langfuse.every((span) => span.traceId === TRACE)).toBe(true);
     });
@@ -309,13 +314,34 @@ describe.skipIf(!enabled)("the collector's road to Langfuse, run in the pinned i
       for (const word of FOREIGN_WORDS) expect(sent).not.toContain(word);
     });
 
+    it("carries the turn's tags as a list, the release, and a failing sensor as a guardrail at level WARNING (unit 83)", () => {
+      /* every product span of the turn's own; a legacy research's activity in the turn's trace sets none (unit 84) */
+      const product = output("off").langfuse.filter((span) => span.service === "hb-workers" && !span.name.startsWith("activity."));
+      for (const span of product) {
+        expect(span.attributes["langfuse.trace.tags"], span.name).toEqual(TURN_TAGS);
+        expect(span.attributes["langfuse.trace.name"], span.name).toBe("assistant.turn");
+        expect(span.attributes["langfuse.release"], span.name).toBe("2026.09");
+      }
+      expect(byName(product, "sensor.citation")).toMatchObject({ status: 0, attributes: { "langfuse.observation.type": "guardrail", "langfuse.observation.level": "WARNING", "hb.sensor.result": "FAIL", "hb.sensor.substituted": 1 } });
+      expect(byName(product, "assistant.answer").attributes["langfuse.observation.type"]).toBe("agent");
+    });
+
+    it("sends a legacy research's activity as a root with its workflow, attempt and mark and no trace attribute, and no outcome ask (unit 84)", () => {
+      const { langfuse } = output("off");
+      const activity = langfuse.find((span) => span.spanId === ACTIVITY_SPAN);
+      expect(activity).toMatchObject({ name: "activity.planResearch", parentSpanId: "", attributes: { "hb.workflow.type": "ResearchWorkflow", "hb.workflow.id": "research:5f0c2a1e-0000-4000-8000-0000000000c1", "hb.activity.attempt": 1, "hb.outcome": "ok", "hb.legacy": true, "hb.research.run_id": "5f0c2a1e-0000-4000-8000-0000000000c2" } });
+      expect(Object.keys(activity?.attributes ?? {}).filter((key) => key.startsWith("langfuse.trace.") || key === "langfuse.release")).toEqual([]);
+      expect(langfuse.map((span) => span.name)).not.toContain("activity.findingOutcomes");
+    });
+
     it("names each generation for its agent, types an embedding, and gives Langfuse its cost", () => {
       const gateway = output("off").langfuse.filter((span) => span.service === "hb-gateway");
       expect(byName(gateway, "assistant.draft").attributes).toMatchObject({ "langfuse.observation.type": "generation", "langfuse.version": "v1.13", "llm.model_name": "claude-opus-5", "llm.token_count.prompt": 1200, "gen_ai.usage.cost": 0.014 });
       expect(byName(gateway, "embed.query").attributes["langfuse.observation.type"]).toBe("embedding");
       expect(byName(gateway, "researcher.read").status).toBe(2);
-      /* the product's call span reads as its agent where it names one (unit 81) */
+      /* every product call's span reads as its agent, its generation's name too (unit 81) */
       expect(output("off").langfuse.find((span) => span.service === "hb-workers" && span.spanId === CLASSIFY_SPAN)?.name).toBe("assistant.classify");
+      expect(output("off").langfuse.find((span) => span.service === "hb-workers" && span.spanId === DRAFT_SPAN)?.name).toBe("assistant.draft");
     });
   });
 

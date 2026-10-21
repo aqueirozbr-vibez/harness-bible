@@ -72,10 +72,36 @@ export function researchTools(remaining: { readonly searches: number; readonly f
   return tools.length === 0 ? null : tools;
 }
 
+/**
+ * Who makes a model call (feature-specs/49 § 6.2): the purpose and the alias cannot tell a draft from a repair, so
+ * every call names its agent. It is the generation's name in Langfuse (the `langfuse_generation_name` header) and
+ * `hb.agent` on the call's own span. An enumeration, never text.
+ */
+export const AGENT_NAMES = [
+  "assistant.classify",
+  "assistant.draft",
+  "assistant.repair",
+  "assistant.grade",
+  "evidence.grade",
+  "evidence.grade.bytes",
+  "adjudicator.decide",
+  "researcher.plan",
+  "researcher.read",
+  "researcher.write",
+  "embed.query",
+  "embed.release",
+  "rerank",
+  "gateway.check",
+  "research.check",
+] as const;
+export const AgentNameSchema = z.enum(AGENT_NAMES);
+export type AgentName = z.infer<typeof AgentNameSchema>;
+
 /** What every call carries (spec § 5.1): the ledger row and the span are written from these fields alone. */
 export const GatewayCallSchema = z.strictObject({
   purpose: PurposeSchema,
   alias: AliasSchema,
+  agent: AgentNameSchema,
   guide: z.strictObject({ agent: z.enum(AGENTS), version: z.string().min(1), sha256: z.string().regex(/^[0-9a-f]{64}$/) }).nullable(),
   principal: PrincipalSchema,
   traceId: z.string().regex(/^[0-9a-f]{32}$/),

@@ -66,7 +66,7 @@ export async function researchCheck(principal: Principal): Promise<ResearchCheck
   const tools = researchTools({ searches: 1, fetches: 1 });
   if (tools === null) throw new AppError("RESEARCH_CHECK", "no tool");
   const turn = await callModelTurn(
-    { purpose: "research", alias: "hb-frontier", guide: null, principal, traceId: newTraceId(), ref: null, serverTools: tools },
+    { purpose: "research", alias: "hb-frontier", agent: "research.check", guide: null, principal, traceId: newTraceId(), ref: null, serverTools: tools },
     { ...requestFor("researchReader"), messages: [{ role: "user", content: PROMPT }] },
     deps,
   );

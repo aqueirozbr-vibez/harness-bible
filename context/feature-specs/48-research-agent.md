@@ -374,6 +374,7 @@ Dropped paragraphs are counted in `report.dropped`, by rule. If none is left, th
 ### 5.8 Lines, spans and the stub
 
 - **Lines.** `lib/telemetry/lines.ts` gains `research.write` beside `research.plan`, `research.read` and `research.run`, with counts and the outcome and never a word (spec 44 § 4).
+  - **Amended by feature-specs/49 (unit 84, 2026-10-21).** Each line's span nests under the span of the activity that printed it: the workers' activity interceptor runs every execution as an `activity.<ActivityType>` scope in the run's trace, a root of it, and prints an `activity` line at its end (49 § 7.1, § 28). The `research.run` span carries the run's state and code as the trace's outcome, in a person's run's trace only.
 - **The stub.** `infra/gateway/stub/research.ts` gains the writer's request, recognised by the writer part's heading on `hb-frontier` with no tool. It answers with `x-hb-stub-write`: `report` (the default), `nothing`, `malformed`, `address` (a paragraph with a URL), `unknown-page` and `ot` (a paragraph telling the reader to bypass an interlock). The reader's fixtures gain their pages' notes. `npm run secrets:scan` covers `v2/`.
 
 ## 6. Live progress

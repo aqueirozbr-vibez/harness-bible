@@ -117,6 +117,7 @@ export function gradeRequestOf(input: GradeEvidenceInput, prompt: EvidencePrompt
   const call: GatewayCall = {
     purpose: "grading",
     alias: "hb-small",
+    agent: bytes ? "evidence.grade.bytes" : "evidence.grade",
     guide: { agent: "grader", version: input.prompt.guide.version, sha256: input.prompt.guide.sha256 },
     principal: input.call.principal,
     traceId: input.call.traceId,

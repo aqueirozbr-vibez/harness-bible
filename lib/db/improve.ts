@@ -1363,6 +1363,18 @@ export async function readEvidenceAsService(caller: ServiceCaller, itemId: strin
 }
 
 /**
+ * The suggestion an evidence item belongs to, as its id and nothing more, read as the grader (feature-specs/49 § 7.2):
+ * the trace a grade's activities take is the suggestion's, and the grade's workflow id names only the item. Null for an
+ * item that is gone.
+ */
+export async function suggestionOfEvidenceItem(caller: ServiceCaller, itemId: string, client: ImproveClient = getPrisma()): Promise<string | null> {
+  requireService(caller);
+  if (caller.id !== "service:grader") throw new AppError("FORBIDDEN", "only the grader's activities read whose suggestion an item is by the item alone (feature-specs/49 § 7.2).");
+  const row = await client.evidenceItem.findUnique({ where: { id: itemId }, select: { suggestionId: true } });
+  return row?.suggestionId ?? null;
+}
+
+/**
  * Whose suggestion it is, as an id and nothing more, for three services. The grading activity (32 § 7.4, § 8): the
  * grade is charged to the contributor's principal and independence compares their verified address with the
  * publisher's domain, both of which `lib/db/account.ts` reads from the id. The intake activity (33 § 3, step 1;

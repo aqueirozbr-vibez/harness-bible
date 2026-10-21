@@ -106,7 +106,8 @@ export interface Retrieved {
 }
 
 /** The call the two gateway functions are given: the alias and the purpose are theirs, not retrieval's. */
-export type RetrieveGatewayCall = Omit<GatewayCall, "alias" | "purpose">;
+/** What retrieval hands its two calls: the embedder and the re-ranker each name their own agent (49 § 6.2). */
+export type RetrieveGatewayCall = Omit<GatewayCall, "alias" | "purpose" | "agent">;
 
 export type EmbedQueryFn = (call: RetrieveGatewayCall, text: string) => Promise<{ readonly embedding: ReadonlyArray<number>; readonly ms: number }>;
 

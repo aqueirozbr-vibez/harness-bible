@@ -28,7 +28,7 @@ const ALIASES = aliasesFromConfig(readFileSync(join(import.meta.dirname, "..", "
 const TEXTS = ["21.3 Worked numbers · retries and idempotency keys", "28.4 Measurement · the ledger head lock"];
 
 function call(overrides: Partial<EmbedCall> = {}): EmbedCall {
-  return { guide: null, principal: { userId: "u-1" }, traceId: "c".repeat(32), ref: "release:2026.09", ...overrides };
+  return { agent: "embed.release", guide: null, principal: { userId: "u-1" }, traceId: "c".repeat(32), ref: "release:2026.09", ...overrides };
 }
 
 describe("embedTexts against the stub gateway", () => {
@@ -71,9 +71,15 @@ describe("embedTexts against the stub gateway", () => {
   it("embeds a batch in the order of the texts and records one EMBED row and one span", async () => {
     const key = await mint();
     let sent: Record<string, unknown> | null = null;
+    let traceparent: string | null = null;
+    let generation: string | null = null;
+    let optOut: string | null = null;
     const watching = deps(key, {
       fetch: async (input, init) => {
         sent = JSON.parse(String(init?.body)) as Record<string, unknown>;
+        traceparent = new Headers(init?.headers).get("traceparent");
+        generation = new Headers(init?.headers).get("langfuse_generation_name");
+        optOut = new Headers(init?.headers).get("litellm-disable-message-redaction");
         return globalThis.fetch(input, init);
       },
     });
@@ -99,6 +105,17 @@ describe("embedTexts against the stub gateway", () => {
     const span = spans.at(-1);
     expect(span).toMatchObject({ "hb.purpose": "embed", "hb.alias": "hb-embed", "hb.outcome": "ok", "hb.cost_usd": 0, "hb.price_unknown": false, "hb.principal": "user:u-1", first_token_ms: null });
     expect(span?.["hb.prompt.sha256"]).toMatch(/^[0-9a-f]{64}$/);
+    /* the parent the gateway's generation will name is this span, the one sent (49 § 5.3) */
+    expect(span?.span_id).toMatch(/^[0-9a-f]{16}$/);
+    expect(traceparent).toBe(`00-${span?.trace_id ?? ""}-${span?.span_id ?? ""}-01`);
+    /* no opt-out without the development gate; with it, the header (49 § 9.2, lock 1) */
+    expect(optOut).toBeNull();
+    const opened = deps(key, { messageText: { on: true, why: null }, fetch: async (input, init) => { optOut = new Headers(init?.headers).get("litellm-disable-message-redaction"); return globalThis.fetch(input, init); } });
+    await embedTexts(call(), TEXTS, opened);
+    expect(optOut).toBe("true");
+    /* named for its agent, in a header (49 § 6.2) */
+    expect(generation).toBe("embed.release");
+    expect(span?.["hb.agent"]).toBe("embed.release");
   });
 
   it("prices the self-hosted embedder as free, and says so rather than calling it unpriced", () => {

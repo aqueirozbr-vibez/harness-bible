@@ -9,7 +9,8 @@ import { newSpanId, newTraceId, parseTraceparent, traceparent } from "@/lib/api/
 import { AppError } from "@/lib/errors";
 import type { GatewayDeps } from "@/lib/gateway/client";
 import { ROUTE_BODIES, WorkersRouteSchema, type EngineState, type GatewayState, type RouteAnswer, type RouteBody, type WorkersRoute } from "@/lib/schemas/workers";
-import { withSpanScope } from "@/lib/telemetry/spans";
+import { logSearch } from "@/lib/telemetry/lines";
+import { inSpan, withSpanScope } from "@/lib/telemetry/spans";
 
 import { gatewayCheck } from "./check";
 import { embedQuery } from "./embed";
@@ -141,11 +142,21 @@ export function startWorkers(options: WorkersOptions): Promise<RunningWorkers> {
       const check = await gatewayCheck(principal, options.gateway);
       return { model: check.model, usage: check.usage };
     },
-    "/embed/query": async ({ principal, text }, traceId) => {
-      /* No ref: the search page has no id to attribute the row to, and the assistant calls embedQuery itself with its message id. */
-      const embedded = await embedQuery({ guide: null, principal, traceId, ref: null }, text, options.gateway);
-      return { embedding: embedded.embedding, modelId: embedded.modelId, ms: embedded.ms };
-    },
+    "/embed/query": ({ principal, text }, traceId) =>
+      /* The search page's query as a scope of its own (feature-specs/49 § 6.3): its embedding nests under `search.query`,
+         the search line printed at either end, the root of a `search.query` trace on the Langfuse road. */
+      inSpan({ name: "search.query", traceId, trace: { name: "search.query", tags: ["search"] }, failed: { "hb.outcome": "failed" } }, async () => {
+        const started = performance.now();
+        try {
+          /* No ref: the search page has no id to attribute the row to, and the assistant calls embedQuery itself with its message id. */
+          const embedded = await embedQuery({ guide: null, principal, traceId, ref: null }, text, options.gateway);
+          logSearch({ traceId, outcome: "ok", code: null, ms: Math.round(performance.now() - started) });
+          return { embedding: embedded.embedding, modelId: embedded.modelId, ms: embedded.ms };
+        } catch (error: unknown) {
+          logSearch({ traceId, outcome: "failed", code: error instanceof AppError ? error.code : error instanceof Error ? error.name : "INTERNAL", ms: Math.round(performance.now() - started) });
+          throw error;
+        }
+      }),
   };
 
   async function dispatch<R extends JsonRoute>(route: R, req: IncomingMessage, traceId: string): Promise<RouteAnswer<R>> {

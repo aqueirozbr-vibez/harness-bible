@@ -1,11 +1,13 @@
 import type Anthropic from "@anthropic-ai/sdk";
 
-import { newSpanId, traceparent } from "@/lib/api/trace";
+import { newSpanId } from "@/lib/api/trace";
 import { AppError } from "@/lib/errors";
 import { outcomeOfGatewayError, pricedUsage, recordCall, type RecordDeps } from "@/lib/gateway/budget";
 import { defaultGatewayDeps, gatewayClient, mapGatewayError, type GatewayDeps } from "@/lib/gateway/client";
 import { GatewayUnavailableError } from "@/lib/gateway/errors";
 import { NO_USAGE, type Usage } from "@/lib/gateway/prices";
+import { callHeaders } from "@/lib/gateway/headers";
+import { MESSAGE_TEXT_OFF, messageTextHeaders } from "@/lib/gateway/messageText";
 import { promptSha256 } from "@/lib/gateway/span";
 import { principalId, RerankResponseSchema, type GatewayCall, type RerankResponse } from "@/lib/schemas/gateway";
 
@@ -62,8 +64,8 @@ export interface Reranked {
   readonly ms: number;
 }
 
-/** The call a caller describes: the alias and the purpose are this module's, so no other model can be reached here. */
-export type RerankCall = Omit<GatewayCall, "alias" | "purpose">;
+/** The call a caller describes: the alias, the purpose and the agent are this module's, so no other model can be reached here (49 § 6.2). */
+export type RerankCall = Omit<GatewayCall, "alias" | "purpose" | "agent">;
 
 export interface RerankInput {
   readonly query: string;
@@ -137,12 +139,12 @@ function readRerank(
 export async function rerank(call: RerankCall, input: RerankInput, deps: GatewayDeps = defaultGatewayDeps()): Promise<Reranked> {
   if (input.documents.length === 0) throw new AppError("GATEWAY_RERANK_EMPTY", "rerank was given no document; retrieval re-ranks the candidates of one query (feature-specs/12 § 7.2)");
   if (!Number.isInteger(input.topN) || input.topN < 1) throw new AppError("GATEWAY_RERANK_TOP_N", `topN must be a whole number of at least 1, not ${input.topN} (feature-specs/12 § 7.1)`);
-  const full: GatewayCall = { ...call, alias: "hb-rerank", purpose: "rerank" };
+  const full: GatewayCall = { ...call, alias: "hb-rerank", purpose: "rerank", agent: "rerank" };
   const started = performance.now();
   const elapsed = (): number => Math.round(performance.now() - started);
   const sent = documentsFor(input.documents, RERANK_DOCUMENT_CHARACTERS);
   const request = { model: full.alias, query: input.query, documents: sent.map((document) => document.text), top_n: input.topN };
-  const base = { call: full, promptSha256: promptSha256(request), modelId: full.alias, usage: NO_USAGE, costUsd: 0, priceUnknown: false, searches: 0, gatewayCallId: null, firstTokenMs: null };
+  const base = { call: full, promptSha256: promptSha256(request), spanId: newSpanId(), modelId: full.alias, usage: NO_USAGE, costUsd: 0, priceUnknown: false, searches: 0, gatewayCallId: null, firstTokenMs: null };
   const recordDeps: RecordDeps = { append: deps.append, log: deps.log, now: deps.now };
   const refuse = async (error: AppError, gatewayCallId: string | null = null): Promise<never> => {
     await recordCall({ ...base, outcome: outcomeOfGatewayError(error), gatewayCallId, latencyMs: elapsed() }, recordDeps);
@@ -157,7 +159,7 @@ export async function rerank(call: RerankCall, input: RerankInput, deps: Gateway
     throw error;
   }
 
-  const options = { headers: { traceparent: traceparent(full.traceId, newSpanId()) } };
+  const options = { headers: { ...callHeaders(full, base.spanId), ...messageTextHeaders(full.agent, deps.messageText ?? MESSAGE_TEXT_OFF) } };
   let answer: { readonly data: unknown; readonly response: Response };
   try {
     answer = await client.post<unknown>(RERANK_ROUTE, { ...options, body: { ...request, metadata: { user_id: principalId(full.principal) } } }).withResponse();

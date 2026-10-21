@@ -4,6 +4,7 @@ import { parseArgs } from "node:util";
 
 import { getPrisma } from "@/lib/db/client";
 import type { Principal } from "@/lib/schemas/gateway";
+import { startTelemetry, stopTelemetry } from "@/lib/telemetry/tracer";
 import { gatewayCheck } from "@/workers/check";
 import { checkPrincipalOf } from "@/workers/env";
 
@@ -36,7 +37,10 @@ function principalFromArgs(): Principal {
   return configured;
 }
 
-gatewayCheck(principalFromArgs())
+const principal = principalFromArgs();
+/* The call's span is exported too when a collector is configured, so the gateway's generation has its parent there (feature-specs/49 § 16, unit 80). */
+startTelemetry("hb-jobs")
+  .then(() => gatewayCheck(principal))
   .then((check) => {
     console.log(JSON.stringify(check, null, 2));
   })
@@ -44,4 +48,7 @@ gatewayCheck(principalFromArgs())
     console.error(error instanceof Error ? `${error.name}: ${error.message}` : String(error));
     process.exitCode = 1;
   })
-  .finally(() => getPrisma().$disconnect());
+  .finally(async () => {
+    await stopTelemetry();
+    await getPrisma().$disconnect();
+  });

@@ -68,6 +68,17 @@ services:
       UPSTREAM_LANGFUSE_PUBLIC_KEY: ""
       UPSTREAM_LANGFUSE_SECRET_KEY: ""
       UPSTREAM_LANGFUSE_HOST: ""
+      # Where `langfuse_otel` exports, with no key of its own (feature-specs/49 § 5.2; unit 80): the collector. Set
+      # even while the `observe` profile is off: the export then fails, and the image's exporter logs each failed
+      # batch to the gateway's log with a traceback, which is expected and harmless and which no setting of the image
+      # silences (unit 80's review). Unset, the logger would print every span to the gateway's stdout instead. None
+      # of the three is a secret. The endpoint is completed to /v1/traces. The image reads other OpenTelemetry names
+      # first or beside these (OTEL_EXPORTER_OTLP_*, OTEL_HEADERS, OTEL_IGNORE_CONTEXT_PROPAGATION, LITELLM_OTEL_V2;
+      # opentelemetry.py:314, :338-342), so no OTEL_* or LITELLM_OTEL_* line may be in infra/gateway/.env (its example
+      # says so, and spec 49 § 4's presence check looks).
+      OTEL_EXPORTER: otlp_http
+      OTEL_ENDPOINT: http://otel-collector:4318
+      OTEL_SERVICE_NAME: hb-gateway
     # Published on the loopback interface alone: the proxy answers to its master key, so it is not offered to the
     # LAN (feature-specs/11 § 8 names http://localhost:4000; the stub binds 127.0.0.1 for the same reason).
     ports:

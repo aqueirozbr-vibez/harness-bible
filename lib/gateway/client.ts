@@ -2,16 +2,18 @@ import Anthropic, { APIConnectionError, APIConnectionTimeoutError, APIError } fr
 import type { MessageStream } from "@anthropic-ai/sdk/lib/MessageStream";
 import type { ContentBlock, Message, MessageCreateParams, MessageCreateParamsNonStreaming, MessageCreateParamsStreaming } from "@anthropic-ai/sdk/resources/messages";
 
-import { newSpanId, traceparent } from "@/lib/api/trace";
+import { newSpanId } from "@/lib/api/trace";
 import { appendBudgetRow, type BudgetRowInput } from "@/lib/db/budget";
 import { findGatewayKey } from "@/lib/db/gateway";
-import { env } from "@/lib/env";
+import { env, messageTextGate, type MessageTextGate } from "@/lib/env";
 import { AppError } from "@/lib/errors";
 import { outcomeOfGatewayError, outcomeOfMessage, recordCall, type CallRecord, type RecordDeps } from "@/lib/gateway/budget";
 import { BudgetExceededError, budgetResetAt, GatewayRefusedError, GatewayUnavailableError, isBudgetError, ProviderRefusalError } from "@/lib/gateway/errors";
 import { decryptKey, keySecret } from "@/lib/gateway/keys";
 import { limitsFor, limitsOfRow } from "@/lib/gateway/policy";
 import { NO_USAGE } from "@/lib/gateway/prices";
+import { callHeaders } from "@/lib/gateway/headers";
+import { MESSAGE_TEXT_OFF, messageTextHeaders } from "@/lib/gateway/messageText";
 import { logGatewaySpan, promptSha256, type GatewaySpanLogger } from "@/lib/gateway/span";
 import { principalId, ServerToolsSchema, type GatewayCall, type Principal } from "@/lib/schemas/gateway";
 
@@ -37,10 +39,12 @@ export interface GatewayDeps {
   readonly log: GatewaySpanLogger;
   readonly fetch: Fetch;
   readonly now: () => Date;
+  /** The development text switch's gate (feature-specs/49 § 9.1); absent counts as off. */
+  readonly messageText?: MessageTextGate;
 }
 
 export function defaultGatewayDeps(): GatewayDeps {
-  return { baseUrl: env.GATEWAY_URL, keySecret: env.GATEWAY_KEY_SECRET, findKey: findGatewayKey, append: appendBudgetRow, log: logGatewaySpan, fetch: globalThis.fetch, now: () => new Date() };
+  return { baseUrl: env.GATEWAY_URL, keySecret: env.GATEWAY_KEY_SECRET, findKey: findGatewayKey, append: appendBudgetRow, log: logGatewaySpan, fetch: globalThis.fetch, now: () => new Date(), messageText: messageTextGate };
 }
 
 /**
@@ -127,7 +131,7 @@ export async function callModel(call: GatewayCall, request: MessageCreateParams,
   const elapsed = (): number => Math.round(performance.now() - started);
   if ("tools" in request && request.tools !== undefined) throw new AppError("GATEWAY_TOOLS_REFUSED", "a request carries no tools of its own: the provider's web tools go on the call as serverTools, and there is no client tool (feature-specs/41 § 3)");
   const tools = call.serverTools === undefined ? {} : { tools: serverToolsOf(call.serverTools) };
-  const base: CallBase = { call, promptSha256: promptSha256(request), modelId: call.alias, usage: NO_USAGE, costUsd: 0, priceUnknown: false, searches: 0, gatewayCallId: null, firstTokenMs: null };
+  const base: CallBase = { call, promptSha256: promptSha256(request), spanId: newSpanId(), modelId: call.alias, usage: NO_USAGE, costUsd: 0, priceUnknown: false, searches: 0, gatewayCallId: null, firstTokenMs: null };
   const recordDeps: RecordDeps = { append: deps.append, log: deps.log, now: deps.now };
   const refuse = async (error: AppError): Promise<never> => {
     await recordCall({ ...base, outcome: outcomeOfGatewayError(error), latencyMs: elapsed() }, recordDeps);
@@ -146,7 +150,7 @@ export async function callModel(call: GatewayCall, request: MessageCreateParams,
    * `maxRetries` overrides the client's default of two, so a row's worst case is its timeout times its attempts
    * (feature-specs/11 § 5.3; unit 37b). */
   const limits = call.row === undefined ? limitsFor(call.purpose, call.alias) : limitsOfRow(call.row, call.alias);
-  const options = { timeout: limits.timeoutMs, maxRetries: limits.maxRetries, headers: { traceparent: traceparent(call.traceId, newSpanId()) }, ...(signal === undefined ? {} : { signal }) };
+  const options = { timeout: limits.timeoutMs, maxRetries: limits.maxRetries, headers: { ...callHeaders(call, base.spanId), ...messageTextHeaders(call.agent, deps.messageText ?? MESSAGE_TEXT_OFF) }, ...(signal === undefined ? {} : { signal }) };
 
   if (request.stream === true) {
     const params: MessageCreateParamsStreaming = { ...request, ...tools, model: call.alias, metadata };

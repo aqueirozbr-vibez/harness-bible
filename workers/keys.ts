@@ -1,9 +1,11 @@
 import { z } from "zod";
 
 import { findGatewayKey, insertGatewayKey, isIndividualUser, organisationCaps, replaceGatewayKey, type GatewayKeyData, type GatewayKeyRow, type OrganisationCaps } from "@/lib/db/gateway";
+import type { MessageTextGate } from "@/lib/env";
 import { AppError, isUniqueViolation } from "@/lib/errors";
 import { GatewayUnavailableError } from "@/lib/gateway/errors";
 import { encryptKey, keySecret } from "@/lib/gateway/keys";
+import { MESSAGE_TEXT_OFF } from "@/lib/gateway/messageText";
 import { maxBudgetUsd } from "@/lib/gateway/prices";
 import { ALIASES, principalId, type Principal } from "@/lib/schemas/gateway";
 
@@ -49,6 +51,8 @@ export interface KeyDeps {
   readonly fetch: Fetch;
   readonly now: () => Date;
   readonly db: KeyDb;
+  /** The minting process's development text gate (feature-specs/49 § 9.2, D2); absent counts as off. */
+  readonly messageText?: MessageTextGate;
 }
 
 export interface KeyInfo {
@@ -62,18 +66,28 @@ export interface GenerateKeyBody {
   readonly budget_duration: "1mo";
   readonly tpm_limit: number;
   readonly models: ReadonlyArray<string>;
-  readonly metadata: { readonly organisationId: string; readonly kind: "organisation" } | { readonly userId: string; readonly kind: "individual" };
+  readonly metadata: ({ readonly organisationId: string; readonly kind: "organisation" } | { readonly userId: string; readonly kind: "individual" }) & {
+    /** Lets this key's requests opt out of the gateway's redaction (49 § 9.2, lock 2): set only while the gate is on. */
+    readonly allow_client_message_redaction_opt_out?: true;
+  };
   readonly key_alias: string;
 }
 
-/** What `/key/generate` is asked for (spec § 3.4), from the principal's caps. */
-export function generateKeyBody(principal: Principal, caps: OrganisationCaps): GenerateKeyBody {
+/**
+ * What `/key/generate` is asked for (spec § 3.4), from the principal's caps; and, only while the minting process's
+ * development text gate is on, the metadata flag that lets the key's requests opt out of the gateway's redaction
+ * (feature-specs/49 § 9.2, D2). A key minted with the gate off never carries it, so it stays redacted.
+ */
+export function generateKeyBody(principal: Principal, caps: OrganisationCaps, gate: MessageTextGate = MESSAGE_TEXT_OFF): GenerateKeyBody {
   return {
     max_budget: maxBudgetUsd(caps.tokenCap),
     budget_duration: "1mo",
     tpm_limit: caps.tokensPerMinute,
     models: [...ALIASES],
-    metadata: "organisationId" in principal ? { organisationId: principal.organisationId, kind: "organisation" } : { userId: principal.userId, kind: "individual" },
+    metadata: {
+      ...("organisationId" in principal ? { organisationId: principal.organisationId, kind: "organisation" as const } : { userId: principal.userId, kind: "individual" as const }),
+      ...(gate.on ? { allow_client_message_redaction_opt_out: true as const } : {}),
+    },
     key_alias: principalId(principal),
   };
 }
@@ -126,7 +140,7 @@ async function management(deps: KeyDeps, path: "/key/generate" | "/key/delete", 
 async function mint(principal: Principal, deps: KeyDeps): Promise<GatewayKeyData> {
   keySecret(deps.keySecret);
   const caps = await capsOf(principal, deps);
-  const body = generateKeyBody(principal, caps);
+  const body = generateKeyBody(principal, caps, deps.messageText ?? MESSAGE_TEXT_OFF);
   const parsed = GeneratedKeySchema.safeParse(await management(deps, "/key/generate", body));
   if (!parsed.success) throw new GatewayUnavailableError("key_management", "/key/generate answered without a key and its token");
   return { litellmKeyId: parsed.data.token, keyCiphertext: encryptKey(deps.keySecret, parsed.data.key), maxBudgetUsd: body.max_budget, tokensPerMinute: body.tpm_limit };

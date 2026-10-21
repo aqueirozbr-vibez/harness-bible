@@ -98,7 +98,7 @@ describe("the planner's prompt (48 § 5.3)", () => {
     expect(Object.keys(promptOf()).sort()).toEqual(["context", "guide", "language", "question", "rubric", "sections"]);
     const { call, request } = plannerRequestOf(inputOf());
     expect(request).not.toHaveProperty("tools");
-    expect(call).toEqual({ purpose: "research", alias: "hb-small", guide: { agent: "researcher", version: "v2.0", sha256: GUIDE.sha256 }, principal: { organisationId: "org-of-the-asker" }, traceId: TRACE, ref: RUN });
+    expect(call).toEqual({ purpose: "research", alias: "hb-small", agent: "researcher.plan", guide: { agent: "researcher", version: "v2.0", sha256: GUIDE.sha256 }, principal: { organisationId: "org-of-the-asker" }, traceId: TRACE, ref: RUN });
     expect(request).toMatchObject({ model: "hb-small", max_tokens: 1_024 });
     expect(request).not.toHaveProperty("output_config");
   });

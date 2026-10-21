@@ -2,7 +2,7 @@
 #
 # Two things come in, and they go to three places:
 #   - spans, over OTLP/HTTP on 4318, from the web tier, the workers and the scheduled jobs
-#     (OTEL_EXPORTER_OTLP_ENDPOINT; lib/telemetry/tracer.ts) and, from unit 80, the gateway's one span a model call
+#     (OTEL_EXPORTER_OTLP_ENDPOINT; lib/telemetry/tracer.ts) and, since unit 80, the gateway's one span a model call
 #     -> Tempo (the `traces` pipeline), and -> Langfuse (the `traces/langfuse` pipeline, feature-specs/49 § 5.5);
 #   - the product's own JSON lines, read from the files under /var/log/hb -> Loki.
 #
@@ -35,7 +35,7 @@ receivers:
         parse_from: body
         on_error: drop_quiet
       - type: filter
-        expr: 'not (attributes.kind in ["span", "model_call", "job", "policy", "retrieve", "aid_run", "answer", "research"])'
+        expr: 'not (attributes.kind in ["span", "model_call", "job", "policy", "retrieve", "aid_run", "answer", "research", "sensor", "search", "activity"])'
 
 extensions:
   # Where the file receiver remembers how far it has read, so a restart of the process neither repeats nor skips.
@@ -90,12 +90,19 @@ processors:
         - 'name == "http.request"'
         # The scheduled jobs.
         - 'name == "job"'
+        # A research's asks after its findings' outcomes: hundreds over the 40 days a send waits (48 § 8.4), each a root
+        # with nothing beneath it and no outcome of its own. Tempo keeps them (49 § 28).
+        - 'name == "activity.findingOutcome" or name == "activity.findingOutcomes"'
         # The release's embedding job, about a thousand calls a release, stays in Tempo (D3): the product's span from
         # unit 81, which names its agent, and the gateway's generation, which the same header names.
         - 'attributes["hb.agent"] == "embed.release"'
         - 'attributes["langfuse.generation.name"] == "embed.release"'
         # Of the gateway's spans only the generation goes: no proxy-internal span, no raw request.
         - 'resource.attributes["service.name"] == "hb-gateway" and attributes["langfuse.observation.type"] != "generation"'
+        # Nor a generation without a parent: every product call sends a traceparent, so a parentless one is a request
+        # the gateway refused before any model (a budget, a rate limit, a key), logged from the raw request without
+        # its headers; the product's own span of the call already records the refusal (unit 80's review).
+        - 'resource.attributes["service.name"] == "hb-gateway" and parent_span_id == SpanID(0x0000000000000000)'
       spanevent:
         - 'true'
 
@@ -124,19 +131,25 @@ processors:
           - 'set(span.name, span.attributes["hb.agent"]) where span.attributes["hb.agent"] != nil'
           - >-
             keep_keys(span.attributes, [
-            "gen_ai.operation.name",
-            "hb.aid.exit_code", "hb.aid.id", "hb.aid.runner", "hb.aid.timed_out",
-            "hb.alias", "hb.candidates", "hb.citations.resolved", "hb.citations.total", "hb.code", "hb.cost_usd",
-            "hb.edition.cited", "hb.edition.locale", "hb.edition.mismatch", "hb.embed_ms", "hb.first_token_ms",
-            "hb.gateway.call_id", "hb.grounded", "hb.guide.sha256", "hb.guide.version", "hb.job", "hb.message_id",
-            "hb.mode", "hb.outcome", "hb.over_budget", "hb.policy", "hb.price_unknown", "hb.prompt.sha256", "hb.purpose",
-            "hb.refusal.cause", "hb.repaired", "hb.rerank_ms",
-            "hb.research.dropped", "hb.research.findings", "hb.research.page_reads", "hb.research.paragraphs",
-            "hb.research.proposed", "hb.research.refuted", "hb.research.run_id", "hb.research.searches",
-            "hb.secret.detected", "hb.secret.redacted", "hb.sql_ms", "hb.substituted", "hb.total_ms", "hb.vector_ready"
+            "gen_ai.operation.name", "hb.activity.attempt", "hb.agent", "hb.aid.exit_code", "hb.aid.id",
+            "hb.aid.runner", "hb.aid.timed_out", "hb.alias", "hb.candidates", "hb.citations.resolved",
+            "hb.citations.total", "hb.code", "hb.cost_usd", "hb.edition.cited", "hb.edition.locale",
+            "hb.edition.mismatch", "hb.embed_ms", "hb.first_token_ms", "hb.gateway.call_id", "hb.grounded",
+            "hb.guide.sha256", "hb.guide.version", "hb.job", "hb.legacy", "hb.message_id", "hb.mode", "hb.outcome",
+            "hb.over_budget", "hb.policy", "hb.price_unknown", "hb.prompt.sha256", "hb.purpose", "hb.refusal.cause",
+            "hb.repaired", "hb.rerank_ms", "hb.research.dropped", "hb.research.findings", "hb.research.page_reads",
+            "hb.research.paragraphs", "hb.research.proposed", "hb.research.refuted", "hb.research.run_id",
+            "hb.research.searches", "hb.secret.detected", "hb.secret.redacted", "hb.sensor.claims",
+            "hb.sensor.result", "hb.sensor.rule", "hb.sensor.substituted", "hb.sql_ms", "hb.substituted",
+            "hb.total_ms", "hb.vector_ready", "hb.workflow.id", "hb.workflow.type", "langfuse.observation.level",
+            "langfuse.observation.type", "langfuse.release", "langfuse.trace.metadata.code",
+            "langfuse.trace.metadata.message_id", "langfuse.trace.metadata.outcome",
+            "langfuse.trace.metadata.refusal_cause", "langfuse.trace.metadata.run_id",
+            "langfuse.trace.metadata.suggestion_id", "langfuse.trace.metadata.workflow_id", "langfuse.trace.name",
+            "langfuse.trace.tags"
             ])
 
-  # The gateway's generation (from unit 80; inert until then).
+  # The gateway's generation (since unit 80: LiteLLM's `langfuse_otel`, infra/gateway/litellm.yaml).
   # - Its name is the agent's, from the `langfuse_generation_name` header (unit 81), and an embedder's call is typed so.
   # - Its cost is where Langfuse reads a total: `gen_ai.usage.cost`, from the logger's `llm.cost.total`.
   # - Its text goes only with the collector's half of the switch on (49 § 9.1), and never from a call that failed

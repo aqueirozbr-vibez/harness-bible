@@ -206,20 +206,68 @@ describe("the answer flow (feature-specs/13 § 9)", () => {
   it("buys exactly one repair with a low score, and ships whatever the second score is", async () => {
     let drafts = 0;
     let grades = 0;
+    const agents: string[] = [];
     const result = await answer(
       request(),
       sinks(),
       deps({
-        draft: async () => { drafts += 1; return ANSWERED(output([{ text: "A retried write is a second write.", sectionId: "21.3" }])); },
-        grade: async () => { grades += 1; return GRADE_FAIL; },
+        classify: async (_request, call) => { agents.push(call.agent); return null; },
+        draft: async (_prompt, call) => { drafts += 1; agents.push(call.agent); return ANSWERED(output([{ text: "A retried write is a second write.", sectionId: "21.3" }])); },
+        grade: async (_prompt, call) => { grades += 1; agents.push(call.agent); return GRADE_FAIL; },
       }),
     );
     expect(drafts).toBe(2);
     expect(grades).toBe(2);
+    /* each call named for its agent: the draft and the repair are the same purpose and alias (49 § 6.2) */
+    expect(agents).toEqual(["assistant.classify", "assistant.draft", "assistant.grade", "assistant.repair", "assistant.grade"]);
     expect(result.repaired).toBe(true);
     /* The second score was still low, and the answer ships anyway with the score in the log (architecture § 6.3). */
     expect(result.grounded).toBe(0.25);
     expect(detailOf(result.verdicts, "grader")?.verdict).toBe("FAIL");
+  });
+
+  it("tells the mode sensor's run where the mode has a shape, and a refusal by the rules as one FAIL with its rule and cause (49 § 8)", async () => {
+    const runs: Array<{ readonly sensor: string; readonly verdict: string; readonly rule?: string; readonly code?: string }> = [];
+    const onSensor: AnswerDeps["onSensor"] = (verdict, _ms, facts) => {
+      runs.push({ sensor: verdict.sensor, verdict: verdict.verdict, ...(facts?.rule === undefined ? {} : { rule: facts.rule }), ...(facts?.code === undefined ? {} : { code: facts.code }) });
+    };
+    const compareDraft = async () =>
+      ANSWERED(
+        JSON.stringify({
+          claims: [
+            { text: "A retried write is a second write.", sectionId: "21.3", figureId: null },
+            { text: "Permissions are granted by policy.", sectionId: "28.1", figureId: null },
+          ],
+          refusal: null,
+          mode_result: { openPoint: "Which side owns the key." },
+        }),
+      );
+    await answer(request({ mode: "compare", context: { chapter: 21, section: null, chapters: [21, 28] } }), sinks(), deps({ draft: compareDraft, onSensor }));
+    expect(runs.map((run) => run.sensor)).toEqual(["scope", "citation", "mode", "edition"]);
+    /* a pass carries no rule and no cause */
+    expect(runs[0]).toEqual({ sensor: "scope", verdict: "PASS" });
+    runs.length = 0;
+    await answer(request(), sinks(), deps({ chaptersVerified: async () => false, onSensor }));
+    expect(runs).toEqual([{ sensor: "scope", verdict: "FAIL", rule: "unverified", code: "R-UNVERIFIED" }]);
+  });
+
+  it("tells each sensor's run as it happens: the scope rules once, the citation and edition sensors in each pass (49 § 8)", async () => {
+    const runs: Array<{ readonly sensor: string; readonly verdict: string; readonly ms: number; readonly claims: number | undefined }> = [];
+    await answer(
+      request(),
+      sinks(),
+      deps({
+        grade: async () => GRADE_FAIL,
+        onSensor: (verdict, ms, facts) => {
+          runs.push({ sensor: verdict.sensor, verdict: verdict.verdict, ms, claims: facts?.claims });
+        },
+      }),
+    );
+    /* a repaired turn: two passes; an explain turn has no shape for the mode sensor to check */
+    expect(runs.map((run) => run.sensor)).toEqual(["scope", "citation", "edition", "citation", "edition"]);
+    expect(runs[0]?.verdict).toBe("PASS");
+    expect(runs.filter((run) => run.sensor === "citation").every((run) => run.claims === 1)).toBe(true);
+    expect(runs.every((run) => run.ms >= 0)).toBe(true);
   });
 
   it("repairs an unparseable answer once, and refuses rather than show raw text when it happens twice", async () => {

@@ -109,7 +109,7 @@ describe("the writer's prompt and request", () => {
   it("holds no tool, names its own row, and has no field for who asked, the brief or a page itself", () => {
     expect(Object.keys(promptOf()).sort()).toEqual(["earlier", "findings", "guide", "language", "pages", "question", "rubric", "sections"]);
     const { call, request } = writerRequestOf(inputOf());
-    expect(call).toEqual({ purpose: "research", alias: "hb-frontier", row: "researchWriter", guide: { agent: "researcher", version: "v2.0", sha256: GUIDE.sha256 }, principal: { organisationId: "org-of-the-asker" }, traceId: TRACE, ref: RUN });
+    expect(call).toEqual({ purpose: "research", alias: "hb-frontier", agent: "researcher.write", row: "researchWriter", guide: { agent: "researcher", version: "v2.0", sha256: GUIDE.sha256 }, principal: { organisationId: "org-of-the-asker" }, traceId: TRACE, ref: RUN });
     expect(call).not.toHaveProperty("serverTools");
     expect(request).not.toHaveProperty("tools");
     expect(request).not.toHaveProperty("stream");

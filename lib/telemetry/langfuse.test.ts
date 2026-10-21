@@ -4,8 +4,8 @@ import type { GatewaySpan } from "@/lib/gateway/span";
 import type { AnswerResult } from "@/lib/schemas/assistant";
 import { parseSectionId } from "@/lib/schemas/ids";
 
-import { PRODUCT_LANGFUSE_EXCLUDED, PRODUCT_LANGFUSE_KEYS } from "./langfuse";
-import { aidRunSpanOf, answerLineOf, answerSpanOf, failedAnswerLine, genAiSpanOf, httpSpanOf, jobSpanOf, researchLineOf, researchSpanOf, retrieveSpanOf } from "./lines";
+import { langfuseAttributesOf, PRODUCT_LANGFUSE_EXCLUDED, PRODUCT_LANGFUSE_KEYS } from "./langfuse";
+import { activitySpanOf, aidRunSpanOf, answerLineOf, answerSpanOf, failedAnswerLine, genAiSpanOf, httpSpanOf, jobSpanOf, researchLineOf, researchSpanOf, retrieveSpanOf, searchSpanOf, sensorSpanOf } from "./lines";
 import { recordSpan, setSpanSink, withSpanScope, type SpanRecord } from "./spans";
 
 /*
@@ -20,6 +20,7 @@ const MODEL_CALL: GatewaySpan = {
   "gen_ai.system": "anthropic",
   "gen_ai.request.model": "claude-opus-5",
   "hb.alias": "hb-frontier",
+  "hb.agent": "assistant.draft",
   "hb.guide.version": "v1.13",
   "hb.guide.sha256": "a".repeat(64),
   "hb.prompt.sha256": "b".repeat(64),
@@ -34,6 +35,7 @@ const MODEL_CALL: GatewaySpan = {
   "hb.principal": "org:00000000-0000-4000-8000-00000000de01",
   "hb.outcome": "ok",
   trace_id: TRACE,
+  span_id: "d".repeat(16),
   "x-litellm-call-id": "3f2504e0-4f89-41d3-9a0c-0305e82c3301",
   latency_ms: 3100,
   first_token_ms: 900,
@@ -68,9 +70,30 @@ const BUILT: ReadonlyArray<SpanRecord> = [
   aidRunSpanOf({ traceId: TRACE, aidId: "21.8-task-survival", runner: "docker", exitCode: 0, timedOut: false, ms: 640 }, 1_000),
   answerSpanOf(answerLineOf(TURN, RESULT), 1_000),
   answerSpanOf(failedAnswerLine(TURN, "BUDGET_EXCEEDED"), 1_000),
+  answerSpanOf({ ...answerLineOf(TURN, RESULT), outcome: "refusal", refusalCause: "R-SCOPE" }, 1_000),
+  sensorSpanOf({ traceId: TRACE, sensor: "scope", result: "FAIL", rule: "unverified", code: "R-UNVERIFIED", claims: null, substituted: null, ms: 1 }, 1_000),
+  sensorSpanOf({ traceId: TRACE, sensor: "citation", result: "WARN", rule: null, code: null, claims: 4, substituted: 1, ms: 2 }, 1_000),
+  searchSpanOf({ traceId: TRACE, outcome: "failed", code: "GATEWAY_BUDGET", ms: 40 }, 1_000),
   researchSpanOf(researchLineOf("write", RUN, "report", 4_000, { findings: 1, paragraphs: 3, dropped: 1 }), 1_000),
   researchSpanOf(researchLineOf("run", RUN, "DONE", 90_000, { searches: 4, pageReads: 2, findings: 2, proposed: 1, refuted: 1 }), 1_000),
 ];
+
+const ACTIVITY = { traceId: TRACE, activity: "planRun", workflowType: "ResearchRunWorkflow", workflowId: `research:${RUN.runId}`, attempt: 1, outcome: "ok", code: null, ms: 900 } as const;
+
+/** A workflow's activities (49 § 7.1; unit 84): one that went, one that failed, a legacy run's with its mark, and the run's own line. */
+const ACTIVITIES: ReadonlyArray<SpanRecord> = [
+  activitySpanOf(ACTIVITY, 1_000),
+  activitySpanOf({ ...ACTIVITY, attempt: 2, outcome: "failed", code: "TIMEOUT" }, 1_000),
+  activitySpanOf({ ...ACTIVITY, workflowType: "ResearchWorkflow", legacy: true, runId: RUN.runId }, 1_000),
+  researchSpanOf(researchLineOf("run", RUN, "SKIPPED", 2_000, { code: "NOT_RUN" }), 1_000),
+];
+
+/** The subjects' trace attributes the activities' scopes carry, each with its record id (§ 6.4). */
+const WORKFLOW_TRACES = [
+  { name: "research.run", tags: ["research"], metadata: { run_id: RUN.runId } },
+  { name: "suggestion", tags: ["suggestion"], metadata: { suggestion_id: "S-21-0016" } },
+  { name: "export", tags: ["export"], metadata: { workflow_id: "export:44444444-4444-4444-8444-444444444444" } },
+] as const;
 
 function excluded(key: string): boolean {
   return PRODUCT_LANGFUSE_EXCLUDED.some((entry) => (entry.endsWith(".") ? key.startsWith(entry) : key === entry));
@@ -81,11 +104,18 @@ function recorded(): ReadonlyArray<SpanRecord> {
   const seen: SpanRecord[] = [];
   setSpanSink((record) => seen.push(record));
   const secret = ["sk", "ant", `api03-${"Kd4".repeat(30)}`].join("-");
-  withSpanScope({ traceId: TRACE, spanId: "c".repeat(16), request: true }, () => {
+  /* with a subject's trace attributes, as a turn's scope carries them (49 § 6.4) */
+  withSpanScope({ traceId: TRACE, spanId: "c".repeat(16), request: true, trace: { name: "assistant.turn", tags: ["turn", "mode:explain"], release: "2026.09" } }, () => {
     for (const span of BUILT) recordSpan(span);
     /* the guard's mark, which recordSpan adds to a span a secret reached */
     recordSpan({ ...RETRIEVE, attributes: { ...RETRIEVE.attributes, "hb.mode": secret } });
   });
+  /* an activity's scope: no request, its subject's trace attributes (49 § 7.1) */
+  for (const trace of WORKFLOW_TRACES) {
+    withSpanScope({ traceId: TRACE, spanId: "e".repeat(16), trace }, () => {
+      for (const span of ACTIVITIES) recordSpan(span);
+    });
+  }
   return seen;
 }
 
@@ -113,5 +143,41 @@ describe("PRODUCT_LANGFUSE_KEYS (49 § 5.5)", () => {
     for (const key of ["hb.principal", "hb.subject", "url.path", "http.request.method", "http.response.status_code", "gen_ai.usage.input_tokens", "gen_ai.request.model", "gen_ai.system", "hb.parent", "hb.count.messages"]) {
       expect(excluded(key), key).toBe(true);
     }
+  });
+});
+
+describe("langfuseAttributesOf (49 § 6.3, § 6.4, § 8)", () => {
+  it("shows a sensor as a guardrail, at level WARNING where it did not pass, and never as an error", () => {
+    for (const result of ["FAIL", "WARN"]) expect(langfuseAttributesOf("sensor.citation", { "hb.sensor.result": result })).toEqual({ "langfuse.observation.type": "guardrail", "langfuse.observation.level": "WARNING" });
+    for (const result of ["PASS", "NA"]) expect(langfuseAttributesOf("sensor.scope", { "hb.sensor.result": result })).toEqual({ "langfuse.observation.type": "guardrail" });
+  });
+
+  it("types the turn as an agent and its retrieval as a retriever, and leaves every other span Langfuse's default", () => {
+    expect(langfuseAttributesOf("assistant.answer", {})["langfuse.observation.type"]).toBe("agent");
+    expect(langfuseAttributesOf("assistant.retrieve", {})["langfuse.observation.type"]).toBe("retriever");
+    for (const name of ["gen_ai.chat", "gen_ai.embeddings", "aid.run", "search.query", "research.run"]) expect(langfuseAttributesOf(name, {}), name).toEqual({});
+  });
+
+  it("sets the subject's name, tags and release on any span its scope carries them to, and its outcome on its own span alone", () => {
+    const trace = { name: "assistant.turn", tags: ["turn", "mode:compare", "locale:pt"], release: "2026.09" };
+    expect(langfuseAttributesOf("gen_ai.chat", { "hb.outcome": "ok" }, trace)).toEqual({ "langfuse.trace.name": "assistant.turn", "langfuse.trace.tags": ["turn", "mode:compare", "locale:pt"], "langfuse.release": "2026.09" });
+    expect(langfuseAttributesOf("assistant.answer", { "hb.outcome": "refusal", "hb.refusal.cause": "R-SCOPE", "hb.code": null, "hb.message_id": "m-1" }, trace)).toMatchObject({
+      "langfuse.trace.metadata.outcome": "refusal",
+      "langfuse.trace.metadata.refusal_cause": "R-SCOPE",
+      "langfuse.trace.metadata.message_id": "m-1",
+    });
+    expect(langfuseAttributesOf("assistant.answer", { "hb.outcome": "failed", "hb.code": "BUDGET_EXCEEDED" })).not.toHaveProperty("langfuse.trace.metadata.refusal_cause");
+    /* a search's trace has no release when its route is not told one */
+    expect(langfuseAttributesOf("search.query", {}, { name: "search.query", tags: ["search"] })).toEqual({ "langfuse.trace.name": "search.query", "langfuse.trace.tags": ["search"] });
+  });
+
+  it("sets a workflow's record id on every span of its trace, and a run's outcome only in a research's own trace (unit 84)", () => {
+    const research = { name: "research.run", tags: ["research"], metadata: { run_id: "r-1" } };
+    expect(langfuseAttributesOf("activity.planRun", { "hb.outcome": "ok" }, research)).toEqual({ "langfuse.trace.name": "research.run", "langfuse.trace.tags": ["research"], "langfuse.trace.metadata.run_id": "r-1" });
+    expect(langfuseAttributesOf("research.run", { "hb.outcome": "SKIPPED", "hb.code": "NOT_RUN" }, research)).toMatchObject({ "langfuse.trace.metadata.outcome": "SKIPPED", "langfuse.trace.metadata.code": "NOT_RUN" });
+    /* a legacy run's line lands in its turn's trace, or in none: the turn's outcome is the turn's */
+    expect(langfuseAttributesOf("research.run", { "hb.outcome": "DONE", "hb.code": null }, { name: "assistant.turn", tags: ["turn"] })).not.toHaveProperty("langfuse.trace.metadata.outcome");
+    expect(langfuseAttributesOf("research.run", { "hb.outcome": "DONE" })).toEqual({});
+    expect(langfuseAttributesOf("activity.gradeItem", {}, { name: "suggestion", tags: ["suggestion"], metadata: {} })).toEqual({ "langfuse.trace.name": "suggestion", "langfuse.trace.tags": ["suggestion"] });
   });
 });

@@ -235,7 +235,29 @@ describe.skipIf(!ready)("one turn's spans over the whole stack", () => {
     expect(answer[0]).toMatchObject({ status: { code: 0 }, attributes: { "hb.message_id": final.messageId, "hb.mode": "explain", "hb.outcome": "answer", "hb.edition.locale": "en", "hb.edition.cited": "EN", "hb.edition.mismatch": false, "hb.secret.redacted": 0 } });
     expect(answer[0]?.attributes["hb.citations.total"]).toBeGreaterThan(0);
     expect(answer[0]?.attributes["hb.citations.resolved"]).toBe(answer[0]?.attributes["hb.citations.total"]);
-    for (const span of spans.filter((candidate) => candidate.name !== "http.request")) expect(span.parentSpanId).toBe(worker?.spanId);
+    /* The turn as one tree (feature-specs/49 § 6.3): the answer under the workers' request, and everything the turn did
+       under the answer — retrieval with its two calls beneath it, the model calls, each sensor of each pass. */
+    expect(answer[0]?.parentSpanId).toBe(worker?.spanId);
+    const retrieval = of(spans, "assistant.retrieve")[0];
+    expect(retrieval?.parentSpanId).toBe(answer[0]?.spanId);
+    for (const span of [...of(spans, "gen_ai.embeddings"), ...of(spans, "gen_ai.rerank")]) expect(span.parentSpanId, span.name).toBe(retrieval?.spanId);
+    for (const span of chats) expect(span.parentSpanId, String(span.attributes["hb.agent"])).toBe(answer[0]?.spanId);
+    const sensors = spans.filter((span) => span.name.startsWith("sensor."));
+    expect(sensors.map((span) => span.name)).toEqual(expect.arrayContaining(["sensor.scope", "sensor.citation", "sensor.edition"]));
+    for (const span of sensors) {
+      expect(span.parentSpanId, span.name).toBe(answer[0]?.spanId);
+      expect(span.status.code, span.name).toBe(0);
+      expect(["PASS", "FAIL", "WARN", "NA"]).toContain(span.attributes["hb.sensor.result"]);
+    }
+    /* The turn's trace attributes on every product span of it, and its outcome on the answer alone (49 § 6.4). */
+    for (const span of spans.filter((candidate) => candidate.name !== "http.request")) {
+      expect(span.attributes["langfuse.trace.name"], span.name).toBe("assistant.turn");
+      expect(span.attributes["langfuse.trace.tags"], span.name).toEqual(["turn", "mode:explain", "locale:en"]);
+      expect(typeof span.attributes["langfuse.release"], span.name).toBe("string");
+      if (span.name !== "assistant.answer") expect(span.attributes, span.name).not.toHaveProperty("langfuse.trace.metadata.outcome");
+    }
+    expect(answer[0]?.attributes).toMatchObject({ "langfuse.observation.type": "agent", "langfuse.trace.metadata.outcome": "answer", "langfuse.trace.metadata.message_id": final.messageId });
+    expect(retrieval?.attributes["langfuse.observation.type"]).toBe("retriever");
 
     /* No words and no secrets, in any attribute of any span (§ 5.1): the question, what was answered, who asked, the keys. */
     const strings = spans.flatMap((span) => [span.status.message, ...Object.values(span.attributes).filter((value): value is string => typeof value === "string")]);
@@ -258,7 +280,9 @@ describe.skipIf(!ready)("one turn's spans over the whole stack", () => {
     const spans = receiver.spans().slice(before);
     const worker = of(spans, "http.request").find((span) => span.attributes["url.path"] === "/answer");
     expect(of(spans, "aid.run")).toHaveLength(1);
-    expect(of(spans, "aid.run")[0]).toMatchObject({ parentSpanId: worker?.spanId, status: { code: 0 }, attributes: { "hb.aid.id": AID_ID, "hb.aid.runner": "python", "hb.aid.exit_code": 0, "hb.aid.timed_out": false } });
+    /* under the turn's answer, as everything the turn does (49 § 6.3), which hangs from the workers' request */
+    expect(of(spans, "assistant.answer")[0]?.parentSpanId).toBe(worker?.spanId);
+    expect(of(spans, "aid.run")[0]).toMatchObject({ parentSpanId: of(spans, "assistant.answer")[0]?.spanId, status: { code: 0 }, attributes: { "hb.aid.id": AID_ID, "hb.aid.runner": "python", "hb.aid.exit_code": 0, "hb.aid.timed_out": false } });
     expect(of(spans, "assistant.answer")[0]?.attributes).toMatchObject({ "hb.message_id": final.messageId, "hb.mode": "walk", "hb.outcome": "answer" });
     /* The reader's inputs are numbers the script ran with; they are in the ledger as a hash and in no span. */
     expect(spans.some((span) => Object.keys(span.attributes).some((name) => name.includes("input") && !name.startsWith("gen_ai.usage.")))).toBe(false);
@@ -281,8 +305,11 @@ describe.skipIf(!ready)("one turn's spans over the whole stack", () => {
       }
     });
     /* The policy decision is a line of its own and stays one: it goes to the log store, not to a trace (architecture section 7). */
-    expect(new Set(kinds.map((line) => line.kind))).toEqual(new Set(["policy", "span", "retrieve", "model_call", "answer"]));
+    /* and since unit 83 each sensor of the turn (feature-specs/49 § 8) */
+    expect(new Set(kinds.map((line) => line.kind))).toEqual(new Set(["policy", "span", "retrieve", "model_call", "answer", "sensor"]));
     expect(kinds.find((line) => line.kind === "answer")?.messageId).toBe(final.messageId);
+    /* a sensor's line says its verdict and its counts, never its detail, which can quote what it read (49 § 8) */
+    for (const line of kinds.filter((candidate) => candidate.kind === "sensor")) expect(line).not.toHaveProperty("detail");
   }, 120_000);
 
   it("removes a secret pasted into a question before it is stored, shown to a model or searched by, and counts it", async () => {

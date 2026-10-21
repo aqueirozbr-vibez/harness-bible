@@ -24,6 +24,8 @@ export interface CallRecord {
   /** The provider's count of web searches in the call (`usage.server_tool_use`, 41 § 3): 0 for a call without the tool; priced into `costUsd`. */
   readonly searches: number;
   readonly promptSha256: string;
+  /** The call's own span id: its span's, and the one its `traceparent` names, so the gateway's generation nests under it (49 § 5.3). */
+  readonly spanId: string;
   readonly gatewayCallId: string | null;
   readonly latencyMs: number;
   readonly firstTokenMs: number | null;
@@ -116,6 +118,7 @@ export function toSpan(record: CallRecord): GatewaySpan {
     "gen_ai.system": "anthropic",
     "gen_ai.request.model": record.modelId,
     "hb.alias": record.call.alias,
+    "hb.agent": record.call.agent,
     "hb.guide.version": record.call.guide?.version ?? null,
     "hb.guide.sha256": record.call.guide?.sha256 ?? null,
     "hb.prompt.sha256": record.promptSha256,
@@ -130,6 +133,7 @@ export function toSpan(record: CallRecord): GatewaySpan {
     "hb.principal": principalId(record.call.principal),
     "hb.outcome": record.outcome,
     trace_id: record.call.traceId,
+    span_id: record.spanId,
     "x-litellm-call-id": record.gatewayCallId,
     latency_ms: record.latencyMs,
     first_token_ms: record.firstTokenMs,

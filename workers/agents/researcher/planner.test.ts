@@ -120,7 +120,7 @@ describe("the planner's prompt", () => {
   it("holds no tool and carries nothing of the asker: the request's shape has no field for one (41 § 11.2, § 11.3)", () => {
     const { call, request } = plannerRequestOf(inputOf());
     expect(request).not.toHaveProperty("tools");
-    expect(call).toEqual({ purpose: "research", alias: "hb-small", guide: { agent: "researcher", version: "v1.0", sha256: GUIDE.sha256 }, principal: { organisationId: "org-research" }, traceId: TRACE, ref: RUN });
+    expect(call).toEqual({ purpose: "research", alias: "hb-small", agent: "researcher.plan", guide: { agent: "researcher", version: "v1.0", sha256: GUIDE.sha256 }, principal: { organisationId: "org-research" }, traceId: TRACE, ref: RUN });
     expect(call).not.toHaveProperty("serverTools");
     expect(request.model).toBe("hb-small");
     expect(request.max_tokens).toBe(1_024);

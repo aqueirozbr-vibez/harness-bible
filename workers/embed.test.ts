@@ -10,6 +10,7 @@ import type { EmbedReleaseStatus, SectionToEmbed } from "@/lib/db/search";
 import { AppError } from "@/lib/errors";
 import type { GatewayDeps } from "@/lib/gateway/client";
 import { encryptKey } from "@/lib/gateway/keys";
+import type { GatewaySpan } from "@/lib/gateway/span";
 import { EMBED_MODEL_ID, EMBED_TARGET } from "@/lib/gateway/prices";
 import { batchesOf, embedQuery, embedRelease, type EmbedJobDeps } from "@/workers/embed";
 
@@ -220,7 +221,10 @@ describe("the embedding job", () => {
     const key = await mint();
     const before = rows.length;
 
-    const embedded = await embedQuery({ guide: null, principal: { organisationId: "org-1" }, traceId: "e".repeat(32), ref: null }, "idempotency keys", gateway(key));
+    const spans: GatewaySpan[] = [];
+    const embedded = await embedQuery({ guide: null, principal: { organisationId: "org-1" }, traceId: "e".repeat(32), ref: null }, "idempotency keys", gateway(key, { log: (span) => spans.push(span) }));
+    /* the query's embedding names itself, whoever asks for it (49 § 6.2) */
+    expect(spans.map((span) => span["hb.agent"])).toEqual(["embed.query"]);
 
     expect(embedded.embedding).toEqual(stubEmbedding("idempotency keys"));
     expect(embedded.embedding).toHaveLength(1024);

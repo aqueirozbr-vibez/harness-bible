@@ -46,6 +46,8 @@ export function genAiSpanOf(span: GatewaySpan, endedAt: number): SpanRecord {
   return {
     name: `gen_ai.${operation}`,
     traceId: span.trace_id,
+    /* the id the call's `traceparent` sent, so the gateway's generation hangs from this span (49 § 5.3) */
+    spanId: span.span_id,
     endedAt,
     ms: span.latency_ms,
     attributes: {
@@ -57,6 +59,7 @@ export function genAiSpanOf(span: GatewaySpan, endedAt: number): SpanRecord {
       "gen_ai.usage.cache_read_input_tokens": span["gen_ai.usage.cache_read_input_tokens"],
       "gen_ai.usage.cache_creation_input_tokens": span["gen_ai.usage.cache_creation_input_tokens"],
       "hb.alias": span["hb.alias"],
+      "hb.agent": span["hb.agent"],
       "hb.guide.version": span["hb.guide.version"],
       "hb.guide.sha256": span["hb.guide.sha256"],
       "hb.prompt.sha256": span["hb.prompt.sha256"],
@@ -318,3 +321,119 @@ export function logResearch(line: ResearchLine): void {
   recordSpan(researchSpanOf(line, Date.now()));
 }
 
+
+/**
+ * A sensor's run (feature-specs/49 § 8): which sensor, how it came out, the rule or the code that decided it where it
+ * has one, the counts it already reports, and the time of the pure call; never its detail, which can quote what it
+ * read. Langfuse shows the span as a guardrail, at level WARNING where it did not pass: a sensor that did not pass is
+ * the product working, so its span never has an error status.
+ */
+export interface SensorLine {
+  readonly traceId: string;
+  readonly sensor: string;
+  readonly result: "PASS" | "FAIL" | "WARN" | "NA";
+  /** The named rule that decided it, an enumeration (the scope rules' `rule`); null for a sensor without one. */
+  readonly rule: string | null;
+  /** The refusal cause or code it gave, an enumeration; null where there is none. */
+  readonly code: string | null;
+  /** The claims it read, and how many it substituted; null for a sensor that does not count claims. */
+  readonly claims: number | null;
+  readonly substituted: number | null;
+  readonly ms: number;
+}
+
+export function sensorSpanOf(line: SensorLine, endedAt: number): SpanRecord {
+  return {
+    name: `sensor.${line.sensor}`,
+    traceId: line.traceId,
+    endedAt,
+    ms: line.ms,
+    attributes: {
+      "hb.sensor.result": line.result,
+      "hb.sensor.rule": line.rule,
+      "hb.code": line.code,
+      "hb.sensor.claims": line.claims,
+      "hb.sensor.substituted": line.substituted,
+    },
+  };
+}
+
+export function logSensor(line: SensorLine): void {
+  printLine("sensor", line);
+  recordSpan(sensorSpanOf(line, Date.now()));
+}
+
+/**
+ * The search page's query, embedded by the workers' `/embed/query` route (feature-specs/49 § 6.3): how it went and how
+ * long it took; never the query. Its span is the scope the query's embedding nests under, the root of a `search.query`
+ * trace on the Langfuse road.
+ */
+export interface SearchLine {
+  readonly traceId: string;
+  readonly outcome: "ok" | "failed";
+  /** The failure's code; null where it went. */
+  readonly code: string | null;
+  readonly ms: number;
+}
+
+export function searchSpanOf(line: SearchLine, endedAt: number): SpanRecord {
+  return {
+    name: "search.query",
+    traceId: line.traceId,
+    endedAt,
+    ms: line.ms,
+    attributes: { "hb.outcome": line.outcome, "hb.code": line.code },
+    ...(line.outcome === "failed" ? { error: line.code ?? "INTERNAL" } : {}),
+  };
+}
+
+export function logSearch(line: SearchLine): void {
+  printLine("search", line);
+  recordSpan(searchSpanOf(line, Date.now()));
+}
+
+/**
+ * A workflow's activity, one execution (feature-specs/49 § 7.1): which activity of which workflow, its attempt, how it
+ * ended and the code it failed with; never the error's message. Its span is the scope the activity's work nests under,
+ * a root of its subject's trace. A legacy research run's carries its run's id and the mark `hb.legacy` in place of the
+ * trace attributes it leaves to its turn (§ 6.4).
+ */
+export interface ActivityLine {
+  readonly traceId: string;
+  /** The activity's type, the function's name the workflow calls it by. */
+  readonly activity: string;
+  readonly workflowType: string;
+  readonly workflowId: string;
+  readonly attempt: number;
+  readonly outcome: "ok" | "failed" | "cancelled";
+  /** failed: the `ApplicationFailure`'s type, `TIMEOUT`, or the error's name; cancelled: `CANCELLED`; ok: null. */
+  readonly code: string | null;
+  /** The legacy research workflow's runs alone: the mark, and the run's id where the read found it. */
+  readonly legacy?: true;
+  readonly runId?: string | null;
+  readonly ms: number;
+}
+
+export function activitySpanOf(line: ActivityLine, endedAt: number): SpanRecord {
+  return {
+    name: `activity.${line.activity}`,
+    traceId: line.traceId,
+    endedAt,
+    ms: line.ms,
+    attributes: {
+      "hb.workflow.type": line.workflowType,
+      "hb.workflow.id": line.workflowId,
+      "hb.activity.attempt": line.attempt,
+      "hb.outcome": line.outcome,
+      "hb.code": line.code,
+      ...(line.legacy === true ? { "hb.legacy": true, "hb.research.run_id": line.runId ?? null } : {}),
+    },
+    /* a failure, a time-out among them, is the one error; a cancellation is the workflow's own decision */
+    ...(line.outcome === "failed" ? { error: line.code ?? "INTERNAL" } : {}),
+  };
+}
+
+export function logActivity(line: ActivityLine): void {
+  printLine("activity", line);
+  recordSpan(activitySpanOf(line, Date.now()));
+}

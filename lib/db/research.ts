@@ -624,6 +624,36 @@ export async function readResearchRun(runId: string, userId: string): Promise<Re
   return withTenant({ userId, organisationId: null }, () => getPrisma().researchRun.findUnique({ where: { id: runId }, select: { id: true, messageId: true, userId: true, organisationId: true, releaseId: true, locale: true, state: true, skip: true, failure: true, gap: true, sectionAnchors: true, questionSha256: true, briefSha256: true, searches: true, pageReads: true, workflowId: true, traceId: true, textPurgedAt: true, createdAt: true } }));
 }
 
+/** A run's id and the trace its work is filed under, and nothing else of it (feature-specs/49 § 7.2). */
+export interface ResearchTrace {
+  readonly runId: string;
+  readonly traceId: string;
+}
+
+/**
+ * The trace of the run a research workflow's id names (feature-specs/49 § 7.2): by the run's id, a person's run's
+ * workflow, else by its message's, a legacy run's. The activity spans resolve it before the activity runs, knowing the
+ * workflow's id and not whose run it is, so this reads by primary key outside any reader's context: one raw statement
+ * (lib/db/RAW_SQL.md), since the guard filters every run by its reader and the system context exempts only the
+ * authentication's models. It returns the run's id and its trace id, which name no one. Null for a run that is gone.
+ */
+export async function researchTraceOf(id: string): Promise<ResearchTrace | null> {
+  const rows = await getPrisma().$queryRaw<Array<{ id: string; traceId: string }>>`
+    SELECT "id", "traceId" FROM "ResearchRun" WHERE "id" = ${id} OR "messageId" = ${id} ORDER BY ("id" = ${id}) DESC LIMIT 1
+  `;
+  const row = rows[0];
+  return row === undefined ? null : { runId: row.id, traceId: row.traceId };
+}
+
+/** The same for a finding's send (`finding:<id>`): its run's id and trace; null for a finding gone or detached from its run. */
+export async function researchTraceOfFinding(findingId: string): Promise<ResearchTrace | null> {
+  const rows = await getPrisma().$queryRaw<Array<{ id: string; traceId: string }>>`
+    SELECT r."id", r."traceId" FROM "ResearchFinding" f JOIN "ResearchRun" r ON r."id" = f."runId" WHERE f."id" = ${findingId}
+  `;
+  const row = rows[0];
+  return row === undefined ? null : { runId: row.id, traceId: row.traceId };
+}
+
 /**
  * What the planner reads of the turn (40 § 6.2 step 1), inside the reader's own tenant context: the question, the
  * answer, the uncovered sentences. Null text where the purge took it; null, with no query, for a run detached from its

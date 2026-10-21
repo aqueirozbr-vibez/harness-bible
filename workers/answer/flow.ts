@@ -81,6 +81,19 @@ export interface AnswerDeps {
   readonly now: () => number;
   readonly guide?: Guide;
   readonly graderGuide?: Guide;
+  /**
+   * A sensor's run, as it happens (feature-specs/49 § 8): the scope rules once, and the citation, mode and edition
+   * sensors of each pass, each timed around its pure call. The turn prints the line; the verdict's detail is not for it.
+   */
+  readonly onSensor?: (verdict: SensorVerdict, ms: number, facts?: SensorFacts) => void;
+}
+
+/** What a sensor's line says of its run besides the verdict: the rule and the code that decided it, and its counts. */
+export interface SensorFacts {
+  readonly rule?: string;
+  readonly code?: string;
+  readonly claims?: number;
+  readonly substituted?: number;
 }
 
 
@@ -204,14 +217,24 @@ function labFiguresOf(sections: ReadonlyArray<PromptSection>): ReadonlyArray<Fig
  * its pseudo-section (spec 19 § 4); with none, the figure rule stands down and the row says so.
  */
 function runSensors(parsed: ParsedOutput, sections: ReadonlyArray<PromptSection>, request: AnswerRequest, deps: AnswerDeps, briefChapters: ReadonlyArray<number>) {
+  const substitutedIn = (claims: ReadonlyArray<ResolvedClaim>) => claims.filter((claim) => claim.substituted).length;
+  const citationStarted = performance.now();
   const citation = citationSensor(
     parsed.claims.map((claim) => ({ text: claim.text, sectionId: claim.sectionId, figureId: claim.cited ? claim.figureId : null })),
     sensorSectionsOf(sections),
     request.locale,
   );
+  const modeStarted = performance.now();
   const mode = modeSensor({ mode: request.mode, context: request.context, claims: citation.claims, modeResult: parsed.modeResult, briefChapters, labFigures: labFiguresOf(sections) }, request.locale);
+  const modeEnded = performance.now();
   const citations = citationsOf(mode.claims, sections);
+  const editionStarted = performance.now();
   const edition = editionSensor(citations, request.locale, deps.versionOf);
+  const editionEnded = performance.now();
+  /* each sensor's own line (49 § 8): the mode's only where the mode has a shape to check, as the result's verdicts have it */
+  deps.onSensor?.(citation.verdict, modeStarted - citationStarted, { claims: parsed.claims.length, substituted: substitutedIn(citation.claims) });
+  if (SHAPED_MODES.has(request.mode)) deps.onSensor?.(mode.verdict, modeEnded - modeStarted, { claims: citation.claims.length, substituted: substitutedIn(mode.claims) });
+  deps.onSensor?.(edition.verdict, editionEnded - editionStarted);
   return { claims: mode.claims, citation, mode, citations, edition };
 }
 
@@ -219,9 +242,10 @@ export async function answer(request: AnswerRequest, sinks: AnswerSinks, deps: A
   const t0 = deps.now();
   const guide = deps.guide ?? loadGuide("assistant", ASSISTANT_GUIDE_VERSION);
   const graderGuide = deps.graderGuide ?? loadGuidePart("assistant", ASSISTANT_GUIDE_VERSION, "grader");
-  const call = (purpose: GatewayCall["purpose"], alias: GatewayCall["alias"]): GatewayCall => ({
+  const call = (purpose: GatewayCall["purpose"], alias: GatewayCall["alias"], agent: GatewayCall["agent"]): GatewayCall => ({
     purpose,
     alias,
+    agent,
     guide: { agent: "assistant", version: guide.version, sha256: guide.sha256 },
     principal: request.principal,
     traceId: request.traceId,
@@ -235,9 +259,13 @@ export async function answer(request: AnswerRequest, sinks: AnswerSinks, deps: A
 
   /* Step 1: the rules. A refusal here has cost nothing at all. */
   const chaptersVerified = await deps.chaptersVerified(request);
+  const rulesStarted = performance.now();
   const ruled = scopeRules({ question: request.question, chaptersVerified });
   const scopeMs = deps.now() - t0;
-  if (ruled.cause !== null && !(walking && ruled.cause === "R-RECOMPUTE")) {
+  const refusedByRule = ruled.cause !== null && !(walking && ruled.cause === "R-RECOMPUTE");
+  /* the rule and the cause only where they refused: a walk's recompute rule stands down and is a pass, with no code (unit 83's review) */
+  deps.onSensor?.(verdict("scope", refusedByRule ? "FAIL" : "PASS", ""), performance.now() - rulesStarted, refusedByRule ? { ...(ruled.rule === null ? {} : { rule: ruled.rule }), ...(ruled.cause === null ? {} : { code: ruled.cause }) } : {});
+  if (refusedByRule && ruled.cause !== null) {
     const pointers = ruled.cause === "R-SCOPE-OT" ? OT_POINTERS : ruled.cause === "R-RECOMPUTE" ? recomputePointers(request.question, deps) : [];
     const totalMs = deps.now() - t0;
     return refuse(ruled.cause, pointers, true, deps, guide, { scopeMs, retrieveMs: 0, firstTokenMs: null, draftMs: 0, sensorsMs: 0, graderMs: 0, totalMs }, verdict("scope", "FAIL", `scope · ${ruled.cause}`, { rule: ruled.rule ?? "" }));
@@ -246,7 +274,7 @@ export async function answer(request: AnswerRequest, sinks: AnswerSinks, deps: A
   /* Step 2: the classifier and retrieval together (architecture § 8). A cause discards the retrieval. */
   sinks.status("retrieving");
   const retrieveStarted = deps.now();
-  const [classified, sections] = await Promise.all([walking ? Promise.resolve<RefusalCause | null>(null) : deps.classify(request, call("assistant", "hb-small")), deps.retrieve(request)]);
+  const [classified, sections] = await Promise.all([walking ? Promise.resolve<RefusalCause | null>(null) : deps.classify(request, call("assistant", "hb-small", "assistant.classify")), deps.retrieve(request)]);
   const retrieveMs = deps.now() - retrieveStarted;
   if (classified !== null) {
     /* The nearest sections the book does cover — except for an unverified chapter, whose refusal points at
@@ -270,7 +298,7 @@ export async function answer(request: AnswerRequest, sinks: AnswerSinks, deps: A
   };
   const prompt = assemble(promptInput);
   const draftStarted = deps.now();
-  let drafted = await deps.draft(prompt, call("assistant", "hb-frontier"), sinks, null);
+  let drafted = await deps.draft(prompt, call("assistant", "hb-frontier", "assistant.draft"), sinks, null);
   let draftMs = deps.now() - draftStarted;
 
   /* A walk with a result in the prompt holds the output to the walk's shape as well (spec 18 § 4); compare, lab and
@@ -289,7 +317,7 @@ export async function answer(request: AnswerRequest, sinks: AnswerSinks, deps: A
     sinks.status("grading");
     const graderStarted = deps.now();
     try {
-      const text = await deps.grade(assembleGrader({ guide: graderGuide, sections, claims }), call("grading", "hb-frontier"));
+      const text = await deps.grade(assembleGrader({ guide: graderGuide, sections, claims }), call("grading", "hb-frontier", "assistant.grade"));
       return readGrade(text);
     } catch (error: unknown) {
       if (error instanceof BudgetExceededError) throw error;
@@ -304,7 +332,7 @@ export async function answer(request: AnswerRequest, sinks: AnswerSinks, deps: A
     sinks.onRepair?.(instruction);
     repaired = true;
     const started = deps.now();
-    const repairedDraft = await deps.draft(prompt, call("assistant", "hb-frontier"), { ...sinks, token: () => undefined }, instruction);
+    const repairedDraft = await deps.draft(prompt, call("assistant", "hb-frontier", "assistant.repair"), { ...sinks, token: () => undefined }, instruction);
     /* The reader saw the first draft's first token; a repair is not streamed and has none of its own. The time the
        latency sensor judges is the one the reader waited (measured lost on every repaired turn, 2026-10-03). */
     drafted = { ...repairedDraft, firstTokenMs: drafted.firstTokenMs ?? repairedDraft.firstTokenMs };

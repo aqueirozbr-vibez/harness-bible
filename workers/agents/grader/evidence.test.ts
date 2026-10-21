@@ -287,6 +287,10 @@ describe("gradeEvidence on the stub gateway", () => {
     it("names its own request row: a PDF's call is one try, so a 500 is not retried and the body goes once", async () => {
       expect(gradeRequestOf(inputOf(bytesPrompt("application/pdf", PDF))).call.row).toBe("evidenceGraderBytes");
       expect(gradeRequestOf(inputOf(promptOf())).call.row).toBeUndefined();
+      /* and names its agent by the same test: the name the collector's lock reads, so a PDF's or an image's
+         base64 never reaches Langfuse whatever the text switch says (feature-specs/49 § 9.3; unit 81's review) */
+      expect(gradeRequestOf(inputOf(bytesPrompt("application/pdf", PDF))).call.agent).toBe("evidence.grade.bytes");
+      expect(gradeRequestOf(inputOf(promptOf())).call.agent).toBe("evidence.grade");
       /* The body is built from the row the call names, as the limits are (the two rows agree today). */
       expect(gradeRequestOf(inputOf(bytesPrompt("application/pdf", PDF))).request).toMatchObject(EVIDENCE_GRADER_BYTES_REQUEST);
       expect(gradeRequestOf(inputOf(promptOf())).request).toMatchObject(EVIDENCE_GRADER_REQUEST);

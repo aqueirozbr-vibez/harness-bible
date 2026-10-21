@@ -61,6 +61,13 @@ describe("generateKeyBody", () => {
     });
     expect(generateKeyBody(USER, INDIVIDUAL)).toMatchObject({ max_budget: 1, tpm_limit: 100, metadata: { userId: "u-1", kind: "individual" }, key_alias: "user:u-1" });
   });
+
+  it("lets the key's requests opt out of redaction only while the minting process's development gate is open (49 § 9.2, D2)", () => {
+    expect(generateKeyBody(ORG, ORG_CAPS, { on: true, why: null }).metadata).toEqual({ organisationId: "org-1", kind: "organisation", allow_client_message_redaction_opt_out: true });
+    expect(generateKeyBody(ORG, ORG_CAPS, { on: false, why: "NODE_ENV is test, not development" }).metadata).toEqual({ organisationId: "org-1", kind: "organisation" });
+    /* no gate given is the gate shut */
+    expect(generateKeyBody(USER, INDIVIDUAL).metadata).not.toHaveProperty("allow_client_message_redaction_opt_out");
+  });
 });
 
 describe("the workers' keys against the stub", () => {
@@ -218,5 +225,12 @@ describe("the workers' keys against the stub", () => {
     expect((wrong as GatewayUnavailableError).message).toContain("/key/generate answered 401");
     const down = await ensureKey(ORG, deps({ gatewayUrl: "http://127.0.0.1:1" })).catch((e: unknown) => e);
     expect((down as GatewayUnavailableError).cause).toBe("connection");
+  });
+
+  it("mints the opt-out flag into the key's metadata at the gateway only with the gate open (49 § 9.2, lock 2)", async () => {
+    const open = await ensureKey(ORG, deps({ messageText: { on: true, why: null } }));
+    expect(((await info(open.litellmKeyId)).metadata as Record<string, unknown>).allow_client_message_redaction_opt_out).toBe(true);
+    const shut = await ensureKey(ORG, deps({ messageText: { on: false, why: "LANGFUSE_MESSAGE_TEXT is off" } }));
+    expect((await info(shut.litellmKeyId)).metadata).not.toHaveProperty("allow_client_message_redaction_opt_out");
   });
 });

@@ -9,6 +9,7 @@ import { env } from "@/lib/env";
 import { REPORTS_DIR } from "@/lib/gate/goldenRun";
 import type { ResearchCheckFacts } from "@/lib/gate/research";
 import { principalOfId, type Principal } from "@/lib/schemas/gateway";
+import { startTelemetry, stopTelemetry } from "@/lib/telemetry/tracer";
 import { researchCheck, type ResearchCheck } from "@/workers/research/check";
 
 /*
@@ -53,7 +54,10 @@ function principalFromArgs(): Principal {
   return principal;
 }
 
-researchCheck(principalFromArgs())
+const principal = principalFromArgs();
+/* The calls' spans are exported too when a collector is configured, so the gateway's generations have their parents there (feature-specs/49 § 16, unit 80). */
+startTelemetry("hb-jobs")
+  .then(() => researchCheck(principal))
   .then((report) => {
     console.log(JSON.stringify(report, null, 2));
     const at = new Date();
@@ -70,4 +74,7 @@ researchCheck(principalFromArgs())
     console.error(error instanceof Error ? `${error.name}: ${error.message}` : String(error));
     process.exitCode = 1;
   })
-  .finally(() => getPrisma().$disconnect());
+  .finally(async () => {
+    await stopTelemetry();
+    await getPrisma().$disconnect();
+  });

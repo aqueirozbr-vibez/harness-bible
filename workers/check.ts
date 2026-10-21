@@ -20,7 +20,7 @@ export interface GatewayCheck {
 
 export async function gatewayCheck(principal: Principal, deps: GatewayDeps = defaultGatewayDeps()): Promise<GatewayCheck> {
   const message = await callModel(
-    { purpose: "assistant", alias: "hb-small", guide: null, principal, traceId: newTraceId(), ref: null },
+    { purpose: "assistant", alias: "hb-small", agent: "gateway.check", guide: null, principal, traceId: newTraceId(), ref: null },
     { ...requestFor("scopeClassifier"), messages: [{ role: "user", content: CHECK_PROMPT }] },
     deps,
   );

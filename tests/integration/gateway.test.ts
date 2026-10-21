@@ -140,7 +140,7 @@ describe.skipIf(!hasDatabase)("the gateway rows against the database", () => {
     const month = monthOf(NOW);
     const before = await monthSpend(ORG, month);
     const message = await callModel(
-      { purpose: "assistant", alias: "hb-small", guide: null, principal: ORG, traceId: "d".repeat(32), ref: "integration" },
+      { purpose: "assistant", alias: "hb-small", agent: "gateway.check", guide: null, principal: ORG, traceId: "d".repeat(32), ref: "integration" },
       { ...requestFor("scopeClassifier"), messages: [{ role: "user", content: CHECK_PROMPT }] },
       gatewayDeps(),
     );

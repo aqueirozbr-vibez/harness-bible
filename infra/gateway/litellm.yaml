@@ -38,16 +38,20 @@ model_list:
       api_key: os.environ/INFINITY_API_KEY
 
 litellm_settings:
-  # Model spans and cost to Langfuse (§ 3.5); the Langfuse keys are gateway-only environment. The OTel exporter
-  # stays off until the collector exists (feature-specs/21).
-  success_callback: ["langfuse"]
-  failure_callback: ["langfuse"]
-  # No message body leaves the gateway for a callback (feature-specs/45 D6; unit 64). LiteLLM replaces the messages,
-  # the prompt and the response with "redacted-by-litellm" before Langfuse, on success and on failure. Langfuse then
-  # keeps spans, timings and costs and no text, so a conversation its reader deletes has no copy there. Checked at the
-  # pinned image (LiteLLM 1.102.1): the proxy sets each key of this block on the litellm module, and its logging redacts
-  # on this global unless a request turns it off by header or parameter, which nothing of the application sends
-  # (tests/gateway-config.test.ts). The spend logs keep no prompt either: `store_prompts_in_spend_logs` is off by default.
+  # Each model call as one OpenTelemetry span, typed `generation`, exported to the collector and to nothing else
+  # (feature-specs/49 § 5.2; unit 80). The gateway holds no Langfuse key: compose blanks every Langfuse variable, so
+  # the logger exports where OTEL_EXPORTER and OTEL_ENDPOINT tell it, the collector, which alone holds the keys and
+  # keeps from this span only the generation's type, model, tokens and usage (and in development, under its own
+  # switch, a successful call's text). Both variables are required wherever this file is deployed: without them the
+  # logger prints every span to the gateway's stdout (49 § 5.2). The span's parent is the call's `traceparent`, the
+  # product's model-call span (49 § 5.3).
+  callbacks: ["langfuse_otel"]
+  # No message body in a callback's success (feature-specs/45 D6; unit 64): LiteLLM replaces the messages, the prompt
+  # and the response with "redacted-by-litellm" before any logger, unless a request turns it off by header or
+  # parameter, which nothing of the application sends (tests/gateway-config.test.ts). A call that failed reaches the
+  # logger unredacted (49 § 9.2), so the collector deletes a failed generation's input and output whatever its switch
+  # says. Checked at the pinned image (LiteLLM 1.102.1): the proxy sets each key of this block on the litellm module.
+  # The spend logs keep no prompt either: `store_prompts_in_spend_logs` is off by default.
   turn_off_message_logging: true
 
 general_settings:

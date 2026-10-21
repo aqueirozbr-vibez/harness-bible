@@ -69,6 +69,7 @@ export function adjudicationRequestOf(input: AdjudicateInput) {
   const call: GatewayCall = {
     purpose: "adjudication",
     alias: "hb-frontier",
+    agent: "adjudicator.decide",
     guide: { agent: "adjudicator", version: input.prompt.guide.version, sha256: input.prompt.guide.sha256 },
     principal: input.call.principal,
     traceId: input.call.traceId,

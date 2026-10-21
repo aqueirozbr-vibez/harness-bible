@@ -74,6 +74,12 @@ const EnvSchema = z
      * no OpenTelemetry code loads: the JSON lines are all there is.
      */
     OTEL_EXPORTER_OTLP_ENDPOINT: z.url().optional(),
+    /**
+     * The workers' half of the development-only text switch (feature-specs/49 § 9.1): `on` lets a successful call's
+     * prompt and answer reach Langfuse, through the gateway and the collector's own half, and only behind
+     * `messageTextGate` below. `true`, `1` or `yes` are refused rather than read as anything; refused in production.
+     */
+    LANGFUSE_MESSAGE_TEXT: z.enum(["on", "off"]).default("off"),
     /** The workers' private surface (11 § 7, § 8): the app dials this URL and the workers listen at its host and port; unset = WorkersUnavailableError. */
     WORKERS_URL: z.url().optional(),
     /** The shared bearer of that channel (11 D7), held by the app and the workers. */
@@ -111,6 +117,9 @@ const EnvSchema = z
     if (value.NODE_ENV !== "production" || process.env.NEXT_PHASE === "phase-production-build") return;
     if (value.AUTH_DEV_PROVIDER !== undefined) {
       ctx.addIssue({ code: "custom", path: ["AUTH_DEV_PROVIDER"], message: "AUTH_DEV_PROVIDER must be unset in production (feature-specs/09 § 8.5)." });
+    }
+    if (value.LANGFUSE_MESSAGE_TEXT === "on") {
+      ctx.addIssue({ code: "custom", path: ["LANGFUSE_MESSAGE_TEXT"], message: "LANGFUSE_MESSAGE_TEXT must be off in production (feature-specs/49 § 9)." });
     }
     for (const name of ["KEYCLOAK_ISSUER", "KEYCLOAK_CLIENT_SECRET", "OPA_URL"] as const) {
       if (value[name] === undefined) {
@@ -169,6 +178,7 @@ export const env: Env = EnvSchema.parse({
   RESEARCH_PRINCIPAL: read("RESEARCH_PRINCIPAL"),
   INDIVIDUAL_TOKEN_CAP: read("INDIVIDUAL_TOKEN_CAP"),
   OTEL_EXPORTER_OTLP_ENDPOINT: read("OTEL_EXPORTER_OTLP_ENDPOINT"),
+  LANGFUSE_MESSAGE_TEXT: read("LANGFUSE_MESSAGE_TEXT"),
   WORKERS_URL: read("WORKERS_URL"),
   WORKERS_TOKEN: read("WORKERS_TOKEN"),
   TEMPORAL_ADDRESS: read("TEMPORAL_ADDRESS"),
@@ -179,3 +189,31 @@ export const env: Env = EnvSchema.parse({
   CURATOR_SEED_SHARE: read("CURATOR_SEED_SHARE"),
   CURATOR_SAMPLE_PER_MONTH: read("CURATOR_SAMPLE_PER_MONTH"),
 });
+
+/** Whether a successful call's text may reach Langfuse from this process, and if not, the first reason why not. */
+export interface MessageTextGate {
+  readonly on: boolean;
+  readonly why: string | null;
+}
+
+const LOOPBACK_HOSTS: ReadonlySet<string> = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
+/**
+ * The development check behind `LANGFUSE_MESSAGE_TEXT=on` (feature-specs/49 § 9.1). `NODE_ENV` defaults to
+ * development in the schema and nothing that runs the workers sets it, so a deployment that forgot
+ * `NODE_ENV=production` would pass a test of "not production"; the gate wants four positive signs instead: the
+ * setting on, `NODE_ENV` exactly `development` as the process received it (before the default), a loopback `APP_URL`
+ * as the process received it too (the workers never need `APP_URL`, so its default would pass every deployment of
+ * theirs; unit 82's review), and the development sign-in. `why` names the first that failed. Off, it fails closed; nothing refuses to boot.
+ */
+export function messageTextGateOf(input: { readonly text: "on" | "off"; readonly nodeEnv: string | undefined; readonly appUrl: string | undefined; readonly authDevProvider: string | undefined }): MessageTextGate {
+  if (input.text !== "on") return { on: false, why: "LANGFUSE_MESSAGE_TEXT is off" };
+  if (input.nodeEnv !== "development") return { on: false, why: input.nodeEnv === undefined ? "NODE_ENV is unset, and only an explicit NODE_ENV=development passes" : `NODE_ENV is ${input.nodeEnv}, not development` };
+  if (input.appUrl === undefined) return { on: false, why: "APP_URL is unset, and only an explicit loopback APP_URL passes" };
+  const host = new URL(input.appUrl).hostname;
+  if (!LOOPBACK_HOSTS.has(host)) return { on: false, why: `APP_URL's host ${host} is not a loopback host` };
+  if (input.authDevProvider !== "1") return { on: false, why: "AUTH_DEV_PROVIDER is not 1" };
+  return { on: true, why: null };
+}
+
+export const messageTextGate: MessageTextGate = messageTextGateOf({ text: env.LANGFUSE_MESSAGE_TEXT, nodeEnv: read("NODE_ENV"), appUrl: read("APP_URL") === undefined ? undefined : env.APP_URL, authDevProvider: env.AUTH_DEV_PROVIDER });

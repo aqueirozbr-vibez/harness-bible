@@ -95,7 +95,7 @@ export async function embedRelease(options: EmbedReleaseOptions, deps: EmbedJobD
   for (const batch of batches) {
     try {
       const result = await embedTexts(
-        { guide: null, principal: options.principal, traceId: newTraceId(), ref: `release:${options.releaseId}` },
+        { agent: "embed.release", guide: null, principal: options.principal, traceId: newTraceId(), ref: `release:${options.releaseId}` },
         batch.map((section) => {
           if (section.text.length <= options.maxCharacters) return section.text;
           truncated += 1;
@@ -147,7 +147,7 @@ export interface EmbeddedQuery {
  * principal's ledger as a batch of the job. The assistant calls this function directly; the web tier reaches it
  * through `POST /embed/query` (workers/server.ts), because invariant 6 keeps the gateway out of the web tier.
  */
-export async function embedQuery(call: EmbedCall, text: string, deps: GatewayDeps = defaultGatewayDeps()): Promise<EmbeddedQuery> {
-  const embedded = await embedTexts(call, [text], deps);
+export async function embedQuery(call: Omit<EmbedCall, "agent">, text: string, deps: GatewayDeps = defaultGatewayDeps()): Promise<EmbeddedQuery> {
+  const embedded = await embedTexts({ ...call, agent: "embed.query" }, [text], deps);
   return { embedding: embedded.vectors[0], modelId: embedded.modelId, ms: embedded.ms };
 }

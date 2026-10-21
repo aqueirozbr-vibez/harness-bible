@@ -34,7 +34,7 @@ figures: F-21-05 "expected work redone" 45% (derived, L14)
 type Fetch = typeof fetch;
 
 function call(overrides: Partial<GatewayCall> = {}): GatewayCall {
-  return { purpose: "assistant", alias: "hb-small", guide: null, principal: { userId: "u-1" }, traceId: "b".repeat(32), ref: "msg-1", ...overrides };
+  return { purpose: "assistant", alias: "hb-small", agent: "assistant.classify", guide: null, principal: { userId: "u-1" }, traceId: "b".repeat(32), ref: "msg-1", ...overrides };
 }
 
 const CHECK = { ...requestFor("scopeClassifier"), messages: [{ role: "user" as const, content: CHECK_PROMPT }] };
@@ -124,6 +124,39 @@ describe("the client against the stub gateway", () => {
     return lines.filter((line) => line.startsWith("POST /v1/messages ")).length;
   }
 
+  it("names its agent and its guide's version in headers, never the body, so the prompt's hash does not move (49 § 6.2)", async () => {
+    const key = await mint();
+    const seen: Array<{ readonly body: string; readonly headers: Headers }> = [];
+    const capturing: Fetch = (input, init) => {
+      seen.push({ body: String(init?.body), headers: new Headers(init?.headers) });
+      return globalThis.fetch(input, init);
+    };
+    const guide = { agent: "assistant" as const, version: "v1.8", sha256: "a".repeat(64) };
+    await callModel(call({ agent: "assistant.draft", guide }), CHECK, deps(key, { fetch: capturing }));
+    await callModel(call({ agent: "assistant.repair", guide }), CHECK, deps(key, { fetch: capturing }));
+    const [draft, repair] = seen;
+    expect(draft?.headers.get("langfuse_generation_name")).toBe("assistant.draft");
+    expect(repair?.headers.get("langfuse_generation_name")).toBe("assistant.repair");
+    expect([draft?.headers.get("langfuse_version"), repair?.headers.get("langfuse_version")]).toEqual(["v1.8", "v1.8"]);
+    expect(repair?.body).toBe(draft?.body);
+    expect(draft?.body).not.toContain("assistant.draft");
+    const [first, second] = spans.slice(-2);
+    expect([first?.["hb.agent"], second?.["hb.agent"]]).toEqual(["assistant.draft", "assistant.repair"]);
+    expect(second?.["hb.prompt.sha256"]).toBe(first?.["hb.prompt.sha256"]);
+    /* a call with no guide sends no version */
+    await callModel(call(), CHECK, deps(key, { fetch: capturing }));
+    expect(seen.at(-1)?.headers.get("langfuse_generation_name")).toBe("assistant.classify");
+    expect(seen.at(-1)?.headers.has("langfuse_version")).toBe(false);
+    /* the development switch's opt-out goes exactly where messageTextHeaders puts it (49 § 9.2, lock 1) */
+    expect(seen.every((request) => !request.headers.has("litellm-disable-message-redaction"))).toBe(true);
+    const open = { on: true, why: null } as const;
+    await callModel(call({ agent: "assistant.draft" }), CHECK, deps(key, { fetch: capturing, messageText: open }));
+    expect(seen.at(-1)?.headers.get("litellm-disable-message-redaction")).toBe("true");
+    expect(seen.at(-1)?.body).toBe(draft?.body);
+    await callModel(call({ agent: "evidence.grade.bytes" }), CHECK, deps(key, { fetch: capturing, messageText: open }));
+    expect(seen.at(-1)?.headers.has("litellm-disable-message-redaction")).toBe(false);
+  });
+
   it("calls hb-small, stamps the principal and the alias, and writes the row and the span", async () => {
     const key = await mint();
     let sent: Record<string, unknown> | null = null;
@@ -150,6 +183,8 @@ describe("the client against the stub gateway", () => {
     expect(span["hb.prompt.sha256"]).toMatch(/^[0-9a-f]{64}$/);
     expect(span.latency_ms).toBeGreaterThanOrEqual(0);
     expect(JSON.stringify(span)).not.toContain(CHECK_PROMPT);
+    /* the parent the gateway's generation will name is this span, the one sent (49 § 5.3) */
+    expect(traceparent).toBe(`00-${"b".repeat(32)}-${span.span_id}-01`);
     expect(JSON.stringify(span)).not.toContain(key);
   });
 

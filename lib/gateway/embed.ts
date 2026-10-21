@@ -1,11 +1,13 @@
 import type Anthropic from "@anthropic-ai/sdk";
 
-import { newSpanId, traceparent } from "@/lib/api/trace";
+import { newSpanId } from "@/lib/api/trace";
 import { AppError } from "@/lib/errors";
 import { outcomeOfGatewayError, pricedUsage, recordCall, type RecordDeps } from "@/lib/gateway/budget";
 import { defaultGatewayDeps, gatewayClient, mapGatewayError, type GatewayDeps } from "@/lib/gateway/client";
 import { GatewayUnavailableError } from "@/lib/gateway/errors";
 import { NO_USAGE, type Usage } from "@/lib/gateway/prices";
+import { callHeaders } from "@/lib/gateway/headers";
+import { MESSAGE_TEXT_OFF, messageTextHeaders } from "@/lib/gateway/messageText";
 import { promptSha256 } from "@/lib/gateway/span";
 import { EmbeddingsResponseSchema, EMBEDDING_DIMENSIONS, principalId, type GatewayCall } from "@/lib/schemas/gateway";
 
@@ -32,8 +34,11 @@ export interface Embedded {
   readonly ms: number;
 }
 
-/** The call a caller describes: the alias and the purpose are this module's, so no other model can be reached here. */
-export type EmbedCall = Omit<GatewayCall, "alias" | "purpose">;
+/**
+ * The call a caller describes: the alias and the purpose are this module's, so no other model can be reached here,
+ * and its agent is one of the embedder's two, the query's or the release job's (feature-specs/49 § 6.2).
+ */
+export type EmbedCall = Omit<GatewayCall, "alias" | "purpose" | "agent"> & { readonly agent: "embed.query" | "embed.release" };
 
 /** The four counts of an embeddings answer: input tokens only, which is what the provider bills. */
 function usageOfEmbeddings(usage: { readonly prompt_tokens?: number; readonly total_tokens?: number } | undefined): Usage {
@@ -84,7 +89,7 @@ export async function embedTexts(call: EmbedCall, texts: ReadonlyArray<string>, 
   const started = performance.now();
   const elapsed = (): number => Math.round(performance.now() - started);
   const request = { model: full.alias, input: texts };
-  const base = { call: full, promptSha256: promptSha256(request), modelId: full.alias, usage: NO_USAGE, costUsd: 0, priceUnknown: false, searches: 0, gatewayCallId: null, firstTokenMs: null };
+  const base = { call: full, promptSha256: promptSha256(request), spanId: newSpanId(), modelId: full.alias, usage: NO_USAGE, costUsd: 0, priceUnknown: false, searches: 0, gatewayCallId: null, firstTokenMs: null };
   const recordDeps: RecordDeps = { append: deps.append, log: deps.log, now: deps.now };
   const refuse = async (error: AppError, gatewayCallId: string | null = null): Promise<never> => {
     await recordCall({ ...base, outcome: outcomeOfGatewayError(error), gatewayCallId, latencyMs: elapsed() }, recordDeps);
@@ -99,7 +104,7 @@ export async function embedTexts(call: EmbedCall, texts: ReadonlyArray<string>, 
     throw error;
   }
 
-  const options = { headers: { traceparent: traceparent(full.traceId, newSpanId()) } };
+  const options = { headers: { ...callHeaders(full, base.spanId), ...messageTextHeaders(full.agent, deps.messageText ?? MESSAGE_TEXT_OFF) } };
   let answer: { readonly data: unknown; readonly response: Response };
   try {
     answer = await client.post<unknown>(EMBEDDINGS_ROUTE, { ...options, body: { ...request, metadata: { user_id: principalId(full.principal) } } }).withResponse();

@@ -40,7 +40,7 @@ const BRIEF = "Look for the current recommended practice on idempotency keys and
 type Fetch = typeof fetch;
 
 function call(overrides: Partial<GatewayCall> = {}): GatewayCall & { readonly serverTools: ServerTools } {
-  return { purpose: "research", alias: "hb-frontier", guide: null, principal: { organisationId: "org-research" }, traceId: "c".repeat(32), ref: "run-1", serverTools: researchTools() ?? [], ...overrides };
+  return { purpose: "research", alias: "hb-frontier", agent: "researcher.read", guide: null, principal: { organisationId: "org-research" }, traceId: "c".repeat(32), ref: "run-1", serverTools: researchTools() ?? [], ...overrides };
 }
 
 function readerRequest() {

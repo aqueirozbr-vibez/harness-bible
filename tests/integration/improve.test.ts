@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { getPrisma } from "@/lib/db/client";
-import { addEvidenceItem, adjudicatorAcceptsBetween, calibrationEventsBetween, moveAlong, requestWithdrawal, takeBackWithdrawal, withdrawalStands, contributorIdOf, createDraft, curatorDecidedSince, curatorQueue, curatorQueueCount, queueCountByPart, currentParts, deleteDraft, latestCuratorDecision, latestOwnOpenSuggestion, listOwnSuggestions, openRubricReview, ownUnverifiableDeclines, queueDecisionOf, readSuggestion, mergedInParts, readSuggestionAsService, rubricReviewIdOf, rubricReviewsIn, seedOf, seedsOffered, setRosterEntry, transition, withdrawCuratorAction, writeCuratorAction, writeSeedDecision, writeSensorVerdicts, writeSuggestionScore, type DraftInput, type ImproveClient, type ServiceCaller, type UserCaller } from "@/lib/db/improve";
+import { addEvidenceItem, adjudicatorAcceptsBetween, calibrationEventsBetween, moveAlong, requestWithdrawal, takeBackWithdrawal, withdrawalStands, contributorIdOf, createDraft, curatorDecidedSince, curatorQueue, curatorQueueCount, queueCountByPart, currentParts, deleteDraft, latestCuratorDecision, latestOwnOpenSuggestion, listOwnSuggestions, openRubricReview, ownUnverifiableDeclines, queueDecisionOf, readSuggestion, mergedInParts, readSuggestionAsService, rubricReviewIdOf, suggestionOfEvidenceItem, rubricReviewsIn, seedOf, seedsOffered, setRosterEntry, transition, withdrawCuratorAction, writeCuratorAction, writeSeedDecision, writeSensorVerdicts, writeSuggestionScore, type DraftInput, type ImproveClient, type ServiceCaller, type UserCaller } from "@/lib/db/improve";
 import { env } from "@/lib/env";
 
 /*
@@ -579,6 +579,18 @@ describe.skipIf(!hasDatabase)("the one door to the improvement rows, against the
     });
     expect(seen).toMatchObject({ byIntake: CONTRIBUTOR_A, byGrader: CONTRIBUTOR_A, byAdjudicator: CONTRIBUTOR_A, absent: null });
     for (const id of ["service:merge", "service:researcher"] as const) await expect(contributorIdOf({ kind: "service", id }, seen.id), id).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  it("tells the grader's activities whose suggestion an item is, by the item alone, and no other service (49 § 7.2; unit 84)", async () => {
+    const ITEM = "4f1c9a2e-0000-4000-8000-0000000000b4";
+    const seen = await rolledBack(async (tx) => {
+      const made = await createDraft(contributorA, draft(), tx);
+      await addEvidenceItem(contributorA, made.id, { id: ITEM, kind: "LINK", url: "https://pages.example/pricing", doi: null, storageKey: null, host: "pages.example" }, 10, tx);
+      return { id: made.id, owner: await suggestionOfEvidenceItem(grader, ITEM, tx), absent: await suggestionOfEvidenceItem(grader, "4f1c9a2e-0000-4000-8000-0000000000b5", tx) };
+    });
+    expect(seen).toEqual({ id: seen.id, owner: seen.id, absent: null });
+    for (const caller of [intake, { kind: "service", id: "service:adjudicator" }, { kind: "service", id: "service:researcher" }] as const) await expect(suggestionOfEvidenceItem(caller, ITEM), caller.id).rejects.toMatchObject({ code: "FORBIDDEN" });
+    await expect(suggestionOfEvidenceItem(contributorA as unknown as ServiceCaller, ITEM)).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
   it("writes a submitted suggestion's sensor verdicts, one row a sensor, over the last attempt's, and none on a draft (unit 50a)", async () => {

@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { getPrisma } from "@/lib/db/client";
 import { countGatewayKeys } from "@/lib/db/gateway";
-import { env } from "@/lib/env";
+import { env, messageTextGate } from "@/lib/env";
 import { defaultGatewayDeps } from "@/lib/gateway/client";
 import { registerProcessSecret } from "@/lib/security/processSecrets";
 import { startTelemetry, stopTelemetry } from "@/lib/telemetry/tracer";
@@ -65,9 +65,12 @@ registerProcessSecret(workers.masterKey);
 void startTelemetry("hb-workers").then((exporting) => {
   if (exporting) console.info("telemetry: the workers export their spans");
 });
+/* The development text switch, said at boot either way it went (feature-specs/49 § 9.1). */
+if (messageTextGate.on) console.info("langfuse: prompts and answers go to Langfuse (LANGFUSE_MESSAGE_TEXT=on, development, test accounts only)");
+else if (env.LANGFUSE_MESSAGE_TEXT === "on") console.warn(`langfuse: LANGFUSE_MESSAGE_TEXT=on is ignored: ${messageTextGate.why ?? "the development check failed"} (feature-specs/49 § 9.1)`);
 startWorkers({
   token,
-  keys: { gatewayUrl: env.GATEWAY_URL, masterKey: workers.masterKey, keySecret: env.GATEWAY_KEY_SECRET, individual: workers.individual, fetch: globalThis.fetch, now: () => new Date(), db: keyDb },
+  keys: { gatewayUrl: env.GATEWAY_URL, masterKey: workers.masterKey, keySecret: env.GATEWAY_KEY_SECRET, individual: workers.individual, fetch: globalThis.fetch, now: () => new Date(), db: keyDb, messageText: messageTextGate },
   gateway: defaultGatewayDeps(),
   probe: gatewayProbe({ gatewayUrl: env.GATEWAY_URL, fetch: globalThis.fetch, now: () => new Date() }),
   engine: engineProbe({ check: engine === null ? undefined : async (deadlineMs) => (await temporal()).checkEngine(engine, deadlineMs), now: () => new Date() }),
